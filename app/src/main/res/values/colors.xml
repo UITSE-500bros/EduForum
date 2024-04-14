@@ -2,4 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="textColor">#FFFFFFFF</color>
+    <color name="backgroundColor">#000814</color>
+    <color name="loginBackgroundEndColor">#0B2136</color>
+    <color name="loginTextboxBackgroundColor">#EFFAFF</color>
+    <color name="mainTextboxBackgroundColor">#BBBBBB</color>
+    <color name="primaryColor">#001D3D</color>
+    <color name="secondaryColor">#0097FB</color>
+    <color name="tagBackgroundColor">#2C353D</color>
 </resources>
