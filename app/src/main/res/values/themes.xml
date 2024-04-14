@@ -1,8 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.EduForum" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/mainTextboxBackgroundColor</item>
+        <item name="colorOnPrimaryContainer">@color/loginTextboxBackgroundColor</item>
     </style>
 
     <style name="Theme.EduForum" parent="Base.Theme.EduForum" />

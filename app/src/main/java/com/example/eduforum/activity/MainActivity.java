@@ -1,8 +1,12 @@
-package com.example.eduforum;
+package com.example.eduforum.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.eduforum.R;
+import com.google.android.material.color.DynamicColors;
+import com.google.android.material.color.utilities.DynamicColor;
 
 public class MainActivity extends AppCompatActivity {
 
