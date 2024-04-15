@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
+    app:flow_horizontalAlign="center"
+    xmlns:tools="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/sliderTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="80dp"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        android:text="@string/screen0"
+        android:textColor="@color/white"
+        android:textSize="35sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="256dp"
+        android:src="@drawable/eduforumlogo"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="30dp"/>
+
+    <TextView
+        android:id="@+id/sliderDescriptionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="27sp"
+        android:text="@string/desscreen0"
+        android:textColor="@color/white"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        android:layout_marginTop="30dp"/>
+
+</LinearLayout>

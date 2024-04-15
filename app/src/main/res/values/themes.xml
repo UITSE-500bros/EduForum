@@ -5,6 +5,7 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorPrimaryContainer">@color/mainTextboxBackgroundColor</item>
         <item name="colorOnPrimaryContainer">@color/loginTextboxBackgroundColor</item>
+        <item name="fontFamily">@font/source_sans_pro_semibold</item>
     </style>
 
     <style name="Theme.EduForum" parent="Base.Theme.EduForum" />
