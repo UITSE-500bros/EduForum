@@ -12,4 +12,11 @@
     <string name="desscreen3">Khám phá hàng trăm chủ đề khác nhau,  hỏi và trả lời từ những người bạn mới. EduForum là nguồn tài nguyên không giới hạn cho sự học tập và phát triển cá nhân.</string>
     <string name="title_activity_login">LoginActivity</string>
 
+    <!--    string cho login -->
+    <string name="LoginTitle">Đăng nhập</string>
+    <string name="loginDescription">Đăng nhập bằng tài khoản của bạn</string>
+    <string name="Emailaddress">Địa chỉ email</string>
+    <string name="password">Mật khẩu</string>
+
+
 </resources>
