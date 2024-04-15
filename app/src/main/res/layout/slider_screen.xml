@@ -41,7 +41,7 @@
         android:id="@+id/sliderDescriptionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:text="@string/desscreen1"
         android:textColor="@color/white"
         android:layout_marginHorizontal="16dp"
