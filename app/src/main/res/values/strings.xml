@@ -11,4 +11,11 @@
     <string name="desscreen2">Chia sẻ bài viết, hình ảnh, video và ý tưởng với cộng đồng sinh viên toàn cầu. Dễ dàng tạo nội dung mới và thảo luận với mọi người.</string>
     <string name="desscreen3">Khám phá hàng trăm chủ đề khác nhau,  hỏi và trả lời từ những người bạn mới. EduForum là nguồn tài nguyên không giới hạn cho sự học tập và phát triển cá nhân.</string>
 
+    <!-- thiết lập string cho login/logout -->
+    <string name="passChangedText">Mật khẩu của bạn đã được thay đổi thành công.</string>
+    <string name="accCreatedText">Tài khoản của bạn đã được tạo thành công.</string>
+    <string name="forgotPassHeadingText">Quên mật khẩu?</string>
+    <string name="forgotPassText">Đừng lo! Nó thường xuyên xảy ra. Hãy nhập địa chỉ email liên kết với tài khoản của bạn.</string>
+    <string name="createNewPassHeadingText">Tạo mật khẩu mới</string>
+    <string name="createNewPassText">Mật khẩu mới của bạn phải khác với những mật khẩu đã dùng trước đó.</string>
 </resources>
