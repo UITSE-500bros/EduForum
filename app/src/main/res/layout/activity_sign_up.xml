@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.SignUpActivity"
+    android:background="@drawable/loginscreen"
+    android:orientation="vertical">
+    <ImageView
+        android:layout_width="122dp"
+        android:layout_height="24dp"
+        android:layout_gravity="left"
+        android:layout_marginTop="50dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/eduforumlogo" />
+
+    <TextView
+        android:id="@+id/ng_nh_p"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="26dp"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        android:gravity="top"
+        android:lineHeight="33sp"
+        android:text="@string/Dang_ky"
+        android:textColor="@color/white"
+        android:textSize="26sp" />
+    <TextView
+        android:id="@+id/ng_nh_p_b_n"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/taotk"
+        android:textSize="21sp"
+        android:textColor="@color/white"
+        android:gravity="top"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        android:lineHeight="10sp"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:id="@+id/TIL_Email"
+        android:hint="@string/Emailaddress"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_marginStart="26dp"
+        android:background="@drawable/rectangle"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="30dp"
+        app:suffixText="\@gmail.com"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:inputType="textEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:id="@+id/TIL_Name"
+        android:hint="@string/name"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_marginStart="26dp"
+        android:background="@drawable/rectangle"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="30dp"
+
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:inputType="textPersonName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:id="@+id/TIL_Password"
+        android:hint="@string/password"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_marginStart="26dp"
+        android:background="@drawable/rectangle"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="30dp"
+        app:passwordToggleEnabled="true"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:id="@+id/TIL_ConfirmPassword"
+        android:hint="@string/confirmPass"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_marginStart="26dp"
+        android:background="@drawable/rectangle"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="30dp"
+        app:passwordToggleEnabled="true"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/login_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Dang_ky"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/login_btn"
+
+        />
+</LinearLayout>

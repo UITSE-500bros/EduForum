@@ -2,6 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray">#ABABAB</color>
     <color name="textColor">#FFFFFFFF</color>
     <color name="backgroundColor">#000814</color>
     <color name="loginBackgroundEndColor">#0B2136</color>
@@ -10,4 +11,5 @@
     <color name="primaryColor">#0097FB</color>
     <color name="secondaryColor">#001D3D</color>
     <color name="tagBackgroundColor">#2C353D</color>
+    <color name="login_editText">#0097FB80</color>
 </resources>

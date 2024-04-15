@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.LoginActivity"
+    android:background="@drawable/loginscreen"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="122dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/eduforumlogo" />
+    <TextView
+        android:id="@+id/ng_nh_p"
+        android:layout_width="121dp"
+        android:layout_height="33dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="26dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="86dp"
+        android:text="@string/LoginTitle"
+        android:textSize="26sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        android:gravity="top"
+        android:lineHeight="33sp"
+        />
+    <TextView
+        android:id="@+id/ng_nh_p_b_n"
+        android:layout_width="396dp"
+        android:layout_height="26dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="26dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="130dp"
+        android:text="@string/loginDescription"
+        android:textSize="21sp"
+        android:textColor="@color/white"
+        android:gravity="top"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        android:lineHeight="26sp"
+        />
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:id="@+id/TIL_Email"
+        android:hint="@string/Emailaddress"
+        android:layout_width="322dp"
+        android:layout_height="62dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="26dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/rectangle"
+        android:layout_marginTop="210dp"
+        app:suffixText="\@gmail.com"
+
+        >
+        <com.google.android.material.textfield.TextInputEditText
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:id="@+id/TIL_Password"
+        android:hint="@string/password"
+        android:layout_width="322dp"
+        android:layout_height="62dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="26dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/rectangle"
+        android:layout_marginTop="310dp"
+        app:passwordToggleEnabled="true"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/forgor_pass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="224dp"
+        android:layout_marginTop="382dp"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        android:gravity="top"
+        android:text="@string/forgot_pass"
+        android:textColor="#B0B0B0"
+        android:background="@drawable/transparent_btn"
+        android:textSize="13sp" />
+
+    <Button
+        android:id="@+id/login_btn"
+        android:layout_width="322dp"
+        android:layout_height="59dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/login_btn"
+        android:layout_marginTop="450dp"
+        android:layout_marginLeft="26dp"
+        android:background="@drawable/login_btn"
+
+        />
+    <TextView
+        android:id="@+id/create_account"
+        android:layout_width="121dp"
+        android:layout_height="42dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="123dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="570dp"
+        android:text="@string/register"
+        android:textSize="15sp"
+        android:textColor="#B0B0B0"
+        android:lineSpacingExtra="2sp"
+        android:translationY="-1.07sp"
+        android:gravity="center_horizontal|top"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="575dp"
+        android:background="@drawable/transparent_btn"
+        android:text="@string/dangky"
+        android:textColor="#0097FB"
+        />
+
+
+</RelativeLayout>

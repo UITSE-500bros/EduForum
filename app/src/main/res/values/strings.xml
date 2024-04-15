@@ -1,9 +1,30 @@
 <resources>
     <string name="app_name">EduForum</string>
-    <string name="passChangedText">Mật khẩu của bạn đã được thay đổi thành công.</string>
-    <string name="accCreatedText">Tài khoản của bạn đã được tạo thành công.</string>
-    <string name="forgotPassHeadingText">Quên mật khẩu?</string>
-    <string name="forgotPassText">Đừng lo! Nó thường xuyên xảy ra. Hãy nhập địa chỉ email liên kết với tài khoản của bạn.</string>
-    <string name="createNewPassHeadingText">Tạo mật khẩu mới</string>
-    <string name="createNewPassText">Mật khẩu mới của bạn phải khác với những mật khẩu đã dùng trước đó.</string>
+
+    <!-- thiết lập string cho welcome -->
+    <string name="screen0">Chào mừng tới</string>
+    <string name="screen1">Kết nối</string>
+    <string name="screen2">Chia sẻ</string>
+    <string name="screen3">Học hỏi</string>
+    <string name="desscreen0">Kết nối, Chia sẻ, Học hỏi</string>
+    <string name="desscreen1">Trò chuyện và kết bạn với hàng nghìn sinh viên khác trên EduForum. Tìm kiếm những người có cùng sở thích và tương tác mạnh mẽ với cộng đồng đa dạng của chúng tôi.</string>
+    <string name="desscreen2">Chia sẻ bài viết, hình ảnh, video và ý tưởng với cộng đồng sinh viên toàn cầu. Dễ dàng tạo nội dung mới và thảo luận với mọi người.</string>
+    <string name="desscreen3">Khám phá hàng trăm chủ đề khác nhau,  hỏi và trả lời từ những người bạn mới. EduForum là nguồn tài nguyên không giới hạn cho sự học tập và phát triển cá nhân.</string>
+    <string name="title_activity_login">LoginActivity</string>
+
+    <!--    string cho login -->
+    <string name="LoginTitle">Đăng nhập</string>
+    <string name="loginDescription">Đăng nhập bằng tài khoản của bạn</string>
+    <string name="Emailaddress">Địa chỉ email</string>
+    <string name="password">Mật khẩu</string>
+    <string name="forgot_pass">Quên mật khẩu?</string>
+    <string name="login_btn">Đăng nhập</string>
+    <string name="register">Chưa có tài khoản?</string>
+    <string name="dangky">Đăng ký ngay</string>
+    <string name="taotk">Tạo tài khoản mới</string>
+    <string name="name">Họ và tên</string>
+    <string name="confirmPass">Xác nhận mật khẩu</string>
+    <string name="Dang_ky">Đăng ký</string>
+
+
 </resources>
