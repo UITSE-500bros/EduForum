@@ -17,8 +17,10 @@
     <string name="loginDescription">Đăng nhập bằng tài khoản của bạn</string>
     <string name="Emailaddress">Địa chỉ email</string>
     <string name="password">Mật khẩu</string>
-    <string name="forgor_pass">Quên mật khẩu?</string>
+    <string name="forgot_pass">Quên mật khẩu?</string>
     <string name="login_btn">Đăng nhập</string>
+    <string name="register">Chưa có tài khoản?</string>
+    <string name="dangky">Đăng ký ngay</string>
 
 
 </resources>

@@ -83,32 +83,60 @@
             android:layout_height="match_parent"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/forgor_pass"
-        android:layout_width="124dp"
-        android:layout_height="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="224dp"
+        android:layout_marginStart="224dp"
         android:layout_marginTop="382dp"
         android:fontFamily="@font/source_sans_pro_semibold"
         android:gravity="top"
-        android:text="@string/forgor_pass"
-        android:textAlignment="textEnd"
+        android:text="@string/forgot_pass"
         android:textColor="#B0B0B0"
-
+        android:background="@drawable/transparent_btn"
         android:textSize="13sp" />
 
     <Button
         android:id="@+id/login_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="322dp"
+        android:layout_height="59dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:text="@string/login_btn"
-        android:layout_marginTop="500"
+        android:layout_marginTop="450dp"
+        android:layout_marginLeft="26dp"
+        android:background="@drawable/login_btn"
+
+        />
+    <TextView
+        android:id="@+id/create_account"
+        android:layout_width="121dp"
+        android:layout_height="42dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="123dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="570dp"
+        android:text="@string/register"
+        android:textSize="15sp"
+        android:textColor="#B0B0B0"
+        android:lineSpacingExtra="2sp"
+        android:translationY="-1.07sp"
+        android:gravity="center_horizontal|top"
         />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="575dp"
+        android:background="@drawable/transparent_btn"
+        android:text="@string/dangky"
+        android:textColor="#0097FB"
+        />
 
 
 </RelativeLayout>
