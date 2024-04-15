@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">EduForum</string>
+    <string name="passChangedText">Mật khẩu của bạn đã được thay đổi thành công.</string>
+    <string name="accCreatedText">Tài khoản của bạn đã được tạo thành công.</string>
+    <string name="forgotPassHeadingText">Quên mật khẩu?</string>
+    <string name="forgotPassText">Đừng lo! Nó thường xuyên xảy ra. Hãy nhập địa chỉ email liên kết với tài khoản của bạn.</string>
+    <string name="createNewPassHeadingText">Tạo mật khẩu mới</string>
+    <string name="createNewPassText">Mật khẩu mới của bạn phải khác với những mật khẩu đã dùng trước đó.</string>
 
     <!-- thiết lập string cho welcome -->
     <string name="screen0">Chào mừng tới</string>
