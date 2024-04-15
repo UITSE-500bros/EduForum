@@ -27,23 +27,21 @@ public class WelcomeActivity extends AppCompatActivity {
 
     ViewPager.OnPageChangeListener viewOnPageLisner = new ViewPager.OnPageChangeListener(){
         @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+        @Override
+        public void onPageSelected(int position){
+            setDotIndicator(position);
+            if(position < 3){
+                nextButton.setText("Next");
             }
-            @Override
-            public void onPageSelected(int position){
-                setDotIndicator(position);
-                if(position == 3){
+            else {
                     nextButton.setText("Finish");
-                }
-                else {
-                    nextButton.setText("Next");
-                }
             }
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        };
+        }
+        @Override
+        public void onPageScrollStateChanged(int state) {
+        }
+    };
 
 
     @Override
@@ -96,7 +94,7 @@ public class WelcomeActivity extends AppCompatActivity {
             dots[i].setTextColor(getResources().getColor(R.color.gray, getApplication().getTheme()));
             dotIndicator.addView(dots[i]);
         }
-        // mau trang cua cac cham la mau trang hien tai
+        // mau trang cua cac cham la mau trang hien tai theo vi tri position
         dots[position].setTextColor(getResources().getColor(R.color.white, getApplication().getTheme()));
     }
     public int getItem(int i){
