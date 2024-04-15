@@ -35,13 +35,9 @@ public class WelcomeActivity extends AppCompatActivity {
                 setDotIndicator(position);
                 if(position == 3){
                     nextButton.setText("Finish");
-                    nextButton.setVisibility(View.VISIBLE);
-                    skipButton.setVisibility(View.VISIBLE);
                 }
                 else {
                     nextButton.setText("Next");
-                    nextButton.setVisibility(View.VISIBLE);
-                    skipButton.setVisibility(View.VISIBLE);
                 }
             }
             @Override
