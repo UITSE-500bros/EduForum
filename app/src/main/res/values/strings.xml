@@ -21,6 +21,10 @@
     <string name="login_btn">Đăng nhập</string>
     <string name="register">Chưa có tài khoản?</string>
     <string name="dangky">Đăng ký ngay</string>
+    <string name="taotk">Tạo tài khoản mới</string>
+    <string name="name">Họ và tên</string>
+    <string name="confirmPass">Xác nhận mật khẩu</string>
+    <string name="Dang_ky">Đăng ký</string>
 
 
 </resources>
