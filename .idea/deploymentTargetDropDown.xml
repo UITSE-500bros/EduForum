@@ -5,6 +5,18 @@
       <entry key="All Tests">
         <State />
       </entry>
+      <entry key="LoginActivity">
+        <State />
+      </entry>
+      <entry key="NewPassActivity">
+        <State />
+      </entry>
+      <entry key="OtpActivity">
+        <State />
+      </entry>
+      <entry key="SignUpActivity">
+        <State />
+      </entry>
     </value>
   </component>
 </project>

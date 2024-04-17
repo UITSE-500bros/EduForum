@@ -31,6 +31,8 @@
     <string name="name">Họ và tên</string>
     <string name="confirmPass">Xác nhận mật khẩu</string>
     <string name="Dang_ky">Đăng ký</string>
+    <string name="confirm_otp">Xác thực OTP</string>
+    <string name="otp_guideline">Nhập mã xác thực mà chúng tôi vừa gửi vào địa chỉ email cảu bạn</string>
 
 
 </resources>
