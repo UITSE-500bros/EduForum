@@ -6,6 +6,9 @@
         <item name="colorPrimaryContainer">@color/mainTextboxBackgroundColor</item>
         <item name="colorOnPrimaryContainer">@color/loginTextboxBackgroundColor</item>
         <item name="fontFamily">@font/source_sans_pro_semibold</item>
+        <item name="android:background">@color/backgroundColor</item>
+        <item name="cardElevation">10dp</item>
+        <item name="cardBackgroundColor">@color/cardViewBackgroundColor</item>
     </style>
 
     <style name="Theme.EduForum" parent="Base.Theme.EduForum" />

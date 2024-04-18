@@ -11,4 +11,5 @@
     <color name="primaryColor">#0097FB</color>
     <color name="secondaryColor">#001D3D</color>
     <color name="tagBackgroundColor">#2C353D</color>
+    <color name="cardViewBackgroundColor">#001D3D</color>
 </resources>
