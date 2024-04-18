@@ -64,8 +64,8 @@ public class WelcomeActivity extends AppCompatActivity {
         skipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
-                //finish();
+                startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+                finish();
             }
         });
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -76,8 +76,8 @@ public class WelcomeActivity extends AppCompatActivity {
                     slideViewPager.setCurrentItem(getItem(1), true);
                 }
                 else {
-                    //startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
-                    //finish();
+                    startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+                    finish();
                 }
             }
         });

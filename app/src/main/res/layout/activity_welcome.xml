@@ -35,10 +35,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/transparent_btn"
+        android:id="@+id/dotIdicator"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nextButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
     <Button
         android:id="@+id/nextButton"
         android:layout_width="244dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/next_slider_shape"
         android:drawableEnd="@drawable/nextarrow"
         android:fontFamily="@font/source_sans_pro_semibold"
         android:paddingStart="50dp"
@@ -47,23 +60,11 @@
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:layout_marginBottom="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/slideViewPager"
-        app:layout_constraintVertical_bias="0.433" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/dotIdicator"
-        android:orientation="horizontal"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nextButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/slideViewPager" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
