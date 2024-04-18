@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.LoginActivity"
+    android:background="@drawable/login_background"
+    android:orientation="vertical">
+ <TextView
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:text="@string/confirm_otp"
+     android:fontFamily="@font/source_sans_pro_semibold"
+     android:lineHeight="39sp"
+     android:textSize="30sp"
+     android:textColor="@color/white"
+     android:letterSpacing="-0.01"
+     android:translationY="-0.64sp"
+     android:layout_marginTop="100dp"
+     android:layout_marginLeft="22dp"
+     />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/otp_guideline"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        android:lineHeight="24sp"
+        android:textSize="16sp"
+        android:textColor="#838BA1"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="22dp"
+        android:lineSpacingExtra="4sp"
+        android:translationY="-1.94sp"
+        android:gravity="top"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <EditText
+            android:id="@+id/OtpET1"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/otp_box"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="30dp"
+            android:textStyle="bold"
+
+            />
+
+        <EditText
+            android:id="@+id/OtpET2"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/otp_box"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="30dp"
+            android:textStyle="bold"
+
+            />
+
+        <EditText
+            android:id="@+id/OtpET3"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/otp_box"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="30dp"
+            android:textStyle="bold"
+
+            />
+
+        <EditText
+            android:id="@+id/OtpET4"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/otp_box"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="30dp"
+            android:textStyle="bold"
+
+            />
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/rectangle"
+        android:layout_gravity="center"
+        android:text="Xác thực"
+        android:lineHeight="20sp"
+        android:textSize="16sp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Không nhận được mã?"
+        android:lineHeight="21sp"
+        android:textSize="15sp"
+        android:textColor="#B0B0B0"
+        android:letterSpacing="0.01"
+        android:lineSpacingExtra="-2sp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginTop="300dp"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:background="@drawable/transparent_btn"
+        android:text="Gửi lại mã"
+        android:textColor="#0097FB"
+        />
+
+
+
+
+</LinearLayout>
