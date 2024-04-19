@@ -4,6 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#ABABAB</color>
     <color name="textColor">#FFFFFFFF</color>
+    <color name="subTitleTextColor">#8391A1</color>
     <color name="backgroundColor">#000814</color>
     <color name="loginBackgroundEndColor">#0B2136</color>
     <color name="loginTextboxBackgroundColor">#EFFAFF</color>

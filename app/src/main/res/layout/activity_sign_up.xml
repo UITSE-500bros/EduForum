@@ -79,39 +79,46 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        style="@style/Widget.Material3.TextInputLayout.FilledBox"
         android:id="@+id/TIL_Password"
-        android:hint="@string/password"
         android:layout_width="match_parent"
         android:layout_height="62dp"
         android:layout_marginStart="26dp"
-        android:background="@drawable/rectangle"
-        android:layout_marginEnd="20dp"
         android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/rectangle"
+        android:hint="@string/password"
         app:passwordToggleEnabled="true"
-        >
+        app:passwordToggleTint="@color/primaryColor">
+
         <com.google.android.material.textfield.TextInputEditText
-            android:inputType="textPassword"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:backgroundTint="#FFFFFF"
+            android:inputType="textPassword"
+            android:password="true"
+            android:visibility="visible" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:id="@+id/TIL_ConfirmPassword"
-        android:hint="@string/confirmPass"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="62dp"
         android:layout_marginStart="26dp"
-        android:background="@drawable/rectangle"
-        android:layout_marginEnd="20dp"
         android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:hint="@string/confirmPass"
         app:passwordToggleEnabled="true"
-        >
+        android:background="@drawable/rectangle"
+
+        app:passwordToggleTint="@color/primaryColor">
+
         <com.google.android.material.textfield.TextInputEditText
-            android:inputType="textPassword"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

@@ -77,6 +77,7 @@
         android:background="@drawable/rectangle"
         android:layout_marginTop="310dp"
         app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/primaryColor"
         >
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
