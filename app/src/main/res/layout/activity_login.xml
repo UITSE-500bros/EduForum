@@ -58,6 +58,7 @@
         android:background="@drawable/rectangle"
         android:layout_marginTop="210dp"
         app:suffixText="\@gmail.com"
+        app:suffixTextColor="@color/primaryColor"
 
         >
         <com.google.android.material.textfield.TextInputEditText
