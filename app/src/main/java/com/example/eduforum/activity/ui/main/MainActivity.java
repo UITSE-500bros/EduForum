@@ -1,4 +1,4 @@
-package com.example.eduforum.activity;
+package com.example.eduforum.activity.ui.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 

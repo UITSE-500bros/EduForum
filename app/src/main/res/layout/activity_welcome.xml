@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
-    tools:context=".activity.WelcomeActivity">
+    tools:context=".activity.ui.welcome.WelcomeActivity">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/slideViewPager"

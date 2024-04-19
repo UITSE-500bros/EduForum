@@ -1,4 +1,4 @@
-package com.example.eduforum.activity;
+package com.example.eduforum.activity.ui.welcome;
 
 import android.content.Context;
 import android.view.LayoutInflater;

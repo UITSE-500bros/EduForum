@@ -1,19 +1,17 @@
-package com.example.eduforum.activity;
+package com.example.eduforum.activity.ui.welcome;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.ui.auth.LoginActivity;
 import com.google.android.material.button.MaterialButton;
 
 public class WelcomeActivity extends AppCompatActivity {

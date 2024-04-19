@@ -13,21 +13,21 @@
         android:theme="@style/Theme.EduForum"
         tools:targetApi="31">
         <activity
-            android:name=".activity.OtpActivity"
+            android:name=".activity.ui.auth.OtpActivity"
             android:exported="true">
         </activity>
         <activity
-            android:name=".activity.SignUpActivity"
+            android:name=".activity.ui.auth.SignUpActivity"
             android:exported="true">
         </activity>
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".activity.ui.auth.LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.EduForum">
         </activity>
         <activity
-            android:name=".activity.WelcomeActivity"
+            android:name=".activity.ui.welcome.WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.ui.main.MainActivity"
             android:exported="false" />
     </application>
 
