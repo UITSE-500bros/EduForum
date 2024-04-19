@@ -16,6 +16,7 @@
         android:layout_marginRight="20dp"
         android:text="@string/createNewPassHeadingText"
         android:textSize="30dp"
+        android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,7 +50,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/edittextshape"
+            android:background="@drawable/loginedittextshape"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -68,7 +69,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/edittextshape"
+            android:background="@drawable/loginedittextshape"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -79,7 +80,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
-        android:background="@drawable/edittextshape"
+        android:background="@drawable/loginedittextshape"
         android:text="Xác nhận"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

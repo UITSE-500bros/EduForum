@@ -17,6 +17,7 @@
         android:text="@string/forgotPassHeadingText"
         android:textSize="30dp"
         android:textStyle="bold"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -50,13 +51,13 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/edittextshape"
+            android:background="@drawable/loginedittextshape"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/sendCodeButton"
-        android:background="@drawable/edittextshape"
+        android:background="@drawable/loginedittextshape"
         android:text="Gửi mã"
         android:layout_width="0dp"
         android:layout_height="56dp"
