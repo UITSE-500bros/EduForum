@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/skipWelcomeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/nextButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/nextButton"
         android:layout_width="244dp"
         android:layout_height="wrap_content"

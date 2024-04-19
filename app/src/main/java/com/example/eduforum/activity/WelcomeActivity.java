@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.eduforum.R;
+import com.google.android.material.button.MaterialButton;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -22,7 +23,7 @@ public class WelcomeActivity extends AppCompatActivity {
     LinearLayout dotIndicator;
     // viewPageAdapter la adapter dung de do noi dung vao cac trang trong slider
     ViewPageAdapter viewPageAdapter;
-    Button nextButton, skipButton;
+    MaterialButton nextButton, skipButton;
     TextView [] dots;
 
     ViewPager.OnPageChangeListener viewOnPageLisner = new ViewPager.OnPageChangeListener(){
