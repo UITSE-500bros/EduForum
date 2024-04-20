@@ -115,7 +115,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:background="@drawable/rectangle"
+        android:background="@drawable/loginbuttonshape"
         android:layout_gravity="center"
         android:text="Xác thực"
         android:lineHeight="20sp"

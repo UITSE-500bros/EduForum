@@ -55,7 +55,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="26dp"
         android:layout_alignParentTop="true"
-        android:background="@drawable/rectangle"
+        android:background="@drawable/loginedittextshape"
         android:layout_marginTop="210dp"
         app:suffixText="\@gmail.com"
         app:suffixTextColor="@color/primaryColor"
@@ -66,23 +66,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:id="@+id/TIL_Password"
-        android:hint="@string/password"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="322dp"
         android:layout_height="62dp"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="26dp"
         android:layout_alignParentTop="true"
-        android:background="@drawable/rectangle"
+        android:layout_marginStart="26dp"
         android:layout_marginTop="310dp"
+
+        android:hint="@string/password"
+        app:hintAnimationEnabled="true"
         app:passwordToggleEnabled="true"
         app:passwordToggleTint="@color/primaryColor"
-        >
+        app:passwordToggleTintMode="src_in">
+
         <com.google.android.material.textfield.TextInputEditText
+
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
