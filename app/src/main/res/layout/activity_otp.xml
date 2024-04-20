@@ -56,9 +56,9 @@
             android:maxLength="1"
             android:maxLines="1"
             android:textColor="@color/black"
-            android:textSize="30dp"
+            android:textSize="30sp"
             android:textStyle="bold"
-
+            android:nextFocusRight="@id/OtpET2"
             />
 
         <EditText
