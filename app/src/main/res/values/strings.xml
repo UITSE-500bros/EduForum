@@ -18,7 +18,7 @@
     <string name="desscreen3">Khám phá hàng trăm chủ đề khác nhau,  hỏi và trả lời từ những người bạn mới. EduForum là nguồn tài nguyên không giới hạn cho sự học tập và phát triển cá nhân.</string>
     <string name="title_activity_login">LoginActivity</string>
 
-    <!--    string cho login -->
+    <!--    string cho login/ sign_up -->
     <string name="LoginTitle">Đăng nhập</string>
     <string name="loginDescription">Đăng nhập bằng tài khoản của bạn</string>
     <string name="Emailaddress">Địa chỉ email</string>
@@ -31,8 +31,17 @@
     <string name="name">Họ và tên</string>
     <string name="confirmPass">Xác nhận mật khẩu</string>
     <string name="Dang_ky">Đăng ký</string>
+    <string name="khoa">Khoa</string>
     <string name="confirm_otp">Xác thực OTP</string>
     <string name="otp_guideline">Nhập mã xác thực mà chúng tôi vừa gửi vào địa chỉ email cảu bạn</string>
+    <string-array name="ds_khoa">
+        <item>Khoa học Máy tính</item>
+        <item>Công nghệ Phần mềm</item>
+        <item>Hệ thống thông tin</item>
+        <item>Kỹ thuật máy tính</item>
+        <item>Truyền thông và Mạng máy tính</item>
+        <item>Khoa học và Kĩ thuật Thông tin</item>
+    </string-array>
 
 
 </resources>

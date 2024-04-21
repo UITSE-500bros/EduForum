@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.ui.auth.CongratsActivity">
+    tools:context=".activity.ui.auth.CongratsActivity"
+    android:background="@color/backgroundColor">
 
     <ImageView
         android:id="@+id/congratsImage"
