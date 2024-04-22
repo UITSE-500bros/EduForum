@@ -12,7 +12,7 @@
         android:layout_width="122dp"
         android:layout_height="24dp"
         android:layout_gravity="left"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:scaleType="centerCrop"
         android:src="@drawable/eduforumlogo" />
 
@@ -45,8 +45,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp">
+        android:layout_marginBottom="20dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -61,7 +60,7 @@
                 android:layout_marginStart="26dp"
                 android:background="@drawable/rectangle"
                 android:layout_marginEnd="20dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 app:suffixText="\@gmail.com"
                 app:suffixTextColor="@color/primaryColor"
                 android:textColorHint="@color/black"
@@ -82,8 +81,7 @@
                 android:layout_marginStart="26dp"
                 android:layout_marginEnd="20dp"
                 android:textColorHint="@color/black"
-                android:layout_marginTop="30dp"
-
+                android:layout_marginTop="20dp"
                 >
                 <com.google.android.material.textfield.TextInputEditText
                     android:inputType="textPersonName"
@@ -98,7 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="26dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/rectangle"
                 android:hint="@string/password"
@@ -122,7 +120,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="26dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/rectangle"
                 android:hint="@string/confirmPass"
@@ -139,12 +137,50 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:id="@+id/TIL_SDT"
+                android:hint="@string/SDT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="26dp"
+                android:background="@drawable/rectangle"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
+                android:textColorHint="@color/black"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:inputType="phone"
+                    android:layout_width="match_parent"
+                    android:backgroundTint="#FFFFFF"
+                    android:layout_height="62dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:id="@+id/TIL_NienKhoa"
+                android:hint="@string/nienKhoa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="26dp"
+                android:background="@drawable/rectangle"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
+                android:textColorHint="@color/black"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:inputType="text|number"
+                    android:layout_width="match_parent"
+                    android:backgroundTint="#FFFFFF"
+                    android:layout_height="62dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TIL_Khoa"
                 style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="62dp"
                 android:layout_marginStart="26dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:hint="@string/khoa"
                 android:background="@drawable/rectangle"
@@ -160,11 +196,34 @@
                     app:simpleItems="@array/ds_khoa"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TIL_GioiTinh"
+                style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="62dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/gioiTinh"
+                android:background="@drawable/rectangle"
+                android:textColorHint="@color/black"
+                app:cursorColor="@color/primaryColor"
+                >
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="62dp"
+                    android:inputType="none"
+                    android:textColor="@color/black"
+                    app:simpleItems="@array/gioiTinh"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
             <Button
                 android:id="@+id/login_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/Dang_ky"
+                android:textSize="20sp"
                 android:layout_marginTop="50dp"
                 android:layout_marginStart="26dp"
                 android:layout_marginEnd="20dp"

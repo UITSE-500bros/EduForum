@@ -32,6 +32,9 @@
     <string name="confirmPass">Xác nhận mật khẩu</string>
     <string name="Dang_ky">Đăng ký</string>
     <string name="khoa">Khoa</string>
+    <string name="gioiTinh">Giới tính</string>
+    <string name="nienKhoa">Niên Khóa</string>
+    <string name="SDT">Số điện thoại</string>
     <string name="confirm_otp">Xác thực OTP</string>
     <string name="otp_guideline">Nhập mã xác thực mà chúng tôi vừa gửi vào địa chỉ email cảu bạn</string>
     <string-array name="ds_khoa">
@@ -41,6 +44,11 @@
         <item>Kỹ thuật máy tính</item>
         <item>Truyền thông và Mạng máy tính</item>
         <item>Khoa học và Kĩ thuật Thông tin</item>
+    </string-array>
+    <string-array name="gioiTinh">
+        <item>Nam</item>
+        <item>Nữ</item>
+        <item>Other</item>
     </string-array>
 
 
