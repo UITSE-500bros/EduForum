@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Forums" android:icon="@drawable/homeicon"/>
-    <item android:title="Notifications" />
-    <item android:title="Settings" />
+    <item android:title="Forums" android:icon="@drawable/homeicon" />
+    <item android:title="Notifications" android:icon="@drawable/notiicon"/>
+    <item android:title="Settings" android:icon="@drawable/settingicon" />
 </menu>
