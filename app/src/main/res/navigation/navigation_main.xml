@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainnavigation"
+    android:id="@+id/navigation_main"
     app:startDestination="@id/homeFragment">
 
     <fragment
@@ -11,10 +11,10 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.example.eduforum.activity.ui.main.fragment.SettingsFragment"
-        android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        android:id="@+id/settingsMainFragment"
+        android:name="com.example.eduforum.activity.ui.main.fragment.SettingsMainFragment"
+        android:label="fragment_settings_main"
+        tools:layout="@layout/fragment_settings_main" />
     <fragment
         android:id="@+id/notiFragment"
         android:name="com.example.eduforum.activity.ui.main.fragment.NotiFragment"
