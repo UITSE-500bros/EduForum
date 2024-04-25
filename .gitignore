@@ -18,3 +18,4 @@ gradlew.bat
 settings.gradle.kts
 build.gradle.kts
 google-services.json
+firebase-debug.log
