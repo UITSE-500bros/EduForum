@@ -36,7 +36,7 @@
     <string name="nienKhoa">Niên Khóa</string>
     <string name="SDT">Số điện thoại</string>
     <string name="confirm_otp">Xác thực OTP</string>
-    <string name="otp_guideline">Nhập mã xác thực mà chúng tôi vừa gửi vào địa chỉ email cảu bạn</string>
+    <string name="otp_guideline">Nhập mã xác thực mà chúng tôi vừa gửi vào địa chỉ email của bạn</string>
     <string-array name="ds_khoa">
         <item>Khoa học Máy tính</item>
         <item>Công nghệ Phần mềm</item>
