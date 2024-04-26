@@ -11,8 +11,9 @@ public class User implements UserBuilder{
     private String email;
     private String password;
     private String phoneNumber;
-    private Gender gender;
+    private String gender;
     private String schoolYear;
+    private String department;
 
     //private Image avatar;
 
@@ -21,7 +22,8 @@ public class User implements UserBuilder{
     public User() {
     }
 
-    public User(String userId,String userName, String name, String email, String password, String phoneNumber, Gender gender, String schoolYear) {
+    public User(String userId,String userName, String name, String email,
+                String password, String phoneNumber, String gender, String schoolYear, String department) {
         this.userId = userId;
         this.userName = userName;
         this.name = name;
@@ -30,6 +32,7 @@ public class User implements UserBuilder{
         this.phoneNumber = phoneNumber;
         this.gender = gender;
         this.schoolYear = schoolYear;
+        this.department = department;
     }
 
 
@@ -53,12 +56,16 @@ public class User implements UserBuilder{
         return phoneNumber;
     }
 
-    public Gender getGender() {
+    public String getGender() {
         return gender;
     }
 
     public String getSchoolYear() {
         return schoolYear;
+    }
+
+    public String getDepartment() {
+        return department;
     }
 
     @Override
@@ -98,7 +105,7 @@ public class User implements UserBuilder{
     }
 
     @Override
-    public UserBuilder setGender(Gender gender) {
+    public UserBuilder setGender(String gender) {
         this.gender = gender;
         return this;
     }
@@ -110,7 +117,14 @@ public class User implements UserBuilder{
     }
 
     @Override
+    public UserBuilder setDepartment(String department) {
+        this.department = department;
+        return this;
+    }
+
+    @Override
     public UserBuilder build() {
-        return new User(userId,userName, name, email, password, phoneNumber,gender,schoolYear);
+        return new User(userId, userName, name, email, password,
+                phoneNumber, gender, schoolYear, department);
     }
 }

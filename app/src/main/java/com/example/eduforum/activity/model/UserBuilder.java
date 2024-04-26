@@ -10,8 +10,9 @@ public interface UserBuilder {
     UserBuilder setPassword(String password);
     UserBuilder setPhoneNumber(String phoneNumber);
 
-    UserBuilder setGender(Gender gender);
+    UserBuilder setGender(String gender);
     UserBuilder setSchoolYear(String schoolYear);
+    UserBuilder setDepartment(String department);
     UserBuilder build();
 }
 //repo for signin, signup, signout,post,comment
