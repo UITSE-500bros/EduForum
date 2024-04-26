@@ -13,9 +13,11 @@
         android:theme="@style/Theme.EduForum"
         tools:targetApi="31">
         <activity
+            android:name=".activity.ui.auth.ForumActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ui.auth.OtpActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".activity.ui.auth.SignUpActivity"
             android:exported="true">
@@ -29,13 +31,10 @@
             android:name=".activity.ui.auth.LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_login"
-            android:theme="@style/Theme.EduForum">
-        </activity>
+            android:theme="@style/Theme.EduForum" />
         <activity
             android:name=".activity.ui.welcome.WelcomeActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".activity.ui.main.MainActivity"
             android:exported="false" />
