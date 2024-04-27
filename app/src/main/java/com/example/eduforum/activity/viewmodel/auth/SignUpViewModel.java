@@ -8,9 +8,6 @@ import com.example.eduforum.activity.model.Topic;
 import com.example.eduforum.activity.model.User;
 import com.example.eduforum.activity.repository.SignUpRepository;
 import com.example.eduforum.activity.repository.SignUpTestRepository;
-import com.example.eduforum.activity.repository.TopicCallback;
-import com.example.eduforum.activity.repository.TopicRepository;
-import com.example.eduforum.activity.repository.TopicTestRepository;
 import com.example.eduforum.activity.ui.auth.SignUpViewState;
 import com.example.eduforum.activity.util.FlagsList;
 
@@ -20,28 +17,25 @@ import java.util.List;
 
 public class SignUpViewModel extends ViewModel {
     private final SignUpRepository signUpRepository;
-    private final TopicRepository topicRepository;
     private final MutableLiveData<SignUpViewState> userLiveData;
     private final MutableLiveData<String> selectedDepartment;
     private final MutableLiveData<String> selectedGender;
-    private final MutableLiveData<Boolean> errorLiveData;
+//    private final MutableLiveData<Boolean> errorLiveData;
 
 
     public SignUpViewModel() {
         // environment-repository
         if (FlagsList.APPLICATION_ENVIRONMENT.equals("development")) {
             signUpRepository = new SignUpTestRepository();
-            topicRepository = new TopicTestRepository();
         } else {
             signUpRepository = new SignUpRepository();
-            topicRepository = new TopicRepository();
         }
 
         // initialize livedata
         userLiveData = new MutableLiveData<>();
         userLiveData.setValue(new SignUpViewState());
         selectedDepartment = new MutableLiveData<>();
-        errorLiveData = new MutableLiveData<>();
+//        errorLiveData = new MutableLiveData<>();
         selectedGender = new MutableLiveData<>();
     }
 

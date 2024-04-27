@@ -1,6 +1,6 @@
 package com.example.eduforum.activity.repository;
 
-
+@Deprecated
 public class TopicTestRepository extends TopicRepository {
 
     public TopicTestRepository() {
