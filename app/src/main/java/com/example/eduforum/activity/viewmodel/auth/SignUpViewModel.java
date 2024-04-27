@@ -1,35 +1,93 @@
 package com.example.eduforum.activity.viewmodel.auth;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.eduforum.activity.model.Topic;
 import com.example.eduforum.activity.model.User;
-import com.example.eduforum.activity.repository.ISignUpRepository;
 import com.example.eduforum.activity.repository.SignUpRepository;
-import com.example.eduforum.activity.repository.TestSignUpRepository;
+import com.example.eduforum.activity.repository.SignUpTestRepository;
+import com.example.eduforum.activity.repository.TopicCallback;
+import com.example.eduforum.activity.repository.TopicRepository;
+import com.example.eduforum.activity.repository.TopicTestRepository;
 import com.example.eduforum.activity.ui.auth.SignUpViewState;
 import com.example.eduforum.activity.util.FlagsList;
 
+import org.checkerframework.checker.guieffect.qual.UI;
+
+import java.util.List;
+
 public class SignUpViewModel extends ViewModel {
-    private ISignUpRepository signUpRepository;
-    private MutableLiveData<SignUpViewState> userLiveData;
+    private final SignUpRepository signUpRepository;
+    private final TopicRepository topicRepository;
+    private final MutableLiveData<SignUpViewState> userLiveData;
+    private final MutableLiveData<String> selectedDepartmentId;
+    private final MutableLiveData<String> selectedGender;
+    private final MutableLiveData<Boolean> errorLiveData;
+
 
     public SignUpViewModel() {
-        if (FlagsList.APPLICATION_ENVIRONMENT == "development") {
-            signUpRepository = new TestSignUpRepository();
+        // environment-repository
+        if (FlagsList.APPLICATION_ENVIRONMENT.equals("development")) {
+            signUpRepository = new SignUpTestRepository();
+            topicRepository = new TopicTestRepository();
         } else {
             signUpRepository = new SignUpRepository();
+            topicRepository = new TopicRepository();
         }
+
+        // initialize livedata
         userLiveData = new MutableLiveData<>();
         userLiveData.setValue(new SignUpViewState());
+        selectedDepartmentId = new MutableLiveData<>();
+        errorLiveData = new MutableLiveData<>();
+        selectedGender = new MutableLiveData<>();
     }
 
-    public MutableLiveData<SignUpViewState> getUser() {
+    // gender
+
+    public LiveData<String> getSelectedGender() {
+        return selectedGender;
+    }
+
+    public void setSelectedGender(String gender) {
+        selectedGender.setValue(gender);
+    }
+
+    // department
+
+    public LiveData<String> getSelectedDepartmentId() {
+        return selectedDepartmentId;
+    }
+
+    public void setSelectedDepartmentId(String departmentId) {
+        selectedDepartmentId.setValue(departmentId);
+    }
+
+    public LiveData<List<Topic>> getDepartmentList() {
+        MutableLiveData<List<Topic>> departments = new MutableLiveData<>();
+        topicRepository.getAllDepartments(new TopicCallback() {
+            @Override
+            public void onTopicLoaded(List<Topic> topics) {
+                departments.setValue(topics);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                errorLiveData.setValue(true);
+            }
+        });
+        return departments;
+    }
+
+
+    public LiveData<SignUpViewState> getUser() {
         return userLiveData;
     }
 
-    public void setUser() {
-
+    public void setUser(SignUpViewState state) {
+        userLiveData.setValue(state);
     }
 
     public void onSignUpClicked() {
@@ -42,12 +100,14 @@ public class SignUpViewModel extends ViewModel {
 
     private User mapUIStateToUser(SignUpViewState UIState) {
         if (UIState == null) return null;
+        UIState.gender = selectedGender.getValue();
+        UIState.department = selectedDepartmentId.getValue();
         User user = new User();
         user.setEmail(UIState.email);
         user.setPassword(UIState.password);
         user.setName(UIState.fullName);
-//        user.setGender(UIState.gender);
-//        user.setSchoolYear(UIState.schoolYear);
+        user.setGender(UIState.gender);
+        user.setSchoolYear(UIState.schoolYear);
         user.setDepartment(UIState.department);
         user.setPhoneNumber(UIState.phoneNumber);
         return user;

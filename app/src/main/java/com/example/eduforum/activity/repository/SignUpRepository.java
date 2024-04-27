@@ -15,10 +15,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class SignUpRepository implements ISignUpRepository {
-
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore db;
+public class SignUpRepository {
+    protected FirebaseAuth mAuth;
+    protected FirebaseFirestore db;
 
     public SignUpRepository() {
         mAuth = FirebaseAuth.getInstance();
@@ -33,8 +32,21 @@ public class SignUpRepository implements ISignUpRepository {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(FlagsList.DEBUG_REGISTER_FLAG, "createUserWithEmail:success");
+                            FirebaseUser fUser = mAuth.getCurrentUser();
                             user.setUserId(mAuth.getUid());
-                            writeNewUserToFirestore(user, FlagsList.CONNECTION_RETRIES);                        } else {
+                            // If not development environment then don't send email verification code
+                            if (!FlagsList.APPLICATION_ENVIRONMENT.equals("development")) {
+                                assert fUser != null;
+                                fUser.sendEmailVerification()
+                                        .addOnCompleteListener(task1 -> {
+                                            if (task1.isSuccessful()) {
+                                                // TODO: send to the UI to notify that email verification has been sent
+                                            }
+                                        });
+                            }
+
+                            writeNewUserToFirestore(user, FlagsList.CONNECTION_RETRIES);
+                        } else {
                             // If sign in fails, display a message to the user.
                             Log.w(FlagsList.DEBUG_REGISTER_FLAG, "createUserWithEmail:failure", task.getException());
 

@@ -198,11 +198,11 @@
                     >
 <!--                    cai nay binding lam sao thi de anh em UI lam :))-->
                     <AutoCompleteTextView
+                        android:id="@+id/ACTV_Khoa"
                         android:layout_width="match_parent"
                         android:layout_height="62dp"
                         android:inputType="none"
-                        android:textColor="@color/black"
-                        app:simpleItems="@array/ds_khoa"/>
+                        android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
                 <!--                    cai nay binding lam sao thi de anh em UI lam :))-->
                 <com.google.android.material.textfield.TextInputLayout
@@ -220,11 +220,11 @@
                     >
 
                     <AutoCompleteTextView
+                        android:id="@+id/ACTV_GioiTinh"
                         android:layout_width="match_parent"
                         android:layout_height="62dp"
                         android:inputType="none"
-                        android:textColor="@color/black"
-                        app:simpleItems="@array/gioiTinh"/>
+                        android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
