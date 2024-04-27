@@ -73,7 +73,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/postsSearchBar"
             app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
-            app:navGraph="@navigation/mainnavigation"
+            app:navGraph="@navigation/forumnavigation"
             app:defaultNavHost="true"/>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -86,7 +86,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/mainmenu" />
+            app:menu="@menu/forummenu" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
