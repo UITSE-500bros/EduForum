@@ -22,7 +22,7 @@ public class SignUpViewModel extends ViewModel {
     private final SignUpRepository signUpRepository;
     private final TopicRepository topicRepository;
     private final MutableLiveData<SignUpViewState> userLiveData;
-    private final MutableLiveData<String> selectedDepartmentId;
+    private final MutableLiveData<String> selectedDepartment;
     private final MutableLiveData<String> selectedGender;
     private final MutableLiveData<Boolean> errorLiveData;
 
@@ -40,7 +40,7 @@ public class SignUpViewModel extends ViewModel {
         // initialize livedata
         userLiveData = new MutableLiveData<>();
         userLiveData.setValue(new SignUpViewState());
-        selectedDepartmentId = new MutableLiveData<>();
+        selectedDepartment = new MutableLiveData<>();
         errorLiveData = new MutableLiveData<>();
         selectedGender = new MutableLiveData<>();
     }
@@ -57,29 +57,29 @@ public class SignUpViewModel extends ViewModel {
 
     // department
 
-    public LiveData<String> getSelectedDepartmentId() {
-        return selectedDepartmentId;
+    public LiveData<String> getSelectedDepartment() {
+        return selectedDepartment;
     }
 
-    public void setSelectedDepartmentId(String departmentId) {
-        selectedDepartmentId.setValue(departmentId);
+    public void setSelectedDepartment(String department) {
+        selectedDepartment.setValue(department);
     }
 
-    public LiveData<List<Topic>> getDepartmentList() {
-        MutableLiveData<List<Topic>> departments = new MutableLiveData<>();
-        topicRepository.getAllDepartments(new TopicCallback() {
-            @Override
-            public void onTopicLoaded(List<Topic> topics) {
-                departments.setValue(topics);
-            }
-
-            @Override
-            public void onError(Exception e) {
-                errorLiveData.setValue(true);
-            }
-        });
-        return departments;
-    }
+//    public LiveData<List<Topic>> getDepartmentList() {
+//        MutableLiveData<List<Topic>> departments = new MutableLiveData<>();
+//        topicRepository.getAllDepartments(new TopicCallback() {
+//            @Override
+//            public void onTopicLoaded(List<Topic> topics) {
+//                departments.setValue(topics);
+//            }
+//
+//            @Override
+//            public void onError(Exception e) {
+//                errorLiveData.setValue(true);
+//            }
+//        });
+//        return departments;
+//    }
 
 
     public LiveData<SignUpViewState> getUser() {
@@ -101,7 +101,7 @@ public class SignUpViewModel extends ViewModel {
     private User mapUIStateToUser(SignUpViewState UIState) {
         if (UIState == null) return null;
         UIState.gender = selectedGender.getValue();
-        UIState.department = selectedDepartmentId.getValue();
+        UIState.department = selectedDepartment.getValue();
         User user = new User();
         user.setEmail(UIState.email);
         user.setPassword(UIState.password);

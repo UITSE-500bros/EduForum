@@ -33,44 +33,56 @@ public class SignUpActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up);
 
-        String[] items = getResources().getStringArray(R.array.gioiTinh);
+        String[] genderItems = getResources().getStringArray(R.array.gioiTinh);
         ArrayAdapter<String> adapterGioiTinh = new ArrayAdapter<>(this,
-                android.R.layout.simple_dropdown_item_1line, items);
+                android.R.layout.simple_dropdown_item_1line, genderItems);
         binding.ACTVGioiTinh.setAdapter(adapterGioiTinh);
 
         binding.ACTVGioiTinh.setOnItemClickListener((parent, view, position, id) -> {
             String selectedGender = adapterGioiTinh.getItem(position);
-            // update the ViewModel
             viewModel.setSelectedGender(selectedGender);
         });
-        ArrayAdapter<Topic> adapterKhoa = new ArrayAdapter<Topic>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<Topic>()) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView textView = (TextView) view.findViewById(android.R.id.text1);
-                Topic item = (Topic) getItem(position);  // Explicitly casting the returned Object to Topic
-                if (item != null) {
-                    textView.setText(item.getName());  // Displaying only the name
-                }
-                return view;
-            }
-        };
-        binding.ACTVKhoa.setAdapter(adapterKhoa);
 
-        viewModel.getDepartmentList().observe(this, departments -> {
-            adapterKhoa.clear();
-            adapterKhoa.addAll(departments);
-        });
+        String[] departmentItems = getResources().getStringArray(R.array.ds_khoa);
+        ArrayAdapter<String> adapterDepartment = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line, departmentItems);
+        binding.ACTVKhoa.setAdapter(adapterDepartment);
 
         binding.ACTVKhoa.setOnItemClickListener((parent, view, position, id) -> {
-            Topic selectedDepartment = adapterKhoa.getItem(position);
-            if (selectedDepartment != null) {
-                viewModel.setSelectedDepartmentId(selectedDepartment.getId());
-            }
+            String selectedDepartment = adapterDepartment.getItem(position);
+            viewModel.setSelectedDepartment(selectedDepartment);
         });
-
 
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
+
+//        ArrayAdapter<Topic> adapterKhoa = new ArrayAdapter<Topic>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<Topic>()) {
+//            @Override
+//            public View getView(int position, View convertView, ViewGroup parent) {
+//                View view = super.getView(position, convertView, parent);
+//                TextView textView = (TextView) view.findViewById(android.R.id.text1);
+//                Topic item = (Topic) getItem(position);  // Explicitly casting the returned Object to Topic
+//                if (item != null) {
+//                    textView.setText(item.getName());  // Displaying only the name
+//                }
+//                return view;
+//            }
+//        };
+//        binding.ACTVKhoa.setAdapter(adapterKhoa);
+//
+//        viewModel.getDepartmentList().observe(this, departments -> {
+//            adapterKhoa.clear();
+//            adapterKhoa.addAll(departments);
+//        });
+//
+//        binding.ACTVKhoa.setOnItemClickListener((parent, view, position, id) -> {
+//            Topic selectedDepartment = adapterKhoa.getItem(position);
+//            if (selectedDepartment != null) {
+//                viewModel.setSelectedDepartmentId(selectedDepartment.getId());
+//            }
+//        });
+
+
+
     }
 }
