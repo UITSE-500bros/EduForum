@@ -1,5 +1,6 @@
 package com.example.eduforum.activity.model;
 
+@Deprecated
 public class Topic {
     private String id;
     private String name;
