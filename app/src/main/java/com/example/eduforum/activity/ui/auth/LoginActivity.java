@@ -1,5 +1,6 @@
 package com.example.eduforum.activity.ui.auth;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,8 +14,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.ui.main.MainActivity;
 import com.example.eduforum.activity.viewmodel.auth.LoginViewModel;
 import com.example.eduforum.databinding.ActivityLoginBinding;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Objects;
@@ -50,6 +53,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        viewModel.getIsEmailVerified().observe(this, isEmailVerified -> {
+            if(isEmailVerified){
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            }
+            else{
+                Snackbar.make(binding.main, "Vui lòng kích hoạt tài khoản qua email", Snackbar.LENGTH_LONG).show();
+
+            }
+        });
 
 
     }
