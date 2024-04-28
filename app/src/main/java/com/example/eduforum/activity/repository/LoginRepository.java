@@ -39,7 +39,7 @@ public class LoginRepository {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(FlagsList.DEBUG_LOGIN_FLAG, "signInWithEmail:failure", task.getException());
-                            callback.onLoginFailed(FlagsList.ERROR_LOGIN_EMAIL_NOT_VERIFIED);
+                            callback.onLoginFailed(FlagsList.ERROR_LOGIN_WRONG_CREDENTIALS);
                         }
                     }
                 });

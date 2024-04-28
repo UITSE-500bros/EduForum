@@ -2,6 +2,7 @@ package com.example.eduforum.activity.ui.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -26,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel viewModel;
     private ActivityLoginBinding binding;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +38,15 @@ public class LoginActivity extends AppCompatActivity {
 
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
+
+        // navigate to sign up
+        binding.register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(), SignUpActivity.class);
+                startActivity(i);
+            }
+        });
 
         TextInputLayout emailInput = binding.TILEmail;
         TextInputLayout passwordInput = binding.TILPassword;
@@ -58,10 +68,10 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
             }
-            else{
-                Snackbar.make(binding.main, "Vui lòng kích hoạt tài khoản qua email", Snackbar.LENGTH_LONG).show();
+        });
 
-            }
+        viewModel.getLoginErrorMsg().observe(this, msg -> {
+            Snackbar.make(binding.getRoot(), msg, Snackbar.LENGTH_SHORT).show();
         });
 
 

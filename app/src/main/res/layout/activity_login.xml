@@ -64,7 +64,6 @@
             android:layout_alignParentTop="true"
             android:background="@drawable/loginedittextshape"
             android:layout_marginTop="210dp"
-            app:suffixText="\@gmail.com"
             app:suffixTextColor="@color/primaryColor"
 
             >

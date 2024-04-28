@@ -116,9 +116,10 @@ public class SignUpViewModel extends ViewModel {
             }
 
             @Override
-            public void onSignUpFailure() {
-                // Handle sign-up failure, e.g., show an error message
+            public void onSignUpFailure(String errorMsg) {
+
             }
+
         });
     }
 
