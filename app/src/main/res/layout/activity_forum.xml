@@ -65,28 +65,17 @@
         </androidx.appcompat.widget.Toolbar>
 
 
-        <fragment
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/forumFragmentContainer"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/postsSearchBar"
-            app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
-            app:navGraph="@navigation/mainnavigation"
-            app:defaultNavHost="true"/>
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigationView"
-            app:itemIconTint="@color/white"
-            app:itemTextColor="@color/white"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/secondaryColor"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/mainmenu" />
+            app:layout_constraintTop_toBottomOf="@+id/postsSearchBar"
+            app:navGraph="@navigation/navigation_main" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
