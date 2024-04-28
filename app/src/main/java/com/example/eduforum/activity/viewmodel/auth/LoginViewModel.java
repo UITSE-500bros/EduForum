@@ -10,6 +10,9 @@ import com.example.eduforum.activity.ui.auth.LoginViewState;
 import com.example.eduforum.activity.util.FlagsList;
 
 public class LoginViewModel extends ViewModel {
+    private final MutableLiveData<String> emailError;
+    private final MutableLiveData<String> passwordError;
+    private final MutableLiveData<Boolean> loginSuccess;
     private final LoginRepository loginRepository;
     private final MutableLiveData<LoginViewState> credentials;
     public LoginViewModel() {
@@ -18,7 +21,9 @@ public class LoginViewModel extends ViewModel {
         } else {
             loginRepository = new LoginRepository();
         }
-
+        emailError = new MutableLiveData<>();
+        passwordError = new MutableLiveData<>();
+        loginSuccess = new MutableLiveData<>();
         credentials = new MutableLiveData<>();
         credentials.setValue(new LoginViewState());
     }
@@ -30,9 +35,46 @@ public class LoginViewModel extends ViewModel {
     public void setCredentials(LoginViewState viewState) {
         credentials.setValue(viewState);
     }
+    public LiveData<String> getEmailError() {
+        return emailError;
+    }
+    public LiveData<String> getPasswordError() {
+        return passwordError;
+    }
+    public LiveData<Boolean> getLoginSuccess() {
+        return loginSuccess;
+    }
 
-    public void onLoginClicked() {
+
+    public void onLoginClicked(String email, String password) {
         LoginViewState state = credentials.getValue();
         this.loginRepository.login(state.getEmail(), state.getPassword());
+
+        boolean isValid = true;
+
+        if(email==null || email.isEmpty()){
+            emailError.setValue("Email is required");
+            isValid = false;
+            return;
+        }
+        else {
+            emailError.setValue(null);
+        }
+
+        if(password==null || password.isEmpty()){
+            passwordError.setValue("Password is required");
+            isValid = false;
+            return;
+        }
+        else{
+            passwordError.setValue(null);
+        }
+        if (isValid) {
+            performlogin(email, password);
+        }
+
+    }
+    private void performlogin(String email, String password){
+       loginSuccess.setValue(true);
     }
 }
