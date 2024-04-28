@@ -46,35 +46,32 @@ public class LoginViewModel extends ViewModel {
     }
 
 
-    public void onLoginClicked(String email, String password) {
+    public void onLoginClicked() {
         LoginViewState state = credentials.getValue();
-        this.loginRepository.login(state.getEmail(), state.getPassword());
-
         boolean isValid = true;
 
-        if(email==null || email.isEmpty()){
+        if(state.getEmail() == null || state.getEmail().isEmpty()){
             emailError.setValue("Email is required");
             isValid = false;
-            return;
         }
         else {
             emailError.setValue(null);
         }
 
-        if(password==null || password.isEmpty()){
+        if(state.getPassword() == null || state.getPassword().isEmpty()) {
             passwordError.setValue("Password is required");
             isValid = false;
-            return;
         }
-        else{
+        else {
             passwordError.setValue(null);
         }
-        if (isValid) {
-            performlogin(email, password);
-        }
+
+        if (!isValid) return;
+
+        loginSuccess.setValue(true);
+
+        this.loginRepository.login(state.getEmail(), state.getPassword());
 
     }
-    private void performlogin(String email, String password){
-       loginSuccess.setValue(true);
-    }
+
 }

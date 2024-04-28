@@ -37,7 +37,6 @@ public class LoginActivity extends AppCompatActivity {
 
         TextInputLayout emailInput = binding.TILEmail;
         TextInputLayout passwordInput = binding.TILPassword;
-        Button loginButton = binding.loginBtn;
 
         viewModel.getEmailError().observe(this, emailError -> {
             if(emailError != null){
@@ -51,12 +50,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        loginButton.setOnClickListener(v -> {
-           String email = Objects.requireNonNull(emailInput.getEditText()).getText().toString();
-           String password = Objects.requireNonNull(passwordInput.getEditText()).getText().toString();
-              viewModel.onLoginClicked(email, password);
-
-        });
 
 
     }
