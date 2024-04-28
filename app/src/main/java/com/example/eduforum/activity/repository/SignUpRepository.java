@@ -24,7 +24,7 @@ public class SignUpRepository {
         db = FirebaseFirestore.getInstance();
     }
 
-    public void register(User user) {
+    public void register(User user, ISignUpCallback callback) {
         mAuth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword())
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -41,6 +41,7 @@ public class SignUpRepository {
                                         .addOnCompleteListener(task1 -> {
                                             if (task1.isSuccessful()) {
                                                 // TODO: send to the UI to notify that email verification has been sent
+                                                 callback.onSignUpSuccess();
                                             }
                                         });
                             }
@@ -49,7 +50,7 @@ public class SignUpRepository {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(FlagsList.DEBUG_REGISTER_FLAG, "createUserWithEmail:failure", task.getException());
-
+                            callback.onSignUpFailure();
                         }
                     }
                 });
