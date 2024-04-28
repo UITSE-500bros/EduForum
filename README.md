@@ -12,8 +12,8 @@
 | 1   | 2252xxxx | Nguyễn Trịnh Vĩnh Thịnh |         |  |
 | 2   | 2252xxxx | Dương Thuận Trí              |  |  |
 | 3   | 22521461 | Trần Quỳnh Thy               | [tqthy](https://github.com/tqthy)                 | <22521461@gm.uit.edu.vn> |
-| 4   | 2252xxxx | Phương Nam             |  |  |
-| 5   | 2252xxxx | Hữu Thịnh               |               |  |
+| 4   | 2252xxxx | Đoàn Phương Nam             |  |  |
+| 5   | 2252xxxx | Huỳnh Hữu Thịnh               |               |  |
 
 ## ❔ **How to name a branch**
 
