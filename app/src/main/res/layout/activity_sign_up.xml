@@ -1,234 +1,245 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.ui.auth.SignUpActivity"
-    android:background="@color/backgroundColor"
-    android:orientation="vertical">
-    <ImageView
-        android:layout_width="122dp"
-        android:layout_height="24dp"
-        android:layout_gravity="left"
-        android:layout_marginTop="10dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/eduforumlogo" />
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/ng_nh_p"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="26dp"
-        android:fontFamily="@font/source_sans_pro_semibold"
-        android:gravity="top"
-        android:lineHeight="33sp"
-        android:text="@string/Dang_ky"
-        android:textColor="@color/white"
-        android:textSize="26sp" />
-    <TextView
-        android:id="@+id/ng_nh_p_b_n"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/taotk"
-        android:textSize="21sp"
-        android:textColor="@color/white"
-        android:gravity="top"
-        android:fontFamily="@font/source_sans_pro_semibold"
-        android:lineHeight="10sp"
-        />
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.eduforum.activity.viewmodel.auth.SignUpViewModel" />
+    </data>
 
-    <ScrollView
+    <LinearLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="20dp">
-        <LinearLayout
-            android:layout_width="match_parent"
+        tools:context=".activity.ui.auth.SignUpActivity"
+        android:background="@color/backgroundColor"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="122dp"
+            android:layout_height="24dp"
+            android:layout_gravity="left"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/eduforumlogo" />
+
+        <TextView
+            android:id="@+id/ng_nh_p"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="26dp"
+            android:fontFamily="@font/source_sans_pro_semibold"
+            android:gravity="top"
+            android:lineHeight="33sp"
+            android:text="@string/Dang_ky"
+            android:textColor="@color/white"
+            android:textSize="26sp" />
+        <TextView
+            android:id="@+id/ng_nh_p_b_n"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/taotk"
+            android:textSize="21sp"
+            android:textColor="@color/white"
+            android:gravity="top"
+            android:fontFamily="@font/source_sans_pro_semibold"
+            android:lineHeight="10sp"
+            />
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                android:id="@+id/TIL_Email"
-                android:hint="@string/Emailaddress"
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="20dp">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="26dp"
-                android:background="@drawable/rectangle"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp"
-                app:suffixText="\@gmail.com"
-                app:suffixTextColor="@color/primaryColor"
-                android:textColorHint="@color/black"
-                >
-                <com.google.android.material.textfield.TextInputEditText
-                    android:inputType="textEmailAddress"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:id="@+id/TIL_Email"
+                    android:hint="@string/Emailaddress"
                     android:layout_width="match_parent"
-                    android:backgroundTint="#FFFFFF"
-                    android:layout_height="62dp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="26dp"
+                    android:background="@drawable/rectangle"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="20dp"
+                    android:textColorHint="@color/black"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:text="@={viewModel.user.email}"
+                        android:inputType="textEmailAddress"
+                        android:layout_width="match_parent"
+                        android:backgroundTint="#FFFFFF"
+                        android:layout_height="62dp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                android:id="@+id/TIL_Name"
-                android:hint="@string/name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="26dp"
-                android:layout_marginEnd="20dp"
-                android:textColorHint="@color/black"
-                android:layout_marginTop="20dp"
-                >
-                <com.google.android.material.textfield.TextInputEditText
-                    android:inputType="textPersonName"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:id="@+id/TIL_Name"
+                    android:hint="@string/name"
                     android:layout_width="match_parent"
-                    android:backgroundTint="#FFFFFF"
-                    android:layout_height="62dp"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginEnd="20dp"
+                    android:textColorHint="@color/black"
+                    android:layout_marginTop="20dp"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:text="@={viewModel.user.fullName}"
+                        android:inputType="textPersonName"
+                        android:layout_width="match_parent"
+                        android:backgroundTint="#FFFFFF"
+                        android:layout_height="62dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.FilledBox"
-                android:id="@+id/TIL_Password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="26dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/rectangle"
-                android:hint="@string/password"
-                app:passwordToggleEnabled="true"
-                android:textColorHint="@color/black"
-                >
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Material3.TextInputLayout.FilledBox"
+                    android:id="@+id/TIL_Password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/rectangle"
+                    android:hint="@string/password"
+                    app:passwordToggleEnabled="true"
+                    android:textColorHint="@color/black"
+                    >
 
-                <com.google.android.material.textfield.TextInputEditText
-                    style="@style/ThemeOverlay.Material3.AutoCompleteTextView.FilledBox"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:text="@={viewModel.user.password}"
+                        style="@style/ThemeOverlay.Material3.AutoCompleteTextView.FilledBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="62dp"
+                        android:backgroundTint="#FFFFFF"
+                        android:inputType="textPassword"
+                        android:visibility="visible" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Material3.TextInputLayout.FilledBox"
+                    android:id="@+id/TIL_ConfirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/rectangle"
+                    android:hint="@string/confirmPass"
+                    app:passwordToggleEnabled="true"
+                    android:textColorHint="@color/black">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        style="@style/ThemeOverlay.Material3.AutoCompleteTextView.FilledBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="62dp"
+                        android:backgroundTint="#FFFFFF"
+                        android:inputType="textPassword" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:id="@+id/TIL_SDT"
+                    android:hint="@string/SDT"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="26dp"
+                    android:background="@drawable/rectangle"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="20dp"
+                    android:textColorHint="@color/black"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:text="@={viewModel.user.phoneNumber}"
+                        android:inputType="phone"
+                        android:layout_width="match_parent"
+                        android:backgroundTint="#FFFFFF"
+                        android:layout_height="62dp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:id="@+id/TIL_NienKhoa"
+                    android:hint="@string/nienKhoa"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="26dp"
+                    android:background="@drawable/rectangle"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="20dp"
+                    android:textColorHint="@color/black"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:text="@={viewModel.user.schoolYear}"
+                        android:inputType="text|number"
+                        android:layout_width="match_parent"
+                        android:backgroundTint="#FFFFFF"
+                        android:layout_height="62dp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/TIL_Khoa"
+                    style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="62dp"
-                    android:backgroundTint="#FFFFFF"
-                    android:inputType="textPassword"
-                    android:password="true"
-                    android:visibility="visible" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.FilledBox"
-                android:id="@+id/TIL_ConfirmPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="26dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/rectangle"
-                android:hint="@string/confirmPass"
-                app:passwordToggleEnabled="true"
-                android:textColorHint="@color/black">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    style="@style/ThemeOverlay.Material3.AutoCompleteTextView.FilledBox"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:hint="@string/khoa"
+                    android:background="@drawable/rectangle"
+                    android:textColorHint="@color/black"
+                    app:cursorColor="@color/primaryColor"
+                    >
+<!--                    cai nay binding lam sao thi de anh em UI lam :))-->
+                    <AutoCompleteTextView
+                        android:id="@+id/ACTV_Khoa"
+                        android:layout_width="match_parent"
+                        android:layout_height="62dp"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <!--                    cai nay binding lam sao thi de anh em UI lam :))-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/TIL_GioiTinh"
+                    style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="62dp"
-                    android:backgroundTint="#FFFFFF"
-                    android:inputType="textPassword"
-                    android:password="true"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginStart="26dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:hint="@string/gioiTinh"
+                    android:background="@drawable/rectangle"
+                    android:textColorHint="@color/black"
+                    app:cursorColor="@color/primaryColor"
+                    >
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                android:id="@+id/TIL_SDT"
-                android:hint="@string/SDT"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="26dp"
-                android:background="@drawable/rectangle"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp"
-                android:textColorHint="@color/black"
-                >
-                <com.google.android.material.textfield.TextInputEditText
-                    android:inputType="phone"
+                    <AutoCompleteTextView
+                        android:id="@+id/ACTV_GioiTinh"
+                        android:layout_width="match_parent"
+                        android:layout_height="62dp"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/login_btn"
+                    android:onClick="@{() -> viewModel.onSignUpClicked()}"
                     android:layout_width="match_parent"
-                    android:backgroundTint="#FFFFFF"
-                    android:layout_height="62dp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="wrap_content"
+                    android:text="@string/Dang_ky"
+                    android:textSize="20sp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/login_btn" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                android:id="@+id/TIL_NienKhoa"
-                android:hint="@string/nienKhoa"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="26dp"
-                android:background="@drawable/rectangle"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp"
-                android:textColorHint="@color/black"
-                >
-                <com.google.android.material.textfield.TextInputEditText
-                    android:inputType="text|number"
-                    android:layout_width="match_parent"
-                    android:backgroundTint="#FFFFFF"
-                    android:layout_height="62dp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/TIL_Khoa"
-                style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="62dp"
-                android:layout_marginStart="26dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:hint="@string/khoa"
-                android:background="@drawable/rectangle"
-                android:textColorHint="@color/black"
-                app:cursorColor="@color/primaryColor"
-                >
-
-                <AutoCompleteTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="62dp"
-                    android:inputType="none"
-                    android:textColor="@color/black"
-                    app:simpleItems="@array/ds_khoa"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/TIL_GioiTinh"
-                style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="62dp"
-                android:layout_marginStart="26dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:hint="@string/gioiTinh"
-                android:background="@drawable/rectangle"
-                android:textColorHint="@color/black"
-                app:cursorColor="@color/primaryColor"
-                >
-
-                <AutoCompleteTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="62dp"
-                    android:inputType="none"
-                    android:textColor="@color/black"
-                    app:simpleItems="@array/gioiTinh"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/login_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/Dang_ky"
-                android:textSize="20sp"
-                android:layout_marginTop="50dp"
-                android:layout_marginStart="26dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/login_btn" />
-
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</layout>
