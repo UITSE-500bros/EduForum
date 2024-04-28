@@ -17,6 +17,7 @@ public class LoginViewModel extends ViewModel {
     private final LoginRepository loginRepository;
     private final MutableLiveData<LoginViewState> credentials;
     private final MutableLiveData<Boolean> isEmailVerified;
+    private final MutableLiveData<Boolean> isResetPasswordEmailSent;
     private final MutableLiveData<String> loginErrorMsg;
     public LoginViewModel() {
         if (FlagsList.APPLICATION_ENVIRONMENT.equals("development")) {
@@ -31,6 +32,7 @@ public class LoginViewModel extends ViewModel {
         isEmailVerified = new MutableLiveData<>();
         credentials.setValue(new LoginViewState());
         loginErrorMsg = new MutableLiveData<>();
+        isResetPasswordEmailSent = new MutableLiveData<>(Boolean.FALSE);
     }
 
     public LiveData<LoginViewState> getCredentials() {
@@ -106,6 +108,24 @@ public class LoginViewModel extends ViewModel {
             }
         });
 
+    }
+
+    public MutableLiveData<Boolean> getIsResetPasswordEmailSent() {
+        return isResetPasswordEmailSent;
+    }
+
+    public void sendResetPasswordEmail(String email) {
+        this.loginRepository.sendResetPasswordEmail(email, new ILoginCallback() {
+            @Override
+            public void onLoginSuccess() {
+                isResetPasswordEmailSent.postValue(true);
+            }
+
+            @Override
+            public void onLoginFailed(String errorMsg) {
+
+            }
+        });
     }
 
 }

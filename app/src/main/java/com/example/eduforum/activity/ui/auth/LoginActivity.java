@@ -48,6 +48,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // navigate to forgot password
+        binding.btnForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(), ForgotPassActivity.class);
+                startActivity(i);
+            }
+        });
+
         TextInputLayout emailInput = binding.TILEmail;
         TextInputLayout passwordInput = binding.TILPassword;
 
