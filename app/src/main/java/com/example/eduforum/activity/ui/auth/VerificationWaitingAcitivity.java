@@ -2,6 +2,7 @@ package com.example.eduforum.activity.ui.auth;
 
 import android.os.Bundle;
 
+import com.example.eduforum.databinding.ActivityVerificationWaitingBinding;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,13 +20,12 @@ import com.example.eduforum.R;
 
 public class VerificationWaitingAcitivity extends AppCompatActivity {
 
-    private ActivityVerificationWaitingAcitivityBinding binding;
+    private ActivityVerificationWaitingBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        binding = ActivityVerificationWaitingAcitivityBinding.inflate(getLayoutInflater());
+        binding = ActivityVerificationWaitingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
 
