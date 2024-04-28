@@ -5,4 +5,6 @@ public interface CommunityBuilder {
     CommunityBuilder setCreatedDate(String createdDate);
     CommunityBuilder setDepartment(String department);
     Community build();
+
+    CommunityBuilder setCommunityId(String id);
 }

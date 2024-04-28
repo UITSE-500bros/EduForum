@@ -6,6 +6,7 @@ import java.io.File;
 
 public class CommunityConcreteBuilder implements CommunityBuilder{
     private String communityName;
+    private String communityId;
 
     private Uri image = Uri.fromFile(new File("../../../../res/drawable-v24/welcome1.xml"));
     private String createdDate;
@@ -33,5 +34,11 @@ public class CommunityConcreteBuilder implements CommunityBuilder{
     @Override
     public Community build() {
         return new Community(communityName, createdDate, department);
+    }
+
+    @Override
+    public CommunityBuilder setCommunityId(String id) {
+        this.communityName = id;
+        return this;
     }
 }
