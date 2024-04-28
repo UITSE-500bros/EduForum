@@ -15,6 +15,7 @@ public class LoginViewModel extends ViewModel {
     private final MutableLiveData<Boolean> loginSuccess;
     private final LoginRepository loginRepository;
     private final MutableLiveData<LoginViewState> credentials;
+    private final MutableLiveData<Boolean> isEmailVerified;
     public LoginViewModel() {
         if (FlagsList.APPLICATION_ENVIRONMENT.equals("development")) {
             loginRepository = new LoginTestRepository();
@@ -25,6 +26,7 @@ public class LoginViewModel extends ViewModel {
         passwordError = new MutableLiveData<>();
         loginSuccess = new MutableLiveData<>();
         credentials = new MutableLiveData<>();
+        isEmailVerified = new MutableLiveData<>();
         credentials.setValue(new LoginViewState());
     }
 
@@ -45,7 +47,9 @@ public class LoginViewModel extends ViewModel {
         return loginSuccess;
     }
 
-
+    public LiveData<Boolean> getIsEmailVerified() {
+        return isEmailVerified;
+    }
     public void onLoginClicked() {
         LoginViewState state = credentials.getValue();
         boolean isValid = true;
