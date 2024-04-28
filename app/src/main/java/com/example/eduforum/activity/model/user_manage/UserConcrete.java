@@ -1,10 +1,6 @@
-package com.example.eduforum.activity.model;
+package com.example.eduforum.activity.model.user_manage;
 
-import android.media.Image;
-
-import com.google.firebase.Timestamp;
-
-public class User implements UserBuilder{
+public class UserConcrete implements UserBuilder{
     private String userId;
     private String userName;
     private String name;
@@ -15,52 +11,6 @@ public class User implements UserBuilder{
     private String schoolYear;
 
     //private Image avatar;
-
-
-
-    public User() {
-    }
-
-    public User(String userId,String userName, String name, String email, String password, String phoneNumber, Gender gender, String schoolYear) {
-        this.userId = userId;
-        this.userName = userName;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.gender = gender;
-        this.schoolYear = schoolYear;
-    }
-
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public String getSchoolYear() {
-        return schoolYear;
-    }
-
     @Override
     public UserBuilder setUserId(String userId) {
         this.userId = userId;
@@ -106,11 +56,11 @@ public class User implements UserBuilder{
     @Override
     public UserBuilder setSchoolYear(String schoolYear) {
         this.schoolYear = schoolYear;
-        return this;
     }
 
     @Override
-    public UserBuilder build() {
-        return new User(userId,userName, name, email, password, phoneNumber,gender,schoolYear);
+    public User build() {
+        return new User(userId,userName,name,email,password,phoneNumber,gender,schoolYear);
+
     }
 }

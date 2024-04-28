@@ -1,6 +1,4 @@
-package com.example.eduforum.activity.model;
-
-import com.google.firebase.Timestamp;
+package com.example.eduforum.activity.model.user_manage;
 
 public interface UserBuilder {
     UserBuilder setUserId(String userId);
@@ -12,6 +10,6 @@ public interface UserBuilder {
 
     UserBuilder setGender(Gender gender);
     UserBuilder setSchoolYear(String schoolYear);
-    UserBuilder build();
+    User build();
 }
 //repo for signin, signup, signout,post,comment

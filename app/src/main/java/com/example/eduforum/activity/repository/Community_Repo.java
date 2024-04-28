@@ -16,6 +16,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Community_Repo {
     protected FirebaseFirestore db;
@@ -25,14 +26,15 @@ public class Community_Repo {
         db = FirebaseFirestore.getInstance();
     }
 
-    public void createCommunity(String communityId, String communityName, String createdDate, String department) {
-        CommunityConcreteBuilder communityConcreteBuilder = new CommunityConcreteBuilder();
-        communityConcreteBuilder.setCommunityId(communityId);
-        communityConcreteBuilder.setCommunityName(communityName);
-        communityConcreteBuilder.setCreatedDate(createdDate);
-        communityConcreteBuilder.setDepartment(department);
+    public void createCommunity(String communityName, String createdDate, String department) {
+        CommunityConcreteBuilder communityConcreteBuilder = (CommunityConcreteBuilder) new CommunityConcreteBuilder()
+                                                                                        .setCommunityName(communityName)
+                                                                                        .setCreatedDate(createdDate)
+                                                                                        .setDepartment(department);
         Community community = communityConcreteBuilder.build();
-        db.collection("Community").document(communityId).set(community);
+        db.collection("Community").document().set(community);
+
+
     }
     public void deleteCommunity(String communityId) {
         db.collection("Community").document(communityId).delete();
@@ -63,5 +65,13 @@ public class Community_Repo {
                     }
                 });
         return communities;
+    }
+
+    public void addingUserIntoCommunity(String communityId, String userId) {
+        db.collection("Community").document(communityId).collection("User").document(userId).set(userId);
+    }
+
+    private String autoGenerateCommunityCode() {
+        return UUID.randomUUID().toString();
     }
 }
