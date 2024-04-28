@@ -20,6 +20,7 @@ import com.example.eduforum.activity.viewmodel.auth.LoginViewModel;
 import com.example.eduforum.databinding.ActivityLoginBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
@@ -34,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        viewModel.getSignedInUser().observe(this, this::updateUI);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 
         binding.setViewModel(viewModel);
@@ -84,5 +86,13 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
+            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(i);
+            finish();
+        }
     }
 }
