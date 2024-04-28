@@ -16,6 +16,10 @@
         android:theme="@style/Theme.EduForum"
         tools:targetApi="31">
         <activity
+            android:name=".activity.ui.auth.ForumActivity"
+            android:exported="true">
+        </activity>
+        <activity
             android:name=".activity.ui.auth.VerificationWaitingActivity"
             android:exported="false"
             android:theme="@style/Theme.EduForum" />

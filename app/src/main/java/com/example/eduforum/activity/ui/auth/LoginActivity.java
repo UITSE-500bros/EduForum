@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel viewModel;
     private ActivityLoginBinding binding;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
