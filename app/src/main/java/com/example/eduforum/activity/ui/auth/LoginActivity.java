@@ -1,57 +1,79 @@
 package com.example.eduforum.activity.ui.auth;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.ui.main.MainActivity;
+import com.example.eduforum.activity.viewmodel.auth.LoginViewModel;
+import com.example.eduforum.databinding.ActivityLoginBinding;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private TextInputLayout emailInput;
-    private TextInputLayout passwordInput;
-    private Button loginButton;
+    private LoginViewModel viewModel;
+    private ActivityLoginBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            return insets;
-        });
 
-        emailInput=findViewById(R.id.TIL_Email);
-        passwordInput=findViewById(R.id.TIL_Password);
-        loginButton=findViewById(R.id.login_btn);
+        viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+
+        // navigate to sign up
+        binding.register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Objects.requireNonNull(emailInput.getEditText()).getText().toString().isEmpty()){
-                    emailInput.setError("Email is required");
-                    return;
-                }
-
-                if(Objects.requireNonNull(passwordInput.getEditText()).getText().toString().isEmpty()){
-                    passwordInput.setError("Password is required");
-                    return;
-                }
-
+                Intent i = new Intent(v.getContext(), SignUpActivity.class);
+                startActivity(i);
             }
+        });
+
+        TextInputLayout emailInput = binding.TILEmail;
+        TextInputLayout passwordInput = binding.TILPassword;
+
+        viewModel.getEmailError().observe(this, emailError -> {
+            if(emailError != null){
+                emailInput.setError(emailError);
+            }
+        });
+
+        viewModel.getPasswordError().observe(this, passwordError -> {
+            if(passwordError != null){
+                passwordInput.setError(passwordError);
+            }
+        });
+
+        viewModel.getIsEmailVerified().observe(this, isEmailVerified -> {
+            if(isEmailVerified){
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        viewModel.getLoginErrorMsg().observe(this, msg -> {
+            Snackbar.make(binding.getRoot(), msg, Snackbar.LENGTH_SHORT).show();
         });
 
 
     }
-
 }

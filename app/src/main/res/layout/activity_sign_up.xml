@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.eduforum.activity.viewmodel.auth.SignUpViewModel" />
+    </data>
+
     <LinearLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
@@ -63,11 +69,10 @@
                     android:background="@drawable/rectangle"
                     android:layout_marginEnd="20dp"
                     android:layout_marginTop="20dp"
-                    app:suffixText="\@gmail.com"
-                    app:suffixTextColor="@color/primaryColor"
                     android:textColorHint="@color/black"
                     >
                     <com.google.android.material.textfield.TextInputEditText
+                        android:text="@={viewModel.user.email}"
                         android:inputType="textEmailAddress"
                         android:layout_width="match_parent"
                         android:backgroundTint="#FFFFFF"
@@ -86,6 +91,7 @@
                     android:layout_marginTop="20dp"
                     >
                     <com.google.android.material.textfield.TextInputEditText
+                        android:text="@={viewModel.user.fullName}"
                         android:inputType="textPersonName"
                         android:layout_width="match_parent"
                         android:backgroundTint="#FFFFFF"
@@ -107,12 +113,12 @@
                     >
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:text="@={viewModel.user.password}"
                         style="@style/ThemeOverlay.Material3.AutoCompleteTextView.FilledBox"
                         android:layout_width="match_parent"
                         android:layout_height="62dp"
                         android:backgroundTint="#FFFFFF"
                         android:inputType="textPassword"
-                        android:password="true"
                         android:visibility="visible" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -131,11 +137,11 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         style="@style/ThemeOverlay.Material3.AutoCompleteTextView.FilledBox"
+                        android:text="@={viewModel.user.passwordCheck}"
                         android:layout_width="match_parent"
                         android:layout_height="62dp"
                         android:backgroundTint="#FFFFFF"
-                        android:inputType="textPassword"
-                        android:password="true"/>
+                        android:inputType="textPassword" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -151,6 +157,7 @@
                     android:textColorHint="@color/black"
                     >
                     <com.google.android.material.textfield.TextInputEditText
+                        android:text="@={viewModel.user.phoneNumber}"
                         android:inputType="phone"
                         android:layout_width="match_parent"
                         android:backgroundTint="#FFFFFF"
@@ -170,6 +177,7 @@
                     android:textColorHint="@color/black"
                     >
                     <com.google.android.material.textfield.TextInputEditText
+                        android:text="@={viewModel.user.schoolYear}"
                         android:inputType="text|number"
                         android:layout_width="match_parent"
                         android:backgroundTint="#FFFFFF"
@@ -189,15 +197,15 @@
                     android:textColorHint="@color/black"
                     app:cursorColor="@color/primaryColor"
                     >
-
+<!--                    cai nay binding lam sao thi de anh em UI lam :))-->
                     <AutoCompleteTextView
+                        android:id="@+id/ACTV_Khoa"
                         android:layout_width="match_parent"
                         android:layout_height="62dp"
                         android:inputType="none"
-                        android:textColor="@color/black"
-                        app:simpleItems="@array/ds_khoa"/>
+                        android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
-
+                <!--                    cai nay binding lam sao thi de anh em UI lam :))-->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/TIL_GioiTinh"
                     style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
@@ -213,26 +221,16 @@
                     >
 
                     <AutoCompleteTextView
+                        android:id="@+id/ACTV_GioiTinh"
                         android:layout_width="match_parent"
                         android:layout_height="62dp"
                         android:inputType="none"
-                        android:textColor="@color/black"
-                        app:simpleItems="@array/gioiTinh"/>
+                        android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
-
-
-                <ImageView
-                    android:id="@+id/avatar_IView"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/user_ava_default"
-                    android:background="@drawable/border_avatar"/>
-
 
                 <Button
                     android:id="@+id/login_btn"
+                    android:onClick="@{() -> viewModel.onSignUpClicked()}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/Dang_ky"
