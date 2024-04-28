@@ -18,6 +18,7 @@ import com.example.eduforum.R;
 import com.example.eduforum.activity.model.Topic;
 import com.example.eduforum.activity.viewmodel.auth.SignUpViewModel;
 import com.example.eduforum.databinding.ActivitySignUpBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -56,6 +57,12 @@ public class SignUpActivity extends AppCompatActivity {
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
 
+        viewModel.getErrorMessage().observe(this, errorMessage -> {
+            if (errorMessage != null) {
+                Snackbar.make(binding.getRoot(), errorMessage, Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
 //        ArrayAdapter<Topic> adapterKhoa = new ArrayAdapter<Topic>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<Topic>()) {
 //            @Override
 //            public View getView(int position, View convertView, ViewGroup parent) {
@@ -85,4 +92,5 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     }
+
 }
