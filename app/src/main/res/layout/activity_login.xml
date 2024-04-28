@@ -59,10 +59,11 @@
         android:layout_marginTop="210dp"
         app:suffixText="\@gmail.com"
         app:suffixTextColor="@color/primaryColor"
+        app:errorEnabled="true"
 
         >
         <com.google.android.material.textfield.TextInputEditText
-
+            android:id="@+id/ET_Email"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -80,11 +81,12 @@
         android:hint="@string/password"
         app:hintAnimationEnabled="true"
         app:passwordToggleEnabled="true"
+        app:errorEnabled="true"
         app:passwordToggleTint="@color/primaryColor"
         app:passwordToggleTintMode="src_in">
 
         <com.google.android.material.textfield.TextInputEditText
-
+            android:id="@+id/ET_Password"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textPassword" />
