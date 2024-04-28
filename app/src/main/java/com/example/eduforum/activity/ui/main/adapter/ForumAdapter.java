@@ -8,8 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eduforum.databinding.ItemForumBinding;
 
-import java.util.List;
-
 public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHolder> {
 
     // private List<Forum> forums;
