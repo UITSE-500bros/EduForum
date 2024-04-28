@@ -16,10 +16,33 @@ public class Community {
     public Community() {
     }
 
-    public Community(String communityId, String communityName, String createdDate, String department) {
-        this.communityId = communityId;
+    public Community(String communityName, String createdDate, String department) {
         this.communityName = communityName;
         this.createdDate = createdDate;
         this.department = department;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public Uri getImage() {
+        return image;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public String getDepartment() {
+        return department;
     }
 }

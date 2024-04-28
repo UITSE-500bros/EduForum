@@ -5,19 +5,12 @@ import android.net.Uri;
 import java.io.File;
 
 public class CommunityConcreteBuilder implements CommunityBuilder{
-
-    private String communityId;
     private String communityName;
 
     private Uri image = Uri.fromFile(new File("../../../../res/drawable-v24/welcome1.xml"));
     private String createdDate;
     private String department;
 
-    @Override
-    public CommunityBuilder setCommunityId(String communityId) {
-        this.communityId = communityId;
-        return this;
-    }
 
     @Override
     public CommunityBuilder setCommunityName(String communityName) {
@@ -39,6 +32,6 @@ public class CommunityConcreteBuilder implements CommunityBuilder{
 
     @Override
     public Community build() {
-        return new Community(communityId, communityName, createdDate, department);
+        return new Community(communityName, createdDate, department);
     }
 }
