@@ -22,6 +22,7 @@ public class SignUpActivity extends AppCompatActivity {
     ActivitySignUpBinding binding;
     private Uri selectedImageUri;
 
+    //instace of ActivityResultLauncher to get the image from the gallery
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(
             new ActivityResultContracts.GetContent(),
             new ActivityResultCallback<Uri>() {
