@@ -21,17 +21,19 @@
             android:theme="@style/Theme.EduForum" />
         <activity
             android:name=".activity.ui.auth.SignUpActivity"
-            android:exported="true"></activity>
-        <activity
-            android:name=".activity.ui.auth.LoginActivity"
-            android:exported="true"
-            android:label="@string/title_activity_login"
-            android:theme="@style/Theme.EduForum">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.ui.auth.LoginActivity"
+            android:exported="true"
+            android:label="@string/title_activity_login"
+            android:theme="@style/Theme.EduForum">
+
         </activity>
         <activity
             android:name=".activity.ui.welcome.WelcomeActivity"

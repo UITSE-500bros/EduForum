@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.eduforum.R;
 import com.example.eduforum.databinding.FragmentFirstBinding;
 
 public class FirstFragment extends Fragment {

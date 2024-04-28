@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.eduforum.activity.model.Topic;
 import com.example.eduforum.activity.model.User;
+import com.example.eduforum.activity.repository.ISignUpCallback;
 import com.example.eduforum.activity.repository.SignUpRepository;
 import com.example.eduforum.activity.repository.SignUpTestRepository;
 import com.example.eduforum.activity.ui.auth.SignUpViewState;
@@ -20,6 +21,8 @@ public class SignUpViewModel extends ViewModel {
     private final MutableLiveData<SignUpViewState> userLiveData;
     private final MutableLiveData<String> selectedDepartment;
     private final MutableLiveData<String> selectedGender;
+    private final MutableLiveData<Boolean> navigateToEmailVerification;
+
 //    private final MutableLiveData<Boolean> errorLiveData;
 
 
@@ -37,6 +40,12 @@ public class SignUpViewModel extends ViewModel {
         selectedDepartment = new MutableLiveData<>();
 //        errorLiveData = new MutableLiveData<>();
         selectedGender = new MutableLiveData<>();
+        navigateToEmailVerification = new MutableLiveData<>();
+    }
+
+    // navigation
+    public LiveData<Boolean> getNavigateToEmailVerification() {
+        return navigateToEmailVerification;
     }
 
     // gender
@@ -89,7 +98,17 @@ public class SignUpViewModel extends ViewModel {
 
         User newUser = mapUIStateToUser(userLiveData.getValue());
 
-        signUpRepository.register(newUser);
+        signUpRepository.register(newUser, new ISignUpCallback() {
+            @Override
+            public void onSignUpSuccess() {
+                navigateToEmailVerification.postValue(true);
+            }
+
+            @Override
+            public void onSignUpFailure() {
+                // Handle sign-up failure, e.g., show an error message
+            }
+        });
     }
 
     private User mapUIStateToUser(SignUpViewState UIState) {
