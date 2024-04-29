@@ -46,6 +46,7 @@ public class SignUpViewModel extends ViewModel {
         selectedGender = new MutableLiveData<>();
         errorMessage = new MutableLiveData<>();
         navigateToEmailVerification = new MutableLiveData<>();
+
     }
 
     // navigation
@@ -139,6 +140,7 @@ public class SignUpViewModel extends ViewModel {
         user.setSchoolYear(UIState.schoolYear);
         user.setDepartment(UIState.department);
         user.setPhoneNumber(UIState.phoneNumber);
+        user.setProfilePicture(String.valueOf(UIState.profilePicture));
         return user;
     }
 

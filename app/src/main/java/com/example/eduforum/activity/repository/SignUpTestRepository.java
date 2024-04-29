@@ -7,6 +7,7 @@ public class SignUpTestRepository extends SignUpRepository {
         super();
         mAuth.useEmulator("10.0.2.2", 9099);
         db.useEmulator("10.0.2.2", 8080);
+        storage.useEmulator("10.0.2.2", 9199);
     }
 
 

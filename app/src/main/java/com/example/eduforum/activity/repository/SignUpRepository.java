@@ -53,7 +53,7 @@ public class SignUpRepository {
                                             callback.onSignUpSuccess();
                                         }
                                     });
-//                            uploadProfilePicture(user);
+                            uploadProfilePicture(user);
                             writeNewUserToFirestore(user, FlagsList.CONNECTION_RETRIES);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -70,10 +70,10 @@ public class SignUpRepository {
 
     public void uploadProfilePicture(User user) {
         StorageReference usersRef = storage.getReference("User");
-
-        Uri file = Uri.fromFile(new File(user.getProfilePicture()));
-        StorageReference userImgRef = usersRef.child(user.getUserId()+"images/"+file.getLastPathSegment());
-        UploadTask uploadTask = userImgRef.putFile(file);
+        Uri fileUri = Uri.parse(user.getProfilePicture());
+        StorageReference userImgRef = usersRef.child(user.getUserId()+"images/"+fileUri.getLastPathSegment());
+        user.setProfilePicture(userImgRef.getPath());
+        UploadTask uploadTask = userImgRef.putFile(fileUri);
 
         // Register observers to listen for when the upload is done or if it fails
         uploadTask.addOnFailureListener(new OnFailureListener() {
