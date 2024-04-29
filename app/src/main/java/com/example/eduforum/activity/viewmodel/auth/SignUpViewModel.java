@@ -117,7 +117,11 @@ public class SignUpViewModel extends ViewModel {
 
             @Override
             public void onSignUpFailure(String errorMsg) {
-
+                if(errorMsg.equals(FlagsList.ERROR_REGISTER_EMAIL_EXISTED)){
+                    errorMessage.postValue("Email đã tồn tại");
+                } else {
+                    errorMessage.postValue("Đã có lỗi xảy ra");
+                }
             }
 
         });
