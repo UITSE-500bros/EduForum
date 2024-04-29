@@ -228,6 +228,16 @@
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <ImageView
+                    android:id="@+id/avatar_IView"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/user_ava_default"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/border_avatar"/>
+
                 <Button
                     android:id="@+id/login_btn"
                     android:onClick="@{() -> viewModel.onSignUpClicked()}"
