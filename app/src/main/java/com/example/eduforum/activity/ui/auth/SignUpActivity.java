@@ -1,14 +1,20 @@
 package com.example.eduforum.activity.ui.auth;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -24,9 +30,29 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 public class SignUpActivity extends AppCompatActivity {
-
     private SignUpViewModel viewModel;
+    private static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
     private ActivitySignUpBinding binding;
+    private Uri selectedImageUri;
+
+    //instace of ActivityResultLauncher to get the image from the gallery
+    ActivityResultLauncher<String> mGetContent = registerForActivityResult(
+            new ActivityResultContracts.GetContent(),
+            new ActivityResultCallback<Uri>() {
+                @Override
+                public void onActivityResult(Uri uri) {
+                    // Returned Uri when Úser selects an image from the gallery
+
+                    if(uri != null){
+                        selectedImageUri = uri;
+                        binding.avatarIView.setImageURI(uri);
+                    }
+                    else {
+                        binding.avatarIView.setImageResource(R.drawable.user_ava_default);
+                    }
+                }
+            });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,13 +89,24 @@ public class SignUpActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
 
         viewModel.getErrorMessage().observe(this, errorMessage -> {
             if (errorMessage != null) {
                 Snackbar.make(binding.getRoot(), errorMessage, Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+        //handle when user click on the avatar image view
+        binding.avatarIView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(SignUpActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    mGetContent.launch("image/*");
+                } else {
+                    ActivityCompat.requestPermissions(SignUpActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_STORAGE_PERMISSION);
+                }
             }
         });
 
@@ -98,9 +135,6 @@ public class SignUpActivity extends AppCompatActivity {
 //                viewModel.setSelectedDepartmentId(selectedDepartment.getId());
 //            }
 //        });
-
-
-
     }
 
 }
