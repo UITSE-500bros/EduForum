@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.eduforum.R;
 import com.example.eduforum.activity.viewmodel.auth.LoginViewModel;
 import com.example.eduforum.databinding.ActivityForgotPassBinding;
+import com.example.eduforum.databinding.ActivityVerificationWaitingBinding;
 
 public class ForgotPassActivity extends AppCompatActivity {
 
@@ -45,9 +46,9 @@ public class ForgotPassActivity extends AppCompatActivity {
         viewModel.getIsResetPasswordEmailSent().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                // Navigate toi 1 trang thong bao email gui thanh cong, back ve login
-//                Intent i = new Intent(getApplicationContext(), ResetPasswordEmailSentActivity.class);
-//                startActivity(i);
+                Intent intent = new Intent(ForgotPassActivity.this, VerificationWaitingActivity.class);
+                intent.putExtra("callingActivity", "ForgotPassActivity");
+                startActivity(intent);
             }
         });
     }
