@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.eduforum.R;
 import com.example.eduforum.activity.ui.main.MainActivity;
 import com.example.eduforum.activity.ui.welcome.WelcomeActivity;
+import com.example.eduforum.activity.util.FlagsList;
 import com.example.eduforum.activity.viewmodel.auth.LoginViewModel;
 import com.example.eduforum.databinding.ActivityLoginBinding;
 import com.google.android.material.snackbar.Snackbar;
@@ -103,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-        if (user != null) {
+        if (user != null && FlagsList.APPLICATION_ENVIRONMENT.equals("production")) {
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(i);
             finish();

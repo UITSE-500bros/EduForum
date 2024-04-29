@@ -13,6 +13,7 @@ public interface UserBuilder {
     UserBuilder setGender(String gender);
     UserBuilder setSchoolYear(String schoolYear);
     UserBuilder setDepartment(String department);
+    UserBuilder setProfilePicture(String profilePicture);
     UserBuilder build();
 }
 //repo for signin, signup, signout,post,comment

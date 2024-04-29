@@ -9,5 +9,5 @@ public class FlagsList {
     public static String ERROR_REGISTER_EMAIL_EXISTED = "ERROR_REGISTER_EMAIL_EXISTED";
     public static String ERROR_REGISTER = "ERROR_REGISTER";
     public static int CONNECTION_RETRIES = 3;
-    public static String APPLICATION_ENVIRONMENT = "production";
+    public static String APPLICATION_ENVIRONMENT = "development";
 }
