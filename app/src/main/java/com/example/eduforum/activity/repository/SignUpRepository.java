@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -50,7 +51,11 @@ public class SignUpRepository {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(FlagsList.DEBUG_REGISTER_FLAG, "createUserWithEmail:failure", task.getException());
-                            callback.onSignUpFailure("error");
+                            String errorMessage = FlagsList.ERROR_REGISTER;
+                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                                errorMessage = FlagsList.ERROR_REGISTER_EMAIL_EXISTED;
+                            }
+                            callback.onSignUpFailure(errorMessage);
                         }
                     }
                 });
