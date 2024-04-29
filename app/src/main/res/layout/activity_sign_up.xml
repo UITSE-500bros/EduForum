@@ -137,6 +137,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         style="@style/ThemeOverlay.Material3.AutoCompleteTextView.FilledBox"
+                        android:text="@={viewModel.user.passwordCheck}"
                         android:layout_width="match_parent"
                         android:layout_height="62dp"
                         android:backgroundTint="#FFFFFF"

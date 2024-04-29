@@ -102,8 +102,46 @@ public class SignUpViewModel extends ViewModel {
         userLiveData.setValue(state);
     }
 
+
+
+    public void onSignUpClicked() {
+        if(!isSignUpDataValid()) return;
+
+        User newUser = mapUIStateToUser(userLiveData.getValue());
+
+        signUpRepository.register(newUser, new ISignUpCallback() {
+            @Override
+            public void onSignUpSuccess() {
+                navigateToEmailVerification.postValue(true);
+            }
+
+            @Override
+            public void onSignUpFailure(String errorMsg) {
+
+            }
+
+        });
+    }
+
+    private User mapUIStateToUser(SignUpViewState UIState) {
+        if (UIState == null) return null;
+        UIState.gender = selectedGender.getValue();
+        UIState.department = selectedDepartment.getValue();
+        User user = new User();
+        user.setEmail(UIState.email);
+        user.setPassword(UIState.password);
+        user.setName(UIState.fullName);
+        user.setGender(UIState.gender);
+        user.setSchoolYear(UIState.schoolYear);
+        user.setDepartment(UIState.department);
+        user.setPhoneNumber(UIState.phoneNumber);
+        return user;
+    }
+
     public boolean isSignUpDataValid() {
         SignUpViewState state = userLiveData.getValue();
+        state.gender = selectedGender.getValue();
+        state.department = selectedDepartment.getValue();
         if (state == null) return false;
         //check email
         if(state.email.isEmpty() || !state.email.matches("^[0-9]{8}@gm\\.uit\\.edu\\.vn$")){
@@ -125,22 +163,16 @@ public class SignUpViewModel extends ViewModel {
         for(int i = 0; i < state.password.length(); i++){
             if(Character.isDigit(state.password.charAt(i))){
                 flag1 = true;
-                break;
             }
-        }
-        for(int i = 0; i < state.password.length(); i++){
             if(Character.isLetter(state.password.charAt(i))){
                 flag2 = true;
-                break;
             }
-        }
-        for(int i = 0; i < state.password.length(); i++){
             char c = state.password.charAt(i);
             if(c >= 33 && c <= 46 || c == 64){
                 flag3 = true;
-                break;
             }
         }
+
         if(!flag1 || !flag2 || !flag3){
             errorMessage.setValue("Mật khẩu phải chứa ít nhất 1 chữ cái, 1 số và 1 ký tự đặc biệt");
             return false;
@@ -166,44 +198,10 @@ public class SignUpViewModel extends ViewModel {
             return false;
         }
         //check gender
-        if(state.gender.isEmpty()){
+        if(state.gender.isEmpty()) {
             errorMessage.setValue("Chưa chọn giới tính");
             return false;
         }
         return true;
     }
-
-    public void onSignUpClicked() {
-        if(!isSignUpDataValid()) return;
-
-        User newUser = mapUIStateToUser(userLiveData.getValue());
-
-        signUpRepository.register(newUser, new ISignUpCallback() {
-            @Override
-            public void onSignUpSuccess() {
-                navigateToEmailVerification.postValue(true);
-            }
-
-            @Override
-            public void onSignUpFailure() {
-                // Handle sign-up failure, e.g., show an error message
-            }
-        });
-    }
-
-    private User mapUIStateToUser(SignUpViewState UIState) {
-        if (UIState == null) return null;
-        UIState.gender = selectedGender.getValue();
-        UIState.department = selectedDepartment.getValue();
-        User user = new User();
-        user.setEmail(UIState.email);
-        user.setPassword(UIState.password);
-        user.setName(UIState.fullName);
-        user.setGender(UIState.gender);
-        user.setSchoolYear(UIState.schoolYear);
-        user.setDepartment(UIState.department);
-        user.setPhoneNumber(UIState.phoneNumber);
-        return user;
-    }
-
 }

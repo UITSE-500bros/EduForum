@@ -1,6 +1,8 @@
 package com.example.eduforum.activity.ui.auth;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -13,8 +15,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.ui.main.MainActivity;
 import com.example.eduforum.activity.viewmodel.auth.LoginViewModel;
 import com.example.eduforum.databinding.ActivityLoginBinding;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Objects;
@@ -35,9 +39,17 @@ public class LoginActivity extends AppCompatActivity {
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
 
+        // navigate to sign up
+        binding.register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(), SignUpActivity.class);
+                startActivity(i);
+            }
+        });
+
         TextInputLayout emailInput = binding.TILEmail;
         TextInputLayout passwordInput = binding.TILPassword;
-        Button loginButton = binding.loginBtn;
 
         viewModel.getEmailError().observe(this, emailError -> {
             if(emailError != null){
@@ -51,11 +63,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        loginButton.setOnClickListener(v -> {
-           String email = Objects.requireNonNull(emailInput.getEditText()).getText().toString();
-           String password = Objects.requireNonNull(passwordInput.getEditText()).getText().toString();
-              viewModel.onLoginClicked(email, password);
+        viewModel.getIsEmailVerified().observe(this, isEmailVerified -> {
+            if(isEmailVerified){
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
+        viewModel.getLoginErrorMsg().observe(this, msg -> {
+            Snackbar.make(binding.getRoot(), msg, Snackbar.LENGTH_SHORT).show();
         });
 
 

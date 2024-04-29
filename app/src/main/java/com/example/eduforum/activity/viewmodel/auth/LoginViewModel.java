@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.eduforum.activity.repository.ILoginCallback;
 import com.example.eduforum.activity.repository.LoginRepository;
 import com.example.eduforum.activity.repository.LoginTestRepository;
 import com.example.eduforum.activity.ui.auth.LoginViewState;
@@ -15,6 +16,8 @@ public class LoginViewModel extends ViewModel {
     private final MutableLiveData<Boolean> loginSuccess;
     private final LoginRepository loginRepository;
     private final MutableLiveData<LoginViewState> credentials;
+    private final MutableLiveData<Boolean> isEmailVerified;
+    private final MutableLiveData<String> loginErrorMsg;
     public LoginViewModel() {
         if (FlagsList.APPLICATION_ENVIRONMENT.equals("development")) {
             loginRepository = new LoginTestRepository();
@@ -25,7 +28,9 @@ public class LoginViewModel extends ViewModel {
         passwordError = new MutableLiveData<>();
         loginSuccess = new MutableLiveData<>();
         credentials = new MutableLiveData<>();
+        isEmailVerified = new MutableLiveData<>();
         credentials.setValue(new LoginViewState());
+        loginErrorMsg = new MutableLiveData<>();
     }
 
     public LiveData<LoginViewState> getCredentials() {
@@ -45,36 +50,62 @@ public class LoginViewModel extends ViewModel {
         return loginSuccess;
     }
 
+    public LiveData<Boolean> getIsEmailVerified() {
+        return isEmailVerified;
+    }
 
-    public void onLoginClicked(String email, String password) {
+    // error message
+
+    public LiveData<String> getLoginErrorMsg() {
+        return loginErrorMsg;
+    }
+
+    public void onLoginClicked() {
         LoginViewState state = credentials.getValue();
-        this.loginRepository.login(state.getEmail(), state.getPassword());
+
 
         boolean isValid = true;
 
-        if(email==null || email.isEmpty()){
+        if(state.getEmail() == null || state.getEmail().isEmpty()){
             emailError.setValue("Email is required");
             isValid = false;
-            return;
+
         }
         else {
             emailError.setValue(null);
         }
 
-        if(password==null || password.isEmpty()){
+        if(state.getPassword() == null || state.getPassword().isEmpty()) {
             passwordError.setValue("Password is required");
             isValid = false;
-            return;
+
         }
-        else{
+        else {
             passwordError.setValue(null);
         }
-        if (isValid) {
-            performlogin(email, password);
-        }
+
+        if (!isValid) return;
+
+        loginSuccess.setValue(true);
+
+        this.loginRepository.login(state.getEmail(), state.getPassword(), new ILoginCallback() {
+            @Override
+            public void onLoginSuccess() {
+                isEmailVerified.postValue(true);
+            }
+
+            @Override
+            public void onLoginFailed(String errorMsg) {
+                if (errorMsg.equals(FlagsList.ERROR_LOGIN_EMAIL_NOT_VERIFIED)) {
+                    loginErrorMsg.postValue("Email chưa được kích hoạt!");
+                }
+                if (errorMsg.equals(FlagsList.ERROR_LOGIN_WRONG_CREDENTIALS)) {
+                    loginErrorMsg.postValue("Sai tên đăng nhập hoặc mật khẩu!");
+                }
+
+            }
+        });
 
     }
-    private void performlogin(String email, String password){
-       loginSuccess.setValue(true);
-    }
+
 }

@@ -65,10 +65,11 @@
         </androidx.appcompat.widget.Toolbar>
 
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/forumFragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:id="@+id/forumFragmentContainer"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/postsSearchBar"
@@ -82,11 +83,14 @@
             app:itemTextColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/secondaryColor"
+            app:defaultNavHost="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/forummenu" />
+            app:layout_constraintTop_toBottomOf="@+id/forumFragmentContainer"
+            app:navGraph="@navigation/navigation_main"
+            app:menu="@menu/menu_main"
+            android:background="@color/secondaryColor"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
