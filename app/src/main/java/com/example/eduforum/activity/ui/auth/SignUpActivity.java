@@ -1,14 +1,22 @@
 package com.example.eduforum.activity.ui.auth;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -24,9 +32,14 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 public class SignUpActivity extends AppCompatActivity {
-
     private SignUpViewModel viewModel;
+    private static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
     private ActivitySignUpBinding binding;
+    private Uri selectedImageUri;
+
+    //instace of ActivityResultLauncher to get the image from the gallery
+    private ActivityResultLauncher<String> mGetContent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +76,6 @@ public class SignUpActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
 
@@ -72,6 +84,57 @@ public class SignUpActivity extends AppCompatActivity {
                 Snackbar.make(binding.getRoot(), errorMessage, Snackbar.LENGTH_SHORT).show();
             }
         });
+
+        // handle when user click on the avatar image view
+
+        // Registers a photo picker activity launcher in single-select mode.
+        ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
+                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                    // Callback is invoked after the user selects a media item or closes the
+                    // photo picker.
+                    if (uri != null) {
+                        Log.d("hahahhahah", uri.toString());
+                        SignUpViewState state = viewModel.getUser().getValue();
+                        assert state != null;
+                        state.setProfilePicture(uri);
+                        binding.getViewModel().setUser(state);
+                        binding.avatarIView.setImageURI(uri);
+                    } else {
+//                        Show errors
+                    }
+                });
+
+        binding.avatarIView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pickMedia.launch(new PickVisualMediaRequest.Builder()
+                        .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                        .build());
+//                if (ContextCompat.checkSelfPermission(SignUpActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+//                    mGetContent.launch("image/*");
+//                } else {
+//                    ActivityCompat.requestPermissions(SignUpActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_STORAGE_PERMISSION);
+//                }
+            }
+        });
+
+//        mGetContent = registerForActivityResult(
+//                new ActivityResultContracts.GetContent(),
+//                new ActivityResultCallback<Uri>() {
+//                    @Override
+//                    public void onActivityResult(Uri uri) {
+//                        // Returned Uri when Úser selects an image from the gallery
+//
+//                        if(uri != null){
+//                            selectedImageUri = uri;
+//                            binding.avatarIView.setImageURI(uri);
+//                        }
+//                        else {
+//                            binding.avatarIView.setImageResource(R.drawable.user_ava_default);
+//                        }
+//                    }
+//                });
+
 
 //        ArrayAdapter<Topic> adapterKhoa = new ArrayAdapter<Topic>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<Topic>()) {
 //            @Override
@@ -98,9 +161,6 @@ public class SignUpActivity extends AppCompatActivity {
 //                viewModel.setSelectedDepartmentId(selectedDepartment.getId());
 //            }
 //        });
-
-
-
     }
 
 }

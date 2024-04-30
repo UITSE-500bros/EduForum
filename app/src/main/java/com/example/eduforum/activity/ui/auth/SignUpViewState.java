@@ -1,5 +1,7 @@
 package com.example.eduforum.activity.ui.auth;
 
+import android.net.Uri;
+
 public class SignUpViewState {
     public String email;
     public String password;
@@ -9,8 +11,9 @@ public class SignUpViewState {
     public String gender;
     public String department;
     public String phoneNumber;
+    public Uri profilePicture;
 
-    public SignUpViewState(String email, String password, String passwordCheck, String fullName, String schoolYear, String gender, String department, String phoneNumber) {
+    public SignUpViewState(String email, String password, String passwordCheck, String fullName, String schoolYear, String gender, String department, String phoneNumber, Uri profilePicture) {
         this.email = email;
         this.password = password;
         this.passwordCheck = passwordCheck;
@@ -19,8 +22,17 @@ public class SignUpViewState {
         this.gender = gender;
         this.department = department;
         this.phoneNumber = phoneNumber;
+        this.profilePicture = profilePicture;
     }
     public SignUpViewState() {}
+
+    public Uri getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(Uri profilePicture) {
+        this.profilePicture = profilePicture;
+    }
 
     public String getEmail() {
         return email;
