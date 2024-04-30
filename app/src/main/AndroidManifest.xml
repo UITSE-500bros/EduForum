@@ -30,6 +30,10 @@
 
         </activity>
         <activity
+            android:name=".activity.ui.auth.ForgotPassActivity"
+            android:exported="true"/>
+
+        <activity
             android:name=".activity.ui.auth.LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_login"

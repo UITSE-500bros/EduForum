@@ -24,46 +24,46 @@
             app:srcCompat="@drawable/email_image" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/verifyTitleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Xác thực tài khoản"
+            android:text="@string/verification_waiting_title1"
             android:textAlignment="center"
             android:textSize="26dp"
             android:textColor="@color/textColor"
-            android:layout_marginLeft="64dp"
-            android:layout_marginRight="64dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/verifyContentTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginRight="100dp"
-            android:text="@string/verification_waiting_label"
+            android:layout_marginRight="16dp"
+            android:text="@string/verification_waiting_content1"
             android:textAlignment="center"
             android:textColor="@color/subTitleTextColor"
             android:textSize="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/verifyTitleTextView" />
 
         <Button
             android:background="@drawable/loginbuttonshape"
             android:onClick="@{() -> viewModel.onBackToLoginClicked()}"
             app:icon="@drawable/icon_check"
-            android:id="@+id/button"
+            android:id="@+id/verificationBackToLoginButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="@string/back_to_login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintTop_toBottomOf="@+id/verifyContentTextView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
