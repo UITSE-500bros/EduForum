@@ -50,13 +50,14 @@ public class CommunityRepository {
                             Log.w("TAG", "listen:error", e);
                             return;
                         }
-
                         for (DocumentChange dc : snapshots.getDocumentChanges()) {
                             switch (dc.getType()) {
                                 case ADDED:
-                                    Log.d("TAG", "New community: " + dc.getDocument().getData());
-                                    Community community = dc.getDocument().toObject(Community.class);
-                                    communities.add(community);
+                                    if(db.collection("CommunityMember").document(dc.getDocument().getId()).collection("UserID").document(currentUser.getUid()).get().isSuccessful()) {
+                                        Log.d("TAG", "New community: " + dc.getDocument().getData());
+                                        Community community = dc.getDocument().toObject(Community.class);
+                                        communities.add(community);
+                                    }
                                     break;
                             }
                         }
@@ -85,8 +86,8 @@ public class CommunityRepository {
 
         //addingUserIntoAdmin();
     }
-    public void deleteCommunity(String communityId) {
-        db.collection("Community").document(communityId).delete();
+    public void deleteCommunity(Community community) {
+        db.collection("Community").document(community.getCommunityId()).delete();
     }
     public void updateCommunity(Community community) {
         db.collection("Community").document(community.getCommunityId()).set(community);
