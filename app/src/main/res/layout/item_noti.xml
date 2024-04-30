@@ -11,6 +11,7 @@
         android:layout_marginEnd="10dp"
         app:cardCornerRadius="18dp"
         app:cardElevation="10dp"
+        app:strokeColor="@color/secondaryColor"
         android:backgroundTint="@color/secondaryColor">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,7 +52,7 @@
                 app:layout_constraintEnd_toStartOf="@id/timeNoti_TextView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="10dp"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp">
 
                 <TextView
@@ -90,7 +91,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/commuNoti_LinearLayout"
                 android:layout_marginTop="10dp"
-                android:layout_marginStart="5dp"
                 android:layout_marginEnd="10dp"/>
 
 
