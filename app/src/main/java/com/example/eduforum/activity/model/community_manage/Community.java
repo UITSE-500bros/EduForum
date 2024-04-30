@@ -10,6 +10,7 @@ public class Community {
 
     private Uri image = Uri.fromFile(new File("../../../../res/drawable-v24/welcome1.xml"));
     private String createdDate;
+    private String description;//todo
     private String department;
 
 

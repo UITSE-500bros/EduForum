@@ -4,14 +4,13 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.LiveData;
 
 import com.example.eduforum.activity.model.community_manage.Community;
 import com.example.eduforum.activity.model.community_manage.CommunityConcreteBuilder;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Firebase;
-import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.FirebaseAppLifecycleListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -19,26 +18,28 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.ktx.Firebase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-public class Community_Repo {
+public class CommunityRepository {
     protected FirebaseFirestore db;
     List<String> communitiesID;
     List<Community> communities;
 
     private ListenerRegistration registration;
 
+    private FirebaseAuth currentUser;
 
-    public Community_Repo() {
+    public CommunityRepository() {
         db = FirebaseFirestore.getInstance();
         communitiesID = new ArrayList<>();
         communities = new ArrayList<>();
+        currentUser = FirebaseAuth.getInstance();
 
         registration = db.collection("Community")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -71,17 +72,27 @@ public class Community_Repo {
 //        communityRepo.removeListener();
 //    }
     public void createCommunity(Community community) {
-        db.collection("Community").add(community);
+        db.collection("Community").add(community).addOnCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                if (task.isSuccessful()) {
+                    Log.d("TAG", "DocumentSnapshot added with ID: " + task.getResult());
+                } else {
+                    Log.w("TAG", "Error adding document", task.getException());
+                }
+            }
+        });
+
+        //addingUserIntoAdmin();
     }
     public void deleteCommunity(String communityId) {
         db.collection("Community").document(communityId).delete();
     }
     public void updateCommunity(Community community) {
-
         db.collection("Community").document(community.getCommunityId()).set(community);
     }
-    public List<String> getAllStringCommunity(String userID) {
 
+    public List<String> getAllStringCommunity(String userID , CommunityCallBack callback) {
         db.collection("CommunityMember").whereEqualTo("userId", userID).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -95,15 +106,24 @@ public class Community_Repo {
                         }
                     }
                 });
-        return communitiesID;
+        return communitiesID;//callback
     }
-
+    public void thamGia(){
+        //TODO
+    }
     public void addingUserIntoCommunity(String communityId, String userId) {
         Map<String, Object> data = new HashMap<>();
         data.put("userIds", Arrays.asList(userId));
         db.collection("CommunityMember").document(communityId).collection("UserID").document(userId).set(data);
     }
-    public List<Community> getAllCommunity(List<String> communityID) {
+
+//    public void addingUserIntoAdmin(String communityId, String userId) {
+//        Map<String, Object> data = new HashMap<>();
+//        data.put("userIds", Arrays.asList(userId));
+//        db.collection("CommunityMember").document(communityId).collection("UserID").document(userId).set(data);
+//    }
+
+    public List<Community> getAllCommunity(List<String> communityID , CommunityCallBack callback) {
         db.collection("Community").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -123,7 +143,7 @@ public class Community_Repo {
                         }
                     }
                 });
-        return communities;
+        return communities;//callback
     }
 
 }
