@@ -8,9 +8,11 @@ public class FlagsList {
     public static String DEBUG_TOPIC_FLAG = "DEBUG_TOPIC";
     public static String ERROR_LOGIN_EMAIL_NOT_VERIFIED = "ERROR_LOGIN_EMAIL_NOT_VERIFIED";
     public static String ERROR_LOGIN_WRONG_CREDENTIALS = "ERROR_LOGIN_WRONG_CREDENTIALS";
+    public static String ERROR_COMMUNITY_FAILED_TO_CREATE = "ERROR_COMMUNITY_FAILED_TO_CREATE";
+    public static String ERROR_COMMUNITY_CODE_NOT_EXIST = "ERROR_COMMUNITY_CODE_NOT_EXIST";
+    public static String ERROR_COMMUNITY_ADD_USER = "ERROR_COMMUNITY_ADD_USER";
     public static int CONNECTION_RETRIES = 3;
     public static String APPLICATION_ENVIRONMENT = "production";
-
 
     public static String DEBUG_COMMUNITY_FLAG = "DEBUG_COMMUNITY";
 }

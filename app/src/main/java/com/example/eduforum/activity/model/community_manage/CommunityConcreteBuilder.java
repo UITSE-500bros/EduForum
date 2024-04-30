@@ -8,7 +8,7 @@ public class CommunityConcreteBuilder implements CommunityBuilder{
     private String communityName;
     private String communityId;
 
-    private Uri image = Uri.fromFile(new File("../../../../res/drawable-v24/welcome1.xml"));
+    private Uri profileImg;
     private String createdDate;
     private String department;
 
@@ -33,7 +33,8 @@ public class CommunityConcreteBuilder implements CommunityBuilder{
 
     @Override
     public Community build() {
-        return new Community(communityName, createdDate, department);
+
+        return new Community( communityName,  createdDate,  department,  profileImg);
     }
 
     @Override
