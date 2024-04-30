@@ -228,19 +228,27 @@
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageView
-                    android:id="@+id/avatar_IView"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/avatar_CView"
                     android:layout_marginTop="20dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/user_ava_default"
-                    android:scaleType="centerCrop"
-                    android:background="@drawable/border_avatar"/>
+                    app:strokeWidth="3dp"
+                    android:backgroundTint="@color/backgroundColor">
+
+                    <ImageView
+                        android:id="@+id/avatar_IView"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:src="@drawable/image_upload"
+                        android:scaleType="centerCrop" />
+
+                </com.google.android.material.card.MaterialCardView>
+
 
                 <Button
                     android:id="@+id/login_btn"
-                    style="@style/Widget.Material3.Button.ElevatedButton.Icon"
                     android:onClick="@{() -> viewModel.onSignUpClicked()}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -249,6 +257,7 @@
                     android:layout_marginTop="50dp"
                     android:layout_marginStart="26dp"
                     android:layout_marginEnd="20dp"
+                    android:foreground="?attr/selectableItemBackground"
                     android:background="@drawable/login_btn" />
 
             </LinearLayout>

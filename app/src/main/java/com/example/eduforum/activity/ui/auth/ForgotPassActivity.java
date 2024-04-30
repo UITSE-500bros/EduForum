@@ -46,6 +46,7 @@ public class ForgotPassActivity extends AppCompatActivity {
         viewModel.getIsResetPasswordEmailSent().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+                if (!aBoolean) return;
                 Intent intent = new Intent(ForgotPassActivity.this, VerificationWaitingActivity.class);
                 intent.putExtra("callingActivity", "ForgotPassActivity");
                 startActivity(intent);
