@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eduforum.databinding.ItemForumBinding;
 
-public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.ForumViewHolder> {
+public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.CommunityViewHolder> {
 
     // private List<Forum> forums;
 
@@ -19,14 +19,14 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Foru
 */
     @NonNull
     @Override
-    public ForumViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CommunityViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         ItemForumBinding itemBinding = ItemForumBinding.inflate(layoutInflater, parent, false);
-        return new ForumViewHolder(itemBinding);
+        return new CommunityViewHolder(itemBinding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ForumViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CommunityViewHolder holder, int position) {
 
     }
 
@@ -36,10 +36,10 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Foru
         return 0;
     }
 
-    static class ForumViewHolder extends RecyclerView.ViewHolder {
+    static class CommunityViewHolder extends RecyclerView.ViewHolder {
         private final ItemForumBinding binding;
 
-        public ForumViewHolder(ItemForumBinding binding) {
+        public CommunityViewHolder(ItemForumBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
