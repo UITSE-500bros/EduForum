@@ -15,4 +15,5 @@
     <color name="cardViewBackgroundColor">#001D3D</color>
     <color name="login_editText">#0097FB80</color>
     <color name="mainEditTextBackgroundColor">#E3D5CACC</color>
+    <color name="pressedView">#85CBFF</color>
 </resources>
