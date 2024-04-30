@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import com.example.eduforum.activity.model.User;
 import com.example.eduforum.activity.model.community_manage.Community;
 import com.example.eduforum.activity.model.community_manage.CommunityConcreteBuilder;
+import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -18,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -35,7 +37,7 @@ public class CommunityRepository {
     List<String> communitiesID;
     List<Community> communities;
 
-    private final ListenerRegistration registration;
+    private ListenerRegistration registration;
 
     private final FirebaseAuth currentUser;
 
@@ -45,27 +47,7 @@ public class CommunityRepository {
         communities = new ArrayList<>();
         currentUser = FirebaseAuth.getInstance();
 
-        registration = db.collection("Community")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot snapshots,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w("TAG", "listen:error", e);
-                            return;
-                        }
-                        assert snapshots != null;
-                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                            if (dc.getType() == DocumentChange.Type.ADDED) {
-                                if (db.collection("CommunityMember").document(dc.getDocument().getId()).collection("UserID").document(currentUser.getUid()).get().isSuccessful()) {
-                                    Log.d("TAG", "New community: " + dc.getDocument().getData());
-                                    Community community = dc.getDocument().toObject(Community.class);
-                                    communities.add(community);
-                                }
-                            }
-                        }
-                    }
-                });
+
     }
     public void removeListener() {
         registration.remove();
@@ -81,15 +63,23 @@ public class CommunityRepository {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        //callback
+                        community.setCommunityId(documentReference.getId());
+                        //add user to community
+                        String id = currentUser.getUid();
+
+                        addingUserIntoCommunityMember(community, id);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
+                        Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error adding document", e);
+                        //callback
                     }
                 });
+
 
     }
     public void deleteCommunity(Community community) {
@@ -99,7 +89,7 @@ public class CommunityRepository {
         db.collection("Community").document(community.getCommunityId()).set(community);
     }
 
-    public void thamGia(String communityJoinId,User user){
+    public void thamGia(String communityJoinId ,String userId){
         db.collection("Community")
             .whereEqualTo("inviteCode", communityJoinId)
             .get()
@@ -108,59 +98,47 @@ public class CommunityRepository {
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            Log.d("Data", document.getId() + " => " + document.getData());
-                            addingUserIntoCommunityMember(document.getId(), user);
+                            addingUserIntoCommunityMember(document.toObject(Community.class), userId);
                         }
                     } else {
-                        Log.d("Error", "Error getting documents: ", task.getException());
+                        //callback thông báo mã không tồn tại, sai mã
+                        Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, task.getException());
                     }
                 }
             });
-    }
-    public void addingUserIntoCommunityMember(String communityId, User user) {
-        db.collection("CommunityMember").document(communityId).collection("UserMember").document().set(user);
+
+    }// need callback
+    public void addingUserIntoCommunityMember(Community communityId,String userId) {
+        //db.collection("CommunityMember").document(userId).document("Community").set(communityId);
+        //callback thông báo tham gia thành công
     }
 
-    public List<String> getAllStringCommunity(String userID , CommunityCallBack callback) {
-        db.collection("CommunityMember").whereEqualTo("userId", userID).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void observeDocument(String collectionPath, String documentId, CommunityChangeListener listener) {
+        registration = db.collection("CommunityMember")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                communitiesID.add(document.getString("communityId"));
-                            }
-                            callback.onCommunitySuccess();
-                        } else {
-                            Log.d("Error", "Error getting documents: ", task.getException());
-                            callback.onCommunityFailure("Error getting documents: " + task.getException().getMessage()); // Call the failure method of the callback
+                    public void onEvent(@Nullable QuerySnapshot snapshots,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("TAG", "listen:error", e);
+                            return;
                         }
-                    }
-                });
-        return communitiesID;
-    }
-
-    public void getAllCommunity(List<String> communityID , CommunityCallBack callback) {
-        db.collection("Community").get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (communityID.contains(document.getId())) {
-                                    communities.add(new CommunityConcreteBuilder().setCommunityId(document.getId())
-                                            .setCommunityName(document.getString("communityName"))
-                                            .setCreatedDate(String.valueOf(document.getDate("communityDate")))
-                                            .setDepartment(document.getString("department"))
-                                            .build());
+                        assert snapshots != null;
+                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                            if (dc.getType() == DocumentChange.Type.ADDED) {
+                                if (db.collection("CommunityMember")
+                                        .document(dc.getDocument().getId())
+                                        .collection("User")
+                                        .document()
+                                        .get().isSuccessful()) {
+                                    Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "User already in community");
+                                    Community community = dc.getDocument().toObject(Community.class);
+                                    communities.add(community);
                                 }
                             }
-                            callback.onCommunitySuccess();
-                        } else {
-                            Log.d("Error", "Error getting documents: ", task.getException());
-                            callback.onCommunityFailure("Error getting documents: " + task.getException().getMessage()); // Call the failure method of the callback
                         }
                     }
                 });
     }
+
 }

@@ -8,4 +8,7 @@ public class FlagsList {
     public static String ERROR_LOGIN_WRONG_CREDENTIALS = "ERROR_LOGIN_WRONG_CREDENTIALS";
     public static int CONNECTION_RETRIES = 3;
     public static String APPLICATION_ENVIRONMENT = "production";
+
+
+    public static String DEBUG_COMMUNITY_FLAG = "DEBUG_COMMUNITY";
 }
