@@ -9,6 +9,8 @@ import com.example.eduforum.activity.repository.LoginRepository;
 import com.example.eduforum.activity.repository.LoginTestRepository;
 import com.example.eduforum.activity.ui.auth.LoginViewState;
 import com.example.eduforum.activity.util.FlagsList;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginViewModel extends ViewModel {
     private final MutableLiveData<String> emailError;
@@ -17,7 +19,9 @@ public class LoginViewModel extends ViewModel {
     private final LoginRepository loginRepository;
     private final MutableLiveData<LoginViewState> credentials;
     private final MutableLiveData<Boolean> isEmailVerified;
+    private final MutableLiveData<Boolean> isResetPasswordEmailSent;
     private final MutableLiveData<String> loginErrorMsg;
+    private final MutableLiveData<FirebaseUser> userLiveData;
     public LoginViewModel() {
         if (FlagsList.APPLICATION_ENVIRONMENT.equals("development")) {
             loginRepository = new LoginTestRepository();
@@ -31,6 +35,9 @@ public class LoginViewModel extends ViewModel {
         isEmailVerified = new MutableLiveData<>();
         credentials.setValue(new LoginViewState());
         loginErrorMsg = new MutableLiveData<>();
+        isResetPasswordEmailSent = new MutableLiveData<>(Boolean.FALSE);
+        userLiveData = new MutableLiveData<>();
+        checkCurrentUser();
     }
 
     public LiveData<LoginViewState> getCredentials() {
@@ -106,6 +113,33 @@ public class LoginViewModel extends ViewModel {
             }
         });
 
+    }
+
+    public MutableLiveData<Boolean> getIsResetPasswordEmailSent() {
+        return isResetPasswordEmailSent;
+    }
+
+    public void sendResetPasswordEmail(String email) {
+        this.loginRepository.sendResetPasswordEmail(email, new ILoginCallback() {
+            @Override
+            public void onLoginSuccess() {
+                isResetPasswordEmailSent.postValue(true);
+            }
+
+            @Override
+            public void onLoginFailed(String errorMsg) {
+
+            }
+        });
+    }
+
+    // get currently signed-in user
+    public LiveData<FirebaseUser> getSignedInUser() {
+        return userLiveData;
+    }
+    private void checkCurrentUser() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        userLiveData.postValue(currentUser);
     }
 
 }

@@ -1,6 +1,10 @@
 package com.example.eduforum.activity.model;
 
-public class User {
+import android.media.Image;
+
+//import com.google.firebase.Timestamp;
+
+public class User implements UserBuilder{
     private String userId;
     private String userName;
     private String name;
@@ -9,14 +13,18 @@ public class User {
     private String phoneNumber;
     private String gender;
     private String schoolYear;
-
     private String department;
+    private String profilePicture;
 
     //private Image avatar;
+
+
+
     public User() {
     }
 
-    public User(String userId,String userName, String name, String email, String password, String phoneNumber, String gender, String schoolYear,String department) {
+    public User(String userId,String userName, String name, String email,
+                String password, String phoneNumber, String gender, String schoolYear, String department, String profilePicture) {
         this.userId = userId;
         this.userName = userName;
         this.name = name;
@@ -26,6 +34,11 @@ public class User {
         this.gender = gender;
         this.schoolYear = schoolYear;
         this.department = department;
+        this.profilePicture = profilePicture;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
     }
 
 
@@ -53,47 +66,77 @@ public class User {
         return gender;
     }
 
-    public String getDepartment() {
-        return department;
-    }
-
     public String getSchoolYear() {
         return schoolYear;
     }
 
-    public void setUserId(String userId) {
+    public String getDepartment() {
+        return department;
+    }
+
+    @Override
+    public UserBuilder setUserId(String userId) {
         this.userId = userId;
+        return this;
     }
 
-    public void setUserName(String userName) {
+    @Override
+    public UserBuilder setUserName(String userName) {
         this.userName = userName;
+        return this;
     }
 
-    public void setName(String name) {
+    @Override
+    public UserBuilder setName(String name) {
         this.name = name;
+        return this;
     }
 
-    public void setEmail(String email) {
+    @Override
+    public UserBuilder setEmail(String email) {
         this.email = email;
+        return this;
     }
 
-    public void setPassword(String password) {
+    @Override
+    public UserBuilder setPassword(String password) {
         this.password = password;
+        return this;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    @Override
+    public UserBuilder setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+        return this;
     }
 
-    public void setGender(String gender) {
+    @Override
+    public UserBuilder setGender(String gender) {
         this.gender = gender;
+        return this;
     }
 
-    public void setSchoolYear(String schoolYear) {
+    @Override
+    public UserBuilder setSchoolYear(String schoolYear) {
         this.schoolYear = schoolYear;
+        return this;
     }
 
-    public void setDepartment(String department) {
+    @Override
+    public UserBuilder setDepartment(String department) {
         this.department = department;
+        return this;
+    }
+
+    @Override
+    public UserBuilder setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+        return this;
+    }
+
+    @Override
+    public UserBuilder build() {
+        return new User(userId, userName, name, email, password,
+                phoneNumber, gender, schoolYear, department, profilePicture);
     }
 }

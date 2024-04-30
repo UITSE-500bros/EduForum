@@ -44,4 +44,21 @@ public class LoginRepository {
                     }
                 });
     }
+
+    public void sendResetPasswordEmail(String email, ILoginCallback callback) {
+        mAuth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(FlagsList.DEBUG_LOGIN_FLAG, "Reset password email sent.");
+                            callback.onLoginSuccess();
+                        } else {
+                            Log.w(FlagsList.DEBUG_LOGIN_FLAG, "Reset password email error.", task.getException());
+                            callback.onLoginFailed("error");
+                        }
+                    }
+                });
+    }
+
 }

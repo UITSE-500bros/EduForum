@@ -38,7 +38,7 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/generalCommusTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
@@ -57,7 +57,7 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                 </androidx.recyclerview.widget.RecyclerView>
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/personalCommusTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Riêng"

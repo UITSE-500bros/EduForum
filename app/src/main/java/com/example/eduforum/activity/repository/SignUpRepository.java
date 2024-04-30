@@ -1,5 +1,6 @@
 package com.example.eduforum.activity.repository;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,16 +13,27 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class SignUpRepository {
     protected FirebaseAuth mAuth;
     protected FirebaseFirestore db;
+    protected FirebaseStorage storage;
 
     public SignUpRepository() {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
     }
 
     public void register(User user, ISignUpCallback callback) {
@@ -34,29 +46,51 @@ public class SignUpRepository {
                             Log.d(FlagsList.DEBUG_REGISTER_FLAG, "createUserWithEmail:success");
                             FirebaseUser fUser = mAuth.getCurrentUser();
                             user.setUserId(mAuth.getUid());
-                            // If not development environment then don't send email verification code
-                            if (!FlagsList.APPLICATION_ENVIRONMENT.equals("development")) {
-                                assert fUser != null;
-                                fUser.sendEmailVerification()
-                                        .addOnCompleteListener(task1 -> {
-                                            if (task1.isSuccessful()) {
-                                                // TODO: send to the UI to notify that email verification has been sent
-                                                 callback.onSignUpSuccess();
-                                            }
-                                        });
-                            }
-
+                            assert fUser != null;
+                            fUser.sendEmailVerification()
+                                    .addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            callback.onSignUpSuccess();
+                                        }
+                                    });
+                            uploadProfilePicture(user);
                             writeNewUserToFirestore(user, FlagsList.CONNECTION_RETRIES);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(FlagsList.DEBUG_REGISTER_FLAG, "createUserWithEmail:failure", task.getException());
-                            callback.onSignUpFailure("error");
+                            String errorMessage = FlagsList.ERROR_REGISTER;
+                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                                errorMessage = FlagsList.ERROR_REGISTER_EMAIL_EXISTED;
+                            }
+                            callback.onSignUpFailure(errorMessage);
                         }
                     }
                 });
     }
 
-    public void writeNewUserToFirestore(User user, int retries) {
+    public void uploadProfilePicture(User user) {
+        StorageReference usersRef = storage.getReference("User");
+        Uri fileUri = Uri.parse(user.getProfilePicture());
+        StorageReference userImgRef = usersRef.child(user.getUserId()+"images/"+fileUri.getLastPathSegment());
+        user.setProfilePicture(userImgRef.getPath());
+        UploadTask uploadTask = userImgRef.putFile(fileUri);
+
+        // Register observers to listen for when the upload is done or if it fails
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+
+            }
+        });
+    }
+
+    protected void writeNewUserToFirestore(User user, int retries) {
         db.collection("User").document(user.getUserId())
                 .set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -81,7 +115,7 @@ public class SignUpRepository {
 
     // TODO: xu ly truong hop deleteUser fail
 
-    public void deleteUser() {
+    protected void deleteUser() {
         FirebaseUser user = mAuth.getCurrentUser();
 
         user.delete()
