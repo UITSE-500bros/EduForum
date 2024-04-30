@@ -240,6 +240,7 @@
 
                 <Button
                     android:id="@+id/login_btn"
+                    style="@style/Widget.Material3.Button.ElevatedButton.Icon"
                     android:onClick="@{() -> viewModel.onSignUpClicked()}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
