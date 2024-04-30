@@ -236,11 +236,11 @@
                     android:layout_gravity="center"
                     android:src="@drawable/user_ava_default"
                     android:scaleType="centerCrop"
+                    android:foreground="?attr/selectableItemBackground"
                     android:background="@drawable/border_avatar"/>
 
                 <Button
                     android:id="@+id/login_btn"
-                    style="@style/Widget.Material3.Button.ElevatedButton.Icon"
                     android:onClick="@{() -> viewModel.onSignUpClicked()}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -249,6 +249,7 @@
                     android:layout_marginTop="50dp"
                     android:layout_marginStart="26dp"
                     android:layout_marginEnd="20dp"
+                    android:foreground="?attr/selectableItemBackground"
                     android:background="@drawable/login_btn" />
 
             </LinearLayout>

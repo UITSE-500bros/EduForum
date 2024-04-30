@@ -122,7 +122,7 @@
             android:layout_marginTop="450dp"
             android:layout_marginLeft="26dp"
             android:background="@drawable/login_btn"
-
+            android:foreground="?attr/selectableItemBackground"
             />
         <TextView
             android:id="@+id/create_account"
@@ -148,6 +148,7 @@
             android:layout_marginStart="110dp"
             android:layout_marginTop="575dp"
             android:background="@drawable/transparent_btn"
+            android:foreground="?attr/selectableItemBackground"
             android:text="@string/dangky"
             android:textColor="#0097FB"
             />
