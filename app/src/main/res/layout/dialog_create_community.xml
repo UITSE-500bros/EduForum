@@ -58,7 +58,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/communityNameEditText"
                     android:hint="@string/community_name"
-                    android:text="@={createCommuViewModel.communityName}"
+                    android:text="@={createCommuViewModel.commuLiveData.name}"
                     android:layout_width="match_parent"
                     android:layout_height="54dp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -75,14 +75,15 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/descriptionEditText"
                     android:hint="@string/community_description"
+                    android:text="@={createCommuViewModel.commuLiveData.description}"
                     android:layout_width="match_parent"
                     android:layout_height="54dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
                 android:id="@+id/tagInputLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/black"
@@ -93,7 +94,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="54dp"
                     android:paddingLeft="16dp"
-                    android:hint="@string/community_description"
+                    android:hint="@string/community_category"
                     android:inputType="none"
                     android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -107,11 +108,13 @@
                 <Button
                     android:id="@+id/cancelCreateCommunityButton"
                     android:background="@drawable/loginbuttonshape"
+                    android:onClick="@{() -> createCommuViewModel.onCancelButtonClicked()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/cancel" />
                 <Button
                     android:id="@+id/confirmCreateCommunityButton"
+                    android:onClick="@{() -> createCommuViewModel.onCreateCommunityButtonClicked()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"

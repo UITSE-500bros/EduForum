@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +60,7 @@ public class HomeFragment extends Fragment {
     private void showCreateCommunityDialog() {
         Dialog createCommunityDialog = new Dialog(this.getContext());
         DialogCreateCommunityBinding dialogBinding = DialogCreateCommunityBinding.inflate(LayoutInflater.from(this.getContext()));
-        CreateCommunityViewModel createCommuViewModel = new CreateCommunityViewModel();
+        CreateCommunityViewModel createCommuViewModel = new ViewModelProvider(this).get(CreateCommunityViewModel.class);
         // Set up dialog
         createCommunityDialog.setContentView(dialogBinding.getRoot());
         dialogBinding.setCreateCommuViewModel(createCommuViewModel);
@@ -67,13 +68,14 @@ public class HomeFragment extends Fragment {
         String[] departmentItems = getResources().getStringArray(R.array.ds_khoa);
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(this.getContext(),
                 android.R.layout.simple_dropdown_item_1line, departmentItems);
+
         dialogBinding.categoryACTV.setAdapter(categoryAdapter);
         dialogBinding.categoryACTV.setOnItemClickListener((parent, view, position, id) -> {
             createCommuViewModel.setCommunityCategory(categoryAdapter.getItem(position));
         });
         createCommuViewModel.getErrorMsg().observe(getViewLifecycleOwner(), errorMsg -> {
             if (errorMsg != null) {
-                Snackbar.make(dialogBinding.getRoot(), errorMsg, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), errorMsg, Snackbar.LENGTH_SHORT).show();
             }
         });
 

@@ -4,42 +4,41 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import android.net.Uri;
 
+import com.example.eduforum.activity.model.community_manage.Community;
+import com.example.eduforum.activity.model.community_manage.CommunityBuilder;
+import com.example.eduforum.activity.model.community_manage.CommunityConcreteBuilder;
+import com.example.eduforum.activity.repository.CommunityRepository;
+import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
+
 public class CreateCommunityViewModel extends ViewModel {
-    private final MutableLiveData<String> communityName;
-    private final MutableLiveData<String> communityDescription;
-    private final MutableLiveData<Uri> communityImage;
     private final MutableLiveData<String> communityCategory;
     private final MutableLiveData<String> errorMsg;
 
     private final MutableLiveData<Boolean> createNewCommunity;
 
     private final MutableLiveData<Boolean> closeDialog;
-    private final String commuNameString;
+    private final MutableLiveData<CreateCommunityViewState> commuLiveData;
 
-
+    CommunityRepository communityRepository;
     // MutableLiveData<CommunityRepository> ....
 
     public CreateCommunityViewModel() {
-        communityName = new MutableLiveData<>();
-        communityDescription = new MutableLiveData<>();
-        communityImage = new MutableLiveData<>();
+
         communityCategory= new MutableLiveData<>();
         errorMsg = new MutableLiveData<>();
         createNewCommunity = new MutableLiveData<>();
         closeDialog = new MutableLiveData<>();
+        commuLiveData = new MutableLiveData<>();
+        commuLiveData.setValue(new CreateCommunityViewState());
+
+        communityRepository = new CommunityRepository();
     }
 
-    public LiveData<String> getCommunityName() {
-        return communityName;
+    public LiveData<CreateCommunityViewState> getCommuLiveData() {
+        return commuLiveData;
     }
 
-    public LiveData<String> getCommunityDescription() {
-        return communityDescription;
-    }
 
-    public LiveData<Uri> getCommunityImage() {
-        return communityImage;
-    }
 
     public LiveData<String> getCommunityCategory() {
         return communityCategory;
@@ -55,15 +54,7 @@ public class CreateCommunityViewModel extends ViewModel {
     public LiveData<Boolean> getCloseDialog() {
         return closeDialog;
     }
-    public void setCommunityName(String name) {
-        communityName.setValue(name);
-    }
-    public void setCommunityDescription(String description) {
-        communityDescription.setValue(description);
-    }
-    public void setCommunityImage(Uri image) {
-        communityImage.setValue(image);
-    }
+
     public void setCommunityCategory(String category) {
         communityCategory.setValue(category);
     }
@@ -74,21 +65,33 @@ public class CreateCommunityViewModel extends ViewModel {
     public void setCreateNewCommunity(Boolean ableToCreate) {
         createNewCommunity.setValue(ableToCreate);
     }
+    public void setCommuLiveData(CreateCommunityViewState commu) {
+        commuLiveData.setValue(commu);
+    }
 
     public void setCloseDialog(Boolean closed) {
         closeDialog.setValue(closed);
     }
     public void onCreateCommunityButtonClicked(){
-        if(communityName.getValue() == null || communityName.getValue().isEmpty()){
+        CreateCommunityViewState commuState = commuLiveData.getValue();
+        if(commuState.getName() == null || commuState.getName().isEmpty()){
             errorMsg.setValue("Tên cộng đồng không thể trống");
             return;
         }
-        if(communityCategory.getValue() == null || communityCategory.getValue().isEmpty()){
+        commuState.setCategory(communityCategory.getValue());
+        if(commuState.getCategory() == null || commuState.getCategory().isEmpty()){
             errorMsg.setValue("Chưa chọn phân loại cho cộng đồng");
             return;
         }
-        // Community commu = new Community(communityName.getValue(), communityDescription.getValue(), communityCategory.getValue(), communityImage.getValue());
-        // commuRepository.createNewCommunity(commu)...
+
+        Community commu = mapUIStateToCommunity(commuState);
+        if(commu==null){
+            errorMsg.setValue("Có lỗi xảy ra");
+            return;
+        }
+        // O day Nam oi
+        // communityRepository.createCommunity(commu, new ICreateCommunityCallback() .....
+
 
         closeDialog.setValue(true);
         createNewCommunity.setValue(true);
@@ -99,4 +102,11 @@ public class CreateCommunityViewModel extends ViewModel {
         closeDialog.setValue(true);
     }
 
+    private Community mapUIStateToCommunity(CreateCommunityViewState UIState){
+        if(UIState == null) return null;
+        CommunityBuilder builder = new CommunityConcreteBuilder();
+        return builder.setCommunityName(UIState.getName())
+                .setDepartment(UIState.getCategory())
+                .build();
+    }
 }
