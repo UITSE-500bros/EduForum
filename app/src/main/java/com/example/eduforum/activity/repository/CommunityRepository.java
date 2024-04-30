@@ -56,6 +56,9 @@ public class CommunityRepository {
 //        communityRepo.removeListener();
 //    }
     public void createCommunity(Community community, ICommunityCallBack callBack) {
+        List<String> admin = new ArrayList<>();
+        admin.add(currentUser.getUid());
+        community.setAdminList(admin);
         db.collection("Community")
                 .add(community)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -63,10 +66,8 @@ public class CommunityRepository {
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                         community.setCommunityId(documentReference.getId());
-
-                        String id = currentUser.getUid();
-                        // Add user to community
-                        addingUserIntoCommunityMember(community, id, callBack);
+                        callBack.onCreateCommunitySuccess();
+                        // cloud function handles the add creator to group
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -109,7 +110,7 @@ public class CommunityRepository {
     public void addingUserIntoCommunityMember(Community community, String userId, ICommunityCallBack callBack) {
         Map<String, Object> data = new HashMap<>();
         data.put("communityID", community.getCommunityId());
-        data.put("name", community.getCommunityName());
+        data.put("name", community.getName());
         // TODO: xem lai
 //        data.put("profilePicture", community.getProfileImage());
         data.put("department", community.getDepartment());

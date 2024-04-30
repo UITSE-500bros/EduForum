@@ -2,27 +2,41 @@ package com.example.eduforum.activity.model.community_manage;
 
 import android.net.Uri;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Community {
     private String communityId;
-    private String communityName;
+    private String name;
 
+    private List<String> adminList = new ArrayList<>();
     private Uri profileImage;
     private String createdDate;
-    private String description;//todo
+    private String description;
     private String department;
 
 
     public Community() {
     }
 
-    public Community(String communityName, String createdDate, String department, Uri profileImg) {
-        this.communityName = communityName;
+
+    public Community(String name, String createdDate, String department, Uri profileImg, String description, List<String> adminList) {
+        this.name = name;
         this.createdDate = createdDate;
         this.department = department;
         this.profileImage = profileImg;
+        this.description = description;
+        this.adminList = adminList;
     }
+
+    public List<String> getAdminList() {
+        return adminList;
+    }
+
+    public void setAdminList(List<String> adminList) {
+        this.adminList = adminList;
+    }
+
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
@@ -32,8 +46,12 @@ public class Community {
         return communityId;
     }
 
-    public String getCommunityName() {
-        return communityName;
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public Uri getProfileImage() {
@@ -48,8 +66,8 @@ public class Community {
         return department;
     }
 
-    public void setCommunityName(String communityName) {
-        this.communityName = communityName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setProfileImage(Uri profileImage) {

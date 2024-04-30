@@ -2,7 +2,6 @@ package com.example.eduforum.activity.viewmodel.main;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import android.net.Uri;
 
 import com.example.eduforum.activity.model.community_manage.Community;
 import com.example.eduforum.activity.model.community_manage.CommunityBuilder;
@@ -126,8 +125,9 @@ public class CreateCommunityViewModel extends ViewModel {
     private Community mapUIStateToCommunity(CreateCommunityViewState UIState){
         if(UIState == null) return null;
         CommunityBuilder builder = new CommunityConcreteBuilder();
-        return builder.setCommunityName(UIState.getName())
+        return builder.setName(UIState.getName())
                 .setDepartment(UIState.getCategory())
+                .setDescription(UIState.getDescription())
                 .build();
     }
 }

@@ -2,20 +2,22 @@ package com.example.eduforum.activity.model.community_manage;
 
 import android.net.Uri;
 
-import java.io.File;
+import java.util.List;
 
 public class CommunityConcreteBuilder implements CommunityBuilder{
-    private String communityName;
+    private String name;
     private String communityId;
 
+    private List<String> adminList;
     private Uri profileImg;
     private String createdDate;
     private String department;
+    private String description;
 
 
     @Override
-    public CommunityBuilder setCommunityName(String communityName) {
-        this.communityName = communityName;
+    public CommunityBuilder setName(String communityName) {
+        this.name = communityName;
         return this;
     }
 
@@ -32,14 +34,20 @@ public class CommunityConcreteBuilder implements CommunityBuilder{
     }
 
     @Override
+    public CommunityBuilder setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    @Override
     public Community build() {
 
-        return new Community( communityName,  createdDate,  department,  profileImg);
+        return new Community(name,  createdDate,  department,  profileImg, description, adminList);
     }
 
     @Override
     public CommunityBuilder setCommunityId(String id) {
-        this.communityName = id;
+        this.name = id;
         return this;
     }
 }
