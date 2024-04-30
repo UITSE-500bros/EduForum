@@ -14,6 +14,7 @@ public class User implements UserBuilder{
     private String gender;
     private String schoolYear;
     private String department;
+    private String profilePicture;
 
     //private Image avatar;
 
@@ -23,7 +24,7 @@ public class User implements UserBuilder{
     }
 
     public User(String userId,String userName, String name, String email,
-                String password, String phoneNumber, String gender, String schoolYear, String department) {
+                String password, String phoneNumber, String gender, String schoolYear, String department, String profilePicture) {
         this.userId = userId;
         this.userName = userName;
         this.name = name;
@@ -33,6 +34,11 @@ public class User implements UserBuilder{
         this.gender = gender;
         this.schoolYear = schoolYear;
         this.department = department;
+        this.profilePicture = profilePicture;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
     }
 
 
@@ -123,8 +129,14 @@ public class User implements UserBuilder{
     }
 
     @Override
+    public UserBuilder setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+        return this;
+    }
+
+    @Override
     public UserBuilder build() {
         return new User(userId, userName, name, email, password,
-                phoneNumber, gender, schoolYear, department);
+                phoneNumber, gender, schoolYear, department, profilePicture);
     }
 }

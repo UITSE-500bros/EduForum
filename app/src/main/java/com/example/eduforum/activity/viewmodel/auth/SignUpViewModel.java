@@ -46,6 +46,7 @@ public class SignUpViewModel extends ViewModel {
         selectedGender = new MutableLiveData<>();
         errorMessage = new MutableLiveData<>();
         navigateToEmailVerification = new MutableLiveData<>();
+
     }
 
     // navigation
@@ -117,7 +118,11 @@ public class SignUpViewModel extends ViewModel {
 
             @Override
             public void onSignUpFailure(String errorMsg) {
-
+                if(errorMsg.equals(FlagsList.ERROR_REGISTER_EMAIL_EXISTED)){
+                    errorMessage.postValue("Email đã tồn tại");
+                } else {
+                    errorMessage.postValue("Đã có lỗi xảy ra");
+                }
             }
 
         });
@@ -135,6 +140,7 @@ public class SignUpViewModel extends ViewModel {
         user.setSchoolYear(UIState.schoolYear);
         user.setDepartment(UIState.department);
         user.setPhoneNumber(UIState.phoneNumber);
+        user.setProfilePicture(String.valueOf(UIState.profilePicture));
         return user;
     }
 
