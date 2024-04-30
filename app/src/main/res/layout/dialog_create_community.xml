@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <!-- scroll -->
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="createCommuViewModel"
+            type="com.example.eduforum.activity.viewmodel.main.CreateCommunityViewModel" />
+    </data>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -52,6 +58,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/communityNameEditText"
                     android:hint="@string/community_name"
+                    android:text="@={createCommuViewModel.communityName}"
                     android:layout_width="match_parent"
                     android:layout_height="54dp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -104,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/cancel" />
                 <Button
-                    android:id="@+id/createCommunityButton"
+                    android:id="@+id/confirmCreateCommunityButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
@@ -115,5 +122,4 @@
 
         </LinearLayout>
     </ScrollView>
-
 </layout>
