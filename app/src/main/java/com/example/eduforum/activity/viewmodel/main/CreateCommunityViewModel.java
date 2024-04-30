@@ -8,6 +8,7 @@ import com.example.eduforum.activity.model.community_manage.Community;
 import com.example.eduforum.activity.model.community_manage.CommunityBuilder;
 import com.example.eduforum.activity.model.community_manage.CommunityConcreteBuilder;
 import com.example.eduforum.activity.repository.CommunityRepository;
+import com.example.eduforum.activity.repository.ICommunityCallBack;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 
 public class CreateCommunityViewModel extends ViewModel {
@@ -90,10 +91,30 @@ public class CreateCommunityViewModel extends ViewModel {
             return;
         }
         // O day Nam oi
-        // communityRepository.createCommunity(commu, new ICreateCommunityCallback() .....
+         communityRepository.createCommunity(commu, new ICommunityCallBack() {
+                     @Override
+                     public void onCommunitySuccess() {
+
+                     }
+
+                     @Override
+                     public void onCommunityFailure(String errorMsg) {
+
+                     }
+
+                     @Override
+                     public void onCreateCommunitySuccess() {
+
+                     }
+
+                     @Override
+                     public void onCreateCommunityFailure(String errorMsg) {
+
+                     }
+                 });
 
 
-        closeDialog.setValue(true);
+                 closeDialog.setValue(true);
         createNewCommunity.setValue(true);
     }
 

@@ -111,7 +111,7 @@ public class CommunityRepository {
         data.put("communityID", community.getCommunityId());
         data.put("name", community.getCommunityName());
         // TODO: xem lai
-        data.put("profilePicture", community.getProfileImage());
+//        data.put("profilePicture", community.getProfileImage());
         data.put("department", community.getDepartment());
 
 

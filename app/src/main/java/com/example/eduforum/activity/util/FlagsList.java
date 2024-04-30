@@ -12,7 +12,7 @@ public class FlagsList {
     public static String ERROR_COMMUNITY_CODE_NOT_EXIST = "ERROR_COMMUNITY_CODE_NOT_EXIST";
     public static String ERROR_COMMUNITY_ADD_USER = "ERROR_COMMUNITY_ADD_USER";
     public static int CONNECTION_RETRIES = 3;
-    public static String APPLICATION_ENVIRONMENT = "production";
+    public static String APPLICATION_ENVIRONMENT = "development";
 
     public static String DEBUG_COMMUNITY_FLAG = "DEBUG_COMMUNITY";
 }
