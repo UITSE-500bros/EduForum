@@ -1,39 +1,43 @@
 package com.example.eduforum.activity.repository;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.eduforum.activity.model.User;
 import com.example.eduforum.activity.model.community_manage.Community;
 import com.example.eduforum.activity.model.community_manage.CommunityConcreteBuilder;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseAppLifecycleListener;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.ktx.Firebase;
+
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 public class CommunityRepository {
     protected FirebaseFirestore db;
     List<String> communitiesID;
     List<Community> communities;
 
-    private ListenerRegistration registration;
+    private final ListenerRegistration registration;
 
-    private FirebaseAuth currentUser;
+    private final FirebaseAuth currentUser;
 
     public CommunityRepository() {
         db = FirebaseFirestore.getInstance();
@@ -50,15 +54,14 @@ public class CommunityRepository {
                             Log.w("TAG", "listen:error", e);
                             return;
                         }
+                        assert snapshots != null;
                         for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                            switch (dc.getType()) {
-                                case ADDED:
-                                    if(db.collection("CommunityMember").document(dc.getDocument().getId()).collection("UserID").document(currentUser.getUid()).get().isSuccessful()) {
-                                        Log.d("TAG", "New community: " + dc.getDocument().getData());
-                                        Community community = dc.getDocument().toObject(Community.class);
-                                        communities.add(community);
-                                    }
-                                    break;
+                            if (dc.getType() == DocumentChange.Type.ADDED) {
+                                if (db.collection("CommunityMember").document(dc.getDocument().getId()).collection("UserID").document(currentUser.getUid()).get().isSuccessful()) {
+                                    Log.d("TAG", "New community: " + dc.getDocument().getData());
+                                    Community community = dc.getDocument().toObject(Community.class);
+                                    communities.add(community);
+                                }
                             }
                         }
                     }
@@ -73,24 +76,49 @@ public class CommunityRepository {
 //        communityRepo.removeListener();
 //    }
     public void createCommunity(Community community) {
-        db.collection("Community").add(community).addOnCompleteListener(new OnCompleteListener() {
-            @Override
-            public void onComplete(@NonNull Task task) {
-                if (task.isSuccessful()) {
-                    Log.d("TAG", "DocumentSnapshot added with ID: " + task.getResult());
-                } else {
-                    Log.w("TAG", "Error adding document", task.getException());
-                }
-            }
-        });
+        db.collection("Community")
+                .add(community)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
 
-        //addingUserIntoAdmin();
     }
     public void deleteCommunity(Community community) {
         db.collection("Community").document(community.getCommunityId()).delete();
     }
     public void updateCommunity(Community community) {
         db.collection("Community").document(community.getCommunityId()).set(community);
+    }
+
+    public void thamGia(String communityJoinId,User user){
+        db.collection("Community")
+            .whereEqualTo("inviteCode", communityJoinId)
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Log.d("Data", document.getId() + " => " + document.getData());
+                            addingUserIntoCommunityMember(document.getId(), user);
+                        }
+                    } else {
+                        Log.d("Error", "Error getting documents: ", task.getException());
+                    }
+                }
+            });
+    }
+    public void addingUserIntoCommunityMember(String communityId, User user) {
+        db.collection("CommunityMember").document(communityId).collection("UserMember").document().set(user);
     }
 
     public List<String> getAllStringCommunity(String userID , CommunityCallBack callback) {
@@ -102,29 +130,17 @@ public class CommunityRepository {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 communitiesID.add(document.getString("communityId"));
                             }
+                            callback.onCommunitySuccess();
                         } else {
                             Log.d("Error", "Error getting documents: ", task.getException());
+                            callback.onCommunityFailure("Error getting documents: " + task.getException().getMessage()); // Call the failure method of the callback
                         }
                     }
                 });
-        return communitiesID;//callback
-    }
-    public void thamGia(){
-        //TODO
-    }
-    public void addingUserIntoCommunity(String communityId, String userId) {
-        Map<String, Object> data = new HashMap<>();
-        data.put("userIds", Arrays.asList(userId));
-        db.collection("CommunityMember").document(communityId).collection("UserID").document(userId).set(data);
+        return communitiesID;
     }
 
-//    public void addingUserIntoAdmin(String communityId, String userId) {
-//        Map<String, Object> data = new HashMap<>();
-//        data.put("userIds", Arrays.asList(userId));
-//        db.collection("CommunityMember").document(communityId).collection("UserID").document(userId).set(data);
-//    }
-
-    public List<Community> getAllCommunity(List<String> communityID , CommunityCallBack callback) {
+    public void getAllCommunity(List<String> communityID , CommunityCallBack callback) {
         db.collection("Community").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -139,12 +155,12 @@ public class CommunityRepository {
                                             .build());
                                 }
                             }
+                            callback.onCommunitySuccess();
                         } else {
                             Log.d("Error", "Error getting documents: ", task.getException());
+                            callback.onCommunityFailure("Error getting documents: " + task.getException().getMessage()); // Call the failure method of the callback
                         }
                     }
                 });
-        return communities;//callback
     }
-
 }
