@@ -39,6 +39,7 @@ public class HomeViewModel extends ViewModel{
         isCreateCommunitySuccess = new MutableLiveData<>();
         isJoinCommunitySuccess = new MutableLiveData<>();
         joinCommunityLiveData = new MutableLiveData<>();
+        joinCommunityLiveData.setValue(new JoinCommunityViewState());
     }
     public LiveData<JoinCommunityViewState> getJoinCommuLiveData() {
         return joinCommunityLiveData;
@@ -146,6 +147,7 @@ public class HomeViewModel extends ViewModel{
             }
         });
 
+        // setID cho CreateCommunityViewState
 
         createCommunityDialogIsClosed.setValue(true);
     }
@@ -161,7 +163,7 @@ public class HomeViewModel extends ViewModel{
             errorMsg.setValue("Mã cộng đồng không thể trống");
             return;
         }
-        // chua lay dc userID
+        // lay tu loginRepo
 //        communityRepository.thamGia(joinCommuState.getCommunityId(), userID, new ICommunityCallBack() {
 //            @Override
 //            public void onCommunitySuccess() {

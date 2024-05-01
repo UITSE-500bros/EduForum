@@ -17,6 +17,7 @@ import com.example.eduforum.R;
 import com.example.eduforum.activity.ui.main.adapter.CommunityAdapter;
 import com.example.eduforum.activity.viewmodel.main.HomeViewModel;
 import com.example.eduforum.databinding.DialogCreateCommunityBinding;
+import com.example.eduforum.databinding.DialogJoinCommunityBinding;
 import com.example.eduforum.databinding.FragmentHomeBinding;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -54,6 +55,16 @@ public class HomeFragment extends Fragment {
         binding.createCommuButton.setOnClickListener(v -> {
             showCreateCommunityDialog();
         });
+        binding.joinCommuButton.setOnClickListener(v -> {
+            showJoinCommunityDialog();
+        });
+        viewModel.getErrorMsg().observe(getViewLifecycleOwner(), errorMsg -> {
+            if (errorMsg != null) {
+                Snackbar.make(binding.getRoot(), errorMsg, Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+
 
     }
     private void showCreateCommunityDialog() {
@@ -71,11 +82,7 @@ public class HomeFragment extends Fragment {
         dialogBinding.categoryACTV.setOnItemClickListener((parent, view, position, id) -> {
             viewModel.setCommunityCategory(categoryAdapter.getItem(position));
         });
-        viewModel.getErrorMsg().observe(getViewLifecycleOwner(), errorMsg -> {
-            if (errorMsg != null) {
-                Snackbar.make(binding.getRoot(), errorMsg, Snackbar.LENGTH_SHORT).show();
-            }
-        });
+
 
        viewModel.getIsCreateCommunitySuccess().observe(getViewLifecycleOwner(), isCreateCommunitySuccess -> {
             if (isCreateCommunitySuccess) {
@@ -89,5 +96,25 @@ public class HomeFragment extends Fragment {
         });
         createCommunityDialog.show();
 
+    }
+    private void showJoinCommunityDialog(){
+        Dialog joinCommunityDialog = new Dialog(this.getContext());
+        DialogJoinCommunityBinding dialogBinding = DialogJoinCommunityBinding.inflate(LayoutInflater.from(this.getContext()));
+        // Set up dialog
+        joinCommunityDialog.setContentView(dialogBinding.getRoot());
+        dialogBinding.setViewModel(viewModel);
+        dialogBinding.setLifecycleOwner(this);
+        viewModel.getIsJoinCommunitySuccess().observe(getViewLifecycleOwner(), isJoinCommunitySuccess -> {
+            if (isJoinCommunitySuccess) {
+                Snackbar.make(binding.getRoot(), "Join community success", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+        viewModel.getJoinCommunityDialogIsClosed().observe(getViewLifecycleOwner(), joinCommunityDialogIsClosed -> {
+            if (joinCommunityDialogIsClosed) {
+                joinCommunityDialog.dismiss();
+            }
+        });
+
+        joinCommunityDialog.show();
     }
 }

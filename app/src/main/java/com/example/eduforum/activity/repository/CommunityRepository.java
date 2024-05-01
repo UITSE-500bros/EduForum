@@ -224,7 +224,8 @@ public class CommunityRepository {
                 });
     }
 
-
+    // isThamGia
+    // isAdmin
     public List<Community> isThamGia(String userId, ICommunityCallBack callBack){
         List<Community> communities = new ArrayList<>();
         db.collection("CommunityMember")
