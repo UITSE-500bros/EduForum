@@ -13,6 +13,7 @@ import com.example.eduforum.activity.repository.CommunityTestRepository;
 import com.example.eduforum.activity.repository.ICommunityCallBack;
 import com.example.eduforum.activity.repository.ICommunityCallBack_A;
 import com.example.eduforum.activity.repository.ICommunityCallBack_B;
+import com.example.eduforum.activity.repository.ICommunityCallBack_C;
 import com.example.eduforum.activity.repository.LoginRepository;
 import com.example.eduforum.activity.repository.LoginTestRepository;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
@@ -70,6 +71,12 @@ public class HomeViewModel extends ViewModel{
         joinedCommunityList.setValue(new ArrayList<>());
         isAdminCommunityList.setValue(new ArrayList<>());
     }
+    public LiveData<List<CreateCommunityViewState>> getJoinedCommunityList() {
+        return joinedCommunityList;
+    }
+    public LiveData<List<CreateCommunityViewState>> getIsAdminCommunityList() {
+        return isAdminCommunityList;
+    }
     public LiveData<JoinCommunityViewState> getJoinCommuLiveData() {
         return joinCommunityLiveData;
     }
@@ -103,6 +110,13 @@ public class HomeViewModel extends ViewModel{
         return isJoinCommunitySuccess;
     }
 
+    public CommunityRepository getCommunityRepository() {
+        return communityRepository;
+    }
+    public LoginRepository getLoginRepository() {
+        return loginRepository;
+    }
+
     public void setCommunityCategory(String category) {
         communityCategory.setValue(category);
     }
@@ -130,6 +144,24 @@ public class HomeViewModel extends ViewModel{
     public void setJoinCommuLiveData(JoinCommunityViewState joinCommu) {
         joinCommunityLiveData.setValue(joinCommu);
     }
+    public void setJoinedCommunityList(List<CreateCommunityViewState> joinedCommunityList) {
+        this.joinedCommunityList.setValue(joinedCommunityList);
+    }
+    public void setIsAdminCommunityList(List<CreateCommunityViewState> isAdminCommunityList) {
+        this.isAdminCommunityList.setValue(isAdminCommunityList);
+    }
+
+    public void setCommunityRepository(CommunityRepository communityRepository) {
+        this.communityRepository = communityRepository;
+    }
+
+    public void setLoginRepository(LoginRepository loginRepository) {
+        this.loginRepository = loginRepository;
+    }
+
+    //-----------------------------------------------------------
+
+
     public void onConfirmCreateCommunityButtonClicked(){
         CreateCommunityViewState commuState = commuLiveData.getValue();
         if(commuState.getName() == null || commuState.getName().isEmpty()){
@@ -153,6 +185,7 @@ public class HomeViewModel extends ViewModel{
             public void onCreateCommunitySuccess(String communityId) {
                 isCreateCommunitySuccess.setValue(true);
                 commuLiveData.setValue(new CreateCommunityViewState(commuLiveData.getValue().getName(), commuLiveData.getValue().getDescription(), commuLiveData.getValue().getCategory(), null, communityId));
+                updateIsAdminCommunityList(commuLiveData.getValue());
             }
 
             @Override
@@ -185,12 +218,14 @@ public class HomeViewModel extends ViewModel{
         }
         communityRepository.thamGia(joinCommuState.getCommunityId(), FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_A() {
             @Override
-            public void onCommunitySuccess() {
-                isJoinCommunitySuccess.postValue(true);
+            public void onJoinCommunitySuccess() {
+                CreateCommunityViewState newCommunity = new CreateCommunityViewState();
+                newCommunity.setCommunityID(joinCommuState.getCommunityId());
+                updateJoinedCommunityList(newCommunity);
             }
 
             @Override
-            public void onCommunityFailure(String errorMsg) {
+            public void onJoinCommunityFailure(String errorMsg) {
                 if (errorMsg.equals(FlagsList.ERROR_COMMUNITY_CODE_NOT_EXIST)) {
                     setErrorMsg("Cộng đồng không tồn tại");
                 }
@@ -203,6 +238,17 @@ public class HomeViewModel extends ViewModel{
         });
         joinCommunityDialogIsClosed.setValue(true);
     }
+
+    private void updateJoinedCommunityList(CreateCommunityViewState newCommunity){
+        List<CreateCommunityViewState> list = joinedCommunityList.getValue();
+        list.add(newCommunity);
+        joinedCommunityList.setValue(list);
+    }
+    private void updateIsAdminCommunityList(CreateCommunityViewState newCommunity){
+        List<CreateCommunityViewState> list = isAdminCommunityList.getValue();
+        list.add(newCommunity);
+        isAdminCommunityList.setValue(list);
+    }
     public void onCancelJoinCommunityButtonClicked(){
         joinCommunityDialogIsClosed.setValue(true);
     }
@@ -214,5 +260,34 @@ public class HomeViewModel extends ViewModel{
                 .setDepartment(UIState.getCategory())
                 .setDescription(UIState.getDescription())
                 .build();
+    }
+
+    public void fetchJoinedCommunityList(){
+        communityRepository.isMember(FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_B() {
+            @Override
+            public void onRoleMember(List<Community> communityList) {
+                joinedCommunityList.setValue(convertToViewStateList(communityList));
+            }
+
+
+        });
+    }
+
+    public void fetchIsAdminCommunityList(){
+        communityRepository.isAdmin(FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_C() {
+            @Override
+            public void onRoleAdmin(List<Community> communityList) {
+                isAdminCommunityList.setValue(convertToViewStateList(communityList));
+            }
+
+
+        });
+    }
+    private List<CreateCommunityViewState> convertToViewStateList(List<Community> communities) {
+        List<CreateCommunityViewState> viewStates = new ArrayList<>();
+        for (Community community : communities) {
+            viewStates.add(new CreateCommunityViewState(community.getName(), community.getDescription(), community.getDepartment(), community.getProfileImage(), community.getCommunityId()));
+        }
+        return viewStates;
     }
 }

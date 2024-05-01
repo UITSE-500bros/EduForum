@@ -46,7 +46,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
 
     @Override
     public int getItemCount() {
-        return 0;
+        return communityList.size();
     }
 
     public class CommunityViewHolder extends RecyclerView.ViewHolder {
@@ -57,6 +57,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
         }
         void bind(CreateCommunityViewState community) {
             binding.communityNameTextView.setText(community.getName());
+            binding.communityDepartmentTextView.setText(community.getCategory());
             if(community.getCommuAvt()!=null){
                 // Glide...
             }

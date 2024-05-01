@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +16,17 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.model.community_manage.Community;
 import com.example.eduforum.activity.ui.main.adapter.CommunityAdapter;
 import com.example.eduforum.activity.viewmodel.main.HomeViewModel;
 import com.example.eduforum.databinding.DialogCreateCommunityBinding;
 import com.example.eduforum.databinding.DialogJoinCommunityBinding;
 import com.example.eduforum.databinding.FragmentHomeBinding;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -50,8 +57,15 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //generalCommusAdapter = new CommunityAdapter();
-        //myCommusAdapter = new CommunityAdapter();
+        viewModel.fetchJoinedCommunityList();
+        viewModel.fetchIsAdminCommunityList();
+        joinedCommunitiesAdapter = new CommunityAdapter(getContext(), viewModel.getJoinedCommunityList().getValue(),  FirebaseAuth.getInstance());
+        myCommunitiesAdapter = new CommunityAdapter(getContext(), viewModel.getIsAdminCommunityList().getValue(), FirebaseAuth.getInstance());
+        binding.joinedCommunitiesRecyclerView.setAdapter(joinedCommunitiesAdapter);
+        binding.myCommunitiesRecyclerView.setAdapter(myCommunitiesAdapter);
+        binding.joinedCommunitiesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        binding.myCommunitiesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+
         binding.createCommuButton.setOnClickListener(v -> {
             showCreateCommunityDialog();
         });
@@ -64,7 +78,15 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        viewModel.getJoinedCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
+            joinedCommunitiesAdapter.setCommunityList(joinedCommunities);
+            joinedCommunitiesAdapter.notifyDataSetChanged();
+        });
 
+        viewModel.getIsAdminCommunityList().observe(getViewLifecycleOwner(), myCommunities -> {
+            myCommunitiesAdapter.setCommunityList(myCommunities);
+            myCommunitiesAdapter.notifyDataSetChanged();
+        });
 
     }
     private void showCreateCommunityDialog() {
@@ -83,11 +105,8 @@ public class HomeFragment extends Fragment {
             viewModel.setCommunityCategory(categoryAdapter.getItem(position));
         });
 
+        viewModel.getIsAdminCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
 
-       viewModel.getIsCreateCommunitySuccess().observe(getViewLifecycleOwner(), isCreateCommunitySuccess -> {
-            if (isCreateCommunitySuccess) {
-                Snackbar.make(binding.getRoot(), "Create community success", Snackbar.LENGTH_SHORT).show();
-            }
         });
         viewModel.getCreateCommunityDialogIsClosed().observe(getViewLifecycleOwner(), createCommunityDialogIsClosed -> {
             if (createCommunityDialogIsClosed) {
@@ -104,10 +123,9 @@ public class HomeFragment extends Fragment {
         joinCommunityDialog.setContentView(dialogBinding.getRoot());
         dialogBinding.setViewModel(viewModel);
         dialogBinding.setLifecycleOwner(this);
-        viewModel.getIsJoinCommunitySuccess().observe(getViewLifecycleOwner(), isJoinCommunitySuccess -> {
-            if (isJoinCommunitySuccess) {
-                Snackbar.make(binding.getRoot(), "Join community success", Snackbar.LENGTH_SHORT).show();
-            }
+
+        viewModel.getJoinedCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
+
         });
         viewModel.getJoinCommunityDialogIsClosed().observe(getViewLifecycleOwner(), joinCommunityDialogIsClosed -> {
             if (joinCommunityDialogIsClosed) {
@@ -117,4 +135,5 @@ public class HomeFragment extends Fragment {
 
         joinCommunityDialog.show();
     }
+
 }
