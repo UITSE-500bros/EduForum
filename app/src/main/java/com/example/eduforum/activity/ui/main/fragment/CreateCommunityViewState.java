@@ -7,6 +7,7 @@ public class CreateCommunityViewState {
     String description;
     String category;
     Uri commuAvt;
+    String communityID;
 
     public CreateCommunityViewState(String name, String description, String category, Uri commuAvt) {
         this.name = name;
@@ -28,6 +29,7 @@ public class CreateCommunityViewState {
     public String getCategory() {
         return category;
     }
+    public String getCommunityID() {return communityID;}
     public void setCommuAvt(Uri commuAvt) {
         this.commuAvt = commuAvt;
     }
@@ -40,4 +42,5 @@ public class CreateCommunityViewState {
     public void setCategory(String category) {
         this.category = category;
     }
+    public void setCommunityID(String communityID) {this.communityID = communityID;}
 }

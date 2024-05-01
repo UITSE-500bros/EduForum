@@ -9,9 +9,12 @@ import com.example.eduforum.activity.model.community_manage.CommunityConcreteBui
 import com.example.eduforum.activity.repository.CommunityRepository;
 import com.example.eduforum.activity.repository.CommunityTestRepository;
 import com.example.eduforum.activity.repository.ICommunityCallBack;
+import com.example.eduforum.activity.repository.LoginRepository;
+import com.example.eduforum.activity.repository.LoginTestRepository;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.ui.main.fragment.JoinCommunityViewState;
 import com.example.eduforum.activity.util.FlagsList;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class HomeViewModel extends ViewModel{
     private final MutableLiveData<String> communityCategory;
@@ -28,6 +31,8 @@ public class HomeViewModel extends ViewModel{
 
     CommunityRepository communityRepository;
 
+    LoginRepository loginRepository;
+
     public HomeViewModel() {
         communityCategory= new MutableLiveData<>();
         errorMsg = new MutableLiveData<>();
@@ -37,8 +42,11 @@ public class HomeViewModel extends ViewModel{
         commuLiveData.setValue(new CreateCommunityViewState());
         if (FlagsList.APPLICATION_ENVIRONMENT.equals("production")) {
             communityRepository = new CommunityRepository();
+            loginRepository = new LoginRepository();
         } else {
             communityRepository = new CommunityTestRepository();
+            loginRepository = new LoginTestRepository();
+
         }
 
         isCreateCommunitySuccess = new MutableLiveData<>();
@@ -152,7 +160,6 @@ public class HomeViewModel extends ViewModel{
             }
         });
 
-        // setID cho CreateCommunityViewState
 
         createCommunityDialogIsClosed.setValue(true);
     }
@@ -168,32 +175,31 @@ public class HomeViewModel extends ViewModel{
             errorMsg.setValue("Mã cộng đồng không thể trống");
             return;
         }
-        // lay tu loginRepo
-//        communityRepository.thamGia(joinCommuState.getCommunityId(), userID, new ICommunityCallBack() {
-//            @Override
-//            public void onCommunitySuccess() {
-//                isJoinCommunitySuccess.postValue(true);
-//            }
-//
-//            @Override
-//            public void onCommunityFailure(String errorMsg) {
-//                if (errorMsg.equals(FlagsList.ERROR_COMMUNITY_CODE_NOT_EXIST)) {
-//                    setErrorMsg("Cộng đồng không tồn tại");
-//                }
-//                else{
-//                    setErrorMsg("Không thể tham gia cộng đồng");
-//                }
-//            }
-//
-//            @Override
-//            public void onCreateCommunitySuccess() {
-//            }
-//
-//            @Override
-//            public void onCreateCommunityFailure(String errorMsg) {
-//
-//            }
-//        });
+        communityRepository.thamGia(joinCommuState.getCommunityId(), FirebaseAuth.getInstance().getUid(), new ICommunityCallBack() {
+            @Override
+            public void onCommunitySuccess() {
+                isJoinCommunitySuccess.postValue(true);
+            }
+
+            @Override
+            public void onCommunityFailure(String errorMsg) {
+                if (errorMsg.equals(FlagsList.ERROR_COMMUNITY_CODE_NOT_EXIST)) {
+                    setErrorMsg("Cộng đồng không tồn tại");
+                }
+                else{
+                    setErrorMsg("Không thể tham gia cộng đồng");
+                }
+            }
+
+            @Override
+            public void onCreateCommunitySuccess() {
+            }
+
+            @Override
+            public void onCreateCommunityFailure(String errorMsg) {
+
+            }
+        });
         joinCommunityDialogIsClosed.setValue(true);
     }
     public void onCancelJoinCommunityButtonClicked(){
