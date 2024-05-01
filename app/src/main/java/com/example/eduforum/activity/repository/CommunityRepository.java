@@ -156,14 +156,14 @@ public class CommunityRepository {
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                callBack.onCommunitySuccess();
+                                                callBack.onJoinCommunitySuccess();
                                                 Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "DocumentSnapshot successfully updated!");
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                callBack.onCommunityFailure(FlagsList.ERROR_COMMUNITY_ADD_USER);
+                                                callBack.onJoinCommunityFailure(FlagsList.ERROR_COMMUNITY_ADD_USER);
                                                 Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error updating document", e);
                                             }
                                         });
@@ -171,7 +171,7 @@ public class CommunityRepository {
                         } else {
                             // callback thông báo mã không tồn tại, sai mã
                             Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, task.getException());
-                            callBack.onCommunityFailure(FlagsList.ERROR_COMMUNITY_CODE_NOT_EXIST);
+                            callBack.onJoinCommunityFailure(FlagsList.ERROR_COMMUNITY_CODE_NOT_EXIST);
                         }
                     }
                 });

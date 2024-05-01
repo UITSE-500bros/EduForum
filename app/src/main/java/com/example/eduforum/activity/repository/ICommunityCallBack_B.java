@@ -7,5 +7,4 @@ import java.util.List;
 public interface ICommunityCallBack_B {
     void onRoleMember(List<Community> communityList);
 
-    void onBeingMemberFailure(String errorCommunityCodeNotExist);
 }
