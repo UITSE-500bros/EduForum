@@ -10,13 +10,13 @@ import com.example.eduforum.databinding.ItemForumBinding;
 
 public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.CommunityViewHolder> {
 
-    // private List<Forum> forums;
+     //List<Forum> forums;
 
-    /*
-    public ForumAdapter(List<Forum> forums) {
-        this.forums = forums;
-    }
-*/
+
+//    public ForumAdapter(List<Forum> forums) {
+//        this.forums = forums;
+//    }
+
     @NonNull
     @Override
     public CommunityViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

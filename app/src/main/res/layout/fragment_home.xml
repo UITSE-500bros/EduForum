@@ -69,12 +69,12 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
-                    android:text="Chung"
+                    android:text="Cộng đồng của tôi"
                     android:textColor="@color/textColor"
                     android:textSize="24dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/generalForumRecyclerView"
+                    android:id="@+id/myCommunitiesRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -86,14 +86,14 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                     android:id="@+id/personalCommusTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Riêng"
+                    android:text="Cộng đồng đã tham gia"
                     android:textSize="24dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
                     android:textColor="@color/textColor" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/personalForumRecyclerView"
+                    android:id="@+id/joinedCommunitiesRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     tools:listitem="@layout/item_forum"/>

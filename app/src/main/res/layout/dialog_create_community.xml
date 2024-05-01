@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="createCommuViewModel"
-            type="com.example.eduforum.activity.viewmodel.main.CreateCommunityViewModel" />
+            name="viewModel"
+            type="com.example.eduforum.activity.viewmodel.main.HomeViewModel" />
     </data>
     <ScrollView
         android:layout_width="match_parent"
@@ -58,7 +58,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/communityNameEditText"
                     android:hint="@string/community_name"
-                    android:text="@={createCommuViewModel.commuLiveData.name}"
+                    android:text="@={viewModel.commuLiveData.name}"
                     android:layout_width="match_parent"
                     android:layout_height="54dp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -75,7 +75,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/descriptionEditText"
                     android:hint="@string/community_description"
-                    android:text="@={createCommuViewModel.commuLiveData.description}"
+                    android:text="@={viewModel.commuLiveData.description}"
                     android:layout_width="match_parent"
                     android:layout_height="54dp" />
 
@@ -108,13 +108,13 @@
                 <Button
                     android:id="@+id/cancelCreateCommunityButton"
                     android:background="@drawable/loginbuttonshape"
-                    android:onClick="@{() -> createCommuViewModel.onCancelButtonClicked()}"
+                    android:onClick="@{() -> viewModel.onCancelButtonClicked()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/cancel" />
                 <Button
                     android:id="@+id/confirmCreateCommunityButton"
-                    android:onClick="@{() -> createCommuViewModel.onCreateCommunityButtonClicked()}"
+                    android:onClick="@{() -> viewModel.onCreateCommunityButtonClicked()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
