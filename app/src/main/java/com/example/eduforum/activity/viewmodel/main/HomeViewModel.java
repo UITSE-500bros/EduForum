@@ -13,6 +13,8 @@ import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.ui.main.fragment.JoinCommunityViewState;
 import com.example.eduforum.activity.util.FlagsList;
 
+import java.util.List;
+
 public class HomeViewModel extends ViewModel{
     private final MutableLiveData<String> communityCategory;
     private final MutableLiveData<String> errorMsg;
@@ -123,25 +125,13 @@ public class HomeViewModel extends ViewModel{
             errorMsg.setValue("Có lỗi xảy ra");
             return;
         }
-        // O day Nam oi
+
         communityRepository.createCommunity(commu, new ICommunityCallBack() {
             @Override
-            public void onCommunitySuccess() {
-                isJoinCommunitySuccess.postValue(true);
-            }
-
-            @Override
-            public void onCommunityFailure(String errorMsg) {
-                if (errorMsg.equals(FlagsList.ERROR_COMMUNITY_ADD_USER)) {
-                    setErrorMsg("Không thể tham gia cộng đồng");
-                }
-            }
-
-            @Override
-            public void onCreateCommunitySuccess() {
+            public void onCreateCommunitySuccess(String communityId) {
                 isCreateCommunitySuccess.postValue(true);
+                // truyen string id = communityId
             }
-
             @Override
             public void onCreateCommunityFailure(String errorMsg) {
                 if(errorMsg.equals(FlagsList.ERROR_COMMUNITY_CODE_NOT_EXIST)){
@@ -150,6 +140,13 @@ public class HomeViewModel extends ViewModel{
                     setErrorMsg("Không thể tạo cộng đồng");
                 }
             }
+
+            @Override
+            public void onRoleAdmin(List<Community> communityList) {
+                // truyen zo list community
+            }
+
+
         });
 
         // setID cho CreateCommunityViewState
