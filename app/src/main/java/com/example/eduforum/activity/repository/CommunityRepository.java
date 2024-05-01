@@ -223,17 +223,13 @@ public class CommunityRepository {
                                 communities.add(community);
                                 callBack.onRoleMember(communities);
                             }
-                        } else {
-                            // callback thông báo mã không tồn tại, sai mã
-                            Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, task.getException());
-                            callBack.onBeingMemberFailure(FlagsList.ERROR_COMMUNITY_CODE_NOT_EXIST);
                         }
                     }
                 });
     }
 
 
-    public void isAdmin(String userId, ICommunityCallBack callBack){
+    public void isAdmin(String userId, ICommunityCallBack_C callBack){
         List<Community> communities = new ArrayList<>();
         db.collection("CommunityMember")
                 .whereEqualTo("userId", userId)

@@ -4,10 +4,6 @@ import com.example.eduforum.activity.model.community_manage.Community;
 
 import java.util.List;
 
-public interface ICommunityCallBack {
-
-    void onCreateCommunitySuccess(String communityId);
-    void onCreateCommunityFailure(String errorMsg);
-
-
+public interface ICommunityCallBack_C {
+    void onRoleAdmin(List<Community> communityList);
 }
