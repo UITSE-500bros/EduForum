@@ -86,7 +86,7 @@ public class CommunityRepository {
     public void updateCommunity(Community community) {
         db.collection("Community").document(community.getCommunityId()).set(community);
     }
-
+    /*
     public void thamGia(String communityJoinId, String userId, ICommunityCallBack callBack){
         db.collection("Community")
             .whereEqualTo("inviteCode", communityJoinId)
@@ -134,6 +134,50 @@ public class CommunityRepository {
                     }
                 });
     }
+    */
+
+    public void thamGia(String communityJoinId, String userId, ICommunityCallBack callBack){
+        db.collection("Community")
+                .whereEqualTo("inviteCode", communityJoinId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Community community = document.toObject(Community.class);
+                                Map<String, Object> data = new HashMap<>();
+                                data.put("communityID", community.getCommunityId());
+                                data.put("name", community.getName());
+                                data.put("department", community.getDepartment());
+
+                                db.collection("CommunityMember")
+                                        .document(userId)
+                                        .update("communities", FieldValue.arrayUnion(data))
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                callBack.onCommunitySuccess();
+                                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "DocumentSnapshot successfully updated!");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                callBack.onCommunityFailure(FlagsList.ERROR_COMMUNITY_ADD_USER);
+                                                Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error updating document", e);
+                                            }
+                                        });
+                            }
+                        } else {
+                            // callback thông báo mã không tồn tại, sai mã
+                            Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, task.getException());
+                            callBack.onCreateCommunityFailure(FlagsList.ERROR_COMMUNITY_CODE_NOT_EXIST);
+                        }
+                    }
+                });
+    }
+
 
     public void observeDocument(String collectionPath, String documentId, ICommunityChangeListener listener) {
         registration = db.collection("CommunityMember")

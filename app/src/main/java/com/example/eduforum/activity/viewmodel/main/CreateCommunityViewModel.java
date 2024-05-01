@@ -9,6 +9,7 @@ import com.example.eduforum.activity.model.community_manage.CommunityConcreteBui
 import com.example.eduforum.activity.repository.CommunityRepository;
 import com.example.eduforum.activity.repository.ICommunityCallBack;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
+import com.example.eduforum.activity.util.FlagsList;
 
 public class CreateCommunityViewModel extends ViewModel {
     private final MutableLiveData<String> communityCategory;
@@ -19,11 +20,15 @@ public class CreateCommunityViewModel extends ViewModel {
     private final MutableLiveData<Boolean> closeDialog;
     private final MutableLiveData<CreateCommunityViewState> commuLiveData;
 
+
+    private final MutableLiveData<String> createErrorMsg;
+    private final MutableLiveData<Boolean> isCreateCommunitySuccess;
+    private final MutableLiveData<Boolean> isJoinCommunitySuccess;
+
     CommunityRepository communityRepository;
     // MutableLiveData<CommunityRepository> ....
 
     public CreateCommunityViewModel() {
-
         communityCategory= new MutableLiveData<>();
         errorMsg = new MutableLiveData<>();
         createNewCommunity = new MutableLiveData<>();
@@ -32,6 +37,9 @@ public class CreateCommunityViewModel extends ViewModel {
         commuLiveData.setValue(new CreateCommunityViewState());
 
         communityRepository = new CommunityRepository();
+        createErrorMsg = new MutableLiveData<>();
+        isCreateCommunitySuccess = new MutableLiveData<>();
+        isJoinCommunitySuccess = new MutableLiveData<>();
     }
 
     public LiveData<CreateCommunityViewState> getCommuLiveData() {
@@ -53,6 +61,18 @@ public class CreateCommunityViewModel extends ViewModel {
 
     public LiveData<Boolean> getCloseDialog() {
         return closeDialog;
+    }
+
+    public LiveData<String> getCreateErrorMsg() {
+        return createErrorMsg;
+    }
+
+    public MutableLiveData<Boolean> getIsCreateCommunitySuccess() {
+        return isCreateCommunitySuccess;
+    }
+
+    public MutableLiveData<Boolean> getIsJoinCommunitySuccess() {
+        return isJoinCommunitySuccess;
     }
 
     public void setCommunityCategory(String category) {
@@ -93,22 +113,28 @@ public class CreateCommunityViewModel extends ViewModel {
          communityRepository.createCommunity(commu, new ICommunityCallBack() {
                      @Override
                      public void onCommunitySuccess() {
-
+                         isJoinCommunitySuccess.postValue(true);
                      }
 
                      @Override
                      public void onCommunityFailure(String errorMsg) {
-
+                         if (errorMsg.equals(FlagsList.ERROR_COMMUNITY_ADD_USER)) {
+                             createErrorMsg.postValue("Không thể tham gia cộng đồng");
+                         }
                      }
 
                      @Override
                      public void onCreateCommunitySuccess() {
-
+                         isCreateCommunitySuccess.postValue(true);
                      }
 
                      @Override
                      public void onCreateCommunityFailure(String errorMsg) {
-
+                         if(errorMsg.equals(FlagsList.ERROR_COMMUNITY_CODE_NOT_EXIST)){
+                               createErrorMsg.postValue("Community không tồn tại");
+                         }else if(errorMsg.equals(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE)){
+                             createErrorMsg.postValue("Không thể tạo community");
+                         }
                      }
                  });
 
