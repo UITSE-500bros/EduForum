@@ -1,4 +1,6 @@
 package com.example.eduforum.activity.viewmodel.main;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -9,6 +11,8 @@ import com.example.eduforum.activity.model.community_manage.CommunityConcreteBui
 import com.example.eduforum.activity.repository.CommunityRepository;
 import com.example.eduforum.activity.repository.CommunityTestRepository;
 import com.example.eduforum.activity.repository.ICommunityCallBack;
+import com.example.eduforum.activity.repository.ICommunityCallBack_A;
+import com.example.eduforum.activity.repository.ICommunityCallBack_B;
 import com.example.eduforum.activity.repository.LoginRepository;
 import com.example.eduforum.activity.repository.LoginTestRepository;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
@@ -16,7 +20,11 @@ import com.example.eduforum.activity.ui.main.fragment.JoinCommunityViewState;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class HomeViewModel extends ViewModel{
     private final MutableLiveData<String> communityCategory;
@@ -30,6 +38,8 @@ public class HomeViewModel extends ViewModel{
     private final MutableLiveData<JoinCommunityViewState> joinCommunityLiveData;
     private final MutableLiveData<Boolean> isCreateCommunitySuccess;
     private final MutableLiveData<Boolean> isJoinCommunitySuccess;
+    private final MutableLiveData<List<CreateCommunityViewState>> joinedCommunityList;
+    private final MutableLiveData<List<CreateCommunityViewState>> isAdminCommunityList;
 
     CommunityRepository communityRepository;
 
@@ -55,6 +65,10 @@ public class HomeViewModel extends ViewModel{
         isJoinCommunitySuccess = new MutableLiveData<>();
         joinCommunityLiveData = new MutableLiveData<>();
         joinCommunityLiveData.setValue(new JoinCommunityViewState());
+        joinedCommunityList = new MutableLiveData<>();
+        isAdminCommunityList = new MutableLiveData<>();
+        joinedCommunityList.setValue(new ArrayList<>());
+        isAdminCommunityList.setValue(new ArrayList<>());
     }
     public LiveData<JoinCommunityViewState> getJoinCommuLiveData() {
         return joinCommunityLiveData;
@@ -137,21 +151,18 @@ public class HomeViewModel extends ViewModel{
         communityRepository.createCommunity(commu, new ICommunityCallBack() {
             @Override
             public void onCreateCommunitySuccess(String communityId) {
-                isCreateCommunitySuccess.postValue(true);
-                // truyen string id = communityId
-            }
-            @Override
-            public void onCreateCommunityFailure(String errorMsg) {
-                if(errorMsg.equals(FlagsList.ERROR_COMMUNITY_CODE_NOT_EXIST)){
-                    setErrorMsg("Cộng đồng không tồn tại");
-                }else if(errorMsg.equals(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE)){
-                    setErrorMsg("Không thể tạo cộng đồng");
-                }
+                isCreateCommunitySuccess.setValue(true);
+                commuLiveData.setValue(new CreateCommunityViewState(commuLiveData.getValue().getName(), commuLiveData.getValue().getDescription(), commuLiveData.getValue().getCategory(), null, communityId));
             }
 
             @Override
-            public void onRoleAdmin(List<Community> communityList) {
-                // truyen zo list community
+            public void onCreateCommunityFailure(String errorMsg) {
+                if(errorMsg.equals(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE)){
+                    setErrorMsg("Không thể tạo cộng đồng");
+                }
+                else{
+                    setErrorMsg("Có lỗi xảy ra");
+                }
             }
 
 
@@ -172,7 +183,7 @@ public class HomeViewModel extends ViewModel{
             errorMsg.setValue("Mã cộng đồng không thể trống");
             return;
         }
-        communityRepository.thamGia(joinCommuState.getCommunityId(), FirebaseAuth.getInstance().getUid(), new ICommunityCallBack() {
+        communityRepository.thamGia(joinCommuState.getCommunityId(), FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_A() {
             @Override
             public void onCommunitySuccess() {
                 isJoinCommunitySuccess.postValue(true);
@@ -188,14 +199,7 @@ public class HomeViewModel extends ViewModel{
                 }
             }
 
-            @Override
-            public void onCreateCommunitySuccess() {
-            }
 
-            @Override
-            public void onCreateCommunityFailure(String errorMsg) {
-
-            }
         });
         joinCommunityDialogIsClosed.setValue(true);
     }

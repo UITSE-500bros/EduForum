@@ -9,11 +9,12 @@ public class CreateCommunityViewState {
     Uri commuAvt;
     String communityID;
 
-    public CreateCommunityViewState(String name, String description, String category, Uri commuAvt) {
+    public CreateCommunityViewState(String name, String description, String category, Uri commuAvt, String communityID) {
         this.name = name;
         this.description = description;
         this.category = category;
         this.commuAvt = commuAvt;
+        this.communityID = communityID;
     }
     public CreateCommunityViewState() {}
 
