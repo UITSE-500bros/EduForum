@@ -46,6 +46,8 @@ public class CommunityRepository {
         communities = new ArrayList<>();
         currentUser = FirebaseAuth.getInstance();
 
+
+
     }
     public void removeListener() {
         registration.remove();
@@ -59,25 +61,40 @@ public class CommunityRepository {
         List<String> admin = new ArrayList<>();
         admin.add(currentUser.getUid());
         community.setAdminList(admin);
-        db.collection("Community")
-                .add(community)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//        db.collection("Community")
+//                .add(community)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+//                        //community.setCommunityId(documentReference.getId());
+//                        callBack.onCreateCommunitySuccess();
+//                        // cloud function handles the add creator to group
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error adding document", e);
+//                        callBack.onCreateCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE);
+//                    }
+//                });
+
+        db.collection("Community").document().set(community)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                        community.setCommunityId(documentReference.getId());
+                    public void onSuccess(Void aVoid) {
                         callBack.onCreateCommunitySuccess();
-                        // cloud function handles the add creator to group
+                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "DocumentSnapshot successfully written!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error adding document", e);
                         callBack.onCreateCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE);
+                        Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error writing document", e);
                     }
                 });
-
 
     }
     public void deleteCommunity(Community community) {
@@ -205,6 +222,34 @@ public class CommunityRepository {
                         }
                     }
                 });
+    }
+
+
+    public List<Community> isThamGia(String userId, ICommunityCallBack callBack){
+        List<Community> communities = new ArrayList<>();
+        db.collection("CommunityMember")
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Community community = document.toObject(Community.class);
+
+                                communities.add(community);
+
+                                callBack.onCommunitySuccess();
+
+                            }
+                        } else {
+                            // callback thông báo mã không tồn tại, sai mã
+                            Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, task.getException());
+                            callBack.onCreateCommunityFailure(FlagsList.ERROR_COMMUNITY_CODE_NOT_EXIST);
+                        }
+                    }
+                });
+        return communities;
     }
 
 }

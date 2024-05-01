@@ -8,4 +8,6 @@ public interface CommunityBuilder {
     Community build();
 
     CommunityBuilder setCommunityId(String id);
+
+
 }
