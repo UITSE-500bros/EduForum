@@ -4,7 +4,6 @@ import com.example.eduforum.activity.model.community_manage.Community;
 
 import java.util.List;
 
-public interface ICommunityCallBack_B {
-    void onRoleMember(List<Community> communityList);
-
+public interface ICommunityCallBack_C {
+    void onRoleAdmin(List<Community> communityList);
 }

@@ -9,8 +9,5 @@ public interface ICommunityCallBack {
     void onCreateCommunitySuccess(String communityId);
     void onCreateCommunityFailure(String errorMsg);
 
-    void onRoleAdmin(List<Community> communityList);
-
-
 
 }
