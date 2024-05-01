@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.eduforum.activity.viewmodel.main.HomeViewModel" />
+    </data>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/secondaryColor"
+            android:padding="16dp"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/join_community_title"
+                android:textSize="24sp"
+                android:textColor="@color/textColor"
+                android:textAlignment="center"
+                android:layout_marginTop="8dp"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/communityNameInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/black"
+                android:layout_marginTop="16dp"
+               >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/communityIDEditText"
+                    android:hint="@string/community_id"
+                    android:text="@={viewModel.joinCommuLiveData.communityId}"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:gravity="end"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/cancelCreateCommunityButton"
+                    android:background="@drawable/loginbuttonshape"
+                    android:onClick="@{() -> viewModel.onCancelJoinCommunityButtonClicked()}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cancel" />
+                <Button
+                    android:id="@+id/confirmCreateCommunityButton"
+                    android:onClick="@{() -> viewModel.onConfirmJoinCommunityButtonClicked()}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:background="@drawable/loginbuttonshape"
+                    android:text="@string/confirm" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

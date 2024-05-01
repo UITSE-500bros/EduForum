@@ -105,7 +105,10 @@
     <string name="community_category">Phân loại</string>
     <string name="choose_from_device">Chọn hình ảnh từ thiết bị</string>
     <string name="cancel">Hủy bỏ</string>
-    <string name="confirm_create_community">Tạo cộng đồng</string>
+    <string name="confirm">Xác nhận</string>
     <string name="join">Tham gia</string>
     <string name="create_community">Tạo mới</string>
+    <string name="create_community_title">Tạo cộng đồng mới</string>
+    <string name="join_community_title">Tham gia cộng đồng</string>
+    <string name="community_id">Mã cộng đồng (*)</string>
 </resources>

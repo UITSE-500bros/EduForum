@@ -82,8 +82,8 @@ public class HomeFragment extends Fragment {
                 Snackbar.make(binding.getRoot(), "Create community success", Snackbar.LENGTH_SHORT).show();
             }
         });
-        viewModel.getCloseDialog().observe(getViewLifecycleOwner(), closeDialog -> {
-            if (closeDialog) {
+        viewModel.getCreateCommunityDialogIsClosed().observe(getViewLifecycleOwner(), createCommunityDialogIsClosed -> {
+            if (createCommunityDialogIsClosed) {
                 createCommunityDialog.dismiss();
             }
         });
