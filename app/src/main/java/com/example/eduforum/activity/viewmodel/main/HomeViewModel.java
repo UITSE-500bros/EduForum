@@ -7,6 +7,7 @@ import com.example.eduforum.activity.model.community_manage.Community;
 import com.example.eduforum.activity.model.community_manage.CommunityBuilder;
 import com.example.eduforum.activity.model.community_manage.CommunityConcreteBuilder;
 import com.example.eduforum.activity.repository.CommunityRepository;
+import com.example.eduforum.activity.repository.CommunityTestRepository;
 import com.example.eduforum.activity.repository.ICommunityCallBack;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.ui.main.fragment.JoinCommunityViewState;
@@ -34,8 +35,12 @@ public class HomeViewModel extends ViewModel{
         joinCommunityDialogIsClosed = new MutableLiveData<>();
         commuLiveData = new MutableLiveData<>();
         commuLiveData.setValue(new CreateCommunityViewState());
+        if (FlagsList.APPLICATION_ENVIRONMENT.equals("production")) {
+            communityRepository = new CommunityRepository();
+        } else {
+            communityRepository = new CommunityTestRepository();
+        }
 
-        communityRepository = new CommunityRepository();
         isCreateCommunitySuccess = new MutableLiveData<>();
         isJoinCommunitySuccess = new MutableLiveData<>();
         joinCommunityLiveData = new MutableLiveData<>();
