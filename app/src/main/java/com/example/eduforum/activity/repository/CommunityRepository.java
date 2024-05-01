@@ -206,14 +206,10 @@ public class CommunityRepository {
                 });
     }
 
-<<<<<<< Updated upstream
-    // isThamGia
-    // isAdmin
-    public List<Community> isThamGia(String userId, ICommunityCallBack callBack){
-=======
+    
+
 
     public void isMember(String userId, ICommunityCallBack_B callBack){
->>>>>>> Stashed changes
         List<Community> communities = new ArrayList<>();
         db.collection("CommunityMember")
                 .whereEqualTo("userId", userId)
