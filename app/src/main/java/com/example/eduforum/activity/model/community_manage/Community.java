@@ -85,4 +85,6 @@ public class Community {
     public void setDepartment(String department) {
         this.department = department;
     }
+
+
 }
