@@ -67,7 +67,6 @@ public class CommunityRepository {
                         Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                         community.setCommunityId(documentReference.getId());
                         callBack.onCreateCommunitySuccess(documentReference.getId());
-                        // cloud function handles the add creator to group
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -149,6 +148,7 @@ public class CommunityRepository {
                                 data.put("communityID", community.getCommunityId());
                                 data.put("name", community.getName());
                                 data.put("department", community.getDepartment());
+                                data.put("profilePicture", community.getProfileImage());
 
                                 db.collection("CommunityMember")
                                         .document(userId)
@@ -206,7 +206,7 @@ public class CommunityRepository {
                 });
     }
 
-    
+
 
 
     public void isMember(String userId, ICommunityCallBack_B callBack){
@@ -247,10 +247,6 @@ public class CommunityRepository {
                                 communities.add(community);
                                 callBack.onRoleAdmin(communities);
                             }
-                        } else {
-                            // callback thông báo mã không tồn tại, sai mã
-                            Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, task.getException());
-                            callBack.onCreateCommunityFailure(FlagsList.ERROR_COMMUNITY_CODE_NOT_EXIST);
                         }
                     }
                 });
