@@ -108,24 +108,24 @@ public class HomeFragment extends Fragment {
             viewModel.setCommunityCategory(categoryAdapter.getItem(position));
         });
 
-        ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
-                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-                    if (uri != null) {
-                        Log.d("Gallery is opened", uri.toString());
-                        //TO DO: Handle the image uri data here
-
-                        dialogBinding.communityImage.setImageURI(uri);
-                    } else {
-//                        Show errors
-                    }
-                });
-
-        dialogBinding.uploadImageButton.setOnClickListener(v -> {
-            // Launch the photo picker and let the user choose image
-            pickMedia.launch(new PickVisualMediaRequest.Builder()
-                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                    .build());
-        });
+//        ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
+//                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+//                    if (uri != null) {
+//                        Log.d("Gallery is opened", uri.toString());
+//                        //TO DO: Handle the image uri data here
+//
+//                        dialogBinding.communityImage.setImageURI(uri);
+//                    } else {
+////                        Show errors
+//                    }
+//                });
+//
+//        dialogBinding.uploadImageButton.setOnClickListener(v -> {
+//            // Launch the photo picker and let the user choose image
+//            pickMedia.launch(new PickVisualMediaRequest.Builder()
+//                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+//                    .build());
+//        });
 
         viewModel.getIsAdminCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
 
