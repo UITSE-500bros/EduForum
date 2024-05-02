@@ -1,8 +1,10 @@
 package com.example.eduforum.activity.ui.main.fragment;
-
 import android.app.Dialog;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -10,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +20,7 @@ import android.widget.ArrayAdapter;
 
 import com.example.eduforum.R;
 import com.example.eduforum.activity.model.community_manage.Community;
+import com.example.eduforum.activity.ui.auth.SignUpViewState;
 import com.example.eduforum.activity.ui.main.adapter.CommunityAdapter;
 import com.example.eduforum.activity.viewmodel.main.HomeViewModel;
 import com.example.eduforum.databinding.DialogCreateCommunityBinding;
@@ -34,6 +38,7 @@ public class HomeFragment extends Fragment {
     private HomeViewModel viewModel;
     private CommunityAdapter joinedCommunitiesAdapter;
     private CommunityAdapter myCommunitiesAdapter;
+    private ActivityResultLauncher<String> mGetContent;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -103,9 +108,23 @@ public class HomeFragment extends Fragment {
             viewModel.setCommunityCategory(categoryAdapter.getItem(position));
         });
 
+        ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
+                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                    if (uri != null) {
+                        Log.d("Gallery is opened", uri.toString());
+                        //TO DO: Handle the image uri data here
+
+                        dialogBinding.communityImage.setImageURI(uri);
+                    } else {
+//                        Show errors
+                    }
+                });
+
         dialogBinding.uploadImageButton.setOnClickListener(v -> {
-            // giup t lam upload hinh o day Thinh oi, layout cua Dialog nay` la dialog_create_community.xml
-            // imageView la dialogBinding.communityImage
+            // Launch the photo picker and let the user choose image
+            pickMedia.launch(new PickVisualMediaRequest.Builder()
+                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                    .build());
         });
 
         viewModel.getIsAdminCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
