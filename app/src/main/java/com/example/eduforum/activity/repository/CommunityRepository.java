@@ -231,8 +231,8 @@ public class CommunityRepository {
 
     public void isAdmin(String userId, ICommunityCallBack_C callBack){
         List<Community> communities = new ArrayList<>();
-        db.collection("CommunityMember")
-                .whereEqualTo("userId", userId)
+        db.collection("Community")
+                .whereArrayContains("adminList", userId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
