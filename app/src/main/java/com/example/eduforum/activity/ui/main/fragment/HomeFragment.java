@@ -80,12 +80,10 @@ public class HomeFragment extends Fragment {
 
         viewModel.getJoinedCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
             joinedCommunitiesAdapter.setCommunityList(joinedCommunities);
-            joinedCommunitiesAdapter.notifyDataSetChanged();
         });
 
         viewModel.getIsAdminCommunityList().observe(getViewLifecycleOwner(), myCommunities -> {
             myCommunitiesAdapter.setCommunityList(myCommunities);
-            myCommunitiesAdapter.notifyDataSetChanged();
         });
 
     }
@@ -103,6 +101,11 @@ public class HomeFragment extends Fragment {
         dialogBinding.categoryACTV.setAdapter(categoryAdapter);
         dialogBinding.categoryACTV.setOnItemClickListener((parent, view, position, id) -> {
             viewModel.setCommunityCategory(categoryAdapter.getItem(position));
+        });
+
+        dialogBinding.uploadImageButton.setOnClickListener(v -> {
+            // giup t lam upload hinh o day Thinh oi, layout cua Dialog nay` la dialog_create_community.xml
+            // imageView la dialogBinding.communityImage
         });
 
         viewModel.getIsAdminCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
