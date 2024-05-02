@@ -183,9 +183,7 @@ public class HomeViewModel extends ViewModel{
         communityRepository.createCommunity(commu, new ICommunityCallBack() {
             @Override
             public void onCreateCommunitySuccess(String communityId) {
-                isCreateCommunitySuccess.setValue(true);
-                commuLiveData.setValue(new CreateCommunityViewState(commuLiveData.getValue().getName(), commuLiveData.getValue().getDescription(), commuLiveData.getValue().getCategory(), null, communityId));
-                updateIsAdminCommunityList(commuLiveData.getValue());
+                fetchIsAdminCommunityList();
             }
 
             @Override
@@ -219,9 +217,7 @@ public class HomeViewModel extends ViewModel{
         communityRepository.thamGia(joinCommuState.getCommunityId(), FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_A() {
             @Override
             public void onJoinCommunitySuccess() {
-                CreateCommunityViewState newCommunity = new CreateCommunityViewState();
-                newCommunity.setCommunityID(joinCommuState.getCommunityId());
-                updateJoinedCommunityList(newCommunity);
+                fetchJoinedCommunityList();
             }
 
             @Override
