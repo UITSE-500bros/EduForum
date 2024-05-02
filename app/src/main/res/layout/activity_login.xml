@@ -25,8 +25,8 @@
             android:src="@drawable/eduforumlogo" />
         <TextView
             android:id="@+id/ng_nh_p"
-            android:layout_width="121dp"
-            android:layout_height="33dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="26dp"
             android:layout_alignParentTop="true"
@@ -40,8 +40,8 @@
             />
         <TextView
             android:id="@+id/ng_nh_p_b_n"
-            android:layout_width="396dp"
-            android:layout_height="26dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="26dp"
             android:layout_alignParentTop="true"
@@ -57,10 +57,11 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:id="@+id/TIL_Email"
             android:hint="@string/Emailaddress"
-            android:layout_width="322dp"
-            android:layout_height="62dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_marginStart="26dp"
+            android:layout_marginEnd="26dp"
             android:layout_alignParentTop="true"
             android:background="@drawable/loginedittextshape"
             android:layout_marginTop="210dp"
@@ -76,11 +77,12 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/TIL_Password"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-            android:layout_width="322dp"
-            android:layout_height="62dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="26dp"
+            android:layout_marginEnd="26dp"
             android:layout_marginTop="310dp"
 
             android:hint="@string/password"
@@ -103,12 +105,13 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="224dp"
-            android:layout_marginTop="382dp"
+            android:layout_marginLeft="246dp"
+            android:layout_marginTop="379dp"
+            android:background="@drawable/transparent_btn"
             android:fontFamily="@font/source_sans_pro_semibold"
             android:gravity="top"
             android:text="@string/forgot_pass"
             android:textColor="#B0B0B0"
-            android:background="@drawable/transparent_btn"
             android:textSize="13sp" />
 
         <Button
@@ -126,8 +129,8 @@
             />
         <TextView
             android:id="@+id/create_account"
-            android:layout_width="121dp"
-            android:layout_height="42dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="123dp"
             android:layout_alignParentTop="true"
