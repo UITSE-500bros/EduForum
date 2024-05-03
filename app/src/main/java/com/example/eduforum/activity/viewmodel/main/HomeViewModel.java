@@ -235,16 +235,7 @@ public class HomeViewModel extends ViewModel{
         joinCommunityDialogIsClosed.setValue(true);
     }
 
-    private void updateJoinedCommunityList(CreateCommunityViewState newCommunity){
-        List<CreateCommunityViewState> list = joinedCommunityList.getValue();
-        list.add(newCommunity);
-        joinedCommunityList.setValue(list);
-    }
-    private void updateIsAdminCommunityList(CreateCommunityViewState newCommunity){
-        List<CreateCommunityViewState> list = isAdminCommunityList.getValue();
-        list.add(newCommunity);
-        isAdminCommunityList.setValue(list);
-    }
+
     public void onCancelJoinCommunityButtonClicked(){
         joinCommunityDialogIsClosed.setValue(true);
     }
@@ -255,6 +246,7 @@ public class HomeViewModel extends ViewModel{
         return builder.setName(UIState.getName())
                 .setDepartment(UIState.getCategory())
                 .setDescription(UIState.getDescription())
+                .setProfileImage(UIState.getCommuAvt())
                 .build();
     }
 

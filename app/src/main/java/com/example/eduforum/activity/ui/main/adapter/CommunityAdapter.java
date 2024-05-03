@@ -59,7 +59,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
             binding.communityNameTextView.setText(community.getName());
             binding.communityDepartmentTextView.setText(community.getCategory());
             if(community.getCommuAvt()!=null){
-                // Glide...
+                binding.communityImage.setImageURI(community.getCommuAvt());
             }
         }
 

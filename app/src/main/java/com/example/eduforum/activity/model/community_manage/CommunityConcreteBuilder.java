@@ -50,4 +50,8 @@ public class CommunityConcreteBuilder implements CommunityBuilder{
         this.name = id;
         return this;
     }
+    public CommunityBuilder setProfileImage(Uri profileImage) {
+        this.profileImg = profileImage;
+        return this;
+    }
 }
