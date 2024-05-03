@@ -55,13 +55,10 @@ public class HomeViewModel extends ViewModel{
         commuLiveData.setValue(new CreateCommunityViewState());
         if (FlagsList.APPLICATION_ENVIRONMENT.equals("production")) {
             communityRepository = new CommunityRepository();
-            loginRepository = new LoginRepository();
         } else {
             communityRepository = new CommunityTestRepository();
-            loginRepository = new LoginTestRepository();
-
         }
-
+        loginRepository = LoginRepository.getInstance();
         isCreateCommunitySuccess = new MutableLiveData<>();
         isJoinCommunitySuccess = new MutableLiveData<>();
         joinCommunityLiveData = new MutableLiveData<>();

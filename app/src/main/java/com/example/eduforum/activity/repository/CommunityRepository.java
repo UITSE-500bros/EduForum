@@ -179,6 +179,7 @@ public class CommunityRepository {
 
 
     public void observeDocument(String collectionPath, String documentId, ICommunityChangeListener listener) {
+        // TODO: listen realtime tới các document trong CommunityMember có documentID = userID
         registration = db.collection("CommunityMember")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
