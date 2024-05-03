@@ -10,13 +10,28 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 public class LoginRepository {
+    private static LoginRepository instance;
 
     protected FirebaseAuth mAuth;
+    protected FirebaseFirestore db;
+    protected FirebaseStorage storage;
 
     public LoginRepository() {
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
+        configFirebaseEmulator();
+    }
+
+    public static synchronized LoginRepository getInstance() {
+        if (instance == null) {
+            instance = new LoginRepository();
+        }
+        return instance;
     }
 
     public void login(String email, String password, ILoginCallback callback) {
@@ -59,6 +74,12 @@ public class LoginRepository {
                         }
                     }
                 });
+    }
+
+    private void configFirebaseEmulator() {
+        mAuth.useEmulator("10.0.2.2", 9099);
+        db.useEmulator("10.0.2.2", 8080);
+        storage.useEmulator("10.0.2.2", 9199);
     }
 
 }

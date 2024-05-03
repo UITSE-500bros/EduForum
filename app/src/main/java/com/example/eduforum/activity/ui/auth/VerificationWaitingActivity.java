@@ -33,6 +33,7 @@ public class VerificationWaitingActivity extends AppCompatActivity {
         viewModel.getBackToLogin().observe(this, backToLogin -> {
             if (backToLogin) {
                 Intent intent = new Intent(this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });

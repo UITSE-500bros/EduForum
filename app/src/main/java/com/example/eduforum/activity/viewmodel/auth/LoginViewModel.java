@@ -23,11 +23,7 @@ public class LoginViewModel extends ViewModel {
     private final MutableLiveData<String> loginErrorMsg;
     private final MutableLiveData<FirebaseUser> userLiveData;
     public LoginViewModel() {
-        if (FlagsList.APPLICATION_ENVIRONMENT.equals("development")) {
-            loginRepository = new LoginTestRepository();
-        } else {
-            loginRepository = new LoginRepository();
-        }
+        loginRepository = LoginRepository.getInstance();
         emailError = new MutableLiveData<>();
         passwordError = new MutableLiveData<>();
         loginSuccess = new MutableLiveData<>();

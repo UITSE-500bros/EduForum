@@ -93,14 +93,13 @@ public class SignUpActivity extends AppCompatActivity {
                     // Callback is invoked after the user selects a media item or closes the
                     // photo picker.
                     if (uri != null) {
-                        Log.d("hahahhahah", uri.toString());
                         SignUpViewState state = viewModel.getUser().getValue();
                         assert state != null;
                         state.setProfilePicture(uri);
                         binding.getViewModel().setUser(state);
                         binding.avatarIView.setImageURI(uri);
                     } else {
-//                        Show errors
+//                        TODO: Show errors
                     }
                 });
 

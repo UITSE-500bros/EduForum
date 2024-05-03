@@ -3,6 +3,7 @@ package com.example.eduforum.activity.ui.auth;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -93,6 +94,7 @@ public class LoginActivity extends AppCompatActivity {
             if(isEmailVerified){
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -104,7 +106,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-        if (user != null && FlagsList.APPLICATION_ENVIRONMENT.equals("production")) {
+        if (user != null) {
+            Log.d("TEST", user.getEmail());
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(i);
             finish();

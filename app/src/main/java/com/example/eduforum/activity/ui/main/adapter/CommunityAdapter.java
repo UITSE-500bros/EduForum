@@ -1,49 +1,67 @@
 package com.example.eduforum.activity.ui.main.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.databinding.ItemForumBinding;
+import com.google.firebase.auth.FirebaseAuth;
 
-public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.ForumViewHolder> {
+import java.util.List;
 
-    // private List<Forum> forums;
+public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.CommunityViewHolder> {
 
-    /*
-    public ForumAdapter(List<Forum> forums) {
-        this.forums = forums;
+    Context context;
+    List<CreateCommunityViewState> communityList;
+    FirebaseAuth currentUser;
+    public CommunityAdapter(Context context, List<CreateCommunityViewState> communityList, FirebaseAuth currentUser) {
+        this.context = context;
+        this.communityList = communityList;
+        this.currentUser = currentUser;
     }
-*/
+    public void setCommunityList(List<CreateCommunityViewState> communityList) {
+        this.communityList = communityList;
+        notifyDataSetChanged();
+    }
     @NonNull
     @Override
-    public ForumViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        ItemForumBinding itemBinding = ItemForumBinding.inflate(layoutInflater, parent, false);
-        return new ForumViewHolder(itemBinding);
+    public CommunityViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        ItemForumBinding binding = ItemForumBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new CommunityViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ForumViewHolder holder, int position) {
-
+    public void onBindViewHolder(@NonNull CommunityViewHolder holder, int position) {
+        holder.bind(communityList.get(position));
+        holder.itemView.setOnClickListener(v -> {
+            //Intent intent = new Intent(context, CommunityActivity.class);
+            //intent.putExtra("community", communityList.get(position));
+            //context.startActivity(intent);
+        });
     }
 
     @Override
     public int getItemCount() {
-        //return forums.size();
-        return 0;
+        return communityList.size();
     }
 
-    static class ForumViewHolder extends RecyclerView.ViewHolder {
-        private final ItemForumBinding binding;
-
-        public ForumViewHolder(ItemForumBinding binding) {
+    public class CommunityViewHolder extends RecyclerView.ViewHolder {
+        ItemForumBinding binding;
+        public CommunityViewHolder(@NonNull ItemForumBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
-
+        void bind(CreateCommunityViewState community) {
+            binding.communityNameTextView.setText(community.getName());
+            binding.communityDepartmentTextView.setText(community.getCategory());
+            if(community.getCommuAvt()!=null){
+                //binding.communityImage.setImageURI(community.getCommuAvt());
+            }
+        }
 
     }
 }

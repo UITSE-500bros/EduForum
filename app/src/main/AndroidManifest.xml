@@ -50,6 +50,11 @@
             android:exported="true">
         </activity>
         <activity
+            android:name=".activity.ui.welcome.WelcomeActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
             android:name=".activity.ui.main.MainActivity"
             android:exported="false" />
     </application>
