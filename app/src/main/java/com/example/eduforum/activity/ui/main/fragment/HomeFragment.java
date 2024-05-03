@@ -64,21 +64,21 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        pickMedia =
-                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-                    if (uri != null) {
-                        Log.d("Gallery is opened", uri.toString());
-                        //TO DO: Handle the image uri data here
-                        dialogBinding.communityImage.setImageURI(uri);
-                        CreateCommunityViewState state = viewModel.getCommuLiveData().getValue();
-                        assert state != null;
-                        state.setCommuAvt(uri);
-                        viewModel.setCommuLiveData(state);
-
-                    } else {
-                        Snackbar.make(binding.getRoot(), "Không thể mở tài nguyên", Snackbar.LENGTH_SHORT).show();
-                    }
-                });
+//        pickMedia =
+//                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+//                    if (uri != null) {
+//                        Log.d("Gallery is opened", uri.toString());
+//                        //TO DO: Handle the image uri data here
+//                        dialogBinding.communityImage.setImageURI(uri);
+//                        CreateCommunityViewState state = viewModel.getCommuLiveData().getValue();
+//                        assert state != null;
+//                        state.setCommuAvt(uri);
+//                        viewModel.setCommuLiveData(state);
+//
+//                    } else {
+//                        Snackbar.make(binding.getRoot(), "Không thể mở tài nguyên", Snackbar.LENGTH_SHORT).show();
+//                    }
+//                });
         viewModel.fetchJoinedCommunityList();
         viewModel.fetchIsAdminCommunityList();
         joinedCommunitiesAdapter = new CommunityAdapter(getContext(), viewModel.getJoinedCommunityList().getValue(),  FirebaseAuth.getInstance());
@@ -127,12 +127,12 @@ public class HomeFragment extends Fragment {
 
 
 
-        dialogBinding.uploadImageButton.setOnClickListener(v -> {
-            // Launch the photo picker and let the user choose image
-            pickMedia.launch(new PickVisualMediaRequest.Builder()
-                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                    .build());
-        });
+//        dialogBinding.uploadImageButton.setOnClickListener(v -> {
+//            // Launch the photo picker and let the user choose image
+////            pickMedia.launch(new PickVisualMediaRequest.Builder()
+////                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+////                    .build());
+//        });
 
         viewModel.getIsAdminCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
 

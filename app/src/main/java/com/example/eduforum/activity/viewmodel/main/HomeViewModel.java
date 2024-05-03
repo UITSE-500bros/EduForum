@@ -246,7 +246,7 @@ public class HomeViewModel extends ViewModel{
         return builder.setName(UIState.getName())
                 .setDepartment(UIState.getCategory())
                 .setDescription(UIState.getDescription())
-                .setProfileImage(UIState.getCommuAvt())
+                //.setProfileImage(UIState.getCommuAvt())
                 .build();
     }
 
