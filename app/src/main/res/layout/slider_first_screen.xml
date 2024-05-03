@@ -13,11 +13,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="150dp"
         android:fontFamily="@font/source_sans_pro_semibold"
         android:text="@string/screen0"
         android:textColor="@color/white"
-        android:textSize="35sp"
+        android:textSize="40sp"
         android:textStyle="bold" />
 
     <ImageView
@@ -26,18 +26,17 @@
         android:src="@drawable/eduforumlogo"
         android:layout_gravity="center"
         android:scaleType="centerCrop"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="40dp"/>
 
     <TextView
         android:id="@+id/sliderDescriptionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="27sp"
+        android:textSize="30sp"
         android:text="@string/desscreen0"
         android:textColor="@color/white"
         android:layout_gravity="center"
-        android:textStyle="bold"
         android:fontFamily="@font/source_sans_pro_semibold"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="40dp"/>
 
 </LinearLayout>
