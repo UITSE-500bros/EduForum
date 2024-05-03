@@ -39,6 +39,9 @@ public class HomeFragment extends Fragment {
     private CommunityAdapter joinedCommunitiesAdapter;
     private CommunityAdapter myCommunitiesAdapter;
     private ActivityResultLauncher<String> mGetContent;
+
+    private DialogCreateCommunityBinding dialogBinding;
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -48,7 +51,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -94,7 +96,7 @@ public class HomeFragment extends Fragment {
     }
     private void showCreateCommunityDialog() {
         Dialog createCommunityDialog = new Dialog(this.getContext());
-        DialogCreateCommunityBinding dialogBinding = DialogCreateCommunityBinding.inflate(LayoutInflater.from(this.getContext()));
+        dialogBinding = DialogCreateCommunityBinding.inflate(LayoutInflater.from(this.getContext()));
         // Set up dialog
         createCommunityDialog.setContentView(dialogBinding.getRoot());
         dialogBinding.setViewModel(viewModel);
@@ -108,24 +110,24 @@ public class HomeFragment extends Fragment {
             viewModel.setCommunityCategory(categoryAdapter.getItem(position));
         });
 
-//        ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
-//                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-//                    if (uri != null) {
-//                        Log.d("Gallery is opened", uri.toString());
-//                        //TO DO: Handle the image uri data here
-//
-//                        dialogBinding.communityImage.setImageURI(uri);
-//                    } else {
-////                        Show errors
-//                    }
-//                });
-//
-//        dialogBinding.uploadImageButton.setOnClickListener(v -> {
-//            // Launch the photo picker and let the user choose image
-//            pickMedia.launch(new PickVisualMediaRequest.Builder()
-//                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-//                    .build());
-//        });
+        pickMedia =
+                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                    if (uri != null) {
+                        Log.d("Gallery is opened", uri.toString());
+                        //TO DO: Handle the image uri data here
+
+                        dialogBinding.communityImage.setImageURI(uri);
+                    } else {
+//                        Show errors
+                    }
+                });
+
+        dialogBinding.uploadImageButton.setOnClickListener(v -> {
+            // Launch the photo picker and let the user choose image
+            pickMedia.launch(new PickVisualMediaRequest.Builder()
+                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                    .build());
+        });
 
         viewModel.getIsAdminCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
 
