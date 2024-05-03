@@ -8,7 +8,7 @@
     <color name="backgroundColor">#000814</color>
     <color name="loginBackgroundEndColor">#0B2136</color>
     <color name="loginTextboxBackgroundColor">#EFFAFF</color>
-    <color name="mainTextboxBackgroundColor">#BBBBBB</color>
+    <color name="mainTextboxBackgroundColor">#7C7C7C</color>
     <color name="primaryColor">#0097FB</color>
     <color name="secondaryColor">#001D3D</color>
     <color name="tagBackgroundColor">#2C353D</color>

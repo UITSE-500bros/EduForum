@@ -19,7 +19,6 @@
              app:layout_constraintBottom_toBottomOf="parent"
              app:cardElevation="6dp"
              app:cardCornerRadius="20dp"
-             app:cardBackgroundColor="@color/white"
             >
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -35,7 +34,11 @@
                     app:cardElevation="5dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
-
+                    <ImageView
+                        android:id="@+id/communityImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        />
                     <ImageView
                         android:id="@+id/forumImage"
                         android:layout_width="wrap_content"
@@ -45,7 +48,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <TextView
-                    android:id="@+id/forumNameTextView"
+                    android:id="@+id/communityNameTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="24dp"
@@ -58,16 +61,16 @@
                     app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
                 <TextView
-                    android:id="@+id/forumAuthorTextView"
+                    android:id="@+id/communityDepartmentTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DƯƠNG THUẬN TRÍ"
+                    android:text="KHOA CNPM"
                     android:textSize="16dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/forumNameTextView"
+                    app:layout_constraintTop_toBottomOf="@id/communityNameTextView"
                     android:layout_marginTop="2dp"
                     android:layout_marginLeft="24dp"/>
-
+                <!--
                 <TextView
                     android:id="@+id/membersTextView"
                     android:layout_width="wrap_content"
@@ -79,6 +82,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginLeft="24dp"
                     android:layout_marginBottom="12dp"/>
+                    -->
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
