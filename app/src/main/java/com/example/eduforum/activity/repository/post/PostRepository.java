@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 
@@ -25,8 +26,8 @@ import java.util.List;
 
 public class PostRepository {
     private static PostRepository instance;
-    private FirebaseFirestore db;
-    private FirebaseStorage firebaseStorage;
+    private final FirebaseFirestore db;
+    private final FirebaseStorage firebaseStorage;
 
     public PostRepository() {
         db = FirebaseFirestore.getInstance();
@@ -42,16 +43,16 @@ public class PostRepository {
 
     // TODO: add post image to firebase storage
 
-    public void addPost(String communityID, Post post, IPostCallback callback) {
+    public void addPost(Post post, IPostCallback callback) {
         db.collection("Community")
-                .document(communityID)
+                .document(post.getCommunityID())
                 .collection("Post")
                 .add(post)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         callback.onAddPostSuccess();
-                        Log.d(FlagsList.DEBUG_POST_FLAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        Log.d(FlagsList.DEBUG_POST_FLAG, "New post written with ID: " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -61,7 +62,28 @@ public class PostRepository {
                         Log.w(FlagsList.DEBUG_POST_FLAG, "Error adding document", e);
                     }
                 });
+    }
 
+    public void editPost(Post post, IPostCallback callback) {
+        db.collection("Community")
+                .document(post.getCommunityID())
+                .collection("Post")
+                .document(post.getPostID())
+                .set(post, SetOptions.merge())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        callback.onEditPostSuccess();
+                        Log.d(FlagsList.DEBUG_POST_FLAG, "Post successfully edited!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onEditPostFailure(e.toString());
+                        Log.w(FlagsList.DEBUG_POST_FLAG, "Error adding document", e);
+                    }
+                });
     }
 
 
@@ -93,7 +115,7 @@ public class PostRepository {
     }
 
     //TODO: check if the user is the owner of the post, render a button can delete that post @Duong Thuan Tri
-    public void delPost(String communityID, IPostCallback callback,String userID,String postID) {
+    public void deletePost(String communityID, IPostCallback callback,String userID,String postID) {
         db.collection("Community")
                 .document(communityID)
                 .collection("Post")

@@ -9,4 +9,8 @@ public interface IPostCallback {
     void onAddPostFailure(String errorMsg);
 
     void onAddPostSuccess();
+
+    void onEditPostSuccess();
+
+    void onEditPostFailure(String errorMsg);
 }
