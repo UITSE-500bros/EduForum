@@ -203,6 +203,7 @@ public class CommunityRepository {
                                 }
                             }
                         }
+                        listener.onCommunityChange(communities);
                     }
                 });
     }
