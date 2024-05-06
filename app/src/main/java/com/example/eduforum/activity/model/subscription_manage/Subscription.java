@@ -4,7 +4,7 @@ public class Subscription {
     private String communityID;
     private String postID;
     private String userID;
-    
+
     public Subscription(String communityID, String postID, String userID) {
         this.communityID = communityID;
         this.postID = postID;
@@ -22,14 +22,14 @@ public class Subscription {
         return communityID;
     }
 
-    
-    public String setCommunityID(String communityID) {
+
+    public void setCommunityID(String communityID) {
         this.communityID = communityID;
     }
-    public String setPostID(String postID) {
+    public void setPostID(String postID) {
         this.postID = postID;
     }
-    public String setUserID(String userID) {
-        return communityID;
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 }
