@@ -15,6 +15,7 @@ public class Post {
 
     private List<Category> categories;
 
+
     public Post() {
     }
 

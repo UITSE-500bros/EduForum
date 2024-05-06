@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.model.subscription_manage.Subscription;
+import com.example.eduforum.activity.repository.LoginRepository;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -23,12 +24,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PostRepository {
+    private static PostRepository instance;
     private FirebaseFirestore db;
     private FirebaseStorage firebaseStorage;
 
     public PostRepository() {
         db = FirebaseFirestore.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
+    }
+
+    public static synchronized PostRepository getInstance() {
+        if (instance == null) {
+            instance = new PostRepository();
+        }
+        return instance;
     }
 
     // TODO: add post image to firebase storage
