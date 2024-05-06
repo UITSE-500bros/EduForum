@@ -3,6 +3,7 @@ package com.example.eduforum.activity.util;
 public class FlagsList {
     public static final String ERROR_REGISTER_EMAIL_EXISTED = "ERROR_REGISTER_EMAIL_EXISTED";
     public static final String ERROR_REGISTER = "ERROR_REGISTER";
+    public static final String DEBUG_POST_FLAG = "DEBUG_POST";
     public static String DEBUG_REGISTER_FLAG = "DEBUG_REGISTER";
     public static String DEBUG_LOGIN_FLAG = "DEBUG_LOGIN";
     public static String DEBUG_TOPIC_FLAG = "DEBUG_TOPIC";

@@ -1,4 +1,4 @@
-package com.example.eduforum.activity.model.PostModel;
+package com.example.eduforum.activity.model.post_manage;
 
 public class Category {
     public String categoryID;

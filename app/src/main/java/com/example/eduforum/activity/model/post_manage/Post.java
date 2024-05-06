@@ -1,4 +1,4 @@
-package com.example.eduforum.activity.model.PostModel;
+package com.example.eduforum.activity.model.post_manage;
 import java.util.List;
 
 public class Post {
@@ -6,10 +6,9 @@ public class Post {
     private String communityID;
     private String postContent;
     private Boolean isAnonymous;
-    private String createTime;
+    private String timeCreated;
     private Creator creator;
     private List<String> postImages;
-
     private Integer numOfVotes;
 
     private List<String> taggedUsers;
@@ -24,7 +23,7 @@ public class Post {
         this.communityID = communityID;
         this.postContent = postContent;
         this.isAnonymous = isAnonymous;
-        this.createTime = createTime;
+        this.timeCreated = createTime;
         this.creator = creator;
         this.postImages = postImages;
         this.numOfVotes = numOfVotes;
@@ -64,12 +63,12 @@ public class Post {
         isAnonymous = anonymous;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public String getTimeCreated() {
+        return timeCreated;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public void setTimeCreated(String timeCreated) {
+        this.timeCreated = timeCreated;
     }
 
     public Creator getCreator() {
