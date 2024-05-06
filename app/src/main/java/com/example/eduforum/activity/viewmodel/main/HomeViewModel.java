@@ -28,17 +28,18 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class HomeViewModel extends ViewModel{
+
+    // Fields
     private final MutableLiveData<String> communityCategory;
     private final MutableLiveData<String> errorMsg;
 
     private final MutableLiveData<Boolean> createCommunityDialogIsClosed;
 
     private final MutableLiveData<Boolean> joinCommunityDialogIsClosed;
-    private final MutableLiveData<CreateCommunityViewState> commuLiveData;
+    private final MutableLiveData<CreateCommunityViewState> newCommunityLiveData;
 
     private final MutableLiveData<JoinCommunityViewState> joinCommunityLiveData;
-    private final MutableLiveData<Boolean> isCreateCommunitySuccess;
-    private final MutableLiveData<Boolean> isJoinCommunitySuccess;
+
     private final MutableLiveData<List<CreateCommunityViewState>> joinedCommunityList;
     private final MutableLiveData<List<CreateCommunityViewState>> isAdminCommunityList;
 
@@ -46,21 +47,22 @@ public class HomeViewModel extends ViewModel{
 
     LoginRepository loginRepository;
 
+    // Methods
+    // Constructors- initializations
     public HomeViewModel() {
         communityCategory= new MutableLiveData<>();
         errorMsg = new MutableLiveData<>();
         createCommunityDialogIsClosed = new MutableLiveData<>();
         joinCommunityDialogIsClosed = new MutableLiveData<>();
-        commuLiveData = new MutableLiveData<>();
-        commuLiveData.setValue(new CreateCommunityViewState());
+        newCommunityLiveData = new MutableLiveData<>();
+        newCommunityLiveData.setValue(new CreateCommunityViewState());
         if (FlagsList.APPLICATION_ENVIRONMENT.equals("production")) {
             communityRepository = new CommunityRepository();
         } else {
             communityRepository = new CommunityTestRepository();
         }
         loginRepository = LoginRepository.getInstance();
-        isCreateCommunitySuccess = new MutableLiveData<>();
-        isJoinCommunitySuccess = new MutableLiveData<>();
+
         joinCommunityLiveData = new MutableLiveData<>();
         joinCommunityLiveData.setValue(new JoinCommunityViewState());
         joinedCommunityList = new MutableLiveData<>();
@@ -68,6 +70,8 @@ public class HomeViewModel extends ViewModel{
         joinedCommunityList.setValue(new ArrayList<>());
         isAdminCommunityList.setValue(new ArrayList<>());
     }
+    //-------------------------------------------------------------------------------
+    // Getters and Setters
     public LiveData<List<CreateCommunityViewState>> getJoinedCommunityList() {
         return joinedCommunityList;
     }
@@ -78,8 +82,8 @@ public class HomeViewModel extends ViewModel{
         return joinCommunityLiveData;
     }
 
-    public LiveData<CreateCommunityViewState> getCommuLiveData() {
-        return commuLiveData;
+    public LiveData<CreateCommunityViewState> getNewCommunityLiveData() {
+        return newCommunityLiveData;
     }
 
 
@@ -98,15 +102,6 @@ public class HomeViewModel extends ViewModel{
     public LiveData<Boolean> getJoinCommunityDialogIsClosed() {
         return joinCommunityDialogIsClosed;
     }
-
-    public LiveData<Boolean> getIsCreateCommunitySuccess() {
-        return isCreateCommunitySuccess;
-    }
-
-    public LiveData<Boolean> getIsJoinCommunitySuccess() {
-        return isJoinCommunitySuccess;
-    }
-
     public CommunityRepository getCommunityRepository() {
         return communityRepository;
     }
@@ -121,8 +116,8 @@ public class HomeViewModel extends ViewModel{
     public void setErrorMsg(String error) {
         errorMsg.setValue(error);
     }
-    public void setCommuLiveData(CreateCommunityViewState commu) {
-        commuLiveData.setValue(commu);
+    public void setNewCommunityLiveData(CreateCommunityViewState community) {
+        newCommunityLiveData.setValue(community);
     }
 
     public void setCreateCommunityDialogIsClosed(Boolean closed) {
@@ -130,13 +125,6 @@ public class HomeViewModel extends ViewModel{
     }
     public void setJoinCommunityDialogIsClosed(Boolean closed) {
         joinCommunityDialogIsClosed.setValue(closed);
-    }
-
-    public void setIsCreateCommunitySuccess(Boolean success) {
-        isCreateCommunitySuccess.setValue(success);
-    }
-    public void setIsJoinCommunitySuccess(Boolean success) {
-        isJoinCommunitySuccess.setValue(success);
     }
     public void setJoinCommuLiveData(JoinCommunityViewState joinCommu) {
         joinCommunityLiveData.setValue(joinCommu);
@@ -156,11 +144,13 @@ public class HomeViewModel extends ViewModel{
         this.loginRepository = loginRepository;
     }
 
-    //-----------------------------------------------------------
+    //--------------------------------------------------------------------------------------
+    // Other methods
 
-
+    // create community usecase
     public void onConfirmCreateCommunityButtonClicked(){
-        CreateCommunityViewState commuState = commuLiveData.getValue();
+        CreateCommunityViewState commuState = newCommunityLiveData.getValue();
+        // validate
         if(commuState.getName() == null || commuState.getName().isEmpty()){
             errorMsg.setValue("Tên cộng đồng không thể trống");
             return;
@@ -170,13 +160,13 @@ public class HomeViewModel extends ViewModel{
             errorMsg.setValue("Chưa chọn phân loại cho cộng đồng");
             return;
         }
-
+        // create community object (map UI state to domain object)
         Community commu = mapUIStateToCommunity(commuState);
         if(commu==null){
             errorMsg.setValue("Có lỗi xảy ra");
             return;
         }
-
+        // call repository
         communityRepository.createCommunity(commu, new ICommunityCallBack() {
             @Override
             public void onCreateCommunitySuccess(String communityId) {
@@ -192,25 +182,44 @@ public class HomeViewModel extends ViewModel{
                     setErrorMsg("Có lỗi xảy ra");
                 }
             }
+        });
+        // close dialog
+        createCommunityDialogIsClosed.setValue(true);
+    }
+    private Community mapUIStateToCommunity(CreateCommunityViewState UIState){
+        if(UIState == null) return null;
+        CommunityBuilder builder = new CommunityConcreteBuilder();
+        return builder.setName(UIState.getName())
+                .setDepartment(UIState.getCategory())
+                .setDescription(UIState.getDescription())
+                //.setProfileImage(UIState.getCommuAvt())
+                .build();
+    }
+    public void fetchIsAdminCommunityList(){
+        communityRepository.isAdmin(FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_C() {
+            @Override
+            public void onRoleAdmin(List<Community> communityList) {
+                isAdminCommunityList.setValue(convertToViewStateList(communityList));
+            }
 
 
         });
-
-
-        createCommunityDialogIsClosed.setValue(true);
     }
-
-
     public void onCancelCreateCommunityButtonClicked(){
+        // close dialog
         createCommunityDialogIsClosed.setValue(true);
     }
 
+    // --------------------------------
+    // join community usecase
     public void onConfirmJoinCommunityButtonClicked(){
         JoinCommunityViewState joinCommuState = joinCommunityLiveData.getValue();
+        // validate
         if(joinCommuState.getCommunityId() == null || joinCommuState.getCommunityId().isEmpty()){
             errorMsg.setValue("Mã cộng đồng không thể trống");
             return;
         }
+        // call repository, pass the communityID of joinCommuState directly to repository
         communityRepository.thamGia(joinCommuState.getCommunityId(), FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_A() {
             @Override
             public void onJoinCommunitySuccess() {
@@ -226,27 +235,14 @@ public class HomeViewModel extends ViewModel{
                     setErrorMsg("Không thể tham gia cộng đồng");
                 }
             }
-
-
         });
+        // close dialog
         joinCommunityDialogIsClosed.setValue(true);
     }
-
-
     public void onCancelJoinCommunityButtonClicked(){
+        // close dialog
         joinCommunityDialogIsClosed.setValue(true);
     }
-
-    private Community mapUIStateToCommunity(CreateCommunityViewState UIState){
-        if(UIState == null) return null;
-        CommunityBuilder builder = new CommunityConcreteBuilder();
-        return builder.setName(UIState.getName())
-                .setDepartment(UIState.getCategory())
-                .setDescription(UIState.getDescription())
-                //.setProfileImage(UIState.getCommuAvt())
-                .build();
-    }
-
     public void fetchJoinedCommunityList(){
         communityRepository.isMember(FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_B() {
             @Override
@@ -258,16 +254,8 @@ public class HomeViewModel extends ViewModel{
         });
     }
 
-    public void fetchIsAdminCommunityList(){
-        communityRepository.isAdmin(FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_C() {
-            @Override
-            public void onRoleAdmin(List<Community> communityList) {
-                isAdminCommunityList.setValue(convertToViewStateList(communityList));
-            }
-
-
-        });
-    }
+    // --------------------------------
+    // other methods
     private List<CreateCommunityViewState> convertToViewStateList(List<Community> communities) {
         List<CreateCommunityViewState> viewStates = new ArrayList<>();
         for (Community community : communities) {

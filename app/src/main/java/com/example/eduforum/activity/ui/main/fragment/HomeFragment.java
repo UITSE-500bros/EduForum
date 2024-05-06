@@ -135,7 +135,7 @@ public class HomeFragment extends Fragment {
 //        });
 
         viewModel.getIsAdminCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
-
+            myCommunitiesAdapter.setCommunityList(joinedCommunities);
         });
         viewModel.getCreateCommunityDialogIsClosed().observe(getViewLifecycleOwner(), createCommunityDialogIsClosed -> {
             if (createCommunityDialogIsClosed) {
@@ -154,7 +154,7 @@ public class HomeFragment extends Fragment {
         dialogBinding.setLifecycleOwner(this);
 
         viewModel.getJoinedCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
-
+            joinedCommunitiesAdapter.setCommunityList(joinedCommunities);
         });
         viewModel.getJoinCommunityDialogIsClosed().observe(getViewLifecycleOwner(), joinCommunityDialogIsClosed -> {
             if (joinCommunityDialogIsClosed) {

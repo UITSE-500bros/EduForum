@@ -71,7 +71,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/communityNameEditText"
                     android:hint="@string/community_name"
-                    android:text="@={viewModel.commuLiveData.name}"
+                    android:text="@={viewModel.newCommunityLiveData.name}"
                     android:layout_width="match_parent"
                     android:layout_height="54dp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -88,7 +88,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/descriptionEditText"
                     android:hint="@string/community_description"
-                    android:text="@={viewModel.commuLiveData.description}"
+                    android:text="@={viewModel.newCommunityLiveData.description}"
                     android:layout_width="match_parent"
                     android:layout_height="54dp" />
 
