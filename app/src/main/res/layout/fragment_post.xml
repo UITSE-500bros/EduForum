@@ -3,12 +3,143 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activity.ui.main.fragment.PostFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+        android:background="@color/backgroundColor">
+      <ImageView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+            android:src="@drawable/community_background"
+            android:scaleType="centerCrop"
+          android:id="@+id/postImageView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
+          />
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Nhập môn lập trình "
+          android:lineSpacingExtra="-3sp"
+          android:gravity="center_vertical"
+          android:fontFamily="@font/source_sans_pro_semibold"
+          android:lineHeight="17sp"
+          android:textSize="18sp"
+          android:textColor="@color/white"
+          app:layout_constraintTop_toBottomOf="@+id/postImageView"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="15dp"
+          android:layout_marginStart="15dp"
+          android:id="@+id/TitleTextview"
+          />
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+            android:orientation="horizontal"
+          android:id="@+id/memberlayout"
+            app:layout_constraintTop_toBottomOf="@+id/TitleTextview">
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+                android:text="500"
+                android:textSize="15sp"
+              android:textColor="@color/white"
+                android:layout_marginStart="15dp"
+              />
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text=" thành viên"
+                android:textSize="12sp"
+              android:textColor="#B4B9C1"/>
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="12"
+              android:textSize="15sp"
+              android:textColor="@color/white"
+              android:layout_marginStart="15dp"
+              />
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text=" bài viết"
+              android:textSize="12sp"
+              android:textColor="#B4B9C1"/>
+      </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mô tả"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@+id/memberlayout"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            android:id="@+id/descriptionTextview"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đây là cộng đồng chuyên chia sẻ kiến thức về lập trình. Ai thắc mắc gì cứ đăng bài hỏi nha."
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@+id/descriptionTextview"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="15dp"
+            android:id="@+id/descriptionContentTextview"
+            />
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+            android:text="Đã tham gia"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+          app:layout_constraintTop_toBottomOf="@+id/descriptionContentTextview"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="15dp"
+            android:id="@+id/joinedTextview"
+          android:drawablePadding="10dp"
+          app:drawableLeftCompat="@drawable/user_check" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thông báo"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@+id/descriptionContentTextview"
+            app:layout_constraintStart_toEndOf="@+id/joinedTextview"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:id="@+id/joinTextview"
+            android:drawablePadding="10dp"
+            app:drawableLeftCompat="@drawable/bell" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/postRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/joinedTextview"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+
+            />
+
+
+
+
+
+
+
+
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
