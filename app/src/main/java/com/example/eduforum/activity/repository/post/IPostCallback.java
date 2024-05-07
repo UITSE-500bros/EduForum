@@ -13,4 +13,8 @@ public interface IPostCallback {
     void onEditPostSuccess();
 
     void onEditPostFailure(String errorMsg);
+
+    void onQueryPostError(String errorMsg);
+
+    void onQueryPostSuccess(List<Post> queryPostResults);
 }
