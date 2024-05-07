@@ -4,20 +4,13 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.eduforum.activity.model.Topic;
-import com.example.eduforum.activity.model.User;
-import com.example.eduforum.activity.repository.ISignUpCallback;
-import com.example.eduforum.activity.repository.SignUpRepository;
-import com.example.eduforum.activity.repository.SignUpTestRepository;
+import com.example.eduforum.activity.model.user_manage.User;
+import com.example.eduforum.activity.repository.auth.ISignUpCallback;
+import com.example.eduforum.activity.repository.auth.SignUpRepository;
 import com.example.eduforum.activity.ui.auth.SignUpViewState;
 import com.example.eduforum.activity.util.FlagsList;
-import com.google.android.material.snackbar.Snackbar;
-
-import org.checkerframework.checker.guieffect.qual.UI;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 
 public class SignUpViewModel extends ViewModel {
     private final SignUpRepository signUpRepository;
@@ -32,11 +25,8 @@ public class SignUpViewModel extends ViewModel {
 
     public SignUpViewModel() {
         // environment-repository
-        if (FlagsList.APPLICATION_ENVIRONMENT.equals("development")) {
-            signUpRepository = new SignUpTestRepository();
-        } else {
-            signUpRepository = new SignUpRepository();
-        }
+        signUpRepository = SignUpRepository.getInstance();
+
 
         // initialize livedata
         userLiveData = new MutableLiveData<>();

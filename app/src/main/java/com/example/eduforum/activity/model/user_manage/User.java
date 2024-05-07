@@ -1,10 +1,8 @@
-package com.example.eduforum.activity.model;
-
-import android.media.Image;
+package com.example.eduforum.activity.model.user_manage;
 
 //import com.google.firebase.Timestamp;
 
-public class User implements UserBuilder{
+public class User implements UserBuilder {
     private String userId;
     private String userName;
     private String name;

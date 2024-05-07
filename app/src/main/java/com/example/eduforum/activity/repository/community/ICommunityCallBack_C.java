@@ -1,4 +1,4 @@
-package com.example.eduforum.activity.repository;
+package com.example.eduforum.activity.repository.community;
 
 import com.example.eduforum.activity.model.community_manage.Community;
 

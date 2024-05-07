@@ -8,6 +8,8 @@ public class CreateCommunityViewState {
     String category;
     Uri commuAvt;
     String communityID;
+    Boolean isDialogClosed;
+    String errorMessage;
 
     public CreateCommunityViewState(String name, String description, String category, Uri commuAvt, String communityID) {
         this.name = name;
@@ -15,8 +17,13 @@ public class CreateCommunityViewState {
         this.category = category;
         this.commuAvt = commuAvt;
         this.communityID = communityID;
+        this.isDialogClosed = false;
+        this.errorMessage = null;
     }
-    public CreateCommunityViewState() {}
+    public CreateCommunityViewState() {
+        this.isDialogClosed = false;
+        this.errorMessage = null;
+    }
 
     public Uri getCommuAvt() {
         return commuAvt;
@@ -31,6 +38,12 @@ public class CreateCommunityViewState {
         return category;
     }
     public String getCommunityID() {return communityID;}
+    public Boolean getIsDialogClosed() {
+        return isDialogClosed;
+    }
+    public String getErrorMessage() {
+        return errorMessage;
+    }
     public void setCommuAvt(Uri commuAvt) {
         this.commuAvt = commuAvt;
     }
@@ -44,4 +57,10 @@ public class CreateCommunityViewState {
         this.category = category;
     }
     public void setCommunityID(String communityID) {this.communityID = communityID;}
+    public void setIsDialogClosed(Boolean isDialogClosed) {
+        this.isDialogClosed = isDialogClosed;
+    }
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
 }
