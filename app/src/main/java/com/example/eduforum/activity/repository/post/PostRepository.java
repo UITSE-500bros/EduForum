@@ -1,19 +1,26 @@
 package com.example.eduforum.activity.repository.post;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 
 import android.util.Log;
 
+import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.model.subscription_manage.Subscription;
 import com.example.eduforum.activity.util.FlagsList;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -22,6 +29,7 @@ import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PostRepository {
     private static PostRepository instance;
@@ -142,7 +150,81 @@ public class PostRepository {
     }
 
     // TODO: Create filter object
-    public void getPostsWithFilter() {
+    public void queryPost(@Nullable List<Category> categories, @Nullable PostQuery condition, IPostCallback callback) {
+        if (categories == null && condition == null) {
+            callback.onQueryPostError("NO_CONDITION");
+            return;
+        }
+
+        List<Post> queryPostResults = new ArrayList<>();
+
+        CollectionReference postRef = db.collection("Post");
+        Query postQuery = postRef;
+        if (condition != null) {
+            if (condition.isMostCommented()) {
+                postQuery = postRef.orderBy("totalComment", Query.Direction.DESCENDING);
+            }
+            if (condition.isMostVoted()) {
+                postQuery = postRef.orderBy("voteDifference", Query.Direction.DESCENDING);
+            }
+            if (condition.isNewest()) {
+                postQuery = postRef.orderBy("timeCreated", Query.Direction.DESCENDING);
+            }
+            if (condition.isOldest()) {
+                postQuery = postRef.orderBy("timeCreated", Query.Direction.ASCENDING);
+            }
+        }
+
+        if (categories != null) {
+            List<String> categoryIDs = new ArrayList<>();
+            for (Category category: categories) {
+                categoryIDs.add(category.getCategoryID());
+            }
+
+            List<List<String>> batches = new ArrayList<>();
+            int batchSize = 10;
+            for (int i = 0; i < categoryIDs.size(); i += batchSize) {
+                int end = Math.min(categoryIDs.size(), i + batchSize);
+                batches.add(new ArrayList<>(categoryIDs.subList(i, end)));
+            }
+
+            List<Task<QuerySnapshot>> tasks = new ArrayList<>();
+            for (List<String> batch : batches) {
+                Task<QuerySnapshot> task = postQuery.whereArrayContainsAny("categories.categoryID", batch).get();
+                tasks.add(task);
+            }
+
+            Tasks.whenAllSuccess(tasks).addOnSuccessListener(results -> {
+                for (Object result : results) {
+                    QuerySnapshot snapshot = (QuerySnapshot) result;
+                    for (QueryDocumentSnapshot document : snapshot) {
+                        queryPostResults.add(document.toObject(Post.class));
+                        Log.d(FlagsList.DEBUG_POST_FLAG, document.getId() + " => " + document.getData());
+                    }
+                }
+                callback.onQueryPostSuccess(queryPostResults);
+            }).addOnFailureListener(e -> {
+                callback.onQueryPostError(e.toString());
+                Log.w(FlagsList.DEBUG_POST_FLAG, "Error getting documents", e);
+            });
+
+        } else {
+            postQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            queryPostResults.add(document.toObject(Post.class));
+                            Log.d(FlagsList.DEBUG_POST_FLAG, document.getId() + " => " + document.getData());
+                        }
+                        callback.onQueryPostSuccess(queryPostResults);
+                    } else {
+                        callback.onQueryPostError(Objects.requireNonNull(task.getException()).getMessage());
+                        Log.d(FlagsList.DEBUG_POST_FLAG, "Error getting documents: ", task.getException());
+                    }
+                }
+            });
+        }
 
     }
 
