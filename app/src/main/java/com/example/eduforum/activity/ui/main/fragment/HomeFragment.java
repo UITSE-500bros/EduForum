@@ -94,11 +94,6 @@ public class HomeFragment extends Fragment {
         binding.joinCommuButton.setOnClickListener(v -> {
             showJoinCommunityDialog();
         });
-        viewModel.getErrorMsg().observe(getViewLifecycleOwner(), errorMsg -> {
-            if (errorMsg != null) {
-                Snackbar.make(binding.getRoot(), errorMsg, Snackbar.LENGTH_SHORT).show();
-            }
-        });
 
         viewModel.getJoinedCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
             joinedCommunitiesAdapter.setCommunityList(joinedCommunities);
@@ -110,6 +105,7 @@ public class HomeFragment extends Fragment {
 
     }
     private void showCreateCommunityDialog() {
+        viewModel.setNewCommunityLiveData(new CreateCommunityViewState());
         Dialog createCommunityDialog = new Dialog(this.getContext());
         dialogBinding = DialogCreateCommunityBinding.inflate(LayoutInflater.from(this.getContext()));
         // Set up dialog
@@ -122,7 +118,9 @@ public class HomeFragment extends Fragment {
 
         dialogBinding.categoryACTV.setAdapter(categoryAdapter);
         dialogBinding.categoryACTV.setOnItemClickListener((parent, view, position, id) -> {
-            viewModel.setCommunityCategory(categoryAdapter.getItem(position));
+            CreateCommunityViewState newCommunityState = viewModel.getNewCommunityLiveData().getValue();
+            newCommunityState.setCategory(parent.getItemAtPosition(position).toString());
+            viewModel.setNewCommunityLiveData(newCommunityState);
         });
 
 
@@ -137,8 +135,11 @@ public class HomeFragment extends Fragment {
         viewModel.getIsAdminCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
             myCommunitiesAdapter.setCommunityList(joinedCommunities);
         });
-        viewModel.getCreateCommunityDialogIsClosed().observe(getViewLifecycleOwner(), createCommunityDialogIsClosed -> {
-            if (createCommunityDialogIsClosed) {
+        viewModel.getNewCommunityLiveData().observe(getViewLifecycleOwner(), newCommunity -> {
+            if(newCommunity.getErrorMessage() != null){
+                Snackbar.make(dialogBinding.getRoot(), newCommunity.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+            }
+            if (newCommunity.getIsDialogClosed()== true) {
                 createCommunityDialog.dismiss();
             }
         });
@@ -146,6 +147,7 @@ public class HomeFragment extends Fragment {
 
     }
     private void showJoinCommunityDialog(){
+        viewModel.setJoinCommunityLiveData(new JoinCommunityViewState());
         Dialog joinCommunityDialog = new Dialog(this.getContext());
         DialogJoinCommunityBinding dialogBinding = DialogJoinCommunityBinding.inflate(LayoutInflater.from(this.getContext()));
         // Set up dialog
@@ -156,8 +158,11 @@ public class HomeFragment extends Fragment {
         viewModel.getJoinedCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
             joinedCommunitiesAdapter.setCommunityList(joinedCommunities);
         });
-        viewModel.getJoinCommunityDialogIsClosed().observe(getViewLifecycleOwner(), joinCommunityDialogIsClosed -> {
-            if (joinCommunityDialogIsClosed) {
+        viewModel.getJoinCommuLiveData().observe(getViewLifecycleOwner(), joinCommunity -> {
+            if(joinCommunity.getErrorMessage() != null){
+                Snackbar.make(dialogBinding.getRoot(), joinCommunity.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+            }
+            if (joinCommunity.getIsDialogClosed()) {
                 joinCommunityDialog.dismiss();
             }
         });

@@ -24,30 +24,16 @@ import java.util.List;
 public class HomeViewModel extends ViewModel{
 
     // Fields
-    private final MutableLiveData<String> communityCategory;
-    private final MutableLiveData<String> errorMsg;
-
-    private final MutableLiveData<Boolean> createCommunityDialogIsClosed;
-
-    private final MutableLiveData<Boolean> joinCommunityDialogIsClosed;
     private final MutableLiveData<CreateCommunityViewState> newCommunityLiveData;
-
     private final MutableLiveData<JoinCommunityViewState> joinCommunityLiveData;
-
     private final MutableLiveData<List<CreateCommunityViewState>> joinedCommunityList;
     private final MutableLiveData<List<CreateCommunityViewState>> isAdminCommunityList;
-
     CommunityRepository communityRepository;
-
     LoginRepository loginRepository;
 
     // Methods
     // Constructors- initializations
     public HomeViewModel() {
-        communityCategory= new MutableLiveData<>();
-        errorMsg = new MutableLiveData<>();
-        createCommunityDialogIsClosed = new MutableLiveData<>();
-        joinCommunityDialogIsClosed = new MutableLiveData<>();
         newCommunityLiveData = new MutableLiveData<>();
         newCommunityLiveData.setValue(new CreateCommunityViewState());
         if (FlagsList.APPLICATION_ENVIRONMENT.equals("production")) {
@@ -79,65 +65,13 @@ public class HomeViewModel extends ViewModel{
     public LiveData<CreateCommunityViewState> getNewCommunityLiveData() {
         return newCommunityLiveData;
     }
-
-
-
-    public LiveData<String> getCommunityCategory() {
-        return communityCategory;
+    public void setNewCommunityLiveData(CreateCommunityViewState newCommunityLiveData) {
+        this.newCommunityLiveData.setValue(newCommunityLiveData);
     }
 
-    public LiveData<String> getErrorMsg() {
-        return errorMsg;
+    public void setJoinCommunityLiveData(JoinCommunityViewState joinCommunityLiveData) {
+        this.joinCommunityLiveData.setValue(joinCommunityLiveData);
     }
-
-    public LiveData<Boolean> getCreateCommunityDialogIsClosed() {
-        return createCommunityDialogIsClosed;
-    }
-    public LiveData<Boolean> getJoinCommunityDialogIsClosed() {
-        return joinCommunityDialogIsClosed;
-    }
-    public CommunityRepository getCommunityRepository() {
-        return communityRepository;
-    }
-    public LoginRepository getLoginRepository() {
-        return loginRepository;
-    }
-
-    public void setCommunityCategory(String category) {
-        communityCategory.setValue(category);
-    }
-
-    public void setErrorMsg(String error) {
-        errorMsg.setValue(error);
-    }
-    public void setNewCommunityLiveData(CreateCommunityViewState community) {
-        newCommunityLiveData.setValue(community);
-    }
-
-    public void setCreateCommunityDialogIsClosed(Boolean closed) {
-        createCommunityDialogIsClosed.setValue(closed);
-    }
-    public void setJoinCommunityDialogIsClosed(Boolean closed) {
-        joinCommunityDialogIsClosed.setValue(closed);
-    }
-    public void setJoinCommuLiveData(JoinCommunityViewState joinCommu) {
-        joinCommunityLiveData.setValue(joinCommu);
-    }
-    public void setJoinedCommunityList(List<CreateCommunityViewState> joinedCommunityList) {
-        this.joinedCommunityList.setValue(joinedCommunityList);
-    }
-    public void setIsAdminCommunityList(List<CreateCommunityViewState> isAdminCommunityList) {
-        this.isAdminCommunityList.setValue(isAdminCommunityList);
-    }
-
-    public void setCommunityRepository(CommunityRepository communityRepository) {
-        this.communityRepository = communityRepository;
-    }
-
-    public void setLoginRepository(LoginRepository loginRepository) {
-        this.loginRepository = loginRepository;
-    }
-
     //--------------------------------------------------------------------------------------
     // Other methods
 
@@ -145,40 +79,28 @@ public class HomeViewModel extends ViewModel{
     public void onConfirmCreateCommunityButtonClicked(){
         CreateCommunityViewState commuState = newCommunityLiveData.getValue();
         // validate
-        if(commuState.getName() == null || commuState.getName().isEmpty()){
-            errorMsg.setValue("Tên cộng đồng không thể trống");
-            return;
-        }
-        commuState.setCategory(communityCategory.getValue());
-        if(commuState.getCategory() == null || commuState.getCategory().isEmpty()){
-            errorMsg.setValue("Chưa chọn phân loại cho cộng đồng");
-            return;
-        }
+        if(!IsCommunityUIStateValid(commuState)) return;
         // create community object (map UI state to domain object)
         Community commu = mapUIStateToCommunity(commuState);
-        if(commu==null){
-            errorMsg.setValue("Có lỗi xảy ra");
-            return;
-        }
-        // call repository
         communityRepository.createCommunity(commu, new ICommunityCallBack() {
             @Override
             public void onCreateCommunitySuccess(String communityId) {
                 fetchIsAdminCommunityList();
+                closeCreateCommunityDialog();
             }
-
             @Override
             public void onCreateCommunityFailure(String errorMsg) {
+                String errorMessage;
                 if(errorMsg.equals(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE)){
-                    setErrorMsg("Không thể tạo cộng đồng");
+                    errorMessage = "Không thể tạo cộng đồng";
                 }
                 else{
-                    setErrorMsg("Có lỗi xảy ra");
+                    errorMessage = "Đã có lỗi xảy ra";
                 }
+                commuState.setErrorMessage(errorMessage);
+                newCommunityLiveData.setValue(commuState);
             }
         });
-        // close dialog
-        createCommunityDialogIsClosed.setValue(true);
     }
     private Community mapUIStateToCommunity(CreateCommunityViewState UIState){
         if(UIState == null) return null;
@@ -195,13 +117,11 @@ public class HomeViewModel extends ViewModel{
             public void onRoleAdmin(List<Community> communityList) {
                 isAdminCommunityList.setValue(convertToViewStateList(communityList));
             }
-
-
         });
     }
     public void onCancelCreateCommunityButtonClicked(){
         // close dialog
-        createCommunityDialogIsClosed.setValue(true);
+        closeCreateCommunityDialog();
     }
 
     // --------------------------------
@@ -210,7 +130,8 @@ public class HomeViewModel extends ViewModel{
         JoinCommunityViewState joinCommuState = joinCommunityLiveData.getValue();
         // validate
         if(joinCommuState.getCommunityId() == null || joinCommuState.getCommunityId().isEmpty()){
-            errorMsg.setValue("Mã cộng đồng không thể trống");
+            joinCommuState.setErrorMessage("Mã cộng đồng không thể trống");
+            joinCommunityLiveData.setValue(joinCommuState);
             return;
         }
         // call repository, pass the communityID of joinCommuState directly to repository
@@ -218,24 +139,26 @@ public class HomeViewModel extends ViewModel{
             @Override
             public void onJoinCommunitySuccess(Object errorCommunitySuccessToJoin) {
                 fetchJoinedCommunityList();
+                closeJoinCommunityDialog();
             }
 
             @Override
             public void onJoinCommunityFailure(String errorMsg) {
+                String errorMessage;
                 if (errorMsg.equals(FlagsList.ERROR_COMMUNITY_CODE_NOT_EXIST)) {
-                    setErrorMsg("Cộng đồng không tồn tại");
+                    errorMessage = "Mã cộng đồng không tồn tại";
                 }
                 else{
-                    setErrorMsg("Không thể tham gia cộng đồng");
+                    errorMessage = "Đã có lỗi xảy ra";
                 }
+                joinCommuState.setErrorMessage(errorMessage);
+                joinCommunityLiveData.setValue(joinCommuState);
             }
         });
-        // close dialog
-        joinCommunityDialogIsClosed.setValue(true);
     }
     public void onCancelJoinCommunityButtonClicked(){
         // close dialog
-        joinCommunityDialogIsClosed.setValue(true);
+        closeJoinCommunityDialog();
     }
     public void fetchJoinedCommunityList(){
         communityRepository.isMember(FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_B() {
@@ -243,8 +166,6 @@ public class HomeViewModel extends ViewModel{
             public void onRoleMember(List<Community> communityList) {
                 joinedCommunityList.setValue(convertToViewStateList(communityList));
             }
-
-
         });
     }
 
@@ -256,5 +177,29 @@ public class HomeViewModel extends ViewModel{
             viewStates.add(new CreateCommunityViewState(community.getName(), community.getDescription(), community.getDepartment(), community.getProfileImage(), community.getCommunityId()));
         }
         return viewStates;
+    }
+
+    private void closeCreateCommunityDialog() {
+        CreateCommunityViewState commuState = newCommunityLiveData.getValue();
+        commuState.setIsDialogClosed(true);
+        newCommunityLiveData.setValue(commuState);
+    }
+    private void closeJoinCommunityDialog() {
+        JoinCommunityViewState joinCommuState = joinCommunityLiveData.getValue();
+        joinCommuState.setIsDialogClosed(true);
+        joinCommunityLiveData.setValue(joinCommuState);
+    }
+    private boolean IsCommunityUIStateValid(CreateCommunityViewState state) {
+        boolean isValid = true;
+        if (state.getName() == null || state.getName().isEmpty()) {
+            state.setErrorMessage("Tên cộng đồng không thể trống");
+            isValid = false;
+        }
+        else if (state.getCategory() == null || state.getCategory().isEmpty()) {
+            state.setErrorMessage("Hãy chọn một danh mục");
+            isValid = false;
+        }
+        newCommunityLiveData.postValue(state);
+        return isValid;
     }
 }
