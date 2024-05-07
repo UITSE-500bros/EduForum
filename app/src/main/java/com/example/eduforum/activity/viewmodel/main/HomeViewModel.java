@@ -12,6 +12,7 @@ import com.example.eduforum.activity.repository.community.ICommunityCallBack_A;
 import com.example.eduforum.activity.repository.community.ICommunityCallBack_B;
 import com.example.eduforum.activity.repository.community.ICommunityCallBack_C;
 import com.example.eduforum.activity.repository.auth.LoginRepository;
+import com.example.eduforum.activity.repository.community.ICommunityChangeListener;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.ui.main.fragment.JoinCommunityViewState;
 import com.example.eduforum.activity.util.FlagsList;
@@ -44,6 +45,23 @@ public class HomeViewModel extends ViewModel{
         isAdminCommunityList = new MutableLiveData<>();
         joinedCommunityList.setValue(new ArrayList<>());
         isAdminCommunityList.setValue(new ArrayList<>());
+        communityRepository.observeDocument(FirebaseAuth.getInstance().getUid(), new ICommunityChangeListener() {
+            @Override
+            public void onCommunityFetch(List<Community> communities) {
+                joinedCommunityList.setValue(convertToViewStateList(communities));
+            }
+
+            @Override
+            public void onCommunityChange(Community community) {
+
+            }
+
+            @Override
+            public void onCreateNewCommunity(List<Community> communities) {
+                isAdminCommunityList.setValue(convertToViewStateList(communities));
+            }
+
+    });
     }
     //-------------------------------------------------------------------------------
     // Getters and Setters
@@ -80,7 +98,6 @@ public class HomeViewModel extends ViewModel{
         communityRepository.createCommunity(commu, new ICommunityCallBack() {
             @Override
             public void onCreateCommunitySuccess(String communityId) {
-                fetchIsAdminCommunityList();
                 closeCreateCommunityDialog();
             }
             @Override
@@ -106,14 +123,7 @@ public class HomeViewModel extends ViewModel{
                 //.setProfileImage(UIState.getCommuAvt())
                 .build();
     }
-    public void fetchIsAdminCommunityList(){
-//        communityRepository.isAdmin(FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_C() {
-//            @Override
-//            public void onRoleAdmin(List<Community> communityList) {
-//                isAdminCommunityList.setValue(convertToViewStateList(communityList));
-//            }
-//        });
-    }
+
     public void onCancelCreateCommunityButtonClicked(){
         // close dialog
         closeCreateCommunityDialog();
@@ -133,7 +143,6 @@ public class HomeViewModel extends ViewModel{
         communityRepository.thamGia(joinCommuState.getCommunityId(), FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_A() {
             @Override
             public void onJoinCommunitySuccess(String successMsg) {
-                fetchJoinedCommunityList();
                 closeJoinCommunityDialog();
             }
 
@@ -155,14 +164,7 @@ public class HomeViewModel extends ViewModel{
         // close dialog
         closeJoinCommunityDialog();
     }
-    public void fetchJoinedCommunityList(){
-//        communityRepository.isMember(FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_B() {
-//            @Override
-//            public void onRoleMember(List<Community> communityList) {
-//                joinedCommunityList.setValue(convertToViewStateList(communityList));
-//            }
-//        });
-    }
+
 
     // --------------------------------
     // other methods

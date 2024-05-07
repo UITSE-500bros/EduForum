@@ -79,8 +79,6 @@ public class HomeFragment extends Fragment {
 //                        Snackbar.make(binding.getRoot(), "Không thể mở tài nguyên", Snackbar.LENGTH_SHORT).show();
 //                    }
 //                });
-        viewModel.fetchJoinedCommunityList();
-        viewModel.fetchIsAdminCommunityList();
         joinedCommunitiesAdapter = new CommunityAdapter(getContext(), viewModel.getJoinedCommunityList().getValue(),  FirebaseAuth.getInstance());
         myCommunitiesAdapter = new CommunityAdapter(getContext(), viewModel.getIsAdminCommunityList().getValue(), FirebaseAuth.getInstance());
         binding.joinedCommunitiesRecyclerView.setAdapter(joinedCommunitiesAdapter);
