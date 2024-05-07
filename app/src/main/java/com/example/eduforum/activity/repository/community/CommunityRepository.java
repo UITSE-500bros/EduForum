@@ -26,7 +26,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class CommunityRepository {
@@ -135,9 +137,11 @@ public class CommunityRepository {
 
 
     public void observeDocument(String userID, ICommunityChangeListener listener) {
+
         List<Community> isMemberOf = new ArrayList<>();
         List<Community> isAdminOf = new ArrayList<>();
-        db.collection("Community")
+        Set<String> addedCommunityIds = new HashSet<>();
+        ListenerRegistration registration = db.collection("Community")
             .addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot snapshots,@Nullable FirebaseFirestoreException e) {
@@ -146,28 +150,40 @@ public class CommunityRepository {
                         return;
                     }
                     assert snapshots != null;
+
                     for (DocumentChange dc : snapshots.getDocumentChanges()) {
                         QueryDocumentSnapshot doc = dc.getDocument();
 
                         Community community = doc.toObject(Community.class);
-                        if (doc.getMetadata().hasPendingWrites() && community.getAdminList().contains(userID)) {
-                            isAdminOf.add(community);
-                        }
-                        else if (dc.getType() == DocumentChange.Type.ADDED) {
-                            if (community.getAdminList().contains(userID)){
+                        community.setCommunityId(doc.getId());
+                        if (dc.getType() == DocumentChange.Type.ADDED) {
+                            if (community.getAdminList().contains(userID) && !isAdminOf.contains(community) && !addedCommunityIds.contains(community.getCommunityId())) {
+                                if (community.getCommunityId() == null){
+                                    community.setCommunityId(doc.getId());
+                                }
                                 isAdminOf.add(community);
-                            } 
-                        }
-                        else if (community.getUserList().contains(userID)) {
-                            isMemberOf.add(community);
+                                addedCommunityIds.add(community.getCommunityId());
+                            }
+                            else if (community.getUserList().contains(userID) && !isAdminOf.contains(community) && !addedCommunityIds.contains(community.getCommunityId()) ) {
+                                isMemberOf.add(community);
+                                addedCommunityIds.add(community.getCommunityId());
+                            }
+                        }else if (dc.getType() == DocumentChange.Type.MODIFIED) {
+                            if (community.getAdminList().contains(userID) && !isAdminOf.contains(community) && !addedCommunityIds.contains(community.getCommunityId())) {
+                                isAdminOf.add(community);
+                                addedCommunityIds.add(community.getCommunityId());
+                            }
+
                         }
                     }
+
                     listener.onCommunityFetch(isMemberOf);
                     listener.onCreateNewCommunity(isAdminOf);
+
                 }
             });
 
-}
+    }
         //Update : Không cần dùng 2 hàm này nữa
 //    public void isMember(String userId, ICommunityCallBack_B callBack){
 //        List<Community> communities = new ArrayList<>();
