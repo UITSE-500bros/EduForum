@@ -17,7 +17,7 @@
         android:theme="@style/Theme.EduForum"
         tools:targetApi="31">
         <activity
-            android:name=".activity.ui.auth.PostActivity"
+            android:name=".activity.ui.auth.CommunityActivity"
             android:exported="false" />
         <activity
             android:name=".activity.ui.auth.ForumActivity"
