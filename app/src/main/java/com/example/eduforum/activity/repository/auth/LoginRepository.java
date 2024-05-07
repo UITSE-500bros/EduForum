@@ -77,6 +77,7 @@ public class LoginRepository {
     }
 
     private void configFirebaseEmulator() {
+        if (FlagsList.APPLICATION_ENVIRONMENT.equals("development")) return;
         mAuth.useEmulator("10.0.2.2", 9099);
         db.useEmulator("10.0.2.2", 8080);
         storage.useEmulator("10.0.2.2", 9199);
