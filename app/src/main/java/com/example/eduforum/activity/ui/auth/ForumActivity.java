@@ -24,9 +24,7 @@ public class ForumActivity extends AppCompatActivity {
         binding = ActivityForumBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.forumFragmentContainer);
-        NavController navController = navHostFragment.getNavController();
-        //NavigationUI.setupWithNavController(binding., navController);
+
 
         binding.searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
