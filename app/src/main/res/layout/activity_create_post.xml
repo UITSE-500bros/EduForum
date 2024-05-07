@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:background="@color/backgroundColor"
+        tools:context=".activity.ui.auth.CreatePostActivity">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_activity_create_post"
+            android:textSize="24sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"/>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:padding="5dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/postTitleEditText"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:background="@color/white"
+            android:textSize="14sp"
+            android:hint="@string/titlehint_activity_create_post"
+            android:textColor="@color/black"
+            android:textColorHint="@color/hintColorText"
+            android:gravity="start"
+            android:inputType="textMultiLine"
+            android:scrollbars="vertical"
+            android:scrollbarStyle="insideInset"
+            android:maxLines="1"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/content_activity_create_post"
+            android:layout_marginTop="15dp"
+            android:textSize="24sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"/>
+        
+        <LinearLayout
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+        <jp.wasabeef.richeditor.RichEditor
+            android:id="@+id/contentRichEditor"
+            android:layout_width="match_parent"
+            android:layout_height="217dp"
+            android:layout_marginTop="15dp"
+            android:scrollbars="vertical"
+            android:gravity="start"
+            android:maxLength="1000"/>
+
+
+
+    </LinearLayout>
+
+</layout>
