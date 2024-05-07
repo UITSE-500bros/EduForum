@@ -28,7 +28,9 @@ import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class PostRepository {
@@ -222,6 +224,36 @@ public class PostRepository {
                 }
             });
         }
+
+    }
+
+    public void bookmarkPost(Post post, String userID, String communityName, IPostCallback callback) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("userID", userID);
+        Map<String, Object> communityObject = new HashMap<>();
+        communityObject.put("communityID", post.getCommunityID());
+        communityObject.put("name", communityName);
+        data.put("community", communityObject);
+        data.put("creator", post.getCreator());
+        // put the whole post object just for testing purpose, this need to be optimized in the future
+        data.put("post", post);
+
+        db.collection("Bookmark")
+                .add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        callback.onBookmarkSuccess();
+                        Log.d(FlagsList.DEBUG_POST_FLAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onBookmarkError(e.toString());
+                        Log.w(FlagsList.DEBUG_POST_FLAG, "Error adding document", e);
+                    }
+                });
 
     }
 

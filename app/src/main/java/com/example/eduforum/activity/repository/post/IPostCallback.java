@@ -25,4 +25,8 @@ public interface IPostCallback {
     void onSubscriptionSuccess();
 
     void onSubscriptionError(String errorMsg);
+
+    void onBookmarkError(String errorMsg);
+
+    void onBookmarkSuccess();
 }
