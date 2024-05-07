@@ -42,7 +42,7 @@ public class CommunityConcreteBuilder implements CommunityBuilder{
     @Override
     public Community build() {
 
-        return new Community(name,  createdDate,  department,  profileImg, description, adminList);
+        return new Community(communityId, name, adminList, profileImg, createdDate, description, department, null);
     }
 
     @Override

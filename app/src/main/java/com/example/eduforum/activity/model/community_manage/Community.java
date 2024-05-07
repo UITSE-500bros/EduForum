@@ -16,17 +16,21 @@ public class Community {
     private String department;
 
 
+    private List<String> userList = new ArrayList<>();
+
     public Community() {
     }
 
 
-    public Community(String name, String createdDate, String department, Uri profileImg, String description, List<String> adminList) {
+    public Community(String communityId, String name, List<String> adminList, Uri profileImage, String createdDate, String description, String department, List<String> userList) {
+        this.communityId = communityId;
         this.name = name;
-        this.createdDate = createdDate;
-        this.department = department;
-        this.profileImage = profileImg;
-        this.description = description;
         this.adminList = adminList;
+        this.profileImage = profileImage;
+        this.createdDate = createdDate;
+        this.description = description;
+        this.department = department;
+        this.userList = userList;
     }
 
     public List<String> getAdminList() {
@@ -87,4 +91,11 @@ public class Community {
     }
 
 
+    public void setUserList(List<String> userList) {
+        this.userList = userList;
+    }
+
+    public List<String> getUserList() {
+        return userList;
+    }
 }

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.eduforum.activity.model.community_manage.Community;
+import com.example.eduforum.activity.model.community_manage.CommunityMember;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -21,6 +22,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -59,6 +61,10 @@ public class CommunityRepository {
         List<String> admin = new ArrayList<>();
         admin.add(currentUser.getUid());
         community.setAdminList(admin);
+
+        List<String> userList = new ArrayList<>();
+        userList.add(currentUser.getUid());
+        community.setUserList(userList);
         db.collection("Community")
                 .add(community)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -84,55 +90,7 @@ public class CommunityRepository {
     public void updateCommunity(Community community) {
         db.collection("Community").document(community.getCommunityId()).set(community);
     }
-    /*
-    public void thamGia(String communityJoinId, String userId, ICommunityCallBack callBack){
-        db.collection("Community")
-            .whereEqualTo("inviteCode", communityJoinId)
-            .get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            addingUserIntoCommunityMember(document.toObject(Community.class), userId, callBack);
-                        }
-                    } else {
-                        // callback thông báo mã không tồn tại, sai mã
-                        Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, task.getException());
-                        callBack.onCreateCommunityFailure(FlagsList.ERROR_COMMUNITY_CODE_NOT_EXIST);
-                    }
-                }
-            });
 
-    }
-    public void addingUserIntoCommunityMember(Community community, String userId, ICommunityCallBack callBack) {
-        Map<String, Object> data = new HashMap<>();
-        data.put("communityID", community.getCommunityId());
-        data.put("name", community.getName());
-        // TODO: xem lai
-//        data.put("profilePicture", community.getProfileImage());
-        data.put("department", community.getDepartment());
-
-
-        db.collection("CommunityMember")
-                .document(userId)
-                .update("communities", FieldValue.arrayUnion(data))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        callBack.onCommunitySuccess();
-                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "DocumentSnapshot successfully updated!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        callBack.onCommunityFailure(FlagsList.ERROR_COMMUNITY_ADD_USER);
-                        Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error updating document", e);
-                    }
-                });
-    }
-    */
 
     public void thamGia(String communityJoinId, String userId, ICommunityCallBack_A callBack){
         db.collection("Community")
@@ -144,30 +102,25 @@ public class CommunityRepository {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Community community = document.toObject(Community.class);
-                                Map<String, Object> data = new HashMap<>();
-                                data.put("communityID", community.getCommunityId());
-                                data.put("name", community.getName());
-                                data.put("department", community.getDepartment());
-                                data.put("profilePicture", community.getProfileImage());
-
-                                db.collection("CommunityMember")
-                                        .document(userId)
-                                        .update("communities", FieldValue.arrayUnion(data))
+                                List<String> userList = community.getUserList();
+                                userList.add(userId);
+                                db.collection("Community").document(community.getCommunityId())
+                                        .update("userList", userList)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                callBack.onJoinCommunitySuccess();
-                                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "DocumentSnapshot successfully updated!");
+                                                callBack.onJoinCommunitySuccess(FlagsList.ERROR_COMMUNITY_SUCCESS_TO_JOIN);
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                callBack.onJoinCommunityFailure(FlagsList.ERROR_COMMUNITY_ADD_USER);
-                                                Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error updating document", e);
+                                                callBack.onJoinCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_JOIN);
                                             }
                                         });
+
                             }
+
                         } else {
                             // callback thông báo mã không tồn tại, sai mã
                             Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, task.getException());
@@ -178,76 +131,78 @@ public class CommunityRepository {
     }
 
 
-    public void observeDocument(String collectionPath, String documentId, ICommunityChangeListener listener) {
-        // TODO: listen realtime tới các document trong CommunityMember có documentID = userID
-        registration = db.collection("CommunityMember")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot snapshots,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w("TAG", "listen:error", e);
-                            return;
-                        }
-                        assert snapshots != null;
-                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                            if (dc.getType() == DocumentChange.Type.ADDED) {
-                                if (db.collection("CommunityMember")
-                                        .document(dc.getDocument().getId())
-                                        .collection("User")
-                                        .document()
-                                        .get().isSuccessful()) {
-                                    Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "User already in community");
-                                    Community community = dc.getDocument().toObject(Community.class);
-                                    communities.add(community);
-                                }
-                            }
-                        }
-                        listener.onCommunityChange(communities);
-                    }
-                });
-    }
-
-
-
-
-    public void isMember(String userId, ICommunityCallBack_B callBack){
-        List<Community> communities = new ArrayList<>();
-        db.collection("CommunityMember")
-                .whereEqualTo("userId", userId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Community community = document.toObject(Community.class);
-                                communities.add(community);
-                                callBack.onRoleMember(communities);
-                            }
-                        }
-                    }
-                });
-    }
-
-
-    public void isAdmin(String userId, ICommunityCallBack_C callBack){
-        List<Community> communities = new ArrayList<>();
+    public void observeDocument(String userID, ICommunityChangeListener listener) {
+        List<Community> isMemberOf = new ArrayList<>();
+        List<Community> isAdminOf = new ArrayList<>();
         db.collection("Community")
-                .whereArrayContains("adminList", userId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Community community = document.toObject(Community.class);
-                                communities.add(community);
-                                callBack.onRoleAdmin(communities);
-                            }
+            .addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot snapshots,@Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.w("TAG", "listen:error", e);
+                        return;
+                    }
+                    assert snapshots != null;
+                    for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                        QueryDocumentSnapshot doc = dc.getDocument();
+
+                        Community community = doc.toObject(Community.class);
+                        if (doc.getMetadata().hasPendingWrites() && community.getAdminList().contains(userID)) {
+                            isAdminOf.add(community);
+                        }
+                        else if (dc.getType() == DocumentChange.Type.ADDED) {
+                            if (community.getAdminList().contains(userID)){
+                                isAdminOf.add(community);
+                            } 
+                        }
+                        else if (community.getUserList().contains(userID)) {
+                            isMemberOf.add(community);
                         }
                     }
-                });
-    }
+                    listener.onCommunityFetch(isMemberOf);
+                    listener.onCreateNewCommunity(isAdminOf);
+                }
+            });
+
+}
+        //Update : Không cần dùng 2 hàm này nữa
+//    public void isMember(String userId, ICommunityCallBack_B callBack){
+//        List<Community> communities = new ArrayList<>();
+//        db.collection("CommunityMember")
+//                .whereEqualTo("userId", userId)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Community community = document.toObject(Community.class);
+//                                communities.add(community);
+//                                callBack.onRoleMember(communities);
+//                            }
+//                        }
+//                    }
+//                });
+//    }
+//
+//
+//    public void isAdmin(String userId, ICommunityCallBack_C callBack){
+//        List<Community> communities = new ArrayList<>();
+//        db.collection("Community")
+//                .whereArrayContains("adminList", userId)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Community community = document.toObject(Community.class);
+//                                communities.add(community);
+//                                callBack.onRoleAdmin(communities);
+//                            }
+//                        }
+//                    }
+//                });
+//    }
 
 }

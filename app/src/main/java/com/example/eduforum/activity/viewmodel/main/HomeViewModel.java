@@ -1,6 +1,4 @@
 package com.example.eduforum.activity.viewmodel.main;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -15,17 +13,13 @@ import com.example.eduforum.activity.repository.ICommunityCallBack_A;
 import com.example.eduforum.activity.repository.ICommunityCallBack_B;
 import com.example.eduforum.activity.repository.ICommunityCallBack_C;
 import com.example.eduforum.activity.repository.LoginRepository;
-import com.example.eduforum.activity.repository.LoginTestRepository;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.ui.main.fragment.JoinCommunityViewState;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public class HomeViewModel extends ViewModel{
 
@@ -222,7 +216,7 @@ public class HomeViewModel extends ViewModel{
         // call repository, pass the communityID of joinCommuState directly to repository
         communityRepository.thamGia(joinCommuState.getCommunityId(), FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_A() {
             @Override
-            public void onJoinCommunitySuccess() {
+            public void onJoinCommunitySuccess(Object errorCommunitySuccessToJoin) {
                 fetchJoinedCommunityList();
             }
 
