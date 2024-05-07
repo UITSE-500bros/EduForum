@@ -4,9 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.eduforum.activity.repository.ILoginCallback;
-import com.example.eduforum.activity.repository.LoginRepository;
-import com.example.eduforum.activity.repository.LoginTestRepository;
+import com.example.eduforum.activity.repository.auth.ILoginCallback;
+import com.example.eduforum.activity.repository.auth.LoginRepository;
 import com.example.eduforum.activity.ui.auth.LoginViewState;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.firebase.auth.FirebaseAuth;

@@ -1,35 +1,22 @@
 package com.example.eduforum.activity.ui.auth;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
-import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.eduforum.R;
-import com.example.eduforum.activity.model.Topic;
 import com.example.eduforum.activity.viewmodel.auth.SignUpViewModel;
 import com.example.eduforum.databinding.ActivitySignUpBinding;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.ArrayList;
 
 public class SignUpActivity extends AppCompatActivity {
     private SignUpViewModel viewModel;

@@ -1,4 +1,4 @@
-package com.example.eduforum.activity.repository;
+package com.example.eduforum.activity.repository.auth;
 
 public interface ILoginCallback {
     void onLoginSuccess();

@@ -1,11 +1,11 @@
-package com.example.eduforum.activity.repository;
+package com.example.eduforum.activity.repository.auth;
 
 import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.eduforum.activity.model.User;
+import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -20,12 +20,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
 public class SignUpRepository {
+    private static SignUpRepository instance;
     protected FirebaseAuth mAuth;
     protected FirebaseFirestore db;
     protected FirebaseStorage storage;
@@ -34,6 +30,13 @@ public class SignUpRepository {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
+    }
+
+    public static synchronized SignUpRepository getInstance() {
+        if (instance == null) {
+            instance = new SignUpRepository();
+        }
+        return instance;
     }
 
     public void register(User user, ISignUpCallback callback) {

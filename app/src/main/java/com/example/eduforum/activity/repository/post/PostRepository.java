@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.model.subscription_manage.Subscription;
-import com.example.eduforum.activity.repository.LoginRepository;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnFailureListener;

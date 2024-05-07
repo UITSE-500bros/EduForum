@@ -1,4 +1,4 @@
-package com.example.eduforum.activity.repository;
+package com.example.eduforum.activity.repository.category;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 

@@ -6,13 +6,12 @@ import androidx.lifecycle.ViewModel;
 import com.example.eduforum.activity.model.community_manage.Community;
 import com.example.eduforum.activity.model.community_manage.CommunityBuilder;
 import com.example.eduforum.activity.model.community_manage.CommunityConcreteBuilder;
-import com.example.eduforum.activity.repository.CommunityRepository;
-import com.example.eduforum.activity.repository.CommunityTestRepository;
-import com.example.eduforum.activity.repository.ICommunityCallBack;
-import com.example.eduforum.activity.repository.ICommunityCallBack_A;
-import com.example.eduforum.activity.repository.ICommunityCallBack_B;
-import com.example.eduforum.activity.repository.ICommunityCallBack_C;
-import com.example.eduforum.activity.repository.LoginRepository;
+import com.example.eduforum.activity.repository.community.CommunityRepository;
+import com.example.eduforum.activity.repository.community.ICommunityCallBack;
+import com.example.eduforum.activity.repository.community.ICommunityCallBack_A;
+import com.example.eduforum.activity.repository.community.ICommunityCallBack_B;
+import com.example.eduforum.activity.repository.community.ICommunityCallBack_C;
+import com.example.eduforum.activity.repository.auth.LoginRepository;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.ui.main.fragment.JoinCommunityViewState;
 import com.example.eduforum.activity.util.FlagsList;
@@ -36,11 +35,7 @@ public class HomeViewModel extends ViewModel{
     public HomeViewModel() {
         newCommunityLiveData = new MutableLiveData<>();
         newCommunityLiveData.setValue(new CreateCommunityViewState());
-        if (FlagsList.APPLICATION_ENVIRONMENT.equals("production")) {
-            communityRepository = new CommunityRepository();
-        } else {
-            communityRepository = new CommunityTestRepository();
-        }
+        communityRepository = CommunityRepository.getInstance();
         loginRepository = LoginRepository.getInstance();
 
         joinCommunityLiveData = new MutableLiveData<>();
@@ -112,12 +107,12 @@ public class HomeViewModel extends ViewModel{
                 .build();
     }
     public void fetchIsAdminCommunityList(){
-        communityRepository.isAdmin(FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_C() {
-            @Override
-            public void onRoleAdmin(List<Community> communityList) {
-                isAdminCommunityList.setValue(convertToViewStateList(communityList));
-            }
-        });
+//        communityRepository.isAdmin(FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_C() {
+//            @Override
+//            public void onRoleAdmin(List<Community> communityList) {
+//                isAdminCommunityList.setValue(convertToViewStateList(communityList));
+//            }
+//        });
     }
     public void onCancelCreateCommunityButtonClicked(){
         // close dialog
@@ -137,7 +132,7 @@ public class HomeViewModel extends ViewModel{
         // call repository, pass the communityID of joinCommuState directly to repository
         communityRepository.thamGia(joinCommuState.getCommunityId(), FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_A() {
             @Override
-            public void onJoinCommunitySuccess(Object errorCommunitySuccessToJoin) {
+            public void onJoinCommunitySuccess(String successMsg) {
                 fetchJoinedCommunityList();
                 closeJoinCommunityDialog();
             }
@@ -161,12 +156,12 @@ public class HomeViewModel extends ViewModel{
         closeJoinCommunityDialog();
     }
     public void fetchJoinedCommunityList(){
-        communityRepository.isMember(FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_B() {
-            @Override
-            public void onRoleMember(List<Community> communityList) {
-                joinedCommunityList.setValue(convertToViewStateList(communityList));
-            }
-        });
+//        communityRepository.isMember(FirebaseAuth.getInstance().getUid(), new ICommunityCallBack_B() {
+//            @Override
+//            public void onRoleMember(List<Community> communityList) {
+//                joinedCommunityList.setValue(convertToViewStateList(communityList));
+//            }
+//        });
     }
 
     // --------------------------------

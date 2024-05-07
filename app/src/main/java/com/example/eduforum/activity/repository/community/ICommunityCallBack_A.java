@@ -1,4 +1,4 @@
-package com.example.eduforum.activity.repository;
+package com.example.eduforum.activity.repository.community;
 
 public interface ICommunityCallBack_A {
     void onJoinCommunitySuccess(String successMsg);

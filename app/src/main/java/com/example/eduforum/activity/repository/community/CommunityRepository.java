@@ -1,4 +1,4 @@
-package com.example.eduforum.activity.repository;
+package com.example.eduforum.activity.repository.community;
 
 import android.util.Log;
 
@@ -6,13 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.eduforum.activity.model.community_manage.Community;
-import com.example.eduforum.activity.model.community_manage.CommunityMember;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FieldValue;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,12 +26,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class CommunityRepository {
+    private static CommunityRepository instance;
     protected FirebaseFirestore db;
     List<String> communitiesID;
     List<Community> communities;
@@ -42,6 +39,12 @@ public class CommunityRepository {
 
     private final FirebaseAuth currentUser;
 
+    public static synchronized CommunityRepository getInstance() {
+        if (instance == null) {
+            instance = new CommunityRepository();
+        }
+        return instance;
+    }
     public CommunityRepository() {
         db = FirebaseFirestore.getInstance();
         communitiesID = new ArrayList<>();
