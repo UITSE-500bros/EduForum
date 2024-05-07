@@ -8,9 +8,25 @@ public interface IPostCallback {
 
     void onAddPostFailure(String errorMsg);
 
-    void onAddPostSuccess();
+    void onAddPostSuccess(Post newPost);
 
     void onEditPostSuccess();
 
     void onEditPostFailure(String errorMsg);
+
+    void onQueryPostError(String errorMsg);
+
+    void onQueryPostSuccess(List<Post> queryPostResults);
+
+    void onDeletePostSuccess();
+
+    void onDeletePostError(String errorMsg);
+
+    void onSubscriptionSuccess();
+
+    void onSubscriptionError(String errorMsg);
+
+    void onBookmarkError(String errorMsg);
+
+    void onBookmarkSuccess();
 }

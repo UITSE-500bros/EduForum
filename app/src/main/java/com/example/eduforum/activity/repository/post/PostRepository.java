@@ -1,19 +1,26 @@
 package com.example.eduforum.activity.repository.post;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 
 import android.util.Log;
 
+import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.model.subscription_manage.Subscription;
 import com.example.eduforum.activity.util.FlagsList;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -21,7 +28,10 @@ import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class PostRepository {
     private static PostRepository instance;
@@ -50,7 +60,8 @@ public class PostRepository {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        callback.onAddPostSuccess();
+                        post.setPostID(documentReference.getId());
+                        callback.onAddPostSuccess(post);
                         Log.d(FlagsList.DEBUG_POST_FLAG, "New post written with ID: " + documentReference.getId());
                     }
                 })
@@ -58,7 +69,7 @@ public class PostRepository {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         callback.onAddPostFailure(e.toString());
-                        Log.w(FlagsList.DEBUG_POST_FLAG, "Error adding document", e);
+                        Log.w(FlagsList.DEBUG_POST_FLAG, "Error adding post", e);
                     }
                 });
     }
@@ -99,65 +110,167 @@ public class PostRepository {
                             Post post = documentSnapshot.toObject(Post.class);
                             post.setPostID(documentSnapshot.getId());
                             posts.add(post);
+                            Log.d(FlagsList.DEBUG_POST_FLAG, documentSnapshot.getId() + " => " + documentSnapshot.getData());
                         }
+
                         callback.onGetPostSuccess(posts);
-                        //log.d(FlagsList.DEBUG_POST_FLAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         callback.onGetPostFailure(e.toString());
-                        //Log.w(FlagsList.DEBUG_POST_FLAG, "Error adding document", e);
+                        Log.w(FlagsList.DEBUG_POST_FLAG, "Error fetching post,", e);
                     }
                 });
     }
 
     //TODO: check if the user is the owner of the post, render a button can delete that post @Duong Thuan Tri
-    public void deletePost(String communityID, IPostCallback callback,String userID,String postID) {
+    // TODO: delete all comment subcollection when user delete a post
+    public void deletePost(Post post, IPostCallback callback) {
         db.collection("Community")
-                .document(communityID)
+                .document(post.getCommunityID())
                 .collection("Post")
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                .document(post.getPostID())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<Post> posts = new ArrayList<>();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            Post post = documentSnapshot.toObject(Post.class);
-                            post.setPostID(documentSnapshot.getId());
-                            posts.add(post);
-                        }
-                        callback.onGetPostSuccess(posts);
-                        //log.d(FlagsList.DEBUG_POST_FLAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                    public void onSuccess(Void aVoid) {
+                        callback.onDeletePostSuccess();
+                        Log.d(FlagsList.DEBUG_POST_FLAG, "Post successfully deleted!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        callback.onGetPostFailure(e.toString());
-                        //Log.w(FlagsList.DEBUG_POST_FLAG, "Error adding document", e);
+                        callback.onDeletePostError(e.toString());
+                        Log.w(FlagsList.DEBUG_POST_FLAG, "Error deleting document", e);
                     }
                 });
     }
 
-    // TODO: Create filter object
-    public void getPostsWithFilter() {
+    public void queryPost(String communityID, @Nullable List<Category> categories, @Nullable PostQuery condition, IPostCallback callback) {
+        if (categories == null && condition == null) {
+            callback.onQueryPostError("NO_CONDITION");
+            return;
+        }
+
+        List<Post> queryPostResults = new ArrayList<>();
+
+        CollectionReference postRef = db.collection("Community").document(communityID).collection("Post");
+        Query postQuery = postRef;
+        if (condition != null) {
+            if (condition.isMostCommented()) {
+                postQuery = postRef.orderBy("totalComment", Query.Direction.DESCENDING);
+            }
+            if (condition.isMostVoted()) {
+                postQuery = postRef.orderBy("voteDifference", Query.Direction.DESCENDING);
+            }
+            if (condition.isNewest()) {
+                postQuery = postRef.orderBy("timeCreated", Query.Direction.DESCENDING);
+            }
+            if (condition.isOldest()) {
+                postQuery = postRef.orderBy("timeCreated", Query.Direction.ASCENDING);
+            }
+        }
+
+        if (categories != null) {
+            List<String> categoryIDs = new ArrayList<>();
+            for (Category category: categories) {
+                categoryIDs.add(category.getCategoryID());
+            }
+
+            List<List<String>> batches = new ArrayList<>();
+            int batchSize = 10;
+            for (int i = 0; i < categoryIDs.size(); i += batchSize) {
+                int end = Math.min(categoryIDs.size(), i + batchSize);
+                batches.add(new ArrayList<>(categoryIDs.subList(i, end)));
+            }
+
+            List<Task<QuerySnapshot>> tasks = new ArrayList<>();
+            for (List<String> batch : batches) {
+                Task<QuerySnapshot> task = postQuery.whereArrayContainsAny("categories.categoryID", batch).get();
+                tasks.add(task);
+            }
+
+            Tasks.whenAllSuccess(tasks).addOnSuccessListener(results -> {
+                for (Object result : results) {
+                    QuerySnapshot snapshot = (QuerySnapshot) result;
+                    for (QueryDocumentSnapshot document : snapshot) {
+                        queryPostResults.add(document.toObject(Post.class));
+                        Log.d(FlagsList.DEBUG_POST_FLAG, document.getId() + " => " + document.getData());
+                    }
+                }
+                callback.onQueryPostSuccess(queryPostResults);
+            }).addOnFailureListener(e -> {
+                callback.onQueryPostError(e.toString());
+                Log.w(FlagsList.DEBUG_POST_FLAG, "Error getting documents", e);
+            });
+
+        } else {
+            postQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            queryPostResults.add(document.toObject(Post.class));
+                            Log.d(FlagsList.DEBUG_POST_FLAG, document.getId() + " => " + document.getData());
+                        }
+                        callback.onQueryPostSuccess(queryPostResults);
+                    } else {
+                        callback.onQueryPostError(Objects.requireNonNull(task.getException()).getMessage());
+                        Log.d(FlagsList.DEBUG_POST_FLAG, "Error getting documents: ", task.getException());
+                    }
+                }
+            });
+        }
 
     }
 
-    public void subscribePost(String communityID, String postID, String userID) {
-        db.collection("Subscription")
-                .add(new Subscription(communityID,postID,userID))
+    public void bookmarkPost(Post post, String userID, String communityName, IPostCallback callback) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("userID", userID);
+        Map<String, Object> communityObject = new HashMap<>();
+        communityObject.put("communityID", post.getCommunityID());
+        communityObject.put("name", communityName);
+        data.put("community", communityObject);
+        data.put("creator", post.getCreator());
+        // put the whole post object just for testing purpose, this need to be optimized in the future
+        data.put("post", post);
+
+        db.collection("Bookmark")
+                .add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
+                        callback.onBookmarkSuccess();
                         Log.d(FlagsList.DEBUG_POST_FLAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        callback.onBookmarkError(e.toString());
+                        Log.w(FlagsList.DEBUG_POST_FLAG, "Error adding document", e);
+                    }
+                });
+
+    }
+
+    public void subscribePost(String communityID, String postID, String userID, IPostCallback callback) {
+        db.collection("Subscription")
+                .add(new Subscription(communityID,postID,userID))
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        callback.onSubscriptionSuccess();
+                        Log.d(FlagsList.DEBUG_POST_FLAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onSubscriptionError(e.toString());
                         Log.w(FlagsList.DEBUG_POST_FLAG, "Error adding document", e);
                     }
                 });
