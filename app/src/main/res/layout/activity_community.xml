@@ -59,14 +59,14 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="15dp"
             android:layout_marginStart="15dp"
-            android:id="@+id/TitleTextview"
+            android:id="@+id/communityName"
             />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:id="@+id/memberlayout"
-            app:layout_constraintTop_toBottomOf="@+id/TitleTextview">
+            app:layout_constraintTop_toBottomOf="@+id/communityName">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
