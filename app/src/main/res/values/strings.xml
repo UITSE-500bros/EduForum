@@ -114,6 +114,8 @@
     <string name="community_title">
 Nh\u00e1\u00ba\u00adp m\u00c3\u00b4n l\u00e1\u00ba\u00adp tr\u00c3\u00acnh\n500 th\u00c3\u00a0nh vi\u00c3\u00aan 12 b\u00c3\u00a0i vi\u00e1\u00ba\u00bft
 </string>
+    <string name="category_activity_create_post">Danh mục</string>
+    <string name="categoryhint_activity_create_post">Hãy chọn các danh mục phân loại</string>
     <string name="title_activity_create_post">Tiêu đề</string>
     <string name="titlehint_activity_create_post">Hãy nhập tiêu đề bài viết</string>
     <string name="content_activity_create_post">Nội dung</string>

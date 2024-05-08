@@ -3,10 +3,17 @@ package com.example.eduforum.activity.ui.auth;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.VideoView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -81,6 +88,98 @@ public class CreatePostActivity extends AppCompatActivity {
             builder.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.cancel());
 
             builder.show();
+        });
+
+        //set up image
+        ActivityResultLauncher<PickVisualMediaRequest> pickImages =
+        //parameter in PickVisualMediaRequest is the max item user can select
+                registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uri -> {
+                    if (uri != null) {
+                        for(int i = 0; i < uri.size(); i++) {
+                            ImageView imageView = new ImageView(this);
+                            imageView.setImageURI(uri.get(i));
+                            imageView.setMaxHeight(48);
+                            imageView.setMaxWidth(48);
+                            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            binding.resourceList.addView(imageView);
+                        }
+                    } else {
+//                        TODO: Show errors
+                    }
+                });
+
+        binding.imageInsertButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pickImages.launch(new PickVisualMediaRequest.Builder()
+                        .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                        .build());
+            }
+        });
+
+        ActivityResultLauncher<PickVisualMediaRequest> pickVideos =
+                //parameter in PickVisualMediaRequest is the max item user can select
+                registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uri -> {
+                    if (uri != null) {
+                        for(int i = 0; i < uri.size(); i++) {
+                            VideoView videoView = new VideoView(binding.getRoot().getContext());
+                            videoView.setVideoURI(uri.get(i));
+                            binding.resourceList.addView(videoView);
+                        }
+                    } else {
+//                        TODO: Show errors
+                    }
+                });
+        binding.imageInsertButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pickVideos.launch(new PickVisualMediaRequest.Builder()
+                        .setMediaType(ActivityResultContracts.PickVisualMedia.VideoOnly.INSTANCE)
+                        .build());
+            }
+        });
+
+
+        //Handle tag items
+        //TODO: add category items
+        final String[] items = new String[]{"Item 1", "Item 2", "Item 3", "Item 4", "Item 5"};
+
+        final boolean[] checkedItems = new boolean[items.length];
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Chọn các mục");
+        builder.setMultiChoiceItems(items, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                // Event when user check or uncheck an item
+                checkedItems[which] = isChecked;
+            }
+        });
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 5. Khi người dùng nhấp vào "OK", cập nhật text của TextView để hiển thị các mục đã chọn
+                StringBuilder selectedItems = new StringBuilder();
+                for (int i = 0; i < checkedItems.length; i++) {
+                    if (checkedItems[i]) {
+                        selectedItems.append(items[i]).append(", ");
+                    }
+                }
+                // Xóa dấu phẩy cuối cùng
+                if (selectedItems.length() > 0) {
+                    selectedItems.setLength(selectedItems.length() - 2);
+                }
+                binding.categoryTextView.setText(selectedItems.toString());
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+
+// Hiển thị AlertDialog khi nhấp vào TextView
+        binding.categoryTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                builder.show();
+            }
         });
     }
 }

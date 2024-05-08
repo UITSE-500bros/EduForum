@@ -20,11 +20,8 @@
             android:name=".activity.ui.auth.CreatePostActivity"
             android:exported="false" />
         <activity
-            android:name=".CreatePostActivity"
+            android:name=".activity.ui.auth.CommunityActivity"
             android:exported="false" />
-        <activity
-            android:name=".activity.ui.auth.ForumActivity"
-            android:exported="true" />
         <activity
             android:name=".activity.ui.auth.VerificationWaitingActivity"
             android:exported="false"
@@ -46,9 +43,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.ui.welcome.WelcomeActivity"
-            android:exported="true" />
         <activity
             android:name=".activity.ui.welcome.WelcomeActivity"
             android:exported="true" />

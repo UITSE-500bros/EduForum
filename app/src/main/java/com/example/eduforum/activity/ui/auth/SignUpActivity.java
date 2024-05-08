@@ -22,10 +22,6 @@ public class SignUpActivity extends AppCompatActivity {
     private SignUpViewModel viewModel;
     private static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
     private ActivitySignUpBinding binding;
-    private Uri selectedImageUri;
-
-    //instace of ActivityResultLauncher to get the image from the gallery
-    private ActivityResultLauncher<String> mGetContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

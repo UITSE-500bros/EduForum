@@ -17,17 +17,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/title_activity_create_post"
-            android:textSize="24sp"
+            android:textSize="30sp"
             android:textColor="@color/white"
             android:textStyle="bold"/>
 
         <com.google.android.material.textfield.TextInputEditText
-            android:padding="5dp"
+            android:padding="10dp"
             android:layout_marginTop="10dp"
             android:id="@+id/postTitleEditText"
             android:layout_width="match_parent"
             android:layout_height="75dp"
-            android:background="@color/white"
+            android:background="@drawable/loginedittextshape"
             android:textSize="14sp"
             android:hint="@string/titlehint_activity_create_post"
             android:textColor="@color/black"
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:text="@string/content_activity_create_post"
             android:layout_marginTop="15dp"
-            android:textSize="24sp"
+            android:textSize="30sp"
             android:textColor="@color/white"
             android:textStyle="bold"/>
 
@@ -196,20 +196,95 @@
                     android:layout_marginStart="5dp"
                     android:contentDescription="@null"
                     android:src="@drawable/insert_link" />
-
-
+                
             </LinearLayout>
         </HorizontalScrollView>
         <jp.wasabeef.richeditor.RichEditor
             android:id="@+id/contentRichEditor"
             android:layout_width="match_parent"
-            android:layout_height="217dp"
+            android:layout_height="300dp"
             android:layout_marginTop="5dp"
             android:scrollbars="vertical"
             android:gravity="start"
-            android:maxLength="1000"/>
+            android:maxLength="1000"
+            android:background="@drawable/loginedittextshape"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/category_activity_create_post"
+            android:textSize="30sp"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"/>
 
+        <TextView
+            android:id="@+id/categoryTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/categoryhint_activity_create_post"
+            android:drawableRight="@drawable/drop_down_icon"
+            android:background="@drawable/loginedittextshape"
+            android:padding="5dp"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="15dp"/>
+
+        <LinearLayout
+            android:id="@+id/resource_List"
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal"
+            android:orientation="horizontal">
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/imageInsertButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/image_insert_icon"
+                android:background="@null"
+                android:scaleType="centerCrop"
+                android:layout_marginStart="10dp"
+                android:contentDescription="@null"/>
+            <ImageButton
+                android:id="@+id/videoInsertButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/video_insert_icon"
+                android:background="@null"
+                android:scaleType="centerCrop"
+                android:layout_marginStart="10dp"
+                android:contentDescription="@null"/>
+            <ImageButton
+                android:id="@+id/incognitoModeButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/incognito_mode"
+                android:background="@null"
+                android:scaleType="centerCrop"
+                android:layout_marginStart="10dp"
+                android:contentDescription="@null"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/createPostButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button"
+            android:background="@drawable/loginbuttonshape"
+            android:layout_marginTop="15dp"
+            android:text="Tạo"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:foreground="?attr/selectableItemBackground"/>
 
     </LinearLayout>
 
