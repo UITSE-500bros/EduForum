@@ -24,6 +24,8 @@ import androidx.databinding.DataBindingUtil;
 import com.example.eduforum.R;
 import com.example.eduforum.databinding.ActivityCreatePostBinding;
 
+import org.checkerframework.checker.units.qual.C;
+
 import jp.wasabeef.richeditor.RichEditor;
 
 public class CreatePostActivity extends AppCompatActivity {
@@ -41,13 +43,16 @@ public class CreatePostActivity extends AppCompatActivity {
             return insets;
         });
 
-        //Stlye rich editor through binding
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_post);
-        binding.contentRichEditor.setEditorHeight(217);
+
+        //Stlye rich editor through binding
+        binding.contentRichEditor.setBackgroundColor(Color.WHITE);
+        binding.contentRichEditor.setEditorHeight(250);
         binding.contentRichEditor.setEditorFontSize(14);
-        binding.contentRichEditor.setEditorFontSize(R.color.black);
-        binding.contentRichEditor.setEditorBackgroundColor(R.color.white);
-        binding.contentRichEditor.setPlaceholder("Nhập nội dung bài viết");
+        binding.contentRichEditor.setEditorFontColor(Color.BLACK);
+        binding.contentRichEditor.setEditorBackgroundColor(Color.WHITE);
+        binding.contentRichEditor.setPadding(10, 10, 10, 10);
+
 
         //set up action buttons
         binding.actionRedo.setOnClickListener(v -> binding.contentRichEditor.redo());
@@ -98,8 +103,11 @@ public class CreatePostActivity extends AppCompatActivity {
                         for(int i = 0; i < uri.size(); i++) {
                             ImageView imageView = new ImageView(this);
                             imageView.setImageURI(uri.get(i));
-                            imageView.setMaxHeight(48);
-                            imageView.setMaxWidth(48);
+                            int sizeInDp = 40;
+                            float scale = getResources().getDisplayMetrics().density;
+                            int sizeInPx = (int) (sizeInDp * scale + 0.5f);
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(sizeInPx, sizeInPx);
+                            imageView.setLayoutParams(layoutParams);
                             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                             binding.resourceList.addView(imageView);
                         }
@@ -122,15 +130,20 @@ public class CreatePostActivity extends AppCompatActivity {
                 registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uri -> {
                     if (uri != null) {
                         for(int i = 0; i < uri.size(); i++) {
-                            VideoView videoView = new VideoView(binding.getRoot().getContext());
+                            VideoView videoView = new VideoView(this);
                             videoView.setVideoURI(uri.get(i));
+                            int sizeInDp = 40;
+                            float scale = getResources().getDisplayMetrics().density;
+                            int sizeInPx = (int) (sizeInDp * scale + 0.5f);
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(sizeInPx, sizeInPx);
+                            videoView.setLayoutParams(layoutParams);
                             binding.resourceList.addView(videoView);
                         }
                     } else {
 //                        TODO: Show errors
                     }
                 });
-        binding.imageInsertButton.setOnClickListener(new View.OnClickListener() {
+        binding.videoInsertButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pickVideos.launch(new PickVisualMediaRequest.Builder()
