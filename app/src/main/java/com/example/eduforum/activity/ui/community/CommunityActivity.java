@@ -1,4 +1,4 @@
-package com.example.eduforum.activity.ui.auth;
+package com.example.eduforum.activity.ui.community;
 
 import android.os.Bundle;
 
@@ -15,7 +15,7 @@ import com.example.eduforum.activity.ui.main.adapter.CommunityAdapter;
 
 public class CommunityActivity extends AppCompatActivity {
 
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
