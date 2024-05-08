@@ -1,4 +1,4 @@
-package com.example.eduforum.activity.ui.auth;
+package com.example.eduforum.activity.ui.community;
 
 import android.content.DialogInterface;
 import android.graphics.Color;

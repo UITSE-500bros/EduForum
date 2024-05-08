@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:padding="10dp"
         android:background="@color/backgroundColor"
-        tools:context=".activity.ui.auth.CreatePostActivity">
+        tools:context=".activity.ui.community.CreatePostActivity">
 
         <TextView
             android:layout_width="match_parent"

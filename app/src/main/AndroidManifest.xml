@@ -17,11 +17,13 @@
         android:theme="@style/Theme.EduForum"
         tools:targetApi="31">
         <activity
-            android:name=".activity.ui.auth.CreatePostActivity"
+            android:name=".activity.ui.community.CreatePostActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ui.auth.CommunityActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:name=".activity.ui.community.CommunityActivity"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
+
         <activity
             android:name=".activity.ui.auth.VerificationWaitingActivity"
             android:exported="false"

@@ -1,70 +1,44 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <!-- TODO: Update blank fragment layout -->
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/backgroundColor" >
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/postsSearchBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/secondaryColor"
+      <com.google.android.material.appbar.AppBarLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+            android:id="@+id/topappbar"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:navigationIcon="@drawable/back_icon"
-            app:navigationIconTint="@color/white"
-            app:title="Forum Name"
-            app:collapseIcon="@drawable/nav_drawer"
-            app:titleTextColor="@color/white">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_scrollFlags="scroll|enterAlways"
+            >
+          <com.google.android.material.appbar.MaterialToolbar
+              android:id="@+id/topAppBar"
+              android:layout_width="match_parent"
+              android:layout_height="?attr/actionBarSize"
+              app:title="Tên forum"
+              app:menu="@menu/communitymenu"
+                app:navigationIcon="@drawable/back_icon"
+              android:backgroundTint="@color/secondaryColor"
+              style="@style/Widget.MaterialComponents.Toolbar.Primary"
+              />
+      </com.google.android.material.appbar.AppBarLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:orientation="horizontal">
 
-                <ImageButton
-                    android:id="@+id/search_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/secondaryColor"
-                    android:src="@drawable/search_icon" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:visibility="gone">
-
-                    <androidx.appcompat.widget.SearchView
-                        android:id="@+id/search_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <ImageButton
-                    android:id="@+id/navigation_drawer_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/secondaryColor"
-                    android:src="@drawable/nav_drawer"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginEnd="20dp"/>
-
-            </LinearLayout>
-
-        </androidx.appcompat.widget.Toolbar>
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/community_background"
             android:scaleType="centerCrop"
             android:id="@+id/postImageView"
-            app:layout_constraintTop_toBottomOf="@+id/postsSearchBar"
+            app:layout_constraintTop_toBottomOf="@+id/topappbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             />
