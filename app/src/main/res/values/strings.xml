@@ -111,4 +111,7 @@
     <string name="create_community_title">Tạo cộng đồng mới</string>
     <string name="join_community_title">Tham gia cộng đồng</string>
     <string name="community_id">Mã cộng đồng (*)</string>
+    <string name="community_title">
+Nh\u00e1\u00ba\u00adp m\u00c3\u00b4n l\u00e1\u00ba\u00adp tr\u00c3\u00acnh\n500 th\u00c3\u00a0nh vi\u00c3\u00aan 12 b\u00c3\u00a0i vi\u00e1\u00ba\u00bft
+</string>
 </resources>
