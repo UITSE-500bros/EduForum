@@ -37,7 +37,7 @@ public class CommunityActivity extends AppCompatActivity {
             viewModel.setCommunityId(communityId);
         }
         else{
-            // finish();
+            finish();
         }
     }
 }
