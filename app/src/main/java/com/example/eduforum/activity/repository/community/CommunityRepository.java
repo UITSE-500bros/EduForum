@@ -61,32 +61,35 @@ public class CommunityRepository {
 //        communityRepo.removeListener();
 //    }
     public void createCommunity(Community community, ICommunityCallBack callBack) {
-        List<String> admin = new ArrayList<>();
-        admin.add(currentUser.getUid());
-        community.setAdminList(admin);
+    List<String> admin = new ArrayList<>();
+    admin.add(currentUser.getUid());
+    community.setAdminList(admin);
 
-        List<String> userList = new ArrayList<>();
-        userList.add(currentUser.getUid());
-        community.setUserList(userList);
-        db.collection("Community")
-                .add(community)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                        community.setCommunityId(documentReference.getId());
-                        callBack.onCreateCommunitySuccess(documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error adding document", e);
-                        callBack.onCreateCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE);
-                    }
-                });
+    List<String> userList = new ArrayList<>();
+    userList.add(currentUser.getUid());
+    community.setUserList(userList);
 
-    }
+    // Create a new document and get its ID
+    DocumentReference newCommunityRef = db.collection("Community").document();
+    community.setCommunityId(newCommunityRef.getId());
+
+    newCommunityRef
+        .set(community)
+        .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "DocumentSnapshot written with ID: " + newCommunityRef.getId());
+                callBack.onCreateCommunitySuccess(newCommunityRef.getId());
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error adding document", e);
+                callBack.onCreateCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE);
+            }
+        });
+}
     public void deleteCommunity(Community community) {
         db.collection("Community").document(community.getCommunityId()).delete();
     }
