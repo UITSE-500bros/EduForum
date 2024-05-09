@@ -171,44 +171,25 @@ public class CommunityRepository {
             });
 
 }
-        //Update : Không cần dùng 2 hàm này nữa
-//    public void isMember(String userId, ICommunityCallBack_B callBack){
-//        List<Community> communities = new ArrayList<>();
-//        db.collection("CommunityMember")
-//                .whereEqualTo("userId", userId)
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Community community = document.toObject(Community.class);
-//                                communities.add(community);
-//                                callBack.onRoleMember(communities);
-//                            }
-//                        }
-//                    }
-//                });
-//    }
-//
-//
-//    public void isAdmin(String userId, ICommunityCallBack_C callBack){
-//        List<Community> communities = new ArrayList<>();
-//        db.collection("Community")
-//                .whereArrayContains("adminList", userId)
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Community community = document.toObject(Community.class);
-//                                communities.add(community);
-//                                callBack.onRoleAdmin(communities);
-//                            }
-//                        }
-//                    }
-//                });
-//    }
+
+    public void getCommunity(String communityId, ICommunityCallBack_C callBackC){
+        final Community[] community = {new Community()};
+        db.collection("community")
+                .whereEqualTo("communityId", communityId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                community[0] = document.toObject(Community.class);
+                                callBackC.getCommunityInfo(community[0]);
+                            }
+                        } else {
+                            Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+    }
 
 }
