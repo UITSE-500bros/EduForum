@@ -1,4 +1,4 @@
-package com.example.eduforum.activity.ui.main.adapter;
+package com.example.eduforum.activity.ui.community;
 
 import android.content.Context;
 import android.view.LayoutInflater;

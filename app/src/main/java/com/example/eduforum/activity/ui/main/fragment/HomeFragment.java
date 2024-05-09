@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -12,25 +11,19 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.example.eduforum.R;
-import com.example.eduforum.activity.model.community_manage.Community;
-import com.example.eduforum.activity.ui.auth.SignUpViewState;
-import com.example.eduforum.activity.ui.main.adapter.CommunityAdapter;
+import com.example.eduforum.activity.ui.community.CommunityAdapter;
 import com.example.eduforum.activity.viewmodel.main.HomeViewModel;
 import com.example.eduforum.databinding.DialogCreateCommunityBinding;
 import com.example.eduforum.databinding.DialogJoinCommunityBinding;
 import com.example.eduforum.databinding.FragmentHomeBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class HomeFragment extends Fragment {
 
