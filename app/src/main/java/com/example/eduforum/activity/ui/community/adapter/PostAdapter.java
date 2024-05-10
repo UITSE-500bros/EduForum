@@ -45,9 +45,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         PostViewState post = postList.get(position);
         holder.bind(post);
         holder.itemView.setOnClickListener(v -> {
-            //Intent intent = new Intent(context, PostDetailActivity.class);
-            //intent.putExtra("postId", post.getPostId());
-            //context.startActivity(intent);
+
         });
     }
 

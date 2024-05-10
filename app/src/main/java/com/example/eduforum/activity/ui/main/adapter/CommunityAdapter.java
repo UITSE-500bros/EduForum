@@ -1,4 +1,4 @@
-package com.example.eduforum.activity.ui.community;
+package com.example.eduforum.activity.ui.main.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -41,9 +41,8 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
         holder.bind(communityList.get(position));
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, CommunityActivity.class);
-            intent.putExtra("communityId", communityList.get(position).getCommunityID());
-            // sau khi test thi CommuActivity kh mo len -> commuViewState.commuID = null -> commu.commuID = null
-            if(communityList.get(position).getCommunityID()!=null)
+            intent.putExtra("currentCommunity", communityList.get(position));
+            if(communityList.get(position)!=null)
             context.startActivity(intent);
         });
     }

@@ -2,7 +2,9 @@ package com.example.eduforum.activity.ui.main.fragment;
 
 import android.net.Uri;
 
-public class CreateCommunityViewState {
+import java.io.Serializable;
+
+public class CreateCommunityViewState implements Serializable {
     String name;
     String description;
     String category;
