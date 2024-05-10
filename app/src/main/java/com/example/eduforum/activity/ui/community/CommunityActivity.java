@@ -1,5 +1,6 @@
 package com.example.eduforum.activity.ui.community;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -45,5 +46,10 @@ public class CommunityActivity extends AppCompatActivity {
         else{
             finish();
         }
+        binding.createPostEditTextButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CreatePostActivity.class);
+            intent.putExtra("communityId", communityId);
+            startActivity(intent);
+        });
     }
 }
