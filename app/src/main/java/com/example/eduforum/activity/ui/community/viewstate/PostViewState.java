@@ -8,27 +8,48 @@ import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import java.util.List;
 
 public class PostViewState {
+    private String postId;
     private Creator creator;
     private CreateCommunityViewState community;
     private String title;
     private String content;
     private String date;
     private List<Category> tags;
-    public PostViewState(Creator creator, CreateCommunityViewState community, String title, String content, String date, List<Category> tags) {
+    private List<String> image;
+    private List<String> taggedUsers;
+    private Boolean isAnonymous;
+    public PostViewState(String postId, Creator creator, CreateCommunityViewState community, String title, String content, Boolean isAnonymous, String date, List<String> image, List<String> taggedUsers,  List<Category> tags) {
+        this.postId = postId;
         this.creator = creator;
         this.community = community;
         this.title = title;
         this.content = content;
+        this.isAnonymous = isAnonymous;
         this.date = date;
         this.tags = tags;
+        this.image = image;
+        this.taggedUsers = taggedUsers;
     }
     public PostViewState(){
+        this.postId = null;
         this.creator = null;
         this.community = null;
         this.title = null;
         this.content = null;
         this.date = null;
         this.tags = null;
+    }
+    public List<String> getImage() {
+        return image;
+    }
+    public List<String> getTaggedUsers() {
+        return taggedUsers;
+    }
+    public String getPostId() {
+        return postId;
+    }
+    public Boolean getIsAnonymous() {
+        return isAnonymous;
     }
     public Creator getAuthor() {
         return creator;
@@ -48,6 +69,9 @@ public class PostViewState {
     public List<Category> getTags() {
         return tags;
     }
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
     public void setAuthor(Creator creator) {
         this.creator = creator;
     }
@@ -66,7 +90,13 @@ public class PostViewState {
     public void setTags(List<Category> tags) {
         this.tags = tags;
     }
-
-
-
+    public void setAnonymous(Boolean anonymous) {
+        isAnonymous = anonymous;
+    }
+    public void setImage(List<String> image) {
+        this.image = image;
+    }
+    public void setTaggedUsers(List<String> taggedUsers) {
+        this.taggedUsers = taggedUsers;
+    }
 }
