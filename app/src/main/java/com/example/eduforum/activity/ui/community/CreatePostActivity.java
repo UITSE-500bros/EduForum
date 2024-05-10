@@ -20,9 +20,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
+import com.example.eduforum.activity.viewmodel.community.CreatePostViewModel;
 import com.example.eduforum.databinding.ActivityCreatePostBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.checkerframework.checker.units.qual.C;
 
@@ -31,6 +35,7 @@ import jp.wasabeef.richeditor.RichEditor;
 public class CreatePostActivity extends AppCompatActivity {
 
     private ActivityCreatePostBinding binding;
+    private CreatePostViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +47,30 @@ public class CreatePostActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        viewModel = new ViewModelProvider(this).get(CreatePostViewModel.class);
+        String communityId =  getIntent().getStringExtra("communityId");
+        if(communityId != null){
+            viewModel.setCommunityId(communityId);
+        }
+        else{
+            finish();
+        }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_post);
-
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+        initComponents();
+        viewModel.getIsPostCreated().observe(this, isCreated -> {
+            if(isCreated){
+                finish();
+            }
+        });
+        viewModel.getErrorMessage().observe(this, errorMessage -> {
+            if(errorMessage != null){
+                Snackbar.make(binding.getRoot(), errorMessage, Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void initComponents(){
         //Stlye rich editor through binding
         binding.contentRichEditor.setBackgroundColor(Color.WHITE);
         binding.contentRichEditor.setEditorHeight(250);
@@ -97,7 +123,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
         //set up image
         ActivityResultLauncher<PickVisualMediaRequest> pickImages =
-        //parameter in PickVisualMediaRequest is the max item user can select
+                //parameter in PickVisualMediaRequest is the max item user can select
                 registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uri -> {
                     if (uri != null) {
                         for(int i = 0; i < uri.size(); i++) {
@@ -154,7 +180,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
 
         //Handle tag items
-        //TODO: add category items
+        // List<Category> categories = viewModel.getCategories();
         final String[] items = new String[]{"Item 1", "Item 2", "Item 3", "Item 4", "Item 5"};
 
         final boolean[] checkedItems = new boolean[items.length];
@@ -173,9 +199,11 @@ public class CreatePostActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 // 5. Khi người dùng nhấp vào "OK", cập nhật text của TextView để hiển thị các mục đã chọn
                 StringBuilder selectedItems = new StringBuilder();
+                // List<Category> selectedItems = new ArrayList<>();
                 for (int i = 0; i < checkedItems.length; i++) {
                     if (checkedItems[i]) {
                         selectedItems.append(items[i]).append(", ");
+                        // selectedItems.add(new Category(...));
                     }
                 }
                 // Xóa dấu phẩy cuối cùng
@@ -193,6 +221,14 @@ public class CreatePostActivity extends AppCompatActivity {
             public void onClick(View v) {
                 builder.show();
             }
+        });
+
+        binding.createPostButton.setOnClickListener(v -> {
+            PostViewState newPost = viewModel.getPostViewState().getValue();
+            newPost.setContent(binding.contentRichEditor.getHtml());
+            // newPost.setCategory(...);
+            viewModel.setPostViewState(newPost);
+            viewModel.createPost();
         });
     }
 }

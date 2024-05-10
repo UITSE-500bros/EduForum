@@ -171,6 +171,7 @@ public class HomeViewModel extends ViewModel{
     private List<CreateCommunityViewState> convertToViewStateList(List<Community> communities) {
         List<CreateCommunityViewState> viewStates = new ArrayList<>();
         for (Community community : communities) {
+            if(community.getCommunityId() == null) continue;
             viewStates.add(new CreateCommunityViewState(community.getName(), community.getDescription(), community.getDepartment(), community.getProfileImage(), community.getCommunityId()));
         }
         return viewStates;

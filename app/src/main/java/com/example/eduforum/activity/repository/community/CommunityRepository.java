@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -61,32 +62,35 @@ public class CommunityRepository {
 //        communityRepo.removeListener();
 //    }
     public void createCommunity(Community community, ICommunityCallBack callBack) {
-        List<String> admin = new ArrayList<>();
-        admin.add(currentUser.getUid());
-        community.setAdminList(admin);
+    List<String> admin = new ArrayList<>();
+    admin.add(currentUser.getUid());
+    community.setAdminList(admin);
 
-        List<String> userList = new ArrayList<>();
-        userList.add(currentUser.getUid());
-        community.setUserList(userList);
-        db.collection("Community")
-                .add(community)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                        community.setCommunityId(documentReference.getId());
-                        callBack.onCreateCommunitySuccess(documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error adding document", e);
-                        callBack.onCreateCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE);
-                    }
-                });
+    List<String> userList = new ArrayList<>();
+    userList.add(currentUser.getUid());
+    community.setUserList(userList);
 
-    }
+    // Create a new document and get its ID
+    DocumentReference newCommunityRef = db.collection("Community").document();
+    community.setCommunityId(newCommunityRef.getId());
+
+    newCommunityRef
+        .set(community)
+        .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "DocumentSnapshot written with ID: " + newCommunityRef.getId());
+                callBack.onCreateCommunitySuccess(newCommunityRef.getId());
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error adding document", e);
+                callBack.onCreateCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE);
+            }
+        });
+}
     public void deleteCommunity(Community community) {
         db.collection("Community").document(community.getCommunityId()).delete();
     }
@@ -168,44 +172,27 @@ public class CommunityRepository {
             });
 
 }
-        //Update : Không cần dùng 2 hàm này nữa
-//    public void isMember(String userId, ICommunityCallBack_B callBack){
-//        List<Community> communities = new ArrayList<>();
-//        db.collection("CommunityMember")
-//                .whereEqualTo("userId", userId)
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Community community = document.toObject(Community.class);
-//                                communities.add(community);
-//                                callBack.onRoleMember(communities);
-//                            }
-//                        }
-//                    }
-//                });
-//    }
-//
-//
-//    public void isAdmin(String userId, ICommunityCallBack_C callBack){
-//        List<Community> communities = new ArrayList<>();
-//        db.collection("Community")
-//                .whereArrayContains("adminList", userId)
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Community community = document.toObject(Community.class);
-//                                communities.add(community);
-//                                callBack.onRoleAdmin(communities);
-//                            }
-//                        }
-//                    }
-//                });
-//    }
+
+    public void getCommunity(String communityId, ICommunityCallBack_C callBackC){
+
+        db.collection("Community")
+                .document(communityId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                callBackC.getCommunityInfo(document.toObject(Community.class));
+                            } else {
+                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "No such document");
+                            }
+                        } else {
+                            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+    }
 
 }

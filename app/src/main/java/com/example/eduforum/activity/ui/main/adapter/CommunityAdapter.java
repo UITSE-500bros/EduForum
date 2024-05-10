@@ -1,12 +1,14 @@
 package com.example.eduforum.activity.ui.main.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eduforum.activity.ui.community.CommunityActivity;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.databinding.ItemForumBinding;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,9 +40,10 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
     public void onBindViewHolder(@NonNull CommunityViewHolder holder, int position) {
         holder.bind(communityList.get(position));
         holder.itemView.setOnClickListener(v -> {
-            //Intent intent = new Intent(context, CommunityActivity.class);
-            //intent.putExtra("community", communityList.get(position));
-            //context.startActivity(intent);
+            Intent intent = new Intent(context, CommunityActivity.class);
+            intent.putExtra("currentCommunity", communityList.get(position));
+            if(communityList.get(position)!=null)
+            context.startActivity(intent);
         });
     }
 
