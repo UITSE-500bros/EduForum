@@ -6,14 +6,16 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
+import com.example.eduforum.activity.ui.community.adapter.PostAdapter;
+import com.example.eduforum.activity.ui.main.adapter.CommunityAdapter;
 import com.example.eduforum.activity.viewmodel.community.NewsFeedViewModel;
 import com.example.eduforum.databinding.ActivityCommunityBinding;
 
 public class CommunityActivity extends AppCompatActivity {
     ActivityCommunityBinding binding;
     NewsFeedViewModel viewModel;
-    //CommunityAdapter communityAdapter;
+
+    PostAdapter postAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,5 +41,6 @@ public class CommunityActivity extends AppCompatActivity {
         else{
             finish();
         }
+        postAdapter = new PostAdapter(this, viewModel);
     }
 }

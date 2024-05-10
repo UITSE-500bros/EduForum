@@ -1,4 +1,4 @@
-package com.example.eduforum.activity.ui.community.adapter;
+package com.example.eduforum.activity.ui.main.adapter;
 
 import android.content.Context;
 import android.content.Intent;
