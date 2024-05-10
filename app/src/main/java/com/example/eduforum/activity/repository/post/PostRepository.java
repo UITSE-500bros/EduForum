@@ -160,16 +160,16 @@ public class PostRepository {
         CollectionReference postRef = db.collection("Community").document(communityID).collection("Post");
         Query postQuery = postRef;
         if (condition != null) {
-            if (condition.isMostCommented()) {
+            if (condition == PostQuery.MOST_COMMENTED) {
                 postQuery = postRef.orderBy("totalComment", Query.Direction.DESCENDING);
             }
-            if (condition.isMostVoted()) {
+            if (condition == PostQuery.MOST_VOTED) {
                 postQuery = postRef.orderBy("voteDifference", Query.Direction.DESCENDING);
             }
-            if (condition.isNewest()) {
+            if (condition == PostQuery.NEWEST) {
                 postQuery = postRef.orderBy("timeCreated", Query.Direction.DESCENDING);
             }
-            if (condition.isOldest()) {
+            if (condition == PostQuery.OLDEST) {
                 postQuery = postRef.orderBy("timeCreated", Query.Direction.ASCENDING);
             }
         }
