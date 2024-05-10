@@ -41,6 +41,5 @@ public class CommunityActivity extends AppCompatActivity {
         else{
             finish();
         }
-        postAdapter = new PostAdapter(this, viewModel);
     }
 }

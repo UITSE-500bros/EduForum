@@ -8,7 +8,7 @@ import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import java.util.List;
 
 public class PostViewState {
-    private Creator creator
+    private Creator creator;
     private CreateCommunityViewState community;
     private String title;
     private String content;
