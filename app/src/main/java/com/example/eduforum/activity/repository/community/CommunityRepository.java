@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -173,20 +174,22 @@ public class CommunityRepository {
 }
 
     public void getCommunity(String communityId, ICommunityCallBack_C callBackC){
-        final Community[] community = {new Community()};
-        db.collection("community")
-                .whereEqualTo("communityId", communityId)
+
+        db.collection("Community")
+                .document(communityId)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                community[0] = document.toObject(Community.class);
-                                callBackC.getCommunityInfo(community[0]);
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                callBackC.getCommunityInfo(document.toObject(Community.class));
+                            } else {
+                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "No such document");
                             }
                         } else {
-                            Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error getting documents.", task.getException());
+                            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "get failed with ", task.getException());
                         }
                     }
                 });
