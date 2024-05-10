@@ -9,23 +9,41 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.eduforum.R;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.eduforum.activity.ui.community.adapter.PostAdapter;
+import com.example.eduforum.activity.viewmodel.community.NewsFeedViewModel;
+import com.example.eduforum.databinding.ActivityCommunityBinding;
 
 public class CommunityActivity extends AppCompatActivity {
+    ActivityCommunityBinding binding;
+    NewsFeedViewModel viewModel;
 
+    PostAdapter postAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_community);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+        binding = ActivityCommunityBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        init();
+
+        viewModel.getCurrentCommunity().observe(this, community -> {
+            if(community != null){
+                binding.communityName.setText(community.getName());
+                binding.descriptionContentTextview.setText(community.getDescription());
+            }
         });
-
-
-        //RecyclerView for displaying the posts
-
+    }
+    private void init(){
+        viewModel = new ViewModelProvider(this).get(NewsFeedViewModel.class);
+        String communityId = getIntent().getStringExtra("communityId");
+        if(communityId != null) {
+            viewModel.setCommunityId(communityId);
+        }
+        else{
+            finish();
+        }
     }
 }

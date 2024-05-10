@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 
 import com.example.eduforum.R;
 import com.example.eduforum.activity.ui.community.CommunityAdapter;
+
 import com.example.eduforum.activity.viewmodel.main.HomeViewModel;
 import com.example.eduforum.databinding.DialogCreateCommunityBinding;
 import com.example.eduforum.databinding.DialogJoinCommunityBinding;
