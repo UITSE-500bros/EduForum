@@ -36,71 +36,68 @@ public class NewsFeedViewModel extends ViewModel {
     }
     public void setCurrentCommunity(CreateCommunityViewState community) {
         currentCommunity.setValue(community);
+        postRepository.getPosts(community.getCommunityID(), new IPostCallback() {
+            @Override
+            public void onGetPostSuccess(List<Post> posts){
+                postList.setValue(convertPostListToPostViewStateList(posts));
+            }
+            @Override
+            public void onGetPostFailure(String errorMsg){
+                postList.setValue(new ArrayList<>());
+            }
+            @Override
+            public void onAddPostFailure(String errorMsg){
+
+            }
+            @Override
+            public void onAddPostSuccess(Post newPost){
+
+            }
+            @Override
+            public void onEditPostSuccess(){
+
+            }
+            @Override
+            public void onEditPostFailure(String errorMsg){
+            }
+            @Override
+            public void onQueryPostError(String errorMsg){
+
+            }
+            @Override
+            public void onQueryPostSuccess(List<Post> queryPostResults){
+
+            }
+            @Override
+            public void onDeletePostSuccess(){
+
+            }
+            @Override
+            public void onDeletePostError(String errorMsg){
+            }
+            @Override
+            public void onSubscriptionSuccess(){
+
+            }
+            @Override
+            public void onSubscriptionError(String errorMsg){
+
+            }
+            @Override
+            public void onBookmarkError(String errorMsg){
+
+            }
+            @Override
+            public void onBookmarkSuccess(){
+
+            }
+        });
     }
     public LiveData<CreateCommunityViewState> getCurrentCommunity() {
         return currentCommunity;
     }
     public void setCommunityId(String communityId) {
         this.communityId.setValue(communityId);
-        communityRepository.getCommunity(communityId, new ICommunityCallBack_C() {
-            @Override
-            public void onRoleAdmin(List<Community> communityList) {
-
-            }
-
-            @Override
-            public void getCommunityInfo(Community community) {
-                currentCommunity.setValue(new CreateCommunityViewState(community.getName(), community.getDescription(), community.getDepartment(), null, communityId));
-            }
-        });
-        postRepository.getPosts(communityId, new IPostCallback() {
-            @Override
-            public void onGetPostSuccess(List<Post> posts) {
-                postList.setValue(convertPostListToPostViewStateList(posts));
-            }
-            @Override
-            public void onGetPostFailure(String errorMsg) {
-
-            }
-            @Override
-            public void onAddPostSuccess(Post newPost) {
-
-            }
-            @Override
-            public void onAddPostFailure(String errorMsg) {
-            }
-            @Override
-            public void onEditPostSuccess() {
-            }
-            @Override
-            public void onEditPostFailure(String errorMsg) {
-            }
-            @Override
-            public void onQueryPostSuccess(List<Post> queryPostResults) {
-            }
-            @Override
-            public void onQueryPostError(String errorMsg) {
-            }
-
-            @Override
-            public void onDeletePostSuccess() {
-            }
-            @Override
-            public void onDeletePostError(String errorMsg) {
-            }
-            @Override
-            public void onSubscriptionSuccess() {
-            }
-            @Override
-            public void onSubscriptionError(String errorMsg) {
-            }
-            @Override
-            public void onBookmarkError(String errorMsg) {
-            }
-            @Override
-            public void onBookmarkSuccess() {
-            }
-        });
     }
     public LiveData<String> getCommunityId() {
         return communityId;

@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.eduforum.activity.ui.community.adapter.PostAdapter;
+import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.viewmodel.community.NewsFeedViewModel;
 import com.example.eduforum.databinding.ActivityCommunityBinding;
 
@@ -33,9 +34,9 @@ public class CommunityActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(NewsFeedViewModel.class);
         binding.setLifecycleOwner(this);
 
-        String communityId = getIntent().getStringExtra("communityId");
-        if(communityId != null) {
-            viewModel.setCommunityId(communityId);
+        CreateCommunityViewState currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
+        if(currentCommunity != null) {
+            viewModel.setCurrentCommunity(currentCommunity);
         }
         else{
             //finish();
@@ -47,7 +48,7 @@ public class CommunityActivity extends AppCompatActivity {
 
         binding.createPostEditTextButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, CreatePostActivity.class);
-            intent.putExtra("communityId", communityId);
+            intent.putExtra("communityId", currentCommunity.getCommunityID());
             startActivity(intent);
         });
         viewModel.getCurrentCommunity().observe(this, community -> {
