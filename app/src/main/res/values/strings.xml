@@ -120,5 +120,6 @@ Nh\u00e1\u00ba\u00adp m\u00c3\u00b4n l\u00e1\u00ba\u00adp tr\u00c3\u00acnh\n500 
     <string name="titlehint_activity_create_post">Hãy nhập tiêu đề bài viết</string>
     <string name="content_activity_create_post">Nội dung</string>
     <string name="contenthint_activity_create_post">Hãy nhập nội dung bài viết</string>
+    <string name="reply_comment">Phản hồi</string>
 
 </resources>
