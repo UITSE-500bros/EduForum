@@ -72,7 +72,7 @@
                 android:id="@+id/khoa_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:layout_marginTop="2dp"
                 android:text="Công nghệ phần mềm"
                 android:textColor="@color/white"/>
@@ -81,16 +81,16 @@
                 android:id="@+id/contentNoti_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="16sp"
                 android:layout_marginTop="2dp"
-                android:text="Râu cha và 5 người khác đã thích bài viết của bạn"
+                android:text="Mình nè bạn ơi. Add mình với Idol"
                 android:textColor="@color/white"/>
 
             <TextView
                 android:id="@+id/reply_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:layout_marginTop="2dp"
                 android:text="@string/reply_comment"
                 android:textColor="@color/primaryColor"/>
@@ -118,7 +118,7 @@
                 android:id="@+id/voteCount_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:text="50"
                 android:textColor="@color/white"
                 android:layout_gravity="center"/>

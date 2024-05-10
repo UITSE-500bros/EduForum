@@ -39,10 +39,11 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:layout_marginHorizontal="5dp"
                     app:cardBackgroundColor="@color/secondaryColor"
-                    app:cardCornerRadius="3dp"
+                    app:cardCornerRadius="10dp"
                     app:cardElevation="3dp"
+                    app:strokeWidth="0dp"
                     app:cardUseCompatPadding="true"
                     app:contentPadding="5dp">
 
@@ -53,7 +54,7 @@
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="80dp">
 
                             <com.google.android.material.card.MaterialCardView
                                 android:id="@+id/avatar_CardView"
@@ -90,7 +91,7 @@
                                 <TextView
                                     android:id="@+id/userName_TextView"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="wrap_content"
                                     android:maxLines="1"
                                     android:text="Râu cha"
                                     android:textColor="@color/white"
@@ -101,7 +102,7 @@
                                 <TextView
                                     android:id="@+id/timeComment_TextView"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="wrap_content"
                                     android:gravity="center_vertical"
                                     android:maxLines="1"
                                     android:text="10/05/2024 lúc 19:00"
@@ -137,134 +138,167 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:layout_marginTop="10dp"
                             android:layout_marginEnd="10dp"
                             android:maxLength="1000"
                             android:text="Hé nhô các bạn, mình đang cần tìm 2 con ghệ vào chung team để mình gánh. Đồ án làm về EduForum. Nếu quan tâm hãy liên hệ sđt: 0902774213"
                             android:textColor="@color/white"
-                            android:textSize="14sp"
+                            android:textSize="16sp"
                             android:textStyle="normal" />
 
-                        <ImageView
-                            android:id="@+id/pimagetvco"
+                        <HorizontalScrollView
                             android:layout_width="match_parent"
-                            android:layout_height="100dp"
-                            android:background="@color/colorWhite" />
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp">
+
+                            <LinearLayout
+                                android:id="@+id/resource_List"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:scrollbars="horizontal" />
+
+                        </HorizontalScrollView>
+
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="5dp"
                             android:orientation="horizontal">
 
-
-                            <TextView
-                                android:id="@+id/plikebco"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="1.2K Likes"
-                                android:textColor="@color/colorPrimary" />
-
-                            <TextView
-                                android:id="@+id/pcommenttv"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="1.2K Comment"
-                                android:textAlignment="textEnd"
-                                android:textColor="@color/colorPrimary" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="#F5F0F0" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <Button
-                                android:id="@+id/like"
+                            <ImageButton
+                                android:id="@+id/upVote_Button"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:autoLink="all"
-                                android:background="@color/colorWhite"
-                                android:drawableStart="@drawable/ic_like"
-                                android:drawableLeft="@drawable/ic_like"
-                                android:padding="5dp"
-                                android:text="Like" />
+                                android:background="@null"
+                                android:src="@drawable/arrow_circle_up" />
 
-                            <Button
-                                android:id="@+id/share"
+                            <TextView
+                                android:id="@+id/voteCount_TextView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@color/colorWhite"
-                                android:drawableStart="@drawable/ic_share"
-                                android:drawableLeft="@drawable/ic_share"
-                                android:padding="5dp"
-                                android:text="SHARE" />
+                                android:layout_gravity="center"
+                                android:layout_marginStart="5dp"
+                                android:text="50"
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <ImageButton
+                                android:id="@+id/downVote_Button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:background="@null"
+                                android:src="@drawable/icon_circle_down" />
+
+                            <ImageButton
+                                android:id="@+id/comment_Button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="30dp"
+                                android:background="@null"
+                                android:src="@drawable/icon_comment" />
+
+                            <TextView
+                                android:id="@+id/commentCount_TextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="8dp"
+                                android:text="50"
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+
                         </LinearLayout>
 
                     </LinearLayout>
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <TextView
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_commenting"
-                    android:drawableLeft="@drawable/ic_commenting"
-                    android:drawablePadding="5dp"
-                    android:padding="2dp"
-                    android:text="Comments"
-                    android:textColor="@color/colorBlack" />
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="10dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclecomment"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/item_comment"/>
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/commentsa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:layout_marginHorizontal="10dp"
+            android:orientation="vertical">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/commentimge"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/profile_image" />
-
-            <EditText
-                android:id="@+id/typecommet"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@id/sendcomment"
-                android:layout_toEndOf="@id/commentimge"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/imageInsertButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/image_insert_icon" />
+
+                <ImageButton
+                    android:id="@+id/videoInsertButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="15dp"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/video_insert_icon" />
+
+                <ImageButton
+                    android:id="@+id/incognitoModeButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="15dp"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/incognito_mode" />
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/commentEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorWhite"
-                android:hint="Enter Comment..."
+                android:hint="Hãy bình luận"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"
                 android:inputType="textCapSentences|textMultiLine"
-                android:padding="15dp" />
+                android:background="@drawable/loginedittextshape"
+                android:padding="10dp"
+                android:drawableRight="@drawable/send_icon"/>
 
-            <ImageButton
-                android:id="@+id/sendcomment"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentRight="true"
-                android:background="@color/colorWhite"
-                android:src="@drawable/send_message" />
-
-        </RelativeLayout>
+        </LinearLayout>
 
     </RelativeLayout>
 

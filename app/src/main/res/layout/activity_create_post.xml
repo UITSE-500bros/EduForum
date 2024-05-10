@@ -258,14 +258,13 @@
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp">
 
                     <LinearLayout
                         android:id="@+id/resource_List"
-                        android:layout_marginTop="15dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:scrollbars="horizontal"
                         android:orientation="horizontal"/>
 
                 </HorizontalScrollView>
@@ -280,32 +279,34 @@
                         android:id="@+id/imageInsertButton"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/image_insert_icon"
-                        android:background="@null"
-                        android:scaleType="centerCrop"
                         android:layout_marginStart="10dp"
+                        android:background="@null"
+                        android:contentDescription="@null"
                         android:foreground="?attr/selectableItemBackground"
-                        android:contentDescription="@null"/>
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/image_insert_icon" />
+
                     <ImageButton
                         android:id="@+id/videoInsertButton"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/video_insert_icon"
-                        android:background="@null"
-                        android:scaleType="centerCrop"
-                        android:foreground="?attr/selectableItemBackground"
                         android:layout_marginStart="15dp"
-                        android:contentDescription="@null"/>
+                        android:background="@null"
+                        android:contentDescription="@null"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/video_insert_icon" />
+
                     <ImageButton
                         android:id="@+id/incognitoModeButton"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/incognito_mode"
-                        android:background="@null"
-                        android:scaleType="centerCrop"
                         android:layout_marginStart="15dp"
+                        android:background="@null"
+                        android:contentDescription="@null"
                         android:foreground="?attr/selectableItemBackground"
-                        android:contentDescription="@null"/>
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/incognito_mode" />
                 </LinearLayout>
 
                 <TextView
