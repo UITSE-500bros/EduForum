@@ -20,7 +20,7 @@
             android:name=".activity.ui.community.CreatePostActivity"
             android:exported="false" />
         <activity
-            android:exported="false"
+            android:exported="true"
             android:name=".activity.ui.community.CommunityActivity"
             android:theme="@style/Theme.MaterialComponents.NoActionBar" />
 
