@@ -53,14 +53,11 @@ public class CommunityRepository {
         currentUser = FirebaseAuth.getInstance();
 
     }
+    // TODO: anh trí nhớ gọi removeListener() khi không cần theo dõi nữa
     public void removeListener() {
-        registration.remove();
+        if (registration != null) registration.remove();
     }
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        communityRepo.removeListener();
-//    }
+
     public void createCommunity(Community community, ICommunityCallBack callBack) {
     List<String> admin = new ArrayList<>();
     admin.add(currentUser.getUid());
@@ -139,30 +136,38 @@ public class CommunityRepository {
 
 
     public void observeDocument(String userID, ICommunityChangeListener listener) {
-        List<Community> isMemberOf = new ArrayList<>();
-        List<Community> isAdminOf = new ArrayList<>();
-        db.collection("Community")
+        registration = db.collection("Community")
             .addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot snapshots,@Nullable FirebaseFirestoreException e) {
                     if (e != null) {
-                        Log.w("TAG", "listen:error", e);
+                        Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "listen:error", e);
                         return;
                     }
                     assert snapshots != null;
-                    for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                        QueryDocumentSnapshot doc = dc.getDocument();
-
+//                    for (DocumentChange dc : snapshots.getDocumentChanges()) {
+//                        QueryDocumentSnapshot doc = dc.getDocument();
+//
+//                        Community community = doc.toObject(Community.class);
+//                        if (doc.getMetadata().hasPendingWrites() && community.getAdminList().contains(userID)) {
+//                            isAdminOf.add(community);
+//                        }
+//                        else if (dc.getType() == DocumentChange.Type.ADDED) {
+//                            if (community.getAdminList().contains(userID)){
+//                                isAdminOf.add(community);
+//                            }
+//                        }
+//                        else if (community.getUserList().contains(userID)) {
+//                            isMemberOf.add(community);
+//                        }
+//                    }
+                    List<Community> isMemberOf = new ArrayList<>();
+                    List<Community> isAdminOf = new ArrayList<>();
+                    for (QueryDocumentSnapshot doc : snapshots) {
                         Community community = doc.toObject(Community.class);
-                        if (doc.getMetadata().hasPendingWrites() && community.getAdminList().contains(userID)) {
+                        if (community.getAdminList().contains(userID)) {
                             isAdminOf.add(community);
-                        }
-                        else if (dc.getType() == DocumentChange.Type.ADDED) {
-                            if (community.getAdminList().contains(userID)){
-                                isAdminOf.add(community);
-                            } 
-                        }
-                        else if (community.getUserList().contains(userID)) {
+                        } else if (community.getUserList().contains(userID)) {
                             isMemberOf.add(community);
                         }
                     }
@@ -171,7 +176,7 @@ public class CommunityRepository {
                 }
             });
 
-}
+    }
 
     public void getCommunity(String communityId, ICommunityCallBack_C callBackC){
 
