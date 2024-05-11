@@ -24,6 +24,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.eduforum.R;
 import com.example.eduforum.activity.EduForum;
+import com.example.eduforum.activity.model.post_manage.Creator;
+import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.activity.viewmodel.community.CreatePostViewModel;
 import com.example.eduforum.activity.viewmodel.shared.UserViewModel;
@@ -53,6 +55,15 @@ public class CreatePostActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(CreatePostViewModel.class);
         EduForum app = (EduForum) getApplication();
         userViewModel = app.getSharedViewModel(UserViewModel.class);
+        userViewModel.getCurrentUserLiveData().observe(this, user -> {
+            if(user != null){
+                PostViewState postViewState = viewModel.getPostViewState().getValue();
+                Creator creator = mapToCreator(user);
+                assert postViewState != null;
+                postViewState.setCreator(creator);
+                viewModel.setPostViewState(postViewState);
+            }
+        });
 
         String communityId =  getIntent().getStringExtra("communityId");
         if(communityId != null){
@@ -237,4 +248,8 @@ public class CreatePostActivity extends AppCompatActivity {
             viewModel.createPost();
         });
     }
+    private Creator mapToCreator(User user) {
+        return new Creator(user.getUserId(), user.getName(), user.getDepartment(),  user.getProfilePicture());
+    }
 }
+

@@ -21,3 +21,4 @@ build.gradle.kts
 app/google-services.json
 firebase-debug.log
 .idea/deploymentTargetSelector.xml
+.idea/deploymentTargetDropDown.xml

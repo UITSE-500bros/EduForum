@@ -51,7 +51,7 @@ public class PostViewState {
     public Boolean getIsAnonymous() {
         return isAnonymous;
     }
-    public Creator getAuthor() {
+    public Creator getCreator() {
         return creator;
     }
     public CreateCommunityViewState getCommunity() {
@@ -72,7 +72,7 @@ public class PostViewState {
     public void setPostId(String postId) {
         this.postId = postId;
     }
-    public void setAuthor(Creator creator) {
+    public void setCreator(Creator creator) {
         this.creator = creator;
     }
     public void setCommunity(CreateCommunityViewState community) {
