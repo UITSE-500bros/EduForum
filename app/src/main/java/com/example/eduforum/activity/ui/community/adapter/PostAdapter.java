@@ -61,9 +61,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             this.binding = binding;
         }
         void bind(PostViewState post) {
-            if(post.getAuthor()!=null){
-                binding.username.setText(post.getAuthor().getName());
-                binding.falcuty.setText(post.getAuthor().getDepartment());
+            if(post.getCreator()!=null){
+                binding.username.setText(post.getCreator().getName());
+                binding.falcuty.setText(post.getCreator().getDepartment());
             }
             binding.title.setText(post.getTitle());
             binding.time.setText(post.getDate());
