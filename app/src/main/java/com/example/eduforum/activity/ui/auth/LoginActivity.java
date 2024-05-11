@@ -17,10 +17,12 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.EduForum;
 import com.example.eduforum.activity.ui.main.MainActivity;
 import com.example.eduforum.activity.ui.welcome.WelcomeActivity;
 import com.example.eduforum.activity.util.FlagsList;
 import com.example.eduforum.activity.viewmodel.auth.LoginViewModel;
+import com.example.eduforum.activity.viewmodel.shared.UserViewModel;
 import com.example.eduforum.databinding.ActivityLoginBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
@@ -31,6 +33,7 @@ import java.util.Objects;
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel viewModel;
+    private UserViewModel userViewModel;
     private ActivityLoginBinding binding;
     private SharedPreferences prefs = null;
 
@@ -41,6 +44,8 @@ public class LoginActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         viewModel.getSignedInUser().observe(this, this::updateUI);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
+        EduForum app = (EduForum) getApplication();
+        userViewModel = app.getSharedViewModel(UserViewModel.class);
 
         prefs = getSharedPreferences("com.example.eduforum", MODE_PRIVATE);
         if (prefs.getBoolean("firstRun", true)) {
@@ -107,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            Log.d("TEST", user.getEmail());
+//            Log.d("TEST", user.getEmail());
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(i);
             finish();

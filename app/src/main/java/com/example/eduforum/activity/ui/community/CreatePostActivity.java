@@ -23,8 +23,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.EduForum;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.activity.viewmodel.community.CreatePostViewModel;
+import com.example.eduforum.activity.viewmodel.shared.UserViewModel;
 import com.example.eduforum.databinding.ActivityCreatePostBinding;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -36,6 +38,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
     private ActivityCreatePostBinding binding;
     private CreatePostViewModel viewModel;
+    private UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,9 @@ public class CreatePostActivity extends AppCompatActivity {
             return insets;
         });
         viewModel = new ViewModelProvider(this).get(CreatePostViewModel.class);
+        EduForum app = (EduForum) getApplication();
+        userViewModel = app.getSharedViewModel(UserViewModel.class);
+
         String communityId =  getIntent().getStringExtra("communityId");
         if(communityId != null){
             viewModel.setCommunityId(communityId);
