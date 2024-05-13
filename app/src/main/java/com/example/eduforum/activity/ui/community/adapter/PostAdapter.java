@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eduforum.R;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.databinding.ItemCommunityBinding;
 import com.example.eduforum.databinding.ItemNotiBinding;
@@ -46,6 +48,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.bind(post);
         holder.itemView.setOnClickListener(v -> {
 
+        });
+        holder.binding.setting.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(context, holder.binding.setting);
+            popupMenu.inflate(R.menu.post_option_menu);
+            //popupMenu.setOnMenuItemClickListener(item -> {
+                //TODO: Handle menu item click
+            //});
+            popupMenu.show();
         });
     }
 
