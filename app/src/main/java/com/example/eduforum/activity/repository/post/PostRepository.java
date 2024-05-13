@@ -400,4 +400,30 @@ public class PostRepository {
             });
         */
     }
+
+    public void getVoteStatus(String communityID, String postID, String userID, IPostCallback callback) {
+        DocumentReference voteRef = db.collection("Community")
+                .document(communityID)
+                .collection("Post")
+                .document(postID)
+                .collection("Vote")
+                .document(userID);
+
+        voteRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+//                    callback.onGetVoteStatusSuccess(documentSnapshot.getLong("voteType").intValue());
+                } else {
+//                    callback.onGetVoteStatusError("Vote not found");
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+//                callback.onGetVoteStatusError(e.toString());
+            }
+        });
+    }
+
 }
