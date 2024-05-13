@@ -11,8 +11,8 @@ public class Comment extends PostingObject {
         super();
     }
 
-    public Comment(String commentID, Integer depth, String parentID, String content, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, List<String> image) {
-        super(content, timeCreated, lastModified, creator, totalUpVote, totalDownVote, image);
+    public Comment(String commentID, Integer depth, String parentID, String content, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<String> image) {
+        super(content, timeCreated, lastModified, creator, totalUpVote, totalDownVote, voteDifference, image);
         this.commentID = commentID;
         this.depth = depth;
         this.parentID = parentID;

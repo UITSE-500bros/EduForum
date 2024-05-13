@@ -9,19 +9,29 @@ public abstract class PostingObject {
     protected Creator creator;
     protected Integer totalUpVote;
     protected Integer totalDownVote;
+    protected Integer voteDifference;
     protected List<String> image;
 
     public PostingObject() {
     }
 
-    public PostingObject(String content, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, List<String> image) {
+    public PostingObject(String content, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<String> image) {
         this.content = content;
         this.timeCreated = timeCreated;
         this.lastModified = lastModified;
         this.creator = creator;
         this.totalUpVote = totalUpVote;
         this.totalDownVote = totalDownVote;
+        this.voteDifference = voteDifference;
         this.image = image;
+    }
+
+    public Integer getVoteDifference() {
+        return voteDifference;
+    }
+
+    public void setVoteDifference(Integer voteDifference) {
+        this.voteDifference = voteDifference;
     }
 
     public String getContent() {
