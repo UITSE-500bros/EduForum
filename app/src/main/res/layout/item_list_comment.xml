@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/backgroundColor">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/avatarParent_CardView"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                app:cardCornerRadius="90dp"
+                android:elevation="15dp"
+                app:strokeColor="@color/white">
+
+                <ImageView
+                    android:id="@+id/avatarParent_ImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/congrats_image" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:id="@+id/contentParentComment_LinearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/userNameParent_TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textSize="16sp"
+                        android:maxLines="1"
+                        android:text="Râu cha"
+                        android:layout_weight="1"
+                        android:textColor="@color/white"/>
+
+                    <TextView
+                        android:id="@+id/timeParentComment_TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textSize="12sp"
+                        android:maxLines="1"
+                        android:layout_gravity=""
+                        android:gravity="center_vertical"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:text="10/05/2024 lúc 19:00"
+                        android:textColor="@color/white"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/khoaParent_TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_marginTop="2dp"
+                    android:text="Công nghệ phần mềm"
+                    android:textColor="@color/white"/>
+
+                <TextView
+                    android:id="@+id/contentNotiParent_TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_marginTop="2dp"
+                    android:text="Mình nè bạn ơi. Add mình với Idol"
+                    android:textColor="@color/white"/>
+
+                <TextView
+                    android:id="@+id/replyParent_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/reply_comment"
+                    android:textColor="@color/primaryColor"/>
+                <LinearLayout
+                    android:id="@+id/showReplyParentLinearLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="7dp"
+                    >
+                    <TextView
+                        android:layout_width="30dp"
+                        android:layout_height="2dp"
+                        android:textSize="16sp"
+                        android:background="@drawable/loginbuttonshape"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/primaryColor"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:text="@string/showReply_comment"
+                        android:textColor="@color/primaryColor"/>
+                    <TextView
+                        android:layout_width="30dp"
+                        android:layout_height="2dp"
+                        android:textSize="16sp"
+                        android:background="@drawable/loginbuttonshape"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/primaryColor"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/interactionParentLinearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                android:layout_gravity="top|end">
+
+                <ImageButton
+                    android:id="@+id/upVoteParentButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_circle_up"
+                    android:background="@null"/>
+
+                <TextView
+                    android:id="@+id/voteCountParentTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="50"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"/>
+
+                <ImageButton
+                    android:id="@+id/downVoteParentButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_circle_down"
+                    android:background="@null"/>
+            </LinearLayout>
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nestedRecyclerView"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
+            android:padding="5dp"/>
+
+
+    </LinearLayout>
+</layout>
