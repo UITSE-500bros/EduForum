@@ -15,8 +15,8 @@ public class Post extends PostingObject {
         super();
     }
 
-    public Post(String postID, String communityID, String title, String content, Boolean isAnonymous, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer totalComment, List<String> image, List<String> taggedUsers, List<Category> category) {
-        super(content, timeCreated, lastModified, creator, totalUpVote, totalDownVote, image);
+    public Post(String postID, String communityID, String title, String content, Boolean isAnonymous, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, Integer totalComment, List<String> image, List<String> taggedUsers, List<Category> category) {
+        super(content, timeCreated, lastModified, creator, totalUpVote, totalDownVote, voteDifference, image);
         this.postID = postID;
         this.communityID = communityID;
         this.title = title;
