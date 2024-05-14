@@ -11,7 +11,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:cardCornerRadius="8dp"
-        app:cardBackgroundColor="#2C353D"
+        app:cardBackgroundColor="@color/tagBackgroundColor"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:layout_marginTop="5dp"
@@ -28,9 +28,8 @@
             android:paddingEnd="10dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            android:background="2C353D"
-            android:fontFamily="@font/source_sans_pro_semibold"
 
+            android:fontFamily="@font/source_sans_pro_semibold"
             />
     </androidx.cardview.widget.CardView>
 
