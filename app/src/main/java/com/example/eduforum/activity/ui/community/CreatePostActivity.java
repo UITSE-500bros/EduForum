@@ -21,6 +21,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eduforum.R;
 import com.example.eduforum.activity.EduForum;
@@ -86,6 +88,10 @@ public class CreatePostActivity extends AppCompatActivity {
                 Snackbar.make(binding.getRoot(), errorMessage, Snackbar.LENGTH_SHORT).show();
             }
         });
+        //image recycler view
+        RecyclerView ImageRecyclerView = binding.imageRecyclerView;
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        ImageRecyclerView.setLayoutManager(layoutManager);
     }
     private void initComponents(){
         //Stlye rich editor through binding
@@ -168,6 +174,8 @@ public class CreatePostActivity extends AppCompatActivity {
             }
         });
 
+
+
         ActivityResultLauncher<PickVisualMediaRequest> pickVideos =
                 //parameter in PickVisualMediaRequest is the max item user can select
                 registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uri -> {
@@ -194,6 +202,8 @@ public class CreatePostActivity extends AppCompatActivity {
                         .build());
             }
         });
+
+
 
 
         //Handle tag items
