@@ -54,7 +54,7 @@ public class CreatePostViewModel extends ViewModel {
         if(!isPostValid(newPost)){
             return;
         }
-        Post post = new Post(null, communityId.getValue(), newPost.getTitle(), newPost.getContent(), newPost.getIsAnonymous(), newPost.getDate(), newPost.getDate(), newPost.getCreator(), 0, 0, 0, null, null, newPost.getTags());
+        Post post = new Post(newPost.getPostId(), communityId.getValue(), newPost.getTitle(), newPost.getContent(), newPost.getIsAnonymous(), newPost.getDate(), newPost.getDate(), newPost.getCreator(), 0, 0, 0,0, null, null, newPost.getTags());
         // add new post to database
         postRepository.addPost(post, new IPostCallback() {
             @Override

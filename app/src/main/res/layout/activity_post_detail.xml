@@ -221,10 +221,10 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclecomment"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
-                    android:layout_height="wrap_content"
-                    tools:listitem="@layout/item_list_comment"/>
+                    tools:listitem="@layout/item_list_comment" />
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
