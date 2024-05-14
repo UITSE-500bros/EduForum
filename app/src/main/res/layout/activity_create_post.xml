@@ -261,18 +261,16 @@
                     android:maxLength="1000" />
 
 
-                <HorizontalScrollView
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/imageRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    tools:listitem="@layout/item_image"
                     android:layout_marginTop="15dp">
 
-                    <LinearLayout
-                        android:id="@+id/resource_List"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"/>
 
-                </HorizontalScrollView>
+                </androidx.recyclerview.widget.RecyclerView>
 
                 <LinearLayout
                     android:layout_width="match_parent"
