@@ -104,7 +104,9 @@ public class CreatePostActivity extends AppCompatActivity {
 
 
         //set up action buttons
-        binding.actionRedo.setOnClickListener(v -> binding.contentRichEditor.redo());
+        binding.actionRedo.setOnClickListener(v -> {
+            binding.contentRichEditor.redo();
+        });
         binding.actionUndo.setOnClickListener(v -> binding.contentRichEditor.undo());
         binding.actionBold.setOnClickListener(v -> binding.contentRichEditor.setBold());
         binding.actionItalic.setOnClickListener(v -> binding.contentRichEditor.setItalic());
