@@ -36,8 +36,7 @@
                   app:layout_constraintTop_toTopOf="parent"
                   app:menu="@menu/communitymenu"
                   app:navigationIcon="@drawable/back_icon"
-
-                  app:title="Tên forum" />
+                  app:title="Tên forum"/>
 
               <ImageView
               android:layout_width="match_parent"

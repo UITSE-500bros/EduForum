@@ -89,166 +89,110 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginHorizontal="10dp"
                     >
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/textDefineRichEditor"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <ImageButton
+                        app:singleSelection="false">
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/action_undo"
+                            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/text_button_background"
-                            android:scaleType="centerCrop"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:contentDescription="@null"
-                            android:src="@drawable/undo" />
+                            app:icon="@drawable/undo"
+                            />
 
-                        <ImageButton
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/action_redo"
+                            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/text_button_background"
-                            android:scaleType="centerCrop"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:layout_marginStart="8dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/redo"/>
+                            app:icon="@drawable/redo"/>
 
-                        <ImageButton
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/action_bold"
+                            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/text_button_background"
-                            android:scaleType="centerCrop"
-                            android:layout_marginStart="8dp"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:contentDescription="@null"
-                            android:src="@drawable/bold" />
+                            app:icon="@drawable/bold"/>
 
-                        <ImageButton
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/action_italic"
+                            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:background="@drawable/text_button_background"
-                            android:scaleType="centerCrop"
-                            android:layout_marginStart="8dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/italic" />
+                            app:icon="@drawable/italic"/>
 
-                        <ImageButton
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/action_underline"
+                            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/text_button_background"
-                            android:scaleType="centerCrop"
-                            android:layout_marginStart="8dp"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:contentDescription="@null"
-                            android:src="@drawable/underline" />
+                            app:icon="@drawable/underline"/>
 
-                        <ImageButton
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/action_heading1"
+                            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/text_button_background"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:scaleType="centerCrop"
-                            android:layout_marginStart="8dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/h1" />
+                            app:icon="@drawable/h1"/>
 
-                        <ImageButton
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/action_heading2"
+                            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/text_button_background"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:scaleType="centerCrop"
-                            android:layout_marginStart="8dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/h2" />
+                            app:icon="@drawable/h2"/>
 
-                        <ImageButton
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/action_heading3"
+                            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/text_button_background"
-                            android:scaleType="centerCrop"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:layout_marginStart="8dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/h3" />
+                            app:icon="@drawable/h3"/>
 
-
-                        <ImageButton
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/action_align_left"
+                            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/text_button_background"
-                            android:scaleType="centerCrop"
-                            android:layout_marginStart="8dp"
-                            android:contentDescription="@null"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:src="@drawable/justify_left" />
+                            app:icon="@drawable/justify_left"/>
 
-                        <ImageButton
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/action_align_center"
+                            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/text_button_background"
-                            android:scaleType="centerCrop"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:layout_marginStart="8dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/justify_center" />
+                            app:icon="@drawable/justify_center"/>
 
-                        <ImageButton
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/action_align_right"
+                            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:background="@drawable/text_button_background"
-                            android:scaleType="centerCrop"
-                            android:layout_marginStart="8dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/justify_right" />
+                            app:icon="@drawable/justify_right"/>
 
-                        <ImageButton
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/action_insert_bullets"
+                            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/text_button_background"
-                            android:scaleType="centerCrop"
-                            android:layout_marginStart="8dp"
-                            android:contentDescription="@null"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:src="@drawable/bullets" />
+                            app:icon="@drawable/bullets"/>
 
-                        <ImageButton
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/action_insert_numbers"
+                            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/text_button_background"
-                            android:scaleType="centerCrop"
-                            android:layout_marginStart="8dp"
-                            android:contentDescription="@null"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:src="@drawable/numbers" />
+                            app:icon="@drawable/numbers"/>
 
-                        <ImageButton
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/action_insert_link"
+                            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/text_button_background"
-                            android:scaleType="centerCrop"
-                            android:layout_marginStart="8dp"
-                            android:contentDescription="@null"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:src="@drawable/insert_link" />
-
-                    </LinearLayout>
+                            app:icon="@drawable/insert_link"/>
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
                 </HorizontalScrollView>
 
 

@@ -102,49 +102,103 @@ public class CreatePostActivity extends AppCompatActivity {
         binding.contentRichEditor.setEditorBackgroundColor(Color.WHITE);
         binding.contentRichEditor.setPadding(10, 10, 10, 10);
 
-
         //set up action buttons
-        binding.actionRedo.setOnClickListener(v -> {
-            binding.contentRichEditor.redo();
+        binding.textDefineRichEditor.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                if (checkedId == binding.actionUndo.getId()) {
+                    binding.contentRichEditor.undo();
+                } else if (checkedId == binding.actionRedo.getId()) {
+                    binding.contentRichEditor.redo();
+                } else if (checkedId == binding.actionBold.getId()) {
+                    binding.contentRichEditor.setBold();
+                } else if (checkedId == binding.actionUnderline.getId()){
+                    binding.contentRichEditor.setUnderline();
+                } else if (checkedId == binding.actionItalic.getId()){
+                    binding.contentRichEditor.setItalic();
+                } else if (checkedId == binding.actionAlignLeft.getId()){
+                    binding.contentRichEditor.setAlignLeft();
+                } else if (checkedId == binding.actionAlignRight.getId()){
+                    binding.contentRichEditor.setAlignRight();
+                } else if (checkedId == binding.actionAlignCenter.getId()){
+                    binding.contentRichEditor.setAlignCenter();
+                } else if (checkedId == binding.actionHeading1.getId()){
+                    binding.contentRichEditor.setHeading(1);
+                } else if (checkedId == binding.actionHeading2.getId()){
+                    binding.contentRichEditor.setHeading(2);
+                } else if (checkedId == binding.actionHeading3.getId()){
+                    binding.contentRichEditor.setHeading(3);
+                } else if (checkedId == binding.actionInsertBullets.getId()){
+                    binding.contentRichEditor.setBullets();
+                } else if (checkedId == binding.actionInsertNumbers.getId()){
+                    binding.contentRichEditor.setNumbers();
+                } else if (checkedId == binding.actionInsertLink.getId()){
+                    AlertDialog builder = new AlertDialog.Builder(this).create();
+                    builder.setTitle("Chèn link vào bài viết");
+
+                    LinearLayout layout = new LinearLayout(this);
+                    layout.setOrientation(LinearLayout.VERTICAL);
+
+                    final EditText textInput = new EditText(this);
+                    textInput.setHint("Text");
+                    layout.addView(textInput);
+                    final EditText urlInput = new EditText(this);
+                    urlInput.setHint("URL");
+                    layout.addView(urlInput);
+
+                    builder.setView(layout);
+
+                    builder.setButton(DialogInterface.BUTTON_POSITIVE, "OK", (dialog, which) -> {
+                        String text = textInput.getText().toString();
+                        String url = urlInput.getText().toString();
+                        binding.contentRichEditor.insertLink(url, text);
+                    });
+
+                    builder.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.cancel());
+
+                    builder.show();
+                }
+            }
         });
-        binding.actionUndo.setOnClickListener(v -> binding.contentRichEditor.undo());
-        binding.actionBold.setOnClickListener(v -> binding.contentRichEditor.setBold());
-        binding.actionItalic.setOnClickListener(v -> binding.contentRichEditor.setItalic());
-        binding.actionUnderline.setOnClickListener(v -> binding.contentRichEditor.setUnderline());
-        binding.actionAlignCenter.setOnClickListener(v -> binding.contentRichEditor.setAlignCenter());
-        binding.actionAlignLeft.setOnClickListener(v -> binding.contentRichEditor.setAlignLeft());
-        binding.actionAlignRight.setOnClickListener(v -> binding.contentRichEditor.setAlignRight());
-        binding.actionHeading1.setOnClickListener(v -> binding.contentRichEditor.setHeading(1));
-        binding.actionHeading2.setOnClickListener(v -> binding.contentRichEditor.setHeading(2));
-        binding.actionHeading3.setOnClickListener(v -> binding.contentRichEditor.setHeading(3));
-        binding.actionInsertBullets.setOnClickListener(v -> binding.contentRichEditor.setBullets());
-        binding.actionInsertNumbers.setOnClickListener(v -> binding.contentRichEditor.setNumbers());
-        binding.actionInsertLink.setOnClickListener(v -> {
-            AlertDialog builder = new AlertDialog.Builder(this).create();
-            builder.setTitle("Chèn link vào bài viết");
-
-            LinearLayout layout = new LinearLayout(this);
-            layout.setOrientation(LinearLayout.VERTICAL);
-
-            final EditText textInput = new EditText(this);
-            textInput.setHint("Text");
-            layout.addView(textInput);
-            final EditText urlInput = new EditText(this);
-            urlInput.setHint("URL");
-            layout.addView(urlInput);
-
-            builder.setView(layout);
-
-            builder.setButton(DialogInterface.BUTTON_POSITIVE, "OK", (dialog, which) -> {
-                String text = textInput.getText().toString();
-                String url = urlInput.getText().toString();
-                binding.contentRichEditor.insertLink(url, text);
-            });
-
-            builder.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.cancel());
-
-            builder.show();
-        });
+//        binding.actionRedo.setOnClickListener(v -> binding.contentRichEditor.redo());
+//        );
+//        binding.actionUndo.setOnClickListener(v -> binding.contentRichEditor.undo());
+//        binding.actionBold.setOnClickListener(v -> binding.contentRichEditor.setBold());
+//        binding.actionItalic.setOnClickListener(v -> binding.contentRichEditor.setItalic());
+//        binding.actionUnderline.setOnClickListener(v -> binding.contentRichEditor.setUnderline());
+//        binding.actionAlignCenter.setOnClickListener(v -> binding.contentRichEditor.setAlignCenter());
+//        binding.actionAlignLeft.setOnClickListener(v -> binding.contentRichEditor.setAlignLeft());
+//        binding.actionAlignRight.setOnClickListener(v -> binding.contentRichEditor.setAlignRight());
+//        binding.actionHeading1.setOnClickListener(v -> binding.contentRichEditor.setHeading(1));
+//        binding.actionHeading2.setOnClickListener(v -> binding.contentRichEditor.setHeading(2));
+//        binding.actionHeading3.setOnClickListener(v -> binding.contentRichEditor.setHeading(3));
+//        binding.actionInsertBullets.setOnClickListener(v -> binding.contentRichEditor.setBullets());
+//        binding.actionInsertNumbers.setOnClickListener(v -> binding.contentRichEditor.setNumbers());
+//        binding.actionInsertLink.setOnClickListener(v -> {
+//            AlertDialog builder = new AlertDialog.Builder(this).create();
+//            builder.setTitle("Chèn link vào bài viết");
+//
+//            LinearLayout layout = new LinearLayout(this);
+//            layout.setOrientation(LinearLayout.VERTICAL);
+//
+//            final EditText textInput = new EditText(this);
+//            textInput.setHint("Text");
+//            layout.addView(textInput);
+//            final EditText urlInput = new EditText(this);
+//            urlInput.setHint("URL");
+//            layout.addView(urlInput);
+//
+//            builder.setView(layout);
+//
+//            builder.setButton(DialogInterface.BUTTON_POSITIVE, "OK", (dialog, which) -> {
+//                String text = textInput.getText().toString();
+//                String url = urlInput.getText().toString();
+//                binding.contentRichEditor.insertLink(url, text);
+//            });
+//
+//            builder.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.cancel());
+//
+//            builder.show();
+//        });
 
         //set up image
         ActivityResultLauncher<PickVisualMediaRequest> pickImages =
