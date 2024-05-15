@@ -158,7 +158,7 @@ public class CreatePostActivity extends AppCompatActivity {
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(sizeInPx, sizeInPx);
                             imageView.setLayoutParams(layoutParams);
                             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                            binding.resourceList.addView(imageView);
+                            binding.imageRecyclerView.addView(imageView);
                         }
                     } else {
 //                        TODO: Show errors
@@ -188,7 +188,7 @@ public class CreatePostActivity extends AppCompatActivity {
                             int sizeInPx = (int) (sizeInDp * scale + 0.5f);
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(sizeInPx, sizeInPx);
                             videoView.setLayoutParams(layoutParams);
-                            binding.resourceList.addView(videoView);
+                            binding.imageRecyclerView.addView(videoView);
                         }
                     } else {
 //                        TODO: Show errors
