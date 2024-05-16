@@ -14,6 +14,8 @@ public class Community {
     private String createdDate;
     private String description;
     private String department;
+    private Integer totalPost;
+    private Integer totalNewPost;
 
 
     private List<String> userList = new ArrayList<>();
@@ -31,6 +33,35 @@ public class Community {
         this.description = description;
         this.department = department;
         this.userList = userList;
+    }
+
+    public Community(String communityId, String name, List<String> adminList, Uri profileImage, String createdDate, String description, String department, Integer totalPost, Integer totalNewPost, List<String> userList) {
+        this.communityId = communityId;
+        this.name = name;
+        this.adminList = adminList;
+        this.profileImage = profileImage;
+        this.createdDate = createdDate;
+        this.description = description;
+        this.department = department;
+        this.totalPost = totalPost;
+        this.totalNewPost = totalNewPost;
+        this.userList = userList;
+    }
+
+    public Integer getTotalPost() {
+        return totalPost;
+    }
+
+    public void setTotalPost(Integer totalPost) {
+        this.totalPost = totalPost;
+    }
+
+    public Integer getTotalNewPost() {
+        return totalNewPost;
+    }
+
+    public void setTotalNewPost(Integer totalNewPost) {
+        this.totalNewPost = totalNewPost;
     }
 
     public List<String> getAdminList() {

@@ -103,8 +103,36 @@ public class PostRepository {
                 });
     }
 
+    private void resetNewPost(String communityID, String userID) {
+        db.collection("NewPost")
+                .whereEqualTo("userID", userID)
+                .whereEqualTo("communityID", communityID)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    WriteBatch batch = db.batch();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        batch.update(document.getReference(), "totalNewPost", 0);
+                    }
+                    batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(FlagsList.DEBUG_POST_FLAG, "New post count reset successfully!");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(FlagsList.DEBUG_POST_FLAG, "Error resetting new post count", e);
+                        }
+                    });
+                }
+                });
+    }
 
-    public void getPosts(String communityID, IPostCallback callback) {
+    public void getPosts(String communityID, String userID, IPostCallback callback) {
+        // set total new post to 0
+        resetNewPost(communityID, userID);
+
         db.collection("Community")
                 .document(communityID)
                 .collection("Post")
@@ -156,7 +184,9 @@ public class PostRepository {
                 });
     }
 
-    public void queryPost(String communityID, @Nullable List<Category> categories, @Nullable PostQuery condition, IPostCallback callback) {
+    public void queryPost(String communityID, String userID, @Nullable List<Category> categories, @Nullable PostQuery condition, IPostCallback callback) {
+        // set total new post to 0
+        resetNewPost(communityID, userID);
         if (categories == null && condition == null) {
             callback.onQueryPostError("NO_CONDITION");
             return;

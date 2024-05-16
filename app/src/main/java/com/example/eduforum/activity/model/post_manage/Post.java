@@ -25,6 +25,8 @@ public class Post extends PostingObject {
     }
 
 
+
+
     public Boolean getAnonymous() {
         return isAnonymous;
     }
