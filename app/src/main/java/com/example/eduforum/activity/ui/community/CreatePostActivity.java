@@ -28,7 +28,8 @@ import com.example.eduforum.R;
 import com.example.eduforum.activity.EduForum;
 import com.example.eduforum.activity.model.post_manage.Creator;
 import com.example.eduforum.activity.model.user_manage.User;
-import com.example.eduforum.activity.ui.community.adapter.ImageAdapter;
+import com.example.eduforum.activity.ui.community.adapter.MediaAdapter;
+import com.example.eduforum.activity.ui.community.adapter.MediaItem;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.activity.viewmodel.community.CreatePostViewModel;
 import com.example.eduforum.activity.viewmodel.shared.UserViewModel;
@@ -168,7 +169,7 @@ public class CreatePostActivity extends AppCompatActivity {
         ActivityResultLauncher<PickVisualMediaRequest> pickImages =
                 registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uris -> {
                     if (uris != null) {
-                        ArrayList<Uri> uriList = new ArrayList<>();
+                        ArrayList<MediaItem> uriList = new ArrayList<>();
                         for(int i = 0; i < uris.size(); i++) {
                             ImageView imageView = new ImageView(this);
                             imageView.setImageURI(uris.get(i));
@@ -177,9 +178,9 @@ public class CreatePostActivity extends AppCompatActivity {
                             int sizeInPx = (int) (sizeInDp * scale + 0.5f);
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(sizeInPx, sizeInPx);
                             imageView.setLayoutParams(layoutParams);
-                            uriList.add(uris.get(i));
+                            uriList.add(new MediaItem(uris.get(i), false));
                         }
-                        ImageAdapter imageAdapter = new ImageAdapter(uriList);
+                        MediaAdapter imageAdapter = new MediaAdapter(uriList);
                         binding.imageRecyclerView.setAdapter(imageAdapter);
                     } else {
                         // TODO: Show errors
@@ -198,7 +199,9 @@ public class CreatePostActivity extends AppCompatActivity {
         ActivityResultLauncher<PickVisualMediaRequest> pickVideos =
                 //parameter in PickVisualMediaRequest is the max item user can select
                 registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uri -> {
+
                     if (uri != null) {
+                        ArrayList<MediaItem> uriList = new ArrayList<>();
                         for(int i = 0; i < uri.size(); i++) {
                             VideoView videoView = new VideoView(this);
                             videoView.setVideoURI(uri.get(i));
@@ -207,9 +210,10 @@ public class CreatePostActivity extends AppCompatActivity {
                             int sizeInPx = (int) (sizeInDp * scale + 0.5f);
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(sizeInPx, sizeInPx);
                             videoView.setLayoutParams(layoutParams);
+                            uriList.add(new MediaItem(uri.get(i), true));
                         }
-//                        ImageAdapter imageAdapter = new ImageAdapter(new ArrayList<>(uri));
-//                        binding.imageRecyclerView.setAdapter(imageAdapter);
+                        MediaAdapter imageAdapter = new MediaAdapter(uriList);
+                       binding.imageRecyclerView.setAdapter(imageAdapter);
                     } else {
 //                        TODO: Show errors
                     }
