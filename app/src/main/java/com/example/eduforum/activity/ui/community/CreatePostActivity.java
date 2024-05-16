@@ -72,7 +72,7 @@ public class CreatePostActivity extends AppCompatActivity {
             viewModel.setCommunityId(communityId);
         }
         else{
-            finish();
+            //finish();
         }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_post);
         binding.setViewModel(viewModel);
