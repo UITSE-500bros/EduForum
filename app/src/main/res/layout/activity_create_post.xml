@@ -287,7 +287,7 @@
                     style="@style/Widget.MaterialComponents.Button"
                     android:background="@drawable/loginbuttonshape"
                     android:layout_marginTop="15dp"
-                    android:layout_marginBottom="30dp"
+                    android:layout_marginBottom="40dp"
                     android:text="Tạo"
                     android:layout_marginHorizontal="10dp"
                     android:textSize="18sp"
