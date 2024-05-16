@@ -103,6 +103,11 @@ public class CreatePostViewModel extends ViewModel {
             @Override
             public void onBookmarkSuccess() {
             }
+
+            @Override
+            public void onGetVoteStatusSuccess(int voteType) {
+
+            }
         });
     }
     private Boolean isPostValid(PostViewState post){

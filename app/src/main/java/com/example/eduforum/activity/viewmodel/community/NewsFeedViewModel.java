@@ -13,6 +13,7 @@ import com.example.eduforum.activity.repository.post.PostRepository;
 import com.example.eduforum.activity.ui.community.viewstate.FilterViewState;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class NewsFeedViewModel extends ViewModel {
     }
     public void setCurrentCommunity(CreateCommunityViewState community) {
         currentCommunity.setValue(community);
-        postRepository.getPosts(community.getCommunityID(), new IPostCallback() d{
+        postRepository.getPosts(community.getCommunityID(), FirebaseAuth.getInstance().getUid(), new IPostCallback() {
             @Override
             public void onGetPostSuccess(List<Post> posts){
                 postList.setValue(convertPostListToPostViewStateList(posts));
@@ -89,6 +90,11 @@ public class NewsFeedViewModel extends ViewModel {
             }
             @Override
             public void onBookmarkSuccess(){
+
+            }
+
+            @Override
+            public void onGetVoteStatusSuccess(int voteType) {
 
             }
         });
