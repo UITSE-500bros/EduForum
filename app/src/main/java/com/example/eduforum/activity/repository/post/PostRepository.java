@@ -284,11 +284,11 @@ public class PostRepository {
     }
 
     //TODO: transaction for upVote, downVote
-    public void updateVoteCount(String communityID, String postID, String userID, int voteType) {
+    public void updateVoteCount(Post post, String userID, int voteType) {
         DocumentReference postRef = db.collection("Community")
-                .document(communityID)
+                .document(post.getCommunityID())
                 .collection("Post")
-                .document(postID);
+                .document(post.getPostID());
         DocumentReference voteRef = postRef.collection("Vote").document(userID);
 
         db.runTransaction(new Transaction.Function<Void>() {
@@ -359,29 +359,7 @@ public class PostRepository {
 
         });
 
-//
-//        db.runTransaction(new Transaction.Function<Void>() {
-//            @Override
-//            public Void apply(Transaction transaction) throws FirebaseFirestoreException {
-//                DocumentSnapshot snapshot = transaction.get(postRef);
-//
-//                // Assuming the post document has a "votes" field
-//                long newVoteCount = snapshot.getLong("votes") + voteChange;
-//                transaction.update(postRef, "votes", newVoteCount);
-//
-//                return null;
-//            }
-//        }).addOnSuccessListener(new OnSuccessListener<Void>() {
-//            @Override
-//            public void onSuccess(Void aVoid) {
-//                Log.d("Transaction", "Transaction success!");
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Log.w("Transaction", "Transaction failure.", e);
-//            }
-//        });
+
 
         //how to call this function in FE @Duong Thuan Tri
         /*
@@ -401,11 +379,11 @@ public class PostRepository {
         */
     }
 
-    public void getVoteStatus(String communityID, String postID, String userID, IPostCallback callback) {
+    public void getVoteStatus(Post post, String userID, IPostCallback callback) {
         DocumentReference voteRef = db.collection("Community")
-                .document(communityID)
+                .document(post.getCommunityID())
                 .collection("Post")
-                .document(postID)
+                .document(post.getPostID())
                 .collection("Vote")
                 .document(userID);
 
@@ -413,15 +391,15 @@ public class PostRepository {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
-//                    callback.onGetVoteStatusSuccess(documentSnapshot.getLong("voteType").intValue());
+                    callback.onGetVoteStatusSuccess(documentSnapshot.getLong("voteType").intValue());
                 } else {
-//                    callback.onGetVoteStatusError("Vote not found");
+                    callback.onGetVoteStatusSuccess(0);
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-//                callback.onGetVoteStatusError(e.toString());
+                callback.onGetVoteStatusSuccess(0);
             }
         });
     }

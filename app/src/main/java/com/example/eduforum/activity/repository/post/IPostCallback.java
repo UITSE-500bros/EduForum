@@ -29,4 +29,6 @@ public interface IPostCallback {
     void onBookmarkError(String errorMsg);
 
     void onBookmarkSuccess();
+
+    void onGetVoteStatusSuccess(int voteType);  // 0: no vote, 1: upvote, -1: downvote
 }

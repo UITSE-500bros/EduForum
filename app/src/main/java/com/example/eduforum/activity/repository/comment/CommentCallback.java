@@ -15,4 +15,6 @@ public abstract class CommentCallback {
     public abstract void onDeleteSuccess();
 
     public abstract void onUpdateSuccess(Comment comment);
+
+    public abstract void onGetVoteStatusSuccess(int voteType); // 0: no vote, 1: upvote, -1: downvote
 }

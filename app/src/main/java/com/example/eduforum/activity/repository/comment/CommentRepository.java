@@ -7,16 +7,23 @@ import androidx.annotation.NonNull;
 import com.example.eduforum.activity.model.post_manage.Comment;
 import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.model.post_manage.PostingObject;
+import com.example.eduforum.activity.repository.post.IPostCallback;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CommentRepository {
     private static CommentRepository instance;
@@ -136,5 +143,111 @@ public class CommentRepository {
                     callback.onFailure(e.getMessage());
                     Log.w(FlagsList.DEBUG_COMMENT_FLAG, "Error updating document", e);
                 });
+    }
+
+    public void updateVoteCount(Comment comment, String userID, int voteType) {
+        DocumentReference commentRef = db.collection("Community")
+                .document(comment.getCommunityID())
+                .collection("Post")
+                .document(comment.getPostID())
+                .collection("Comment")
+                .document(comment.getCommentID());
+        DocumentReference voteRef = commentRef.collection("Vote").document(userID);
+
+        db.runTransaction(new Transaction.Function<Void>() {
+            @Override
+            public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                DocumentSnapshot commentSnapshot = transaction.get(commentRef);
+                DocumentSnapshot voteSnapshot = transaction.get(voteRef);
+
+                if (!commentSnapshot.exists()) {
+                    throw new FirebaseFirestoreException("Comment does not exist", FirebaseFirestoreException.Code.NOT_FOUND);
+                }
+
+                if (!voteSnapshot.exists()) {
+                    if (voteType == 1) {
+                        transaction.update(commentRef, "totalUpVote", FieldValue.increment(1));
+                        transaction.update(commentRef, "voteDifference", FieldValue.increment(1));
+                    }
+                    else if (voteType == -1) {
+                        transaction.update(commentRef, "totalDownVote", FieldValue.increment(1));
+                        transaction.update(commentRef, "voteDifference", FieldValue.increment(-1));
+                    }
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("userID", userID);
+                    data.put("voteType", voteType);
+                    transaction.set(voteRef, data);
+                    return null;
+                }
+
+                long oldVoteType = voteSnapshot.getLong("voteType");
+                if (oldVoteType == 1) {
+                    if (voteType == 1) {
+                        transaction.update(commentRef, "totalUpVote", FieldValue.increment(-1));
+                        transaction.update(commentRef, "voteDifference", FieldValue.increment(-1));
+                        transaction.update(voteRef, "voteType", 0);
+                    }
+                    else if (voteType == -1) {
+                        transaction.update(commentRef, "totalUpVote", FieldValue.increment(-1));
+                        transaction.update(commentRef, "totalDownVote", FieldValue.increment(1));
+                        transaction.update(commentRef, "voteDifference", FieldValue.increment(-2));
+                        transaction.update(voteRef, "voteType", voteType);
+                    }
+                } else {
+                    if (voteType == 1) {
+                        transaction.update(commentRef, "totalUpVote", FieldValue.increment(1));
+                        transaction.update(commentRef, "totalDownVote", FieldValue.increment(-1));
+                        transaction.update(commentRef, "voteDifference", FieldValue.increment(2));
+                        transaction.update(voteRef, "voteType", voteType);
+                    }
+                    else if (voteType == -1) {
+                        transaction.update(commentRef, "totalDownVote", FieldValue.increment(-1));
+                        transaction.update(commentRef, "voteDifference", FieldValue.increment(1));
+                        transaction.update(voteRef, "voteType", 0);
+                    }
+                }
+
+                return null;
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(FlagsList.DEBUG_COMMENT_FLAG, "Transaction success!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(FlagsList.DEBUG_COMMENT_FLAG, "Transaction failure.", e);
+            }
+
+        });
+
+    }
+
+    public void getVoteStatus(Comment comment, String userID, CommentCallback callback) {
+        DocumentReference voteRef = db.collection("Community")
+                .document(comment.getCommunityID())
+                .collection("Post")
+                .document(comment.getPostID())
+                .collection("Comment")
+                .document(comment.getCommentID())
+                .collection("Vote")
+                .document(userID);
+
+        voteRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    callback.onGetVoteStatusSuccess(documentSnapshot.getLong("voteType").intValue());
+                } else {
+                    callback.onGetVoteStatusSuccess(0);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onGetVoteStatusSuccess(0);
+            }
+        });
     }
 }
