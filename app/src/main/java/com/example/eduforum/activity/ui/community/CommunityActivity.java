@@ -1,5 +1,6 @@
 package com.example.eduforum.activity.ui.community;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -10,8 +11,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.eduforum.R;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.eduforum.activity.ui.community.adapter.PostAdapter;
+import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.viewmodel.community.NewsFeedViewModel;
 import com.example.eduforum.databinding.ActivityCommunityBinding;
 
@@ -25,25 +28,37 @@ public class CommunityActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+
         binding = ActivityCommunityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        init();
+        viewModel = new ViewModelProvider(this).get(NewsFeedViewModel.class);
+        binding.setLifecycleOwner(this);
 
+        CreateCommunityViewState currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
+        if(currentCommunity != null) {
+            viewModel.setCurrentCommunity(currentCommunity);
+        }
+        else{
+            //finish();
+        }
+        // setup postRecyclerView
+        postAdapter = new PostAdapter(this, viewModel.getPostList().getValue());
+        binding.postRecyclerView.setAdapter(postAdapter);
+        binding.postRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        binding.createPostEditTextButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CreatePostActivity.class);
+            intent.putExtra("communityId", currentCommunity.getCommunityID());
+            startActivity(intent);
+        });
         viewModel.getCurrentCommunity().observe(this, community -> {
             if(community != null){
                 binding.communityName.setText(community.getName());
                 binding.descriptionContentTextview.setText(community.getDescription());
             }
         });
-    }
-    private void init(){
-        viewModel = new ViewModelProvider(this).get(NewsFeedViewModel.class);
-        String communityId = getIntent().getStringExtra("communityId");
-        if(communityId != null) {
-            viewModel.setCommunityId(communityId);
-        }
-        else{
-            finish();
-        }
+        viewModel.getPostList().observe(this, postList -> {
+            postAdapter.setPostList(postList);
+        });
     }
 }
