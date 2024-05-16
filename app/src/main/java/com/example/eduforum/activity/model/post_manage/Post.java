@@ -16,22 +16,12 @@ public class Post extends PostingObject {
     }
 
     public Post(String postID, String communityID, String title, String content, Boolean isAnonymous, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, Integer totalComment, List<String> image, List<String> taggedUsers, List<Category> category) {
-        super(content, timeCreated, lastModified, creator, totalUpVote, totalDownVote, voteDifference, image);
-        this.postID = postID;
-        this.communityID = communityID;
+        super(postID, communityID, content, timeCreated, lastModified, creator, totalUpVote, totalDownVote, voteDifference, image);
         this.title = title;
         this.isAnonymous = isAnonymous;
         this.totalComment = totalComment;
         this.taggedUsers = taggedUsers;
         this.category = category;
-    }
-
-    public String getPostID() {
-        return postID;
-    }
-
-    public void setPostID(String postID) {
-        this.postID = postID;
     }
 
 
@@ -57,14 +47,6 @@ public class Post extends PostingObject {
 
     public void setCategory(List<Category> category) {
         this.category = category;
-    }
-
-    public String getCommunityID() {
-        return communityID;
-    }
-
-    public void setCommunityID(String communityID) {
-        this.communityID = communityID;
     }
 
     public String getTitle() {

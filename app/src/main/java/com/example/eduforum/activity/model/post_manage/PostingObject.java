@@ -3,6 +3,8 @@ package com.example.eduforum.activity.model.post_manage;
 import java.util.List;
 
 public abstract class PostingObject {
+    protected String communityID;
+    protected String postID;
     protected String content;
     protected String timeCreated;
     protected String lastModified;
@@ -15,7 +17,20 @@ public abstract class PostingObject {
     public PostingObject() {
     }
 
-    public PostingObject(String content, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<String> image) {
+//    public PostingObject(String content, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<String> image) {
+//        this.content = content;
+//        this.timeCreated = timeCreated;
+//        this.lastModified = lastModified;
+//        this.creator = creator;
+//        this.totalUpVote = totalUpVote;
+//        this.totalDownVote = totalDownVote;
+//        this.voteDifference = voteDifference;
+//        this.image = image;
+//    }
+
+    public PostingObject(String communityID, String postID, String content, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<String> image) {
+        this.communityID = communityID;
+        this.postID = postID;
         this.content = content;
         this.timeCreated = timeCreated;
         this.lastModified = lastModified;
@@ -88,5 +103,21 @@ public abstract class PostingObject {
 
     public void setImage(List<String> image) {
         this.image = image;
+    }
+
+    public String getCommunityID() {
+        return communityID;
+    }
+
+    public void setCommunityID(String communityID) {
+        this.communityID = communityID;
+    }
+
+    public String getPostID() {
+        return postID;
+    }
+
+    public void setPostID(String postID) {
+        this.postID = postID;
     }
 }

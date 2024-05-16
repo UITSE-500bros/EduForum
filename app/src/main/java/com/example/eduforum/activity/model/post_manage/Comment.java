@@ -4,19 +4,21 @@ import java.util.List;
 
 public class Comment extends PostingObject {
     private String commentID;
-    private Integer depth;
-    private String parentID;
+    private String replyCommentID;
+    private String postID;
+    private String communityID;
 
     public Comment() {
         super();
     }
 
-    public Comment(String commentID, Integer depth, String parentID, String content, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<String> image) {
-        super(content, timeCreated, lastModified, creator, totalUpVote, totalDownVote, voteDifference, image);
+    public Comment(String commentID, String postID, String communityID, String parentID, String content, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<String> image) {
+        super(postID, communityID, content, timeCreated, lastModified, creator, totalUpVote, totalDownVote, voteDifference, image);
         this.commentID = commentID;
-        this.depth = depth;
-        this.parentID = parentID;
+        this.replyCommentID = parentID;
     }
+
+
 
     public String getCommentID() {
         return commentID;
@@ -26,19 +28,12 @@ public class Comment extends PostingObject {
         this.commentID = commentID;
     }
 
-    public Integer getDepth() {
-        return depth;
+
+    public String getReplyCommentID() {
+        return replyCommentID;
     }
 
-    public void setDepth(Integer depth) {
-        this.depth = depth;
-    }
-
-    public String getParentID() {
-        return parentID;
-    }
-
-    public void setParentID(String parentID) {
-        this.parentID = parentID;
+    public void setReplyCommentID(String replyCommentID) {
+        this.replyCommentID = replyCommentID;
     }
 }
