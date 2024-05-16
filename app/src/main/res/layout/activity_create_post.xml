@@ -224,8 +224,8 @@
 
                     <ImageButton
                         android:id="@+id/imageInsertButton"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_marginStart="10dp"
                         android:background="@null"
                         android:contentDescription="@null"
@@ -235,8 +235,8 @@
 
                     <ImageButton
                         android:id="@+id/videoInsertButton"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_marginStart="15dp"
                         android:background="@null"
                         android:contentDescription="@null"
@@ -246,8 +246,8 @@
 
                     <ImageButton
                         android:id="@+id/incognitoModeButton"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_marginStart="15dp"
                         android:background="@null"
                         android:contentDescription="@null"

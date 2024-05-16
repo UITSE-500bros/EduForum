@@ -36,7 +36,7 @@ public class NewsFeedViewModel extends ViewModel {
     }
     public void setCurrentCommunity(CreateCommunityViewState community) {
         currentCommunity.setValue(community);
-        postRepository.getPosts(community.getCommunityID(), new IPostCallback() {
+        postRepository.getPosts(community.getCommunityID(), new IPostCallback() d{
             @Override
             public void onGetPostSuccess(List<Post> posts){
                 postList.setValue(convertPostListToPostViewStateList(posts));

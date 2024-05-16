@@ -3,6 +3,7 @@ package com.example.eduforum.activity.ui.community.adapter;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,8 +16,14 @@ import java.util.ArrayList;
 public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_IMAGE = 0;
     private static final int TYPE_VIDEO = 1;
+    private AdapterView.OnItemClickListener onItemClickListener;
+
 
     private ArrayList<MediaItem> mediaItems;
+
+    public  interface  OnItemClickListener{
+        void onItemClick(int position);
+    }
 
     public MediaAdapter(ArrayList<MediaItem> mediaItems) {
         this.mediaItems = mediaItems;
