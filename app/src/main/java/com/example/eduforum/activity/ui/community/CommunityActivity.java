@@ -1,7 +1,10 @@
 package com.example.eduforum.activity.ui.community;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +20,7 @@ import com.example.eduforum.activity.ui.community.adapter.PostAdapter;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.viewmodel.community.NewsFeedViewModel;
 import com.example.eduforum.databinding.ActivityCommunityBinding;
+import com.google.android.material.dialog.MaterialDialogs;
 
 public class CommunityActivity extends AppCompatActivity {
     ActivityCommunityBinding binding;
@@ -61,4 +65,25 @@ public class CommunityActivity extends AppCompatActivity {
             postAdapter.setPostList(postList);
         });
     }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.communitymenu, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.filter:
+                Dialog  dialog = new Dialog(this);
+                dialog.setContentView(R.layout.community_filter);
+                dialog.show();
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }
