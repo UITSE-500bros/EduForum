@@ -166,36 +166,6 @@ public class CreatePostActivity extends AppCompatActivity {
         });
 
         //set up image
-        ActivityResultLauncher<PickVisualMediaRequest> pickImages =
-                registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uris -> {
-                    if (uris != null) {
-                        ArrayList<MediaItem> uriList = new ArrayList<>();
-                        for(int i = 0; i < uris.size(); i++) {
-                            ImageView imageView = new ImageView(this);
-                            imageView.setImageURI(uris.get(i));
-                            int sizeInDp = 40;
-                            float scale = getResources().getDisplayMetrics().density;
-                            int sizeInPx = (int) (sizeInDp * scale + 0.5f);
-                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(sizeInPx, sizeInPx);
-                            imageView.setLayoutParams(layoutParams);
-                            uriList.add(new MediaItem(uris.get(i), false));
-                        }
-                        MediaAdapter imageAdapter = new MediaAdapter(uriList);
-                        binding.imageRecyclerView.setAdapter(imageAdapter);
-                    } else {
-                        // TODO: Show errors
-                    }
-                });
-
-        binding.imageInsertButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pickImages.launch(new PickVisualMediaRequest.Builder().build());
-            }
-        });
-
-
-
         ActivityResultLauncher<PickVisualMediaRequest> pickVideos =
                 //parameter in PickVisualMediaRequest is the max item user can select
                 registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uri -> {
@@ -213,7 +183,7 @@ public class CreatePostActivity extends AppCompatActivity {
                             uriList.add(new MediaItem(uri.get(i), true));
                         }
                         MediaAdapter imageAdapter = new MediaAdapter(uriList);
-                       binding.imageRecyclerView.setAdapter(imageAdapter);
+                        binding.imageRecyclerView.setAdapter(imageAdapter);
                     } else {
 //                        TODO: Show errors
                     }
@@ -224,6 +194,37 @@ public class CreatePostActivity extends AppCompatActivity {
                 pickVideos.launch(new PickVisualMediaRequest.Builder().build());
             }
         });
+
+
+
+//        ActivityResultLauncher<PickVisualMediaRequest> pickVideos =
+//                //parameter in PickVisualMediaRequest is the max item user can select
+//                registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uri -> {
+//
+//                    if (uri != null) {
+//                        ArrayList<MediaItem> uriList = new ArrayList<>();
+//                        for(int i = 0; i < uri.size(); i++) {
+//                            VideoView videoView = new VideoView(this);
+//                            videoView.setVideoURI(uri.get(i));
+//                            int sizeInDp = 40;
+//                            float scale = getResources().getDisplayMetrics().density;
+//                            int sizeInPx = (int) (sizeInDp * scale + 0.5f);
+//                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(sizeInPx, sizeInPx);
+//                            videoView.setLayoutParams(layoutParams);
+//                            uriList.add(new MediaItem(uri.get(i), true));
+//                        }
+//                        MediaAdapter imageAdapter = new MediaAdapter(uriList);
+//                       binding.imageRecyclerView.setAdapter(imageAdapter);
+//                    } else {
+////                        TODO: Show errors
+//                    }
+//                });
+//        binding.videoInsertButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                pickVideos.launch(new PickVisualMediaRequest.Builder().build());
+//            }
+//        });
 
 
         //Handle tag items

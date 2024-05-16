@@ -1,6 +1,5 @@
 package com.example.eduforum.activity.ui.community.adapter;
 
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -16,14 +15,11 @@ import java.util.ArrayList;
 public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_IMAGE = 0;
     private static final int TYPE_VIDEO = 1;
-    private AdapterView.OnItemClickListener onItemClickListener;
 
 
     private ArrayList<MediaItem> mediaItems;
 
-    public  interface  OnItemClickListener{
-        void onItemClick(int position);
-    }
+    private AdapterView.OnItemClickListener onItemClickListener;
 
     public MediaAdapter(ArrayList<MediaItem> mediaItems) {
         this.mediaItems = mediaItems;
@@ -36,6 +32,9 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         } else {
             return TYPE_IMAGE;
         }
+    }
+    public  void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -59,9 +58,24 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         MediaItem mediaItem = mediaItems.get(position);
         if (holder instanceof ImageViewHolder) {
             ((ImageViewHolder) holder).binding.image.setImageURI(mediaItem.getUri());
+            holder.itemView.setOnClickListener(v -> {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(null, v, position, 0);
+                }
+            });
         } else if (holder instanceof VideoViewHolder) {
-            ((VideoViewHolder) holder).binding.video.setVideoURI(mediaItem.getUri());
+            VideoViewHolder videoViewHolder = (VideoViewHolder) holder;
+            videoViewHolder.binding.video.setVideoURI(mediaItem.getUri());
+            videoViewHolder.binding.video.setOnPreparedListener(mp -> {
+                mp.setLooping(true);
+                mp.start();
+            });
         }
+
+    }
+    public void removeItem(AdapterView<?> position) {
+        mediaItems.remove(position);
+
     }
 
     @Override
