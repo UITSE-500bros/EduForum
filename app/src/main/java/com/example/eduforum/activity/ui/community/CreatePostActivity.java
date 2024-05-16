@@ -2,12 +2,12 @@ package com.example.eduforum.activity.ui.community;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.activity.EdgeToEdge;
@@ -28,6 +28,7 @@ import com.example.eduforum.R;
 import com.example.eduforum.activity.EduForum;
 import com.example.eduforum.activity.model.post_manage.Creator;
 import com.example.eduforum.activity.model.user_manage.User;
+import com.example.eduforum.activity.ui.community.adapter.ImageAdapter;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.activity.viewmodel.community.CreatePostViewModel;
 import com.example.eduforum.activity.viewmodel.shared.UserViewModel;
@@ -35,6 +36,9 @@ import com.example.eduforum.databinding.ActivityCreatePostBinding;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.checkerframework.checker.units.qual.C;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import jp.wasabeef.richeditor.RichEditor;
 
@@ -72,7 +76,7 @@ public class CreatePostActivity extends AppCompatActivity {
             viewModel.setCommunityId(communityId);
         }
         else{
-            finish();
+            //finish();
         }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_post);
         binding.setViewModel(viewModel);
@@ -202,22 +206,23 @@ public class CreatePostActivity extends AppCompatActivity {
 
         //set up image
         ActivityResultLauncher<PickVisualMediaRequest> pickImages =
-                //parameter in PickVisualMediaRequest is the max item user can select
-                registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uri -> {
-                    if (uri != null) {
-                        for(int i = 0; i < uri.size(); i++) {
+                registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uris -> {
+                    if (uris != null) {
+                        ArrayList<Uri> uriList = new ArrayList<>();
+                        for(int i = 0; i < uris.size(); i++) {
                             ImageView imageView = new ImageView(this);
-                            imageView.setImageURI(uri.get(i));
+                            imageView.setImageURI(uris.get(i));
                             int sizeInDp = 40;
                             float scale = getResources().getDisplayMetrics().density;
                             int sizeInPx = (int) (sizeInDp * scale + 0.5f);
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(sizeInPx, sizeInPx);
                             imageView.setLayoutParams(layoutParams);
-                            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                            binding.imageRecyclerView.addView(imageView);
+                            uriList.add(uris.get(i));
                         }
+                        ImageAdapter imageAdapter = new ImageAdapter(uriList);
+                        binding.imageRecyclerView.setAdapter(imageAdapter);
                     } else {
-//                        TODO: Show errors
+                        // TODO: Show errors
                     }
                 });
 
@@ -244,8 +249,9 @@ public class CreatePostActivity extends AppCompatActivity {
                             int sizeInPx = (int) (sizeInDp * scale + 0.5f);
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(sizeInPx, sizeInPx);
                             videoView.setLayoutParams(layoutParams);
-                            binding.imageRecyclerView.addView(videoView);
                         }
+//                        ImageAdapter imageAdapter = new ImageAdapter(new ArrayList<>(uri));
+//                        binding.imageRecyclerView.setAdapter(imageAdapter);
                     } else {
 //                        TODO: Show errors
                     }
