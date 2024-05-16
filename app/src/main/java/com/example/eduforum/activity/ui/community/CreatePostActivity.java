@@ -21,10 +21,16 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.EduForum;
+import com.example.eduforum.activity.model.post_manage.Creator;
+import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.activity.viewmodel.community.CreatePostViewModel;
+import com.example.eduforum.activity.viewmodel.shared.UserViewModel;
 import com.example.eduforum.databinding.ActivityCreatePostBinding;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -36,6 +42,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
     private ActivityCreatePostBinding binding;
     private CreatePostViewModel viewModel;
+    private UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +55,18 @@ public class CreatePostActivity extends AppCompatActivity {
             return insets;
         });
         viewModel = new ViewModelProvider(this).get(CreatePostViewModel.class);
+        EduForum app = (EduForum) getApplication();
+        userViewModel = app.getSharedViewModel(UserViewModel.class);
+        userViewModel.getCurrentUserLiveData().observe(this, user -> {
+            if(user != null){
+                PostViewState postViewState = viewModel.getPostViewState().getValue();
+                Creator creator = mapToCreator(user);
+                assert postViewState != null;
+                postViewState.setCreator(creator);
+                viewModel.setPostViewState(postViewState);
+            }
+        });
+
         String communityId =  getIntent().getStringExtra("communityId");
         if(communityId != null){
             viewModel.setCommunityId(communityId);
@@ -69,6 +88,10 @@ public class CreatePostActivity extends AppCompatActivity {
                 Snackbar.make(binding.getRoot(), errorMessage, Snackbar.LENGTH_SHORT).show();
             }
         });
+        //image recycler view
+        RecyclerView ImageRecyclerView = binding.imageRecyclerView;
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        ImageRecyclerView.setLayoutManager(layoutManager);
     }
     private void initComponents(){
         //Stlye rich editor through binding
@@ -79,47 +102,103 @@ public class CreatePostActivity extends AppCompatActivity {
         binding.contentRichEditor.setEditorBackgroundColor(Color.WHITE);
         binding.contentRichEditor.setPadding(10, 10, 10, 10);
 
-
         //set up action buttons
-        binding.actionRedo.setOnClickListener(v -> binding.contentRichEditor.redo());
-        binding.actionUndo.setOnClickListener(v -> binding.contentRichEditor.undo());
-        binding.actionBold.setOnClickListener(v -> binding.contentRichEditor.setBold());
-        binding.actionItalic.setOnClickListener(v -> binding.contentRichEditor.setItalic());
-        binding.actionUnderline.setOnClickListener(v -> binding.contentRichEditor.setUnderline());
-        binding.actionAlignCenter.setOnClickListener(v -> binding.contentRichEditor.setAlignCenter());
-        binding.actionAlignLeft.setOnClickListener(v -> binding.contentRichEditor.setAlignLeft());
-        binding.actionAlignRight.setOnClickListener(v -> binding.contentRichEditor.setAlignRight());
-        binding.actionHeading1.setOnClickListener(v -> binding.contentRichEditor.setHeading(1));
-        binding.actionHeading2.setOnClickListener(v -> binding.contentRichEditor.setHeading(2));
-        binding.actionHeading3.setOnClickListener(v -> binding.contentRichEditor.setHeading(3));
-        binding.actionInsertBullets.setOnClickListener(v -> binding.contentRichEditor.setBullets());
-        binding.actionInsertNumbers.setOnClickListener(v -> binding.contentRichEditor.setNumbers());
-        binding.actionInsertLink.setOnClickListener(v -> {
-            AlertDialog builder = new AlertDialog.Builder(this).create();
-            builder.setTitle("Chèn link vào bài viết");
+        binding.textDefineRichEditor.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                if (checkedId == binding.actionUndo.getId()) {
+                    binding.contentRichEditor.undo();
+                } else if (checkedId == binding.actionRedo.getId()) {
+                    binding.contentRichEditor.redo();
+                } else if (checkedId == binding.actionBold.getId()) {
+                    binding.contentRichEditor.setBold();
+                } else if (checkedId == binding.actionUnderline.getId()){
+                    binding.contentRichEditor.setUnderline();
+                } else if (checkedId == binding.actionItalic.getId()){
+                    binding.contentRichEditor.setItalic();
+                } else if (checkedId == binding.actionAlignLeft.getId()){
+                    binding.contentRichEditor.setAlignLeft();
+                } else if (checkedId == binding.actionAlignRight.getId()){
+                    binding.contentRichEditor.setAlignRight();
+                } else if (checkedId == binding.actionAlignCenter.getId()){
+                    binding.contentRichEditor.setAlignCenter();
+                } else if (checkedId == binding.actionHeading1.getId()){
+                    binding.contentRichEditor.setHeading(1);
+                } else if (checkedId == binding.actionHeading2.getId()){
+                    binding.contentRichEditor.setHeading(2);
+                } else if (checkedId == binding.actionHeading3.getId()){
+                    binding.contentRichEditor.setHeading(3);
+                } else if (checkedId == binding.actionInsertBullets.getId()){
+                    binding.contentRichEditor.setBullets();
+                } else if (checkedId == binding.actionInsertNumbers.getId()){
+                    binding.contentRichEditor.setNumbers();
+                } else if (checkedId == binding.actionInsertLink.getId()){
+                    AlertDialog builder = new AlertDialog.Builder(this).create();
+                    builder.setTitle("Chèn link vào bài viết");
 
-            LinearLayout layout = new LinearLayout(this);
-            layout.setOrientation(LinearLayout.VERTICAL);
+                    LinearLayout layout = new LinearLayout(this);
+                    layout.setOrientation(LinearLayout.VERTICAL);
 
-            final EditText textInput = new EditText(this);
-            textInput.setHint("Text");
-            layout.addView(textInput);
-            final EditText urlInput = new EditText(this);
-            urlInput.setHint("URL");
-            layout.addView(urlInput);
+                    final EditText textInput = new EditText(this);
+                    textInput.setHint("Text");
+                    layout.addView(textInput);
+                    final EditText urlInput = new EditText(this);
+                    urlInput.setHint("URL");
+                    layout.addView(urlInput);
 
-            builder.setView(layout);
+                    builder.setView(layout);
 
-            builder.setButton(DialogInterface.BUTTON_POSITIVE, "OK", (dialog, which) -> {
-                String text = textInput.getText().toString();
-                String url = urlInput.getText().toString();
-                binding.contentRichEditor.insertLink(url, text);
-            });
+                    builder.setButton(DialogInterface.BUTTON_POSITIVE, "OK", (dialog, which) -> {
+                        String text = textInput.getText().toString();
+                        String url = urlInput.getText().toString();
+                        binding.contentRichEditor.insertLink(url, text);
+                    });
 
-            builder.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.cancel());
+                    builder.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.cancel());
 
-            builder.show();
+                    builder.show();
+                }
+            }
         });
+//        binding.actionRedo.setOnClickListener(v -> binding.contentRichEditor.redo());
+//        );
+//        binding.actionUndo.setOnClickListener(v -> binding.contentRichEditor.undo());
+//        binding.actionBold.setOnClickListener(v -> binding.contentRichEditor.setBold());
+//        binding.actionItalic.setOnClickListener(v -> binding.contentRichEditor.setItalic());
+//        binding.actionUnderline.setOnClickListener(v -> binding.contentRichEditor.setUnderline());
+//        binding.actionAlignCenter.setOnClickListener(v -> binding.contentRichEditor.setAlignCenter());
+//        binding.actionAlignLeft.setOnClickListener(v -> binding.contentRichEditor.setAlignLeft());
+//        binding.actionAlignRight.setOnClickListener(v -> binding.contentRichEditor.setAlignRight());
+//        binding.actionHeading1.setOnClickListener(v -> binding.contentRichEditor.setHeading(1));
+//        binding.actionHeading2.setOnClickListener(v -> binding.contentRichEditor.setHeading(2));
+//        binding.actionHeading3.setOnClickListener(v -> binding.contentRichEditor.setHeading(3));
+//        binding.actionInsertBullets.setOnClickListener(v -> binding.contentRichEditor.setBullets());
+//        binding.actionInsertNumbers.setOnClickListener(v -> binding.contentRichEditor.setNumbers());
+//        binding.actionInsertLink.setOnClickListener(v -> {
+//            AlertDialog builder = new AlertDialog.Builder(this).create();
+//            builder.setTitle("Chèn link vào bài viết");
+//
+//            LinearLayout layout = new LinearLayout(this);
+//            layout.setOrientation(LinearLayout.VERTICAL);
+//
+//            final EditText textInput = new EditText(this);
+//            textInput.setHint("Text");
+//            layout.addView(textInput);
+//            final EditText urlInput = new EditText(this);
+//            urlInput.setHint("URL");
+//            layout.addView(urlInput);
+//
+//            builder.setView(layout);
+//
+//            builder.setButton(DialogInterface.BUTTON_POSITIVE, "OK", (dialog, which) -> {
+//                String text = textInput.getText().toString();
+//                String url = urlInput.getText().toString();
+//                binding.contentRichEditor.insertLink(url, text);
+//            });
+//
+//            builder.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.cancel());
+//
+//            builder.show();
+//        });
 
         //set up image
         ActivityResultLauncher<PickVisualMediaRequest> pickImages =
@@ -135,7 +214,7 @@ public class CreatePostActivity extends AppCompatActivity {
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(sizeInPx, sizeInPx);
                             imageView.setLayoutParams(layoutParams);
                             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                            binding.resourceList.addView(imageView);
+                            binding.imageRecyclerView.addView(imageView);
                         }
                     } else {
 //                        TODO: Show errors
@@ -151,6 +230,8 @@ public class CreatePostActivity extends AppCompatActivity {
             }
         });
 
+
+
         ActivityResultLauncher<PickVisualMediaRequest> pickVideos =
                 //parameter in PickVisualMediaRequest is the max item user can select
                 registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uri -> {
@@ -163,7 +244,7 @@ public class CreatePostActivity extends AppCompatActivity {
                             int sizeInPx = (int) (sizeInDp * scale + 0.5f);
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(sizeInPx, sizeInPx);
                             videoView.setLayoutParams(layoutParams);
-                            binding.resourceList.addView(videoView);
+                            binding.imageRecyclerView.addView(videoView);
                         }
                     } else {
 //                        TODO: Show errors
@@ -177,6 +258,8 @@ public class CreatePostActivity extends AppCompatActivity {
                         .build());
             }
         });
+
+
 
 
         //Handle tag items
@@ -231,4 +314,8 @@ public class CreatePostActivity extends AppCompatActivity {
             viewModel.createPost();
         });
     }
+    private Creator mapToCreator(User user) {
+        return new Creator(user.getUserId(), user.getName(), user.getDepartment(),  user.getProfilePicture());
+    }
 }
+

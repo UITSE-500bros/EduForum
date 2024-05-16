@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
@@ -25,6 +26,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Transaction;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
@@ -53,6 +55,11 @@ public class PostRepository {
     // TODO: add post image to firebase storage
 
     public void addPost(Post post, IPostCallback callback) {
+        post.setTotalComment(0);
+        post.setVoteDifference(0);
+        post.setTotalUpVote(0);
+        post.setTotalUpVote(0);
+
         db.collection("Community")
                 .document(post.getCommunityID())
                 .collection("Post")
@@ -277,34 +284,104 @@ public class PostRepository {
     }
 
     //TODO: transaction for upVote, downVote
-    public void updateVoteCount(String communityID, String postID, int voteChange) {
+    public void updateVoteCount(String communityID, String postID, String userID, int voteType) {
         DocumentReference postRef = db.collection("Community")
                 .document(communityID)
                 .collection("Post")
                 .document(postID);
+        DocumentReference voteRef = postRef.collection("Vote").document(userID);
 
         db.runTransaction(new Transaction.Function<Void>() {
             @Override
             public Void apply(Transaction transaction) throws FirebaseFirestoreException {
-                DocumentSnapshot snapshot = transaction.get(postRef);
+                DocumentSnapshot postSnapshot = transaction.get(postRef);
+                DocumentSnapshot voteSnapshot = transaction.get(voteRef);
 
-                // Assuming the post document has a "votes" field
-                long newVoteCount = snapshot.getLong("votes") + voteChange;
-                transaction.update(postRef, "votes", newVoteCount);
+                if (!postSnapshot.exists()) {
+                    throw new FirebaseFirestoreException("Post does not exist", FirebaseFirestoreException.Code.NOT_FOUND);
+                }
+
+                if (!voteSnapshot.exists()) {
+                    if (voteType == 1) {
+                        transaction.update(postRef, "totalUpVote", FieldValue.increment(1));
+                        transaction.update(postRef, "voteDifference", FieldValue.increment(1));
+                    }
+                    else if (voteType == -1) {
+                        transaction.update(postRef, "totalDownVote", FieldValue.increment(1));
+                        transaction.update(postRef, "voteDifference", FieldValue.increment(-1));
+                    }
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("userID", userID);
+                    data.put("voteType", voteType);
+                    transaction.set(voteRef, data);
+                    return null;
+                }
+
+                long oldVoteType = voteSnapshot.getLong("voteType");
+                if (oldVoteType == 1) {
+                    if (voteType == 1) {
+                        transaction.update(postRef, "totalUpVote", FieldValue.increment(-1));
+                        transaction.update(postRef, "voteDifference", FieldValue.increment(-1));
+                        transaction.update(voteRef, "voteType", 0);
+                    }
+                    else if (voteType == -1) {
+                        transaction.update(postRef, "totalUpVote", FieldValue.increment(-1));
+                        transaction.update(postRef, "totalDownVote", FieldValue.increment(1));
+                        transaction.update(postRef, "voteDifference", FieldValue.increment(-2));
+                        transaction.update(voteRef, "voteType", voteType);
+                    }
+                } else {
+                    if (voteType == 1) {
+                        transaction.update(postRef, "totalUpVote", FieldValue.increment(1));
+                        transaction.update(postRef, "totalDownVote", FieldValue.increment(-1));
+                        transaction.update(postRef, "voteDifference", FieldValue.increment(2));
+                        transaction.update(voteRef, "voteType", voteType);
+                    }
+                    else if (voteType == -1) {
+                        transaction.update(postRef, "totalDownVote", FieldValue.increment(-1));
+                        transaction.update(postRef, "voteDifference", FieldValue.increment(1));
+                        transaction.update(voteRef, "voteType", 0);
+                    }
+                }
 
                 return null;
             }
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d("Transaction", "Transaction success!");
+                Log.d(FlagsList.DEBUG_POST_FLAG, "Transaction success!");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.w("Transaction", "Transaction failure.", e);
+                Log.w(FlagsList.DEBUG_POST_FLAG, "Transaction failure.", e);
             }
+
         });
+
+//
+//        db.runTransaction(new Transaction.Function<Void>() {
+//            @Override
+//            public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+//                DocumentSnapshot snapshot = transaction.get(postRef);
+//
+//                // Assuming the post document has a "votes" field
+//                long newVoteCount = snapshot.getLong("votes") + voteChange;
+//                transaction.update(postRef, "votes", newVoteCount);
+//
+//                return null;
+//            }
+//        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                Log.d("Transaction", "Transaction success!");
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Log.w("Transaction", "Transaction failure.", e);
+//            }
+//        });
 
         //how to call this function in FE @Duong Thuan Tri
         /*
@@ -323,4 +400,30 @@ public class PostRepository {
             });
         */
     }
+
+    public void getVoteStatus(String communityID, String postID, String userID, IPostCallback callback) {
+        DocumentReference voteRef = db.collection("Community")
+                .document(communityID)
+                .collection("Post")
+                .document(postID)
+                .collection("Vote")
+                .document(userID);
+
+        voteRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+//                    callback.onGetVoteStatusSuccess(documentSnapshot.getLong("voteType").intValue());
+                } else {
+//                    callback.onGetVoteStatusError("Vote not found");
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+//                callback.onGetVoteStatusError(e.toString());
+            }
+        });
+    }
+
 }

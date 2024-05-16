@@ -1,39 +1,27 @@
 package com.example.eduforum.activity.model.post_manage;
 import java.util.List;
 
-public class Post {
+public class Post extends PostingObject {
     private String postID;
     private String communityID;
     private String title;
-    private String content;
     private Boolean isAnonymous;
-    private String timeCreated;
-    private String lastModified;
-    private Creator creator;
-    private Integer totalUpVote;
-    private Integer totalDownVote;
     private Integer totalComment;
-    private List<String> image;
     private List<String> taggedUsers;
-
     private List<Category> category;
 
 
-    public Post() {}
+    public Post() {
+        super();
+    }
 
-    public Post(String postID, String communityID, String title, String content, Boolean isAnonymous, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer totalComment, List<String> image, List<String> taggedUsers, List<Category> category) {
+    public Post(String postID, String communityID, String title, String content, Boolean isAnonymous, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, Integer totalComment, List<String> image, List<String> taggedUsers, List<Category> category) {
+        super(content, timeCreated, lastModified, creator, totalUpVote, totalDownVote, voteDifference, image);
         this.postID = postID;
         this.communityID = communityID;
         this.title = title;
-        this.content = content;
         this.isAnonymous = isAnonymous;
-        this.timeCreated = timeCreated;
-        this.lastModified = lastModified;
-        this.creator = creator;
-        this.totalUpVote = totalUpVote;
-        this.totalDownVote = totalDownVote;
         this.totalComment = totalComment;
-        this.image = image;
         this.taggedUsers = taggedUsers;
         this.category = category;
     }
@@ -46,13 +34,6 @@ public class Post {
         this.postID = postID;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 
     public Boolean getAnonymous() {
         return isAnonymous;
@@ -60,54 +41,6 @@ public class Post {
 
     public void setAnonymous(Boolean anonymous) {
         isAnonymous = anonymous;
-    }
-
-    public String getTimeCreated() {
-        return timeCreated;
-    }
-
-    public void setTimeCreated(String timeCreated) {
-        this.timeCreated = timeCreated;
-    }
-
-    public String getLastModified() {
-        return lastModified;
-    }
-
-    public void setLastModified(String lastModified) {
-        this.lastModified = lastModified;
-    }
-
-    public Creator getCreator() {
-        return creator;
-    }
-
-    public void setCreator(Creator creator) {
-        this.creator = creator;
-    }
-
-    public Integer getTotalUpVote() {
-        return totalUpVote;
-    }
-
-    public void setTotalUpVote(Integer totalUpVote) {
-        this.totalUpVote = totalUpVote;
-    }
-
-    public Integer getTotalDownVote() {
-        return totalDownVote;
-    }
-
-    public void setTotalDownVote(Integer totalDownVote) {
-        this.totalDownVote = totalDownVote;
-    }
-
-    public List<String> getImage() {
-        return image;
-    }
-
-    public void setImage(List<String> image) {
-        this.image = image;
     }
 
     public List<String> getTaggedUsers() {

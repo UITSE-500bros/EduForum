@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".activity.EduForum"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -18,7 +19,7 @@
         tools:targetApi="31">
         <activity
             android:name=".activity.ui.community.CreatePostActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:exported="true"
             android:name=".activity.ui.community.CommunityActivity"
@@ -45,6 +46,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.ui.community.PostDetailActivity"
+            android:exported="true" />
         <activity
             android:name=".activity.ui.welcome.WelcomeActivity"
             android:exported="true" />

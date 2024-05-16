@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="remove_noti" android:title="Gỡ thông báo" android:icon="@drawable/remove_icon"  />
+    <item android:id="off_noti_commu" android:title="Tắt thông báo cộng đồng" android:icon="@drawable/off_noti_icon"  />
+
+</menu>
