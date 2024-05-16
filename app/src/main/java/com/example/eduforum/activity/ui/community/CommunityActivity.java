@@ -73,11 +73,11 @@ public class CommunityActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.filter:
-                Dialog  dialog = new Dialog(this);
-                dialog.setContentView(R.layout.community_filter);
-                dialog.show();
-                return true;
+//            case R.id.filter:
+//                Dialog  dialog = new Dialog(this);
+//                dialog.setContentView(R.layout.community_filter);
+//                dialog.show();
+//                return true;
 
             default:
                 // If we got here, the user's action was not recognized.
