@@ -5,7 +5,7 @@
         android:id="@+id/search"
         android:icon="@drawable/search_icon"
         android:title="Search"
-        app:showAsAction="ifRoom"
+        app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="com.google.android.material.search.SearchView" />
     <item
         android:id="@+id/filter"

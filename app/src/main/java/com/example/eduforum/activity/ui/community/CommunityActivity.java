@@ -1,9 +1,11 @@
 package com.example.eduforum.activity.ui.community;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -65,6 +67,10 @@ public class CommunityActivity extends AppCompatActivity {
         MaterialToolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
 
+        SearchView searchView = (SearchView) toolbar.getMenu().findItem(R.id.search).getActionView();
+        searchView.setQueryHint("Search post");
+
+
     }
 
     @Override
@@ -77,7 +83,9 @@ public class CommunityActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
        int id = item.getItemId();
         if (id == R.id.filter) {
-            Toast.makeText(this, "filter", Toast.LENGTH_SHORT).show();
+            Dialog filterDialog = new Dialog(this);
+            filterDialog.setContentView(R.layout.community_filter);
+            filterDialog.show();
             return true;
         }
         if(id == R.id.search){
