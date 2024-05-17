@@ -234,17 +234,6 @@
                         android:src="@drawable/image_insert_icon" />
 
                     <ImageButton
-                        android:id="@+id/videoInsertButton"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginStart="15dp"
-                        android:background="@null"
-                        android:contentDescription="@null"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/video_insert_icon" />
-
-                    <ImageButton
                         android:id="@+id/incognitoModeButton"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
