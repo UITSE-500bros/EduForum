@@ -1,5 +1,7 @@
 package com.example.eduforum.activity.ui.community.viewstate;
 
+import android.net.Uri;
+
 import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.activity.model.post_manage.Creator;
 import com.example.eduforum.activity.model.user_manage.User;
@@ -15,10 +17,10 @@ public class PostViewState {
     private String content;
     private String date;
     private List<Category> tags;
-    private List<String> image;
+    private List<Uri> image;
     private List<String> taggedUsers;
     private Boolean isAnonymous;
-    public PostViewState(String postId, Creator creator, CreateCommunityViewState community, String title, String content, Boolean isAnonymous, String date, List<String> image, List<String> taggedUsers,  List<Category> tags) {
+    public PostViewState(String postId, Creator creator, CreateCommunityViewState community, String title, String content, Boolean isAnonymous, String date, List<Uri> image, List<String> taggedUsers,  List<Category> tags) {
         this.postId = postId;
         this.creator = creator;
         this.community = community;
@@ -39,7 +41,7 @@ public class PostViewState {
         this.date = null;
         this.tags = null;
     }
-    public List<String> getImage() {
+    public List<Uri> getImage() {
         return image;
     }
     public List<String> getTaggedUsers() {
@@ -93,7 +95,7 @@ public class PostViewState {
     public void setAnonymous(Boolean anonymous) {
         isAnonymous = anonymous;
     }
-    public void setImage(List<String> image) {
+    public void setImage(List<Uri> image) {
         this.image = image;
     }
     public void setTaggedUsers(List<String> taggedUsers) {
