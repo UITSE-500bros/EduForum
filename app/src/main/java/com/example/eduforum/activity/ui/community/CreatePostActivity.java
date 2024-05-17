@@ -38,6 +38,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.checkerframework.checker.units.qual.C;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -170,6 +171,7 @@ public class CreatePostActivity extends AppCompatActivity {
                 registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uris -> {
                     if (uris != null) {
                         ArrayList<MediaItem> uriList = new ArrayList<>();
+                        ArrayList<Uri> uriList1 = new ArrayList<>();
                         for(int i = 0; i < uris.size(); i++) {
                             ImageView imageView = new ImageView(this);
                             imageView.setImageURI(uris.get(i));
@@ -179,9 +181,14 @@ public class CreatePostActivity extends AppCompatActivity {
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(sizeInPx, sizeInPx);
                             imageView.setLayoutParams(layoutParams);
                             uriList.add(new MediaItem(uris.get(i), false));
+                            uriList1.add(uris.get(i));
                         }
                         MediaAdapter imageAdapter = new MediaAdapter(uriList);
                         binding.imageRecyclerView.setAdapter(imageAdapter);
+                        PostViewState postViewState = viewModel.getPostViewState().getValue();
+                        assert postViewState != null;
+                        postViewState.setImage(uriList1);
+                        viewModel.setPostViewState(postViewState);
                     } else {
                         // TODO: Show errors
                     }
@@ -241,6 +248,7 @@ public class CreatePostActivity extends AppCompatActivity {
         binding.createPostButton.setOnClickListener(v -> {
             PostViewState newPost = viewModel.getPostViewState().getValue();
             newPost.setContent(binding.contentRichEditor.getHtml());
+            //newPost.setDate(LocalDate.now().toString());
             // newPost.setCategory(...);
             viewModel.setPostViewState(newPost);
             viewModel.createPost();
