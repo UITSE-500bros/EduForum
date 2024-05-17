@@ -18,5 +18,6 @@
     <color name="pressedView">#85CBFF</color>
     <color name="bottomNavigationColor">#262D34</color>
     <color name="hintColorText">#803C3C43</color>
+    <color name="red">#FF0808</color>
 
 </resources>
