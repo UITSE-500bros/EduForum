@@ -16,8 +16,7 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="match_parent"
@@ -86,7 +85,7 @@
                 <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginHorizontal="10dp"
                     >
                     <com.google.android.material.button.MaterialButtonToggleGroup
@@ -267,7 +266,7 @@
                     android:padding="5dp"
                     android:textSize="14sp"
                     android:textColor="@color/black"
-                    android:layout_marginTop="15dp"/>
+                    android:layout_marginTop="10dp"/>
 
                 <Button
                     android:id="@+id/createPostButton"
@@ -276,9 +275,9 @@
                     style="@style/Widget.MaterialComponents.Button"
                     android:background="@drawable/loginbuttonshape"
                     android:layout_marginTop="15dp"
-                    android:layout_marginBottom="40dp"
                     android:text="Tạo"
                     android:layout_marginHorizontal="10dp"
+                    android:layout_marginBottom="5dp"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:foreground="?attr/selectableItemBackground"/>
