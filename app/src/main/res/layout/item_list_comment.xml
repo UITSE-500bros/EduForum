@@ -13,7 +13,7 @@
             android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/avatarParent_CardView"
+                android:id="@+id/avatarParentComment"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_marginTop="10dp"

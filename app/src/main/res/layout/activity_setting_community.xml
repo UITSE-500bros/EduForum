@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".activity.ui.community.SettingCommunityActivity"
-            android:background="@color/backgroundColor"
+            android:backgroundTint="@color/backgroundColor"
             android:orientation="vertical"
             android:fitsSystemWindows="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">

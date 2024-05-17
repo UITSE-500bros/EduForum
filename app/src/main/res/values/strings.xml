@@ -95,4 +95,7 @@ Nh\u00e1\u00ba\u00adp m\u00c3\u00b4n l\u00e1\u00ba\u00adp tr\u00c3\u00acnh\n500 
     <string name="title_remove_community">Xóa cộng đồng</string>
     <string name="title_leave_community">Rời khỏi cộng đồng</string>
 
+    <string name="accept_all">Phê duyệt tất cả</string>
+    <string name="deny_all">Từ chối tất cả</string>
+
 </resources>
