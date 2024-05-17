@@ -4,7 +4,9 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -27,6 +29,7 @@ public class CommunityActivity extends AppCompatActivity {
     NewsFeedViewModel viewModel;
 
     PostAdapter postAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,15 +70,33 @@ public class CommunityActivity extends AppCompatActivity {
         MaterialToolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
 
-        SearchView searchView = (SearchView) toolbar.getMenu().findItem(R.id.search).getActionView();
-        searchView.setQueryHint("Search post");
 
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.community_menu, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.community_menu, menu);
+
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//
+//            //event  when user submit the search query
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return true;
+//            }
+//
+//            //event when user change the search query
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//
+//                return true;
+//            }
+//        });
+
+
         return true;
     }
 
@@ -88,10 +109,7 @@ public class CommunityActivity extends AppCompatActivity {
             filterDialog.show();
             return true;
         }
-        if(id == R.id.search){
-            Toast.makeText(this, "search", Toast.LENGTH_SHORT).show();
-            return true;
-        }
+
         if (id == R.id.setting) {
             Toast.makeText(this, "setting", Toast.LENGTH_SHORT).show();
             return true;

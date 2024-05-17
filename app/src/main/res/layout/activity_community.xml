@@ -38,6 +38,7 @@
                   app:layout_constraintTop_toTopOf="parent"
                   app:menu="@menu/community_menu"
                   app:navigationIcon="@drawable/back_icon"
+                  app:titleTextColor="@color/white"
                   app:title="Cộng đồng"/>
 
 
