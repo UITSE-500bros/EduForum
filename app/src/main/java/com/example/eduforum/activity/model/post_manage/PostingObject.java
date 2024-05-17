@@ -1,5 +1,7 @@
 package com.example.eduforum.activity.model.post_manage;
 
+import android.net.Uri;
+
 import java.util.List;
 
 public abstract class PostingObject {
@@ -12,7 +14,7 @@ public abstract class PostingObject {
     protected Integer totalUpVote;
     protected Integer totalDownVote;
     protected Integer voteDifference;
-    protected List<String> image;
+    protected List<Uri> image;
 
     public PostingObject() {
     }
@@ -28,7 +30,7 @@ public abstract class PostingObject {
 //        this.image = image;
 //    }
 
-    public PostingObject(String communityID, String postID, String content, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<String> image) {
+    public PostingObject(String communityID, String postID, String content, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<Uri> image) {
         this.communityID = communityID;
         this.postID = postID;
         this.content = content;
@@ -97,11 +99,11 @@ public abstract class PostingObject {
         this.totalDownVote = totalDownVote;
     }
 
-    public List<String> getImage() {
+    public List<Uri> getImage() {
         return image;
     }
 
-    public void setImage(List<String> image) {
+    public void setImage(List<Uri> image) {
         this.image = image;
     }
 

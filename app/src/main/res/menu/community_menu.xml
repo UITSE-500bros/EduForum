@@ -5,10 +5,16 @@
         android:id="@+id/search"
         android:icon="@drawable/search_icon"
         android:title="Search"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="com.google.android.material.search.SearchView" />
     <item
         android:id="@+id/filter"
         android:icon="@drawable/slider_03"
         android:title="Filter"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/setting"
+        android:icon="@drawable/settingicon"
+        android:title="Setting"
         app:showAsAction="ifRoom" />
 </menu>

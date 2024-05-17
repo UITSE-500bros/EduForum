@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.eduforum.R;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,7 +20,7 @@ import com.example.eduforum.activity.ui.community.adapter.PostAdapter;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.viewmodel.community.NewsFeedViewModel;
 import com.example.eduforum.databinding.ActivityCommunityBinding;
-import com.google.android.material.dialog.MaterialDialogs;
+import com.google.android.material.appbar.MaterialToolbar;
 
 public class CommunityActivity extends AppCompatActivity {
     ActivityCommunityBinding binding;
@@ -39,10 +39,9 @@ public class CommunityActivity extends AppCompatActivity {
         binding.setLifecycleOwner(this);
 
         CreateCommunityViewState currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
-        if(currentCommunity != null) {
+        if (currentCommunity != null) {
             viewModel.setCurrentCommunity(currentCommunity);
-        }
-        else{
+        } else {
             //finish();
         }
         // setup postRecyclerView
@@ -56,7 +55,7 @@ public class CommunityActivity extends AppCompatActivity {
             startActivity(intent);
         });
         viewModel.getCurrentCommunity().observe(this, community -> {
-            if(community != null){
+            if (community != null) {
                 binding.communityName.setText(community.getName());
                 binding.descriptionContentTextview.setText(community.getDescription());
             }
@@ -64,23 +63,40 @@ public class CommunityActivity extends AppCompatActivity {
         viewModel.getPostList().observe(this, postList -> {
             postAdapter.setPostList(postList);
         });
+        //setup toolbar
+        MaterialToolbar toolbar = binding.toolbar;
+        setSupportActionBar(toolbar);
+
+        SearchView searchView = (SearchView) toolbar.getMenu().findItem(R.id.search).getActionView();
+        searchView.setQueryHint("Search post");
+
+
     }
 
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.communitymenu, menu);
+        getMenuInflater().inflate(R.menu.community_menu, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.id.filter)
-        {
-            Dialog dialog = new Dialog(this);
-            dialog.setContentView(R.layout.community_filter);
-            dialog.show();
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+       int id = item.getItemId();
+        if (id == R.id.filter) {
+            Dialog filterDialog = new Dialog(this);
+            filterDialog.setContentView(R.layout.community_filter);
+            filterDialog.show();
             return true;
         }
+        if(id == R.id.search){
+            Toast.makeText(this, "search", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        if (id == R.id.setting) {
+            Toast.makeText(this, "setting", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
-
 }

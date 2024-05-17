@@ -4,12 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <!-- TODO: Update blank fragment layout -->
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/backgroundColor"
         android:fitsSystemWindows="true">
+
       <com.google.android.material.appbar.AppBarLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -26,7 +27,7 @@
 
 
               <com.google.android.material.appbar.MaterialToolbar
-                  android:id="@+id/topAppBar"
+                  android:id="@+id/toolbar"
                   style="@style/Widget.MaterialComponents.Toolbar.Primary"
                   android:layout_width="match_parent"
                   android:layout_height="?attr/actionBarSize"
@@ -35,9 +36,10 @@
                   app:layout_constraintHorizontal_bias="0.0"
                   app:layout_constraintStart_toStartOf="parent"
                   app:layout_constraintTop_toTopOf="parent"
-                  app:menu="@menu/communitymenu"
+                  app:menu="@menu/community_menu"
                   app:navigationIcon="@drawable/back_icon"
-                  app:title="Tên forum"/>
+                  app:title="Cộng đồng"/>
+
 
               <ImageView
               android:layout_width="match_parent"
@@ -45,7 +47,7 @@
               android:src="@drawable/community_background"
               android:scaleType="centerCrop"
               android:id="@+id/postImageView"
-              app:layout_constraintTop_toBottomOf="@+id/topAppBar"
+              app:layout_constraintTop_toBottomOf="@+id/toolbar"
 
               app:layout_constraintStart_toStartOf="parent"
               app:layout_constraintEnd_toEndOf="parent"
@@ -179,9 +181,10 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/topappbar"
+            android:id="@+id/scrollview"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
 
             >
             <androidx.recyclerview.widget.RecyclerView
@@ -197,6 +200,6 @@
 
                 />
         </ScrollView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>
