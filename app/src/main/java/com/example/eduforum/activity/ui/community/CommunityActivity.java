@@ -91,7 +91,8 @@ public class CommunityActivity extends AppCompatActivity {
 //            //event when user change the search query
 //            @Override
 //            public boolean onQueryTextChange(String newText) {
-//
+
+//               postAdapter.getFilter().filter(newText);
 //                return true;
 //            }
 //        });
