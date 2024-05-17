@@ -1,4 +1,6 @@
 package com.example.eduforum.activity.model.post_manage;
+import android.net.Uri;
+
 import java.util.List;
 
 public class Post extends PostingObject {
@@ -15,7 +17,7 @@ public class Post extends PostingObject {
         super();
     }
 
-    public Post(String postID, String communityID, String title, String content, Boolean isAnonymous, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, Integer totalComment, List<String> image, List<String> taggedUsers, List<Category> category) {
+    public Post(String postID, String communityID, String title, String content, Boolean isAnonymous, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, Integer totalComment, List<Uri> image, List<String> taggedUsers, List<Category> category) {
         super(postID, communityID, content, timeCreated, lastModified, creator, totalUpVote, totalDownVote, voteDifference, image);
         this.title = title;
         this.isAnonymous = isAnonymous;
