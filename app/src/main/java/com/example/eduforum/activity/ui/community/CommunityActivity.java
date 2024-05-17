@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.eduforum.R;
@@ -73,14 +74,21 @@ public class CommunityActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+       int id = item.getItemId();
         if (id == R.id.filter) {
-            // Thêm mã xử lý sự kiện click vào đây
-            // Ví dụ: hiển thị một thông báo
-            Toast.makeText(this, "Filter clicked", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "filter", Toast.LENGTH_SHORT).show();
             return true;
         }
+        if(id == R.id.search){
+            Toast.makeText(this, "search", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        if (id == R.id.setting) {
+            Toast.makeText(this, "setting", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 }

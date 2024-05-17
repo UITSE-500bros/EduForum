@@ -12,4 +12,9 @@
         android:icon="@drawable/slider_03"
         android:title="Filter"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/setting"
+        android:icon="@drawable/settingicon"
+        android:title="Setting"
+        app:showAsAction="ifRoom" />
 </menu>
