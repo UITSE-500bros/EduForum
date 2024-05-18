@@ -2,14 +2,16 @@ package com.example.eduforum.activity.model.post_manage;
 
 import android.net.Uri;
 
+import com.google.firebase.Timestamp;
+
 import java.util.List;
 
 public abstract class PostingObject {
     protected String communityID;
     protected String postID;
     protected String content;
-    protected String timeCreated;
-    protected String lastModified;
+    protected Timestamp timeCreated;
+    protected Timestamp lastModified;
     protected Creator creator;
     protected Integer totalUpVote;
     protected Integer totalDownVote;
@@ -32,7 +34,7 @@ public abstract class PostingObject {
 //    }
 
 
-    public PostingObject(String communityID, String postID, String content, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<Uri> image, List<String> downloadImage) {
+    public PostingObject(String communityID, String postID, String content, Timestamp timeCreated, Timestamp lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<Uri> image, List<String> downloadImage) {
         this.communityID = communityID;
         this.postID = postID;
         this.content = content;
@@ -46,7 +48,7 @@ public abstract class PostingObject {
         this.downloadImage = downloadImage;
     }
 
-    public PostingObject(String communityID, String postID, String content, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<Uri> image) {
+    public PostingObject(String communityID, String postID, String content, Timestamp timeCreated, Timestamp lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<Uri> image) {
         this.communityID = communityID;
         this.postID = postID;
         this.content = content;
@@ -83,19 +85,19 @@ public abstract class PostingObject {
         this.content = content;
     }
 
-    public String getTimeCreated() {
+    public Timestamp getTimeCreated() {
         return timeCreated;
     }
 
-    public void setTimeCreated(String timeCreated) {
+    public void setTimeCreated(Timestamp timeCreated) {
         this.timeCreated = timeCreated;
     }
 
-    public String getLastModified() {
+    public Timestamp getLastModified() {
         return lastModified;
     }
 
-    public void setLastModified(String lastModified) {
+    public void setLastModified(Timestamp lastModified) {
         this.lastModified = lastModified;
     }
 

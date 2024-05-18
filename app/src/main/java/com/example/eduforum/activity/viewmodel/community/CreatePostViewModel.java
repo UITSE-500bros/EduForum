@@ -54,12 +54,14 @@ public class CreatePostViewModel extends ViewModel {
         if(!isPostValid(newPost)){
             return;
         }
-        Post post = new Post(newPost.getPostId(), communityId.getValue(), newPost.getTitle(), newPost.getContent(), newPost.getIsAnonymous(), newPost.getDate(), newPost.getDate(), newPost.getCreator(), 0, 0, 0,0, null, null, newPost.getTags());
+        String sth = communityId.getValue();
+        Post post = new Post(newPost.getPostId(), sth, newPost.getTitle(), newPost.getContent(), newPost.getIsAnonymous(), null, null, newPost.getCreator(), 0, 0, 0,0, null, null, newPost.getTags());
         // add new post to database
         postRepository.addPost(post, new IPostCallback() {
             @Override
             public void onAddPostSuccess(Post newPost) {
-                PostViewState newPostViewState = new PostViewState(newPost.getPostID(), newPost.getCreator(), null, newPost.getTitle(), newPost.getContent(), newPost.getAnonymous(), newPost.getTimeCreated(), newPost.getImage(), newPost.getTaggedUsers(), newPost.getCategory());
+                // TODO: convert timestamp thanh UI doc dc
+                PostViewState newPostViewState = new PostViewState(newPost.getPostID(), newPost.getCreator(), null, newPost.getTitle(), newPost.getContent(), newPost.getAnonymous(), null, newPost.getImage(), newPost.getTaggedUsers(), newPost.getCategory());
                 postViewState.setValue(newPostViewState);
                 isPostCreated.setValue(true);
             }

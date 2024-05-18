@@ -43,18 +43,19 @@ public class PostDetailsViewModel extends ViewModel {
         return cmts;
     }
 
+    // TODO: anh nam lam cai nay ne
     private List<CommentViewState> convertCommentListToCommentViewStateList(List<Comment> comments){
         List<CommentViewState> commentViewStates = new ArrayList<>();
         for(Comment comment: comments){
             commentViewStates.add(new CommentViewState(
                     comment.getCommentID(),
                     comment.getContent(),
-                    comment.getTimeCreated(),
+                    null,
                     comment.getCreator(),
                     comment.getTotalUpVote(),
                     comment.getTotalDownVote(),
                     comment.getVoteDifference(),
-                    comment.getLastModified(),
+                    null,
                     comment.getImage(),
                     comment.getReplyCommentID(),
                     comment.getTotalReply()
@@ -64,10 +65,12 @@ public class PostDetailsViewModel extends ViewModel {
 
     }
 
+
+    // TODO: anh em lam cai nay ne
     public void setCurrentPost(PostViewState postViewState) {
         currentPost.setValue(postViewState);
 
-        Post post = new Post(postViewState.getPostId(), postViewState.getCommunity().getCommunityID(), postViewState.getTitle(), postViewState.getContent(), postViewState.getIsAnonymous(), postViewState.getDate(), postViewState.getDate(), postViewState.getCreator(), 0, 0, 0,0, null, null, postViewState.getTags());
+        Post post = new Post(postViewState.getPostId(), postViewState.getCommunity().getCommunityID(), postViewState.getTitle(), postViewState.getContent(), postViewState.getIsAnonymous(), null, null, postViewState.getCreator(), 0, 0, 0,0, null, null, postViewState.getTags());
         commentRepository.loadTopLevelComments(post, new CommentCallback() {
 
             @Override
