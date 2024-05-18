@@ -4,12 +4,12 @@ import android.net.Uri;
 import java.util.List;
 
 public class Post extends PostingObject {
-
     private String title;
     private Boolean isAnonymous;
     private Integer totalComment;
     private List<String> taggedUsers;
     private List<Category> category;
+
 
     public Post() {
         super();
@@ -17,6 +17,15 @@ public class Post extends PostingObject {
 
     public Post(String postID, String communityID, String title, String content, Boolean isAnonymous, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, Integer totalComment, List<Uri> image, List<String> taggedUsers, List<Category> category) {
         super(postID, communityID, content, timeCreated, lastModified, creator, totalUpVote, totalDownVote, voteDifference, image);
+        this.title = title;
+        this.isAnonymous = isAnonymous;
+        this.totalComment = totalComment;
+        this.taggedUsers = taggedUsers;
+        this.category = category;
+    }
+
+    public Post(String communityID, String postID, String content, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<Uri> image, List<String> downloadImage, String title, Boolean isAnonymous, Integer totalComment, List<String> taggedUsers, List<Category> category) {
+        super(communityID, postID, content, timeCreated, lastModified, creator, totalUpVote, totalDownVote, voteDifference, image, downloadImage);
         this.title = title;
         this.isAnonymous = isAnonymous;
         this.totalComment = totalComment;

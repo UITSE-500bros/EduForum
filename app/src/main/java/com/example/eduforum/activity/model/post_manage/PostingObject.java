@@ -15,6 +15,7 @@ public abstract class PostingObject {
     protected Integer totalDownVote;
     protected Integer voteDifference;
     protected List<Uri> image;
+    protected List<String> downloadImage;
 
     public PostingObject() {
     }
@@ -30,6 +31,21 @@ public abstract class PostingObject {
 //        this.image = image;
 //    }
 
+
+    public PostingObject(String communityID, String postID, String content, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<Uri> image, List<String> downloadImage) {
+        this.communityID = communityID;
+        this.postID = postID;
+        this.content = content;
+        this.timeCreated = timeCreated;
+        this.lastModified = lastModified;
+        this.creator = creator;
+        this.totalUpVote = totalUpVote;
+        this.totalDownVote = totalDownVote;
+        this.voteDifference = voteDifference;
+        this.image = image;
+        this.downloadImage = downloadImage;
+    }
+
     public PostingObject(String communityID, String postID, String content, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<Uri> image) {
         this.communityID = communityID;
         this.postID = postID;
@@ -41,6 +57,14 @@ public abstract class PostingObject {
         this.totalDownVote = totalDownVote;
         this.voteDifference = voteDifference;
         this.image = image;
+    }
+
+    public List<String> getDownloadImage() {
+        return downloadImage;
+    }
+
+    public void setDownloadImage(List<String> downloadImage) {
+        this.downloadImage = downloadImage;
     }
 
     public Integer getVoteDifference() {
