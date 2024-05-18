@@ -9,12 +9,21 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.ui.community.adapter.CommentAdapter;
+import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
+import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
+import com.example.eduforum.activity.viewmodel.community.PostDetailsViewModel;
 import com.example.eduforum.databinding.ActivityPostDetailBinding;
 
 public class PostDetailActivity extends AppCompatActivity {
     private ActivityPostDetailBinding binding;
+    private PostDetailsViewModel viewModel;
+
+    private CommentAdapter commentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,5 +46,27 @@ public class PostDetailActivity extends AppCompatActivity {
             //});
             popupMenu.show();
         });
+
+        viewModel = new ViewModelProvider(this).get(PostDetailsViewModel.class);
+        commentAdapter = new CommentAdapter(this, viewModel.getComments().getValue());
+
+        PostViewState postViewState = (PostViewState) getIntent().getSerializableExtra("postViewState");
+        if (postViewState != null) {
+            viewModel.setCurrentPost(postViewState);
+        } else {
+            //finish();
+        }
+
+        binding.recyclecomment.setAdapter(commentAdapter);
+        binding.recyclecomment.setLayoutManager(new LinearLayoutManager(this));
+
+        viewModel.getComments().observe(this, commentViewStates -> {
+            commentAdapter.setCommentList(commentViewStates);
+        });
+
+
+
     }
+
+
 }

@@ -4,14 +4,12 @@ import android.net.Uri;
 import java.util.List;
 
 public class Post extends PostingObject {
-    private String postID;
-    private String communityID;
+
     private String title;
     private Boolean isAnonymous;
     private Integer totalComment;
     private List<String> taggedUsers;
     private List<Category> category;
-
 
     public Post() {
         super();
@@ -25,9 +23,6 @@ public class Post extends PostingObject {
         this.taggedUsers = taggedUsers;
         this.category = category;
     }
-
-
-
 
     public Boolean getAnonymous() {
         return isAnonymous;
