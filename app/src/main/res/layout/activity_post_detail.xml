@@ -44,7 +44,7 @@
                 android:layout_marginBottom="2dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
@@ -100,7 +100,7 @@
 
                                 <LinearLayout
                                     android:id="@+id/contentComment_LinearLayout"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="10dp"
                                     android:layout_marginTop="10dp"
@@ -154,7 +154,7 @@
                                 android:layout_marginStart="10dp"
                                 android:layout_marginEnd="10dp"
                                 android:maxLength="1000"
-                                android:text="Hé nhô các bạn, mình đang cần tìm 2 con ghệ vào chung team để mình gánh. Đồ án làm về EduForum. Nếu quan tâm hãy liên hệ sđt: 0902774213"
+                                android:text="1"
                                 android:textColor="@color/white"
                                 android:textSize="16sp"
                                 android:textStyle="normal" />

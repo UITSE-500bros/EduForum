@@ -11,6 +11,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/backgroundColor"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -37,9 +38,8 @@
             <LinearLayout
                 android:id="@+id/main"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:background="@color/backgroundColor"
                 tools:context=".activity.ui.community.CreatePostActivity">
 
                 <TextView

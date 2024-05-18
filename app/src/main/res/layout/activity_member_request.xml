@@ -62,7 +62,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:background="@color/tagBackgroundColor"
-                    android:fitsSystemWindows="true"
                     >
 
                     <com.google.android.material.button.MaterialButton
