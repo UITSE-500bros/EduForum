@@ -1,5 +1,7 @@
 package com.example.eduforum.activity.ui.community.adapter;
 
+import android.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -66,14 +68,37 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         } else if (holder instanceof VideoViewHolder) {
             VideoViewHolder videoViewHolder = (VideoViewHolder) holder;
             videoViewHolder.binding.video.setVideoURI(mediaItem.getUri());
+
             videoViewHolder.binding.video.setOnPreparedListener(mp -> {
                 mp.setLooping(true);
                 mp.start();
             });
+            videoViewHolder.binding.video.setOnErrorListener((mp, what, extra) -> {
+                // Log the error or show a message to the user
+                Log.e("VideoView", "Error occurred while playing video.");
+                return true;
+            });
+
         }
+        holder.itemView.setOnLongClickListener(v -> {
+            new AlertDialog.Builder(v.getContext())
+                    .setTitle("Xóa ảnh")
+                    .setMessage("Bạn muốn xóa ảnh/video  này?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        removeItem((int) position);
+                        notifyDataSetChanged();
+                    })
+                    .setNegativeButton("No", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
+            return true;
+        });
+
+
 
     }
-    public void removeItem(AdapterView<?> position) {
+    public void removeItem(int position) {
         mediaItems.remove(position);
 
     }
@@ -100,5 +125,7 @@ public class MediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             this.binding = binding;
         }
     }
+
+
 }
 

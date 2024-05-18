@@ -172,6 +172,11 @@ public class CreatePostActivity extends AppCompatActivity {
                     if (uris != null) {
                         ArrayList<MediaItem> uriList = new ArrayList<>();
                         ArrayList<Uri> uriList1 = new ArrayList<>();
+                        // Get the current list of images
+                        PostViewState postViewState = viewModel.getPostViewState().getValue();
+                        if (postViewState != null && postViewState.getImage() != null) {
+                            uriList1.addAll(postViewState.getImage());
+                        }
                         for(int i = 0; i < uris.size(); i++) {
                             ImageView imageView = new ImageView(this);
                             imageView.setImageURI(uris.get(i));
@@ -185,8 +190,6 @@ public class CreatePostActivity extends AppCompatActivity {
                         }
                         MediaAdapter imageAdapter = new MediaAdapter(uriList);
                         binding.imageRecyclerView.setAdapter(imageAdapter);
-                        PostViewState postViewState = viewModel.getPostViewState().getValue();
-                        assert postViewState != null;
                         postViewState.setImage(uriList1);
                         viewModel.setPostViewState(postViewState);
                     } else {

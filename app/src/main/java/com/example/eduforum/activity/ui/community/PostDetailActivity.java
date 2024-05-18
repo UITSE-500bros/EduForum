@@ -2,6 +2,7 @@ package com.example.eduforum.activity.ui.community;
 
 import android.os.Bundle;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,12 +10,24 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.ui.community.adapter.CommentAdapter;
+import com.example.eduforum.activity.ui.community.adapter.PostAdapter;
+import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
+import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
+import com.example.eduforum.activity.viewmodel.community.PostDetailsViewModel;
 import com.example.eduforum.databinding.ActivityPostDetailBinding;
 
 public class PostDetailActivity extends AppCompatActivity {
     private ActivityPostDetailBinding binding;
+    private PostDetailsViewModel viewModel;
+
+    private CommentAdapter commentAdapter;
+
+    private PostAdapter postAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,5 +50,32 @@ public class PostDetailActivity extends AppCompatActivity {
             //});
             popupMenu.show();
         });
+
+        viewModel = new ViewModelProvider(this).get(PostDetailsViewModel.class);
+        commentAdapter = new CommentAdapter(this, viewModel.getComments().getValue());
+
+        PostViewState postViewState = (PostViewState) getIntent().getSerializableExtra("currentPost");
+        if (postViewState != null) {
+            viewModel.setCurrentPost(postViewState);
+            binding.titlePost.setText(postViewState.getTitle().toString());
+            binding.contentPost.setText(postViewState.getContent().toString());
+            binding.userNameTextView.setText(postViewState.getCreator().name);
+
+//            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
+        } else {
+            //finish();
+        }
+
+        binding.recyclecomment.setAdapter(commentAdapter);
+        binding.recyclecomment.setLayoutManager(new LinearLayoutManager(this));
+
+        viewModel.getComments().observe(this, commentViewStates -> {
+            commentAdapter.setCommentList(commentViewStates);
+        });
+
+
+
     }
+
+
 }

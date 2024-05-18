@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.example.eduforum.activity.model.post_manage.Category;
@@ -21,6 +22,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.OnProgressListener;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -28,21 +30,26 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
 public class PostRepository {
     private static PostRepository instance;
     private final FirebaseFirestore db;
-    private final FirebaseStorage firebaseStorage;
+    private final FirebaseStorage storage;
 
     public PostRepository() {
         db = FirebaseFirestore.getInstance();
-        firebaseStorage = FirebaseStorage.getInstance();
+        storage = FirebaseStorage.getInstance();
     }
 
     public static synchronized PostRepository getInstance() {
@@ -81,6 +88,42 @@ public class PostRepository {
                 });
     }
 
+    private void uploadPostImages(Post post, IPostCallback callback) {
+        StorageReference postRef = storage.getReference("Post/" + post.getPostID() + "/images");
+
+        List<Uri> filesUri = post.getImage();
+        int sequenceNumber = 0;
+
+        for (Uri fileUri : filesUri) {
+            String uniqueFileName = String.format(Locale.US, "%04d-%d-%s", sequenceNumber++, System.currentTimeMillis(), fileUri.getLastPathSegment());
+
+            StorageReference fileRef = postRef.child(uniqueFileName);
+
+
+            UploadTask uploadTask = fileRef.putFile(fileUri);
+
+            uploadTask.addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                    Log.d(FlagsList.DEBUG_POST_FLAG, "Upload is paused");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // Handle successful uploads on complete
+                    // ...
+                }
+            });
+
+        }
+    }
+
+
     public void editPost(Post post, IPostCallback callback) {
         db.collection("Community")
                 .document(post.getCommunityID())
@@ -108,24 +151,24 @@ public class PostRepository {
                 .whereEqualTo("userID", userID)
                 .whereEqualTo("communityID", communityID)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    WriteBatch batch = db.batch();
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        batch.update(document.getReference(), "totalNewPost", 0);
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        WriteBatch batch = db.batch();
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            batch.update(document.getReference(), "totalNewPost", 0);
+                        }
+                        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(FlagsList.DEBUG_POST_FLAG, "New post count reset successfully!");
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(FlagsList.DEBUG_POST_FLAG, "Error resetting new post count", e);
+                            }
+                        });
                     }
-                    batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(FlagsList.DEBUG_POST_FLAG, "New post count reset successfully!");
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(FlagsList.DEBUG_POST_FLAG, "Error resetting new post count", e);
-                        }
-                    });
-                }
                 });
     }
 
@@ -213,7 +256,7 @@ public class PostRepository {
 
         if (categories != null) {
             List<String> categoryIDs = new ArrayList<>();
-            for (Category category: categories) {
+            for (Category category : categories) {
                 categoryIDs.add(category.getCategoryID());
             }
 
@@ -296,7 +339,7 @@ public class PostRepository {
 
     public void subscribePost(String communityID, String postID, String userID, IPostCallback callback) {
         db.collection("Subscription")
-                .add(new Subscription(communityID,postID,userID))
+                .add(new Subscription(communityID, postID, userID))
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -335,8 +378,7 @@ public class PostRepository {
                     if (voteType == 1) {
                         transaction.update(postRef, "totalUpVote", FieldValue.increment(1));
                         transaction.update(postRef, "voteDifference", FieldValue.increment(1));
-                    }
-                    else if (voteType == -1) {
+                    } else if (voteType == -1) {
                         transaction.update(postRef, "totalDownVote", FieldValue.increment(1));
                         transaction.update(postRef, "voteDifference", FieldValue.increment(-1));
                     }
@@ -353,8 +395,7 @@ public class PostRepository {
                         transaction.update(postRef, "totalUpVote", FieldValue.increment(-1));
                         transaction.update(postRef, "voteDifference", FieldValue.increment(-1));
                         transaction.update(voteRef, "voteType", 0);
-                    }
-                    else if (voteType == -1) {
+                    } else if (voteType == -1) {
                         transaction.update(postRef, "totalUpVote", FieldValue.increment(-1));
                         transaction.update(postRef, "totalDownVote", FieldValue.increment(1));
                         transaction.update(postRef, "voteDifference", FieldValue.increment(-2));
@@ -366,8 +407,7 @@ public class PostRepository {
                         transaction.update(postRef, "totalDownVote", FieldValue.increment(-1));
                         transaction.update(postRef, "voteDifference", FieldValue.increment(2));
                         transaction.update(voteRef, "voteType", voteType);
-                    }
-                    else if (voteType == -1) {
+                    } else if (voteType == -1) {
                         transaction.update(postRef, "totalDownVote", FieldValue.increment(-1));
                         transaction.update(postRef, "voteDifference", FieldValue.increment(1));
                         transaction.update(voteRef, "voteType", 0);
@@ -388,7 +428,6 @@ public class PostRepository {
             }
 
         });
-
 
 
         //how to call this function in FE @Duong Thuan Tri
