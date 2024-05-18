@@ -2,6 +2,7 @@ package com.example.eduforum.activity.ui.community;
 
 import android.os.Bundle;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.eduforum.R;
 import com.example.eduforum.activity.ui.community.adapter.CommentAdapter;
+import com.example.eduforum.activity.ui.community.adapter.PostAdapter;
 import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.activity.viewmodel.community.PostDetailsViewModel;
@@ -24,6 +26,8 @@ public class PostDetailActivity extends AppCompatActivity {
     private PostDetailsViewModel viewModel;
 
     private CommentAdapter commentAdapter;
+
+    private PostAdapter postAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +54,14 @@ public class PostDetailActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(PostDetailsViewModel.class);
         commentAdapter = new CommentAdapter(this, viewModel.getComments().getValue());
 
-        PostViewState postViewState = (PostViewState) getIntent().getSerializableExtra("postViewState");
+        PostViewState postViewState = (PostViewState) getIntent().getSerializableExtra("currentPost");
         if (postViewState != null) {
             viewModel.setCurrentPost(postViewState);
+            binding.titlePost.setText(postViewState.getTitle().toString());
+            binding.contentPost.setText(postViewState.getContent().toString());
+            binding.userNameTextView.setText(postViewState.getCreator().name);
+
+//            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
         } else {
             //finish();
         }

@@ -28,12 +28,11 @@ public class PostDetailsViewModel extends ViewModel {
     MutableLiveData<PostViewState> currentPost;
 
 
-    public PostDetailsViewModel(PostViewState postViewState) {
+    public PostDetailsViewModel() {
         postRepository = PostRepository.getInstance();
         commentRepository = CommentRepository.getInstance();
         cmts = new MutableLiveData<>();
         currentPost = new MutableLiveData<>();
-        currentPost.setValue(postViewState);
     }
 
     public LiveData<PostViewState> getPost(){
@@ -65,12 +64,13 @@ public class PostDetailsViewModel extends ViewModel {
 
     }
 
-
+    private Post postInstance;
     // TODO: anh em lam cai nay ne
     public void setCurrentPost(PostViewState postViewState) {
         currentPost.setValue(postViewState);
 
         Post post = new Post(postViewState.getPostId(), postViewState.getCommunity().getCommunityID(), postViewState.getTitle(), postViewState.getContent(), postViewState.getIsAnonymous(), null, null, postViewState.getCreator(), 0, 0, 0,0, null, null, postViewState.getTags());
+        postInstance = post;
         commentRepository.loadTopLevelComments(post, new CommentCallback() {
 
             @Override
@@ -108,5 +108,109 @@ public class PostDetailsViewModel extends ViewModel {
 
             }
         });
+    }
+
+    public void loadComments(PostViewState postViewState){
+        Post post = new Post(postViewState.getPostId(), postViewState.getCommunity().getCommunityID(), postViewState.getTitle(), postViewState.getContent(), postViewState.getIsAnonymous(), null, null, postViewState.getCreator(), 0, 0, 0,0, null, null, postViewState.getTags());
+        commentRepository.loadTopLevelComments(post, new CommentCallback() {
+
+            @Override
+            public void onCreateSuccess(Comment comments) {
+
+            }
+
+            @Override
+            public void onFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onInitialLoadSuccess(List<Comment> comments) {
+                cmts.setValue(convertCommentListToCommentViewStateList(comments));
+            }
+
+            @Override
+            public void onLoadRepliesSuccess(List<Comment> comments) {
+
+            }
+
+            @Override
+            public void onDeleteSuccess() {
+
+            }
+
+            @Override
+            public void onUpdateSuccess(Comment comment) {
+
+            }
+
+            @Override
+            public void onGetVoteStatusSuccess(int voteType) {
+
+            }
+        });
+    }
+
+    public void upVote() {
+        postRepository.updateVoteCount(postInstance, FirebaseAuth.getInstance().getCurrentUser().getUid(), 1);
+    }
+
+    public void downVote() {
+        postRepository.updateVoteCount(postInstance, FirebaseAuth.getInstance().getCurrentUser().getUid(), -1);
+    }
+
+    public void addParentComment(String comment) {
+        Comment newComment = new Comment();
+        commentRepository.createComment(postInstance, newComment, new CommentCallback() {
+            @Override
+            public void onCreateSuccess(Comment comments) {
+                List<CommentViewState> commentViewStates = cmts.getValue();
+                commentViewStates.add(new CommentViewState(
+                        comments.getCommentID(),
+                        comments.getContent(),
+                        null,
+                        comments.getCreator(),
+                        comments.getTotalUpVote(),
+                        comments.getTotalDownVote(),
+                        comments.getVoteDifference(),
+                        null,
+                        comments.getImage(),
+                        comments.getReplyCommentID(),
+                        comments.getTotalReply()
+                ));
+                cmts.setValue(commentViewStates);
+            }
+
+            @Override
+            public void onFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onInitialLoadSuccess(List<Comment> comments) {
+
+            }
+
+            @Override
+            public void onLoadRepliesSuccess(List<Comment> comments) {
+
+            }
+
+            @Override
+            public void onDeleteSuccess() {
+
+            }
+
+            @Override
+            public void onUpdateSuccess(Comment comment) {
+
+            }
+
+            @Override
+            public void onGetVoteStatusSuccess(int voteType) {
+
+            }
+        });
+
     }
 }
