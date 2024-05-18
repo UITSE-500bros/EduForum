@@ -2,6 +2,8 @@ package com.example.eduforum.activity.model.post_manage;
 
 import android.net.Uri;
 
+import com.google.firebase.Timestamp;
+
 import java.util.List;
 
 public class Comment extends PostingObject {
@@ -13,13 +15,13 @@ public class Comment extends PostingObject {
         super();
     }
 
-    public Comment(String commentID, String postID, String communityID, String parentID, String content, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<Uri> image) {
+    public Comment(String commentID, String postID, String communityID, String parentID, String content, Timestamp timeCreated, Timestamp lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<Uri> image) {
         super(postID, communityID, content, timeCreated, lastModified, creator, totalUpVote, totalDownVote, voteDifference, image);
         this.commentID = commentID;
         this.replyCommentID = parentID;
     }
 
-    public Comment(String communityID, String postID, String content, String timeCreated, String lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<Uri> image, String commentID, String replyCommentID, String postID1, String communityID1, String totalReply) {
+    public Comment(String communityID, String postID, String content, Timestamp timeCreated, Timestamp lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<Uri> image, String commentID, String replyCommentID, String postID1, String communityID1, String totalReply) {
         super(communityID, postID, content, timeCreated, lastModified, creator, totalUpVote, totalDownVote, voteDifference, image);
         this.commentID = commentID;
         this.replyCommentID = replyCommentID;
