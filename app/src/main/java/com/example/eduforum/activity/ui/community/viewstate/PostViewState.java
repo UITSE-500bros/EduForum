@@ -7,9 +7,10 @@ import com.example.eduforum.activity.model.post_manage.Creator;
 import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PostViewState {
+public class PostViewState implements Serializable {
     private String postId;
     private Creator creator;
     private CreateCommunityViewState community;

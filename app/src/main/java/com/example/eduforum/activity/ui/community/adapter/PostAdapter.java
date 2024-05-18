@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.ui.community.PostDetailActivity;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.databinding.ItemCommunityBinding;
 import com.example.eduforum.databinding.ItemNotiBinding;
@@ -47,7 +48,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         PostViewState post = postList.get(position);
         holder.bind(post);
         holder.itemView.setOnClickListener(v -> {
-
+            Intent intent = new Intent(context, PostDetailActivity.class);
+            intent.putExtra("currentPost", postList.get(position));
+            context.startActivity(intent);
         });
         holder.binding.setting.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(context, holder.binding.setting);
