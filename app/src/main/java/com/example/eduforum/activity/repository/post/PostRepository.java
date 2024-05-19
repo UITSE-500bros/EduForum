@@ -90,6 +90,10 @@ public class PostRepository {
         StorageReference postRef = storage.getReference("Post/" + post.getPostID() + "/images");
 
         List<Uri> filesUri = post.getImage();
+        if (filesUri == null || filesUri.isEmpty()) {
+            callback.onAddPostSuccess(post);
+            return;
+        }
         int sequenceNumber = 0;
 
         StorageMetadata metadata = new StorageMetadata.Builder()
