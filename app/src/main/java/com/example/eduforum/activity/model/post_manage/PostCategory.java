@@ -9,6 +9,8 @@ public class PostCategory {
         this.title = title;
     }
 
+    public PostCategory() {
+    }
     public PostCategory(Category category) {
         this.categoryID = category.getCategoryID();
         this.title = category.getTitle();

@@ -82,6 +82,7 @@ public class CategoryRepository {
                 });
     }
     // delete a category
+    // TODO: delete category in post when delete category - THY
     public void deleteCategory(Community community, Category category, CategoryCallback callback) {
         final CollectionReference categoryRef = db.collection("Community").document(community.getCommunityId()).collection("Category");
         categoryRef.document(category.getCategoryID()).delete()
