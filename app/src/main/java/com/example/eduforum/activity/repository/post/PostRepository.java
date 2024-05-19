@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.activity.model.post_manage.Post;
+import com.example.eduforum.activity.model.post_manage.PostCategory;
 import com.example.eduforum.activity.model.subscription_manage.Subscription;
 import com.example.eduforum.activity.repository.post.dto.AddPostDTO;
 import com.example.eduforum.activity.util.FlagsList;
@@ -60,7 +61,6 @@ public class PostRepository {
         return instance;
     }
 
-    // TODO: add post image to firebase storage - THY
 
     public void addPost(Post post, IPostCallback callback) {
         AddPostDTO addPostDTO = new AddPostDTO(post);
@@ -281,12 +281,13 @@ public class PostRepository {
         }
 
         if (categories != null) {
-            List<String> categoryIDs = new ArrayList<>();
+            List<PostCategory> categoryIDs = new ArrayList<>();
             for (Category category : categories) {
-                categoryIDs.add(category.getCategoryID());
+                PostCategory newCategory = new PostCategory(category);
+                categoryIDs.add(newCategory);
             }
 
-            List<List<String>> batches = new ArrayList<>();
+            List<List<PostCategory>> batches = new ArrayList<>();
             int batchSize = 10;
             for (int i = 0; i < categoryIDs.size(); i += batchSize) {
                 int end = Math.min(categoryIDs.size(), i + batchSize);
@@ -294,8 +295,8 @@ public class PostRepository {
             }
 
             List<Task<QuerySnapshot>> tasks = new ArrayList<>();
-            for (List<String> batch : batches) {
-                Task<QuerySnapshot> task = postQuery.whereArrayContainsAny("categories.categoryID", batch).get();
+            for (List<PostCategory> batch : batches) {
+                Task<QuerySnapshot> task = postQuery.whereArrayContainsAny("category", batch).get();
                 tasks.add(task);
             }
 
