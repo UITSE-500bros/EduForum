@@ -21,8 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
+
     private Context context;
     private List<PostViewState> postList;
+
 
     public PostAdapter(Context context, List<PostViewState> postList) {
         this.context = context;
@@ -30,6 +32,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             this.postList = new ArrayList<>();
         }
         else this.postList = postList;
+
     }
     public void setPostList(List<PostViewState> postList) {
         this.postList = postList;
@@ -39,8 +42,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         ItemCommunityBinding itemCommunityBinding = ItemCommunityBinding.inflate(layoutInflater, parent, false);
+
+
         return new PostViewHolder(itemCommunityBinding);
     }
 
@@ -86,7 +92,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             binding.time.setText(post.getDate());
 
             if(post.getTags()!=null){
-                TagsAdapter tagsAdapter = new TagsAdapter(post.getTags());
+                TagsAdapter tagsAdapter = new TagsAdapter(post.getTags(), new TagsAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        //handle item click here
+                    }
+                });
                 binding.tagslayout.setAdapter(tagsAdapter);
                 binding.tagslayout.setLayoutManager(new LinearLayoutManager(binding.tagslayout.getContext(), LinearLayoutManager.HORIZONTAL, false));
             }
