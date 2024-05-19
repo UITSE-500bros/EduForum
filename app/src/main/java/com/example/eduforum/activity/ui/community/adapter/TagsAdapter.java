@@ -16,13 +16,9 @@ import java.util.List;
 
 public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder>{
     private List<PostCategory> tagsList;
-    private OnItemClickListener listener;
-    public interface OnItemClickListener {
-        void onItemClick( int position);
-    }
-    public TagsAdapter(List<PostCategory> tagsList, OnItemClickListener listener) {
+
+    public TagsAdapter(List<PostCategory> tagsList) {
         this.tagsList = tagsList;
-        this.listener = listener;
     }
 
     @NonNull
@@ -31,7 +27,7 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         ItemTagsBinding itemTagsBinding = ItemTagsBinding.inflate(layoutInflater, parent, false);
 
-        return new TagsViewHolder(itemTagsBinding,listener);
+        return new TagsViewHolder(itemTagsBinding);
     }
 
     @Override
@@ -39,7 +35,10 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
         PostCategory tag = tagsList.get(position);
         holder.binding.setTagText(tag.getTitle());
         holder.binding.executePendingBindings();
+        holder.itemView.setOnClickListener(v -> {
+            //
 
+        });
     }
 
     @Override
@@ -50,19 +49,11 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
     public class TagsViewHolder extends RecyclerView.ViewHolder{
 
         private ItemTagsBinding binding;
-        public TagsViewHolder(ItemTagsBinding binding, OnItemClickListener listener) {
+        public TagsViewHolder(ItemTagsBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
 
-            itemView.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    if (listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(position);
-                    }
-                }
-            });
+
 
 
         }

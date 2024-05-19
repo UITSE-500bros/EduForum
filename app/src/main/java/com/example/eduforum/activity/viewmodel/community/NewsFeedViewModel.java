@@ -7,6 +7,7 @@ import com.example.eduforum.activity.model.community_manage.Community;
 
 import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.activity.model.post_manage.Post;
+import com.example.eduforum.activity.model.post_manage.PostCategory;
 import com.example.eduforum.activity.repository.community.CommunityRepository;
 import com.example.eduforum.activity.repository.community.ICommunityCallBack_C;
 import com.example.eduforum.activity.repository.post.IPostCallback;
@@ -26,7 +27,7 @@ public class NewsFeedViewModel extends ViewModel {
     MutableLiveData<String> communityId;
     MutableLiveData<List<PostViewState>> postList; // posts displaying in news feed, not always the same as the posts in the community
     MutableLiveData<FilterViewState> currentFilter;
-    MutableLiveData<List<Category>> allCategories;
+    MutableLiveData<List<PostCategory>> allCategories;
     CommunityRepository communityRepository;
     PostRepository postRepository;
     public NewsFeedViewModel() {
@@ -39,10 +40,10 @@ public class NewsFeedViewModel extends ViewModel {
         allCategories = new MutableLiveData<>();
         // allCategories.setValue(communityRepository.getCategories());
         // for now, hardcode the categories
-        List<Category> categories = new ArrayList<>();
-        categories.add(new Category("1", "Hỏi đáp", false));
-        categories.add(new Category("2", "Chia sẻ", false));
-        categories.add(new Category("3", "Tuyển dụng", false));
+        List<PostCategory> categories = new ArrayList<>();
+        categories.add(new PostCategory("1", "Hỏi đáp"));
+        categories.add(new PostCategory("2", "Chia sẻ"));
+        categories.add(new PostCategory("3", "Tuyển dụng"));
         allCategories.setValue(categories);
         currentFilter = new MutableLiveData<>();
         currentFilter.setValue(new FilterViewState());
@@ -188,7 +189,7 @@ public class NewsFeedViewModel extends ViewModel {
     public LiveData<List<PostViewState>> getPostList() {
         return postList;
     }
-    public LiveData<List<Category>> getAllCategories() {
+    public LiveData<List<PostCategory>> getAllCategories() {
         return allCategories;
     }
 

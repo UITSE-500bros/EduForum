@@ -112,8 +112,8 @@ public class CommunityActivity extends AppCompatActivity {
             CommunityFilterBinding filterBinding = CommunityFilterBinding.inflate(getLayoutInflater());
             filterDialog.setContentView(filterBinding.getRoot());
             filterBinding.setLifecycleOwner(this);
-            //TagsAdapter tagsAdapter = new TagsAdapter( viewModel.getAllCategories().getValue());
-            //filterBinding.categoryRecyclerView.setAdapter(tagsAdapter);
+            TagsAdapter tagsAdapter = new TagsAdapter( viewModel.getAllCategories().getValue());
+            filterBinding.categoryRecyclerView.setAdapter(tagsAdapter);
             filterBinding.categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             filterBinding.applyButton.setOnClickListener(v -> {
                 // for testing
