@@ -17,8 +17,11 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.UUID;
 
 public class SignUpRepository {
     private static SignUpRepository instance;
@@ -74,21 +77,26 @@ public class SignUpRepository {
     public void uploadProfilePicture(User user) {
         StorageReference usersRef = storage.getReference("User");
         Uri fileUri = Uri.parse(user.getProfilePicture());
-        StorageReference userImgRef = usersRef.child(user.getUserId()+"/images/"+fileUri.getLastPathSegment());
+        StorageReference userImgRef = usersRef.child(user.getUserId()+"/images/"+ UUID.randomUUID().toString());
         user.setProfilePicture(userImgRef.getPath());
-        UploadTask uploadTask = userImgRef.putFile(fileUri);
+        StorageMetadata metadata = new StorageMetadata.Builder()
+                .setContentType("image/jpeg")
+                .build();
+
+        UploadTask uploadTask = userImgRef.putFile(fileUri, metadata);
 
         // Register observers to listen for when the upload is done or if it fails
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle unsuccessful uploads
+                Log.w(FlagsList.DEBUG_REGISTER_FLAG, "Image upload failed: ", exception);
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-
+                Log.d(FlagsList.DEBUG_REGISTER_FLAG, "Image uploaded successfully!");
             }
         });
     }

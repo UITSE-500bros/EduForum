@@ -67,6 +67,7 @@ public class PostRepository {
         post.setTotalUpVote(0);
         post.setTotalUpVote(0);
 
+
         db.collection("Community")
                 .document(post.getCommunityID())
                 .collection("Post")
@@ -94,6 +95,10 @@ public class PostRepository {
         List<Uri> filesUri = post.getImage();
         int sequenceNumber = 0;
 
+        StorageMetadata metadata = new StorageMetadata.Builder()
+                .setContentType("image/jpeg")
+                .build();
+
         List<Task<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
 
         for (Uri fileUri : filesUri) {
@@ -101,7 +106,7 @@ public class PostRepository {
 
             StorageReference fileRef = postRef.child(uniqueFileName);
 
-            UploadTask uploadTask = fileRef.putFile(fileUri);
+            UploadTask uploadTask = fileRef.putFile(fileUri, metadata);
             uploadTasks.add(uploadTask);
         }
 
