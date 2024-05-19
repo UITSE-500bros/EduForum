@@ -16,6 +16,7 @@ public abstract class PostingObject {
     protected Integer totalUpVote;
     protected Integer totalDownVote;
     protected Integer voteDifference;
+
     protected List<Uri> image;
     protected List<String> downloadImage;
 
@@ -60,13 +61,17 @@ public abstract class PostingObject {
         this.voteDifference = voteDifference;
         this.image = image;
     }
-
+    /**
+     * @return A list of image URL - use for downloading-caching <strong>remote images</strong> from firebase storage.
+     */
     public List<String> getDownloadImage() {
         return downloadImage;
     }
-
-    public void setDownloadImage(List<String> downloadImage) {
-        this.downloadImage = downloadImage;
+    /**
+     * @param downloadImages A list of image URL - use for downloading-caching <strong>remote images</strong> from firebase storage.
+     */
+    public void setDownloadImage(List<String> downloadImages) {
+        this.downloadImage = downloadImages;
     }
 
     public Integer getVoteDifference() {
@@ -124,10 +129,15 @@ public abstract class PostingObject {
     public void setTotalDownVote(Integer totalDownVote) {
         this.totalDownVote = totalDownVote;
     }
-
+    /**
+     * @return A list of local image URI - use for uploading <strong>local images</strong> to firebase storage
+     */
     public List<Uri> getImage() {
         return image;
     }
+    /**
+     * @param image A list of local image URI - use for uploading <strong>local images</strong> to firebase storage
+     */
 
     public void setImage(List<Uri> image) {
         this.image = image;

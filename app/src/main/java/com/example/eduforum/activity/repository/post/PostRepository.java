@@ -59,7 +59,7 @@ public class PostRepository {
         return instance;
     }
 
-    // TODO: add post image to firebase storage
+    // TODO: add post image to firebase storage - THY
 
     public void addPost(Post post, IPostCallback callback) {
         post.setTotalComment(0);
