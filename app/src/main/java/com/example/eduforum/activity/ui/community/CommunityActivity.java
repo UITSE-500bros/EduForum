@@ -19,9 +19,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.eduforum.activity.ui.community.adapter.PostAdapter;
+import com.example.eduforum.activity.ui.community.adapter.TagsAdapter;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.viewmodel.community.NewsFeedViewModel;
 import com.example.eduforum.databinding.ActivityCommunityBinding;
+import com.example.eduforum.databinding.CommunityFilterBinding;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class CommunityActivity extends AppCompatActivity {
@@ -106,7 +108,17 @@ public class CommunityActivity extends AppCompatActivity {
        int id = item.getItemId();
         if (id == R.id.filter) {
             Dialog filterDialog = new Dialog(this);
-            filterDialog.setContentView(R.layout.community_filter);
+            CommunityFilterBinding filterBinding = CommunityFilterBinding.inflate(getLayoutInflater());
+            filterDialog.setContentView(filterBinding.getRoot());
+            filterBinding.setLifecycleOwner(this);
+            TagsAdapter tagsAdapter = new TagsAdapter( viewModel.getAllCategories().getValue());
+            filterBinding.categoryRecyclerView.setAdapter(tagsAdapter);
+            filterBinding.categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            filterBinding.applyButton.setOnClickListener(v -> {
+                filterDialog.dismiss();
+            });
+
+
             filterDialog.show();
             return true;
         }

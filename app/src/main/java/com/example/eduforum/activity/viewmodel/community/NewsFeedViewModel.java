@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.example.eduforum.activity.model.community_manage.Community;
 
+import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.repository.community.CommunityRepository;
 import com.example.eduforum.activity.repository.community.ICommunityCallBack_C;
@@ -25,6 +26,7 @@ public class NewsFeedViewModel extends ViewModel {
     MutableLiveData<String> communityId;
     MutableLiveData<List<PostViewState>> postList; // posts displaying in news feed, not always the same as the posts in the community
     MutableLiveData<FilterViewState> currentFilter;
+    MutableLiveData<List<Category>> allCategories;
     CommunityRepository communityRepository;
     PostRepository postRepository;
     public NewsFeedViewModel() {
@@ -34,8 +36,14 @@ public class NewsFeedViewModel extends ViewModel {
         currentCommunity = new MutableLiveData<>();
         currentCommunity.setValue(new CreateCommunityViewState());
         postList = new MutableLiveData<>();
-
-
+        allCategories = new MutableLiveData<>();
+        // allCategories.setValue(communityRepository.getCategories());
+        // for now, hardcode the categories
+        List<Category> categories = new ArrayList<>();
+        categories.add(new Category("1", "Hỏi đáp", false));
+        categories.add(new Category("2", "Chia sẻ", false));
+        categories.add(new Category("3", "Tuyển dụng", false));
+        allCategories.setValue(categories);
     }
     public void setCurrentCommunity(CreateCommunityViewState community) {
         currentCommunity.setValue(community);
@@ -112,6 +120,9 @@ public class NewsFeedViewModel extends ViewModel {
     }
     public LiveData<List<PostViewState>> getPostList() {
         return postList;
+    }
+    public LiveData<List<Category>> getAllCategories() {
+        return allCategories;
     }
 
     private List<PostViewState> convertPostListToPostViewStateList(List<Post> posts) {
