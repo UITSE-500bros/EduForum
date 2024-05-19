@@ -291,7 +291,7 @@ public class PostRepository {
 
             List<Task<QuerySnapshot>> tasks = new ArrayList<>();
             for (List<String> batch : batches) {
-                Task<QuerySnapshot> task = postQuery.whereArrayContainsAny("categories.categoryID", batch).get();
+                Task<QuerySnapshot> task = postQuery.whereArrayContainsAny("category.categoryID", batch).get();
                 tasks.add(task);
             }
 

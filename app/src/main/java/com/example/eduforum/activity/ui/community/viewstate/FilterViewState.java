@@ -12,6 +12,10 @@ public class FilterViewState {
         this.postQuery = postQuery;
         this.tags = tags;
     }
+    public FilterViewState(List<Category> tags){
+        this.postQuery = PostQuery.NEWEST;
+        this.tags = tags;
+    }
     public FilterViewState(){
         this.postQuery = PostQuery.NEWEST;
         this.tags = null;
