@@ -11,11 +11,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.eduforum.R;
 import com.example.eduforum.activity.ui.community.PostDetailActivity;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.databinding.ItemCommunityBinding;
 import com.example.eduforum.databinding.ItemNotiBinding;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +87,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             if(post.getCreator()!=null){
                 binding.username.setText(post.getCreator().getName());
                 binding.falcuty.setText(post.getCreator().getDepartment());
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(post.getCreator().getProfilePicture());
+                Glide.with(binding.getRoot().getContext())
+                        .load(storageReference)
+                        .into(binding.avatar);
             }
             binding.title.setText(post.getTitle());
             binding.time.setText(post.getDate());
