@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.eduforum.activity.ui.community.adapter.PostAdapter;
 import com.example.eduforum.activity.ui.community.adapter.TagsAdapter;
+import com.example.eduforum.activity.ui.community.viewstate.FilterViewState;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.viewmodel.community.NewsFeedViewModel;
 import com.example.eduforum.databinding.ActivityCommunityBinding;
@@ -115,6 +116,8 @@ public class CommunityActivity extends AppCompatActivity {
             filterBinding.categoryRecyclerView.setAdapter(tagsAdapter);
             filterBinding.categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             filterBinding.applyButton.setOnClickListener(v -> {
+                // for testing
+                viewModel.setFilter(new FilterViewState());
                 filterDialog.dismiss();
             });
 

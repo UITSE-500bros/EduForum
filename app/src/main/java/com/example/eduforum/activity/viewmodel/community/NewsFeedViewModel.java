@@ -44,6 +44,73 @@ public class NewsFeedViewModel extends ViewModel {
         categories.add(new Category("2", "Chia sẻ", false));
         categories.add(new Category("3", "Tuyển dụng", false));
         allCategories.setValue(categories);
+        currentFilter = new MutableLiveData<>();
+        currentFilter.setValue(new FilterViewState());
+    }
+    public void setFilter(FilterViewState filter) {
+        currentFilter.setValue(filter);
+        postRepository.queryPost(currentCommunity.getValue().getCommunityID(),FirebaseAuth.getInstance().getUid(), filter.getTags(),  filter.getPostQuery(), new IPostCallback() {
+            @Override
+            public void onGetPostSuccess(List<Post> posts){
+                postList.setValue(convertPostListToPostViewStateList(posts));
+            }
+            @Override
+            public void onGetPostFailure(String errorMsg){
+
+            }
+            @Override
+            public void onAddPostFailure(String errorMsg){
+
+            }
+            @Override
+            public void onAddPostSuccess(Post newPost){
+
+            }
+            @Override
+            public void onEditPostSuccess(){
+
+            }
+            @Override
+            public void onEditPostFailure(String errorMsg){
+            }
+            @Override
+            public void onQueryPostError(String errorMsg){
+
+            }
+            @Override
+            public void onQueryPostSuccess(List<Post> queryPostResults){
+
+            }
+            @Override
+            public void onDeletePostSuccess(){
+
+            }
+            @Override
+            public void onDeletePostError(String errorMsg){
+            }
+            @Override
+            public void onSubscriptionSuccess(){
+
+            }
+            @Override
+            public void onSubscriptionError(String errorMsg){
+
+            }
+            @Override
+            public void onBookmarkError(String errorMsg){
+
+            }
+            @Override
+            public void onBookmarkSuccess(){
+
+            }
+
+            @Override
+            public void onGetVoteStatusSuccess(int voteType) {
+
+            }
+
+        });
     }
     public void setCurrentCommunity(CreateCommunityViewState community) {
         currentCommunity.setValue(community);

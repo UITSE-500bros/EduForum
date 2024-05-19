@@ -13,7 +13,7 @@ public class FilterViewState {
         this.tags = tags;
     }
     public FilterViewState(){
-        this.postQuery = null;
+        this.postQuery = PostQuery.NEWEST;
         this.tags = null;
     }
     public PostQuery getPostQuery() {
