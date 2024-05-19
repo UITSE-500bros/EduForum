@@ -75,7 +75,7 @@ public class PostRepository {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         post.setPostID(documentReference.getId());
-                        callback.onAddPostSuccess(post);
+                        uploadPostImages(post, callback);
                         Log.d(FlagsList.DEBUG_POST_FLAG, "New post written with ID: " + documentReference.getId());
                     }
                 })
@@ -94,33 +94,28 @@ public class PostRepository {
         List<Uri> filesUri = post.getImage();
         int sequenceNumber = 0;
 
+        List<Task<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
+
         for (Uri fileUri : filesUri) {
             String uniqueFileName = String.format(Locale.US, "%04d-%d-%s", sequenceNumber++, System.currentTimeMillis(), fileUri.getLastPathSegment());
 
             StorageReference fileRef = postRef.child(uniqueFileName);
 
-
             UploadTask uploadTask = fileRef.putFile(fileUri);
-
-            uploadTask.addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-                    Log.d(FlagsList.DEBUG_POST_FLAG, "Upload is paused");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle unsuccessful uploads
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // Handle successful uploads on complete
-                    // ...
-                }
-            });
-
+            uploadTasks.add(uploadTask);
         }
+
+        Tasks.whenAllSuccess(uploadTasks).addOnSuccessListener(new OnSuccessListener<List<Object>>() {
+            @Override
+            public void onSuccess(List<Object> objects) {
+                callback.onAddPostSuccess(post);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onAddPostFailure(e.toString());
+            }
+        });
     }
 
 
