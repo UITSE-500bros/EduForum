@@ -111,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-        if (user != null) {
+        if (user != null && user.isEmailVerified()) {
 //            Log.d("TEST", user.getEmail());
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(i);

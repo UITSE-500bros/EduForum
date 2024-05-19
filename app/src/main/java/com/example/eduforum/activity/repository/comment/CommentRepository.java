@@ -266,7 +266,7 @@ public class CommentRepository {
      * Get vote status of a comment.
      * @param comment the comment to get vote status.
      * @param userID the user (current user using the app) to get vote status.
-     * @param callback the callback containing the user's current vote status of the comment.
+     * @param callback the callback containing the user's current vote status of the comment. (0: no vote, 1: upvote, -1: downvote)
      */
     public void getVoteStatus(Comment comment, String userID, CommentCallback callback) {
         DocumentReference voteRef = db.collection("Community")

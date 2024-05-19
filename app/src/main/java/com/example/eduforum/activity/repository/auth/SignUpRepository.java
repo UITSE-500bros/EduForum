@@ -74,7 +74,7 @@ public class SignUpRepository {
     public void uploadProfilePicture(User user) {
         StorageReference usersRef = storage.getReference("User");
         Uri fileUri = Uri.parse(user.getProfilePicture());
-        StorageReference userImgRef = usersRef.child(user.getUserId()+"images/"+fileUri.getLastPathSegment());
+        StorageReference userImgRef = usersRef.child(user.getUserId()+"/images/"+fileUri.getLastPathSegment());
         user.setProfilePicture(userImgRef.getPath());
         UploadTask uploadTask = userImgRef.putFile(fileUri);
 
