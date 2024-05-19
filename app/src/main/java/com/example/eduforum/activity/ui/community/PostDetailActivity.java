@@ -52,25 +52,48 @@ public class PostDetailActivity extends AppCompatActivity {
         });
 
         viewModel = new ViewModelProvider(this).get(PostDetailsViewModel.class);
-        commentAdapter = new CommentAdapter(this, viewModel.getComments().getValue());
+
+
 
         PostViewState postViewState = (PostViewState) getIntent().getSerializableExtra("currentPost");
         if (postViewState != null) {
             viewModel.setCurrentPost(postViewState);
             binding.titlePost.setText(postViewState.getTitle().toString());
             binding.contentPost.setText(postViewState.getContent().toString());
-            binding.userNameTextView.setText(postViewState.getCreator().name);
+//            binding.userNameTextView.setText(postViewState.getCreator().name);
 
 //            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
         } else {
             //finish();
         }
 
+        commentAdapter = new CommentAdapter(this, viewModel.getComments().getValue());
         binding.recyclecomment.setAdapter(commentAdapter);
         binding.recyclecomment.setLayoutManager(new LinearLayoutManager(this));
 
         viewModel.getComments().observe(this, commentViewStates -> {
             commentAdapter.setCommentList(commentViewStates);
+        });
+        binding.setLifecycleOwner(this);
+        binding.sendButton.setOnClickListener(v -> {
+            String comment = binding.commentEditText.getText().toString();
+            if (!comment.isEmpty()) {
+                CommentViewState commentViewState = new CommentViewState(
+                        null,
+                         comment,
+                        null,
+                        null,
+                        0,
+                        0,
+                        0,
+                        null,
+                        null,
+                        null,
+                        "0"
+                );
+                viewModel.addParentComment(commentViewState, postViewState.getPostId(), postViewState.getCommunity().getCommunityID());
+                binding.commentEditText.setText(comment);
+            }
         });
 
 

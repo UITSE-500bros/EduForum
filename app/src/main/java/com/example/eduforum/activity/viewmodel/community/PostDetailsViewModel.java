@@ -33,6 +33,7 @@ public class PostDetailsViewModel extends ViewModel {
         commentRepository = CommentRepository.getInstance();
         cmts = new MutableLiveData<>();
         currentPost = new MutableLiveData<>();
+        cmts.setValue(new ArrayList<CommentViewState>());
     }
 
     public LiveData<PostViewState> getPost(){
@@ -159,9 +160,83 @@ public class PostDetailsViewModel extends ViewModel {
         postRepository.updateVoteCount(postInstance, FirebaseAuth.getInstance().getCurrentUser().getUid(), -1);
     }
 
-    public void addParentComment(String comment) {
-        Comment newComment = new Comment();
+    public void addParentComment(CommentViewState comment,String postID, String communityID) {
+        Comment newComment = new Comment(
+                null,
+                comment.getContent(),
+                communityID,
+                postID,
+                null,
+                null,
+                null,
+                null,
+                0,
+                0,
+                0,
+                null
+        );
         commentRepository.createComment(postInstance, newComment, new CommentCallback() {
+            @Override
+            public void onCreateSuccess(Comment comments) {
+                List<CommentViewState> commentViewStates = cmts.getValue();
+                assert commentViewStates != null;
+                commentViewStates.add(new CommentViewState(
+                        comments.getCommentID(),
+                        comments.getContent(),
+                        null,
+                        comments.getCreator(),
+                        comments.getTotalUpVote(),
+                        comments.getTotalDownVote(),
+                        comments.getVoteDifference(),
+                        null,
+                        comments.getImage(),
+                        comments.getReplyCommentID(),
+                        comments.getTotalReply()
+                ));
+                cmts.setValue(commentViewStates);
+            }
+
+            @Override
+            public void onFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onInitialLoadSuccess(List<Comment> comments) {
+
+            }
+
+            @Override
+            public void onLoadRepliesSuccess(List<Comment> comments) {
+
+            }
+
+            @Override
+            public void onDeleteSuccess() {
+
+            }
+
+            @Override
+            public void onUpdateSuccess(Comment comment) {
+
+            }
+
+            @Override
+            public void onGetVoteStatusSuccess(int voteType) {
+
+            }
+        });
+
+    }
+
+    public void addComment(CommentViewState commentViewState) {
+    }
+
+    public void addChildComment(CommentViewState commentParentViewState, CommentViewState commentChildViewState) {
+        Comment parentComment = new Comment(); // TODO: transfer parentCommentViewState to Comment
+        Comment childComment = new Comment(); // TODO: transfer childCommentViewState to Comment
+
+        commentRepository.createComment(parentComment, childComment, new CommentCallback() {
             @Override
             public void onCreateSuccess(Comment comments) {
                 List<CommentViewState> commentViewStates = cmts.getValue();
@@ -211,6 +286,5 @@ public class PostDetailsViewModel extends ViewModel {
 
             }
         });
-
     }
 }
