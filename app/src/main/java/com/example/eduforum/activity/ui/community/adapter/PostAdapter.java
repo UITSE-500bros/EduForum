@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eduforum.R;
@@ -83,6 +84,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             binding.like.setText("0 lượt thích");
             binding.comment.setText("0 bình luận");
             binding.time.setText(post.getDate());
+
+            if(post.getTags()!=null){
+                TagsAdapter tagsAdapter = new TagsAdapter(post.getTags());
+                binding.tagslayout.setAdapter(tagsAdapter);
+                binding.tagslayout.setLayoutManager(new LinearLayoutManager(binding.tagslayout.getContext(), LinearLayoutManager.HORIZONTAL, false));
+            }
+
+
         }
     }
 }

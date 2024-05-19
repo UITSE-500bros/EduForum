@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.repository.post.IPostCallback;
 import com.example.eduforum.activity.repository.post.PostRepository;
@@ -11,6 +12,7 @@ import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.google.firebase.Timestamp;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CreatePostViewModel extends ViewModel {
@@ -18,6 +20,7 @@ public class CreatePostViewModel extends ViewModel {
     MutableLiveData<String> communityId;
     MutableLiveData<String> errorMessage;
     MutableLiveData<Boolean> isPostCreated;
+    MutableLiveData<List<Category>> allCategories;
     PostRepository postRepository;
     public CreatePostViewModel() {
         postViewState = new MutableLiveData<>();
@@ -27,6 +30,15 @@ public class CreatePostViewModel extends ViewModel {
         isPostCreated = new MutableLiveData<>();
         isPostCreated.setValue(false);
         postRepository = PostRepository.getInstance();
+        allCategories = new MutableLiveData<>();
+        // allCategories.setValue(communityRepository.getAllCategories());
+        // for now, just hard code the categories
+        List<Category> categories = new ArrayList<>();
+        categories.add(new Category("1", "Hỏi đáp", false));
+        categories.add(new Category("2", "Chia sẻ", false));
+        categories.add(new Category("3", "Tuyển dụng", false));
+        allCategories.setValue(categories);
+
     }
     public LiveData<String> getErrorMessage() {
         return errorMessage;
@@ -36,6 +48,9 @@ public class CreatePostViewModel extends ViewModel {
     }
     public LiveData<Boolean> getIsPostCreated() {
         return isPostCreated;
+    }
+    public LiveData<List<Category>> getAllCategories() {
+        return allCategories;
     }
     public void setPostViewState(PostViewState postViewState) {
         this.postViewState.setValue(postViewState);
@@ -62,8 +77,8 @@ public class CreatePostViewModel extends ViewModel {
         postRepository.addPost(post, new IPostCallback() {
             @Override
             public void onAddPostSuccess(Post newPost) {
-                PostViewState newPostViewState = new PostViewState(newPost.getPostID(), newPost.getCreator(), null, newPost.getTitle(), newPost.getContent(), newPost.getAnonymous(), convertTimestampToReadable(newPost.getTimeCreated()), newPost.getImage(), newPost.getTaggedUsers(), newPost.getCategory());
-                postViewState.setValue(newPostViewState);
+                //PostViewState newPostViewState = new PostViewState(newPost.getPostID(), newPost.getCreator(), null, newPost.getTitle(), newPost.getContent(), newPost.getAnonymous(), convertTimestampToReadable(newPost.getTimeCreated()), newPost.getImage(), newPost.getTaggedUsers(), newPost.getCategory());
+                //postViewState.setValue(newPostViewState);
                 isPostCreated.setValue(true);
             }
             @Override
@@ -123,6 +138,9 @@ public class CreatePostViewModel extends ViewModel {
     }
     private String convertTimestampToReadable(Timestamp timestamp){
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        if(timestamp == null){
+            return "";
+        }
         return sdf.format(timestamp.toDate());
     }
 }

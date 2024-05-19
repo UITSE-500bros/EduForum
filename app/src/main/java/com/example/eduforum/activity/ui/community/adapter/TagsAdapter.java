@@ -7,14 +7,15 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.databinding.ItemTagsBinding;
 
 import java.util.List;
 
 public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder>{
-    private List<String> tagsList;
+    private List<Category> tagsList;
 
-    public TagsAdapter(List<String> tagsList) {
+    public TagsAdapter(List<Category> tagsList) {
         this.tagsList = tagsList;
     }
 
@@ -29,8 +30,8 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull TagsAdapter.TagsViewHolder holder, int position) {
-        String tag = tagsList.get(position);
-        holder.binding.tag.setText(tag);
+        Category tag = tagsList.get(position);
+        holder.binding.setTagText(tag.getTitle());
         holder.binding.executePendingBindings();
 
     }

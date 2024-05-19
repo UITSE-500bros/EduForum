@@ -123,6 +123,9 @@ public class NewsFeedViewModel extends ViewModel {
     }
     private String convertTimestampToReadable(Timestamp time) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        if(time == null) {
+            return "";
+        }
         return sdf.format(time.toDate());
     }
 }

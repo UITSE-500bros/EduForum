@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eduforum.R;
 import com.example.eduforum.activity.EduForum;
+import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.activity.model.post_manage.Creator;
 import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.activity.ui.community.adapter.MediaAdapter;
@@ -205,9 +206,11 @@ public class CreatePostActivity extends AppCompatActivity {
         });
 
         //Handle tag items
-        // List<Category> categories = viewModel.getCategories();
-        final String[] items = new String[]{"Item 1", "Item 2", "Item 3", "Item 4", "Item 5"};
-
+        List<Category> categories = viewModel.getAllCategories().getValue();
+        String[] items = new String[categories.size()];
+        for(int i = 0; i < categories.size(); i++){
+            items[i] = categories.get(i).getTitle();
+        }
         final boolean[] checkedItems = new boolean[items.length];
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -224,11 +227,11 @@ public class CreatePostActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 // 5. Khi người dùng nhấp vào "OK", cập nhật text của TextView để hiển thị các mục đã chọn
                 StringBuilder selectedItems = new StringBuilder();
-                // List<Category> selectedItems = new ArrayList<>();
+                List<Category> selectedCategories = new ArrayList<>();
                 for (int i = 0; i < checkedItems.length; i++) {
                     if (checkedItems[i]) {
                         selectedItems.append(items[i]).append(", ");
-                        // selectedItems.add(new Category(...));
+                        selectedCategories.add(categories.get(i));
                     }
                 }
                 // Xóa dấu phẩy cuối cùng
@@ -236,6 +239,11 @@ public class CreatePostActivity extends AppCompatActivity {
                     selectedItems.setLength(selectedItems.length() - 2);
                 }
                 binding.categoryTextView.setText(selectedItems.toString());
+                PostViewState postViewState = viewModel.getPostViewState().getValue();
+                assert postViewState != null;
+                postViewState.setTags(selectedCategories);
+                viewModel.setPostViewState(postViewState);
+
             }
         });
         builder.setNegativeButton("Cancel", null);
