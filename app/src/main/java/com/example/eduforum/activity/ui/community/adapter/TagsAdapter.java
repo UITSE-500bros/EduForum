@@ -8,17 +8,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eduforum.activity.model.post_manage.Category;
+import com.example.eduforum.activity.model.post_manage.Post;
+import com.example.eduforum.activity.model.post_manage.PostCategory;
 import com.example.eduforum.databinding.ItemTagsBinding;
 
 import java.util.List;
 
 public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder>{
-    private List<Category> tagsList;
+    private List<PostCategory> tagsList;
     private OnItemClickListener listener;
     public interface OnItemClickListener {
         void onItemClick( int position);
     }
-    public TagsAdapter(List<Category> tagsList, OnItemClickListener listener) {
+    public TagsAdapter(List<PostCategory> tagsList, OnItemClickListener listener) {
         this.tagsList = tagsList;
         this.listener = listener;
     }
@@ -34,7 +36,7 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull TagsAdapter.TagsViewHolder holder, int position) {
-        Category tag = tagsList.get(position);
+        PostCategory tag = tagsList.get(position);
         holder.binding.setTagText(tag.getTitle());
         holder.binding.executePendingBindings();
 
