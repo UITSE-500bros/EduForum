@@ -42,7 +42,21 @@ public class CommentRepository {
         return instance;
     }
 
-    // create a comment
+    /**
+     * Create a new comment.
+     *
+     * @param parent     the parent post or comment
+     * @param newComment the new comment, including the creator.
+     * @param callback   the callback to handle the result.
+     *                   <br></br><p>- The <strong>commentID</strong> will be set in the <strong>newComment</strong> object passed in the callback after the comment is created.</p>
+     *                   <br></br><p>- The parent totalComment/totalReplies will be recalculated immediately after a new comment is created.</p>
+     *                   <br></br><p>- For a reply, the <strong>replyCommentID</strong> will be set in the <strong>newComment</strong> object passed in the callback.</p>
+     *                   <br></br><p>- Comment's <strong>lastModified, timeCreated</strong> is handled automatically by Cloud Function.</p>
+     *                   <br></br><strong>*Notes:</strong>
+     *                   <br></br>- <strong>lastModified and timeCreated</strong> may need to be generated from client side (ViewModel, Activity) to display onto the UI (Ex: Now). After re-fetching comments data, lastModified and timeCreated will be provided from this repository.
+     *                   <br></br>- <strong>totalReply, totalComment</strong> from parent post or comment will only be updated if re-fetching data from Firestore. UI logic should handle the increment of totalComment/Replies programmatically.
+     */
+    //TODO: Uploading images - THY
     public void createComment(PostingObject parent, Comment newComment, CommentCallback callback) {
         CollectionReference commentRef = db.collection("Community")
                 .document(parent.getCommunityID())
@@ -73,7 +87,12 @@ public class CommentRepository {
 
     }
 
-    // load top-level-comments
+    /**
+     * Fetch top level comments of a post. This method should be called when user opens a post.
+     * @param post the post to fetch comments from.
+     * @param callback the callback to display the top-level comments - containing all metadata of the comment from database.
+     */
+    // TODO: download and cache images - THY
     public void loadTopLevelComments(Post post, CommentCallback callback) {
         Query commentQuery = db.collection("Community")
                 .document(post.getCommunityID())
@@ -90,7 +109,11 @@ public class CommentRepository {
         });
     }
 
-    // load replies of a comment
+    /**
+     * Fetch replies of a comment. This method should be called when user clicks on a comment to view its replies.
+     * @param comment the comment to fetch replies from.
+     * @param callback the callback to display the replies.
+     */
     public void loadReplies(Comment comment, CommentCallback callback) {
         Query commentQuery = db.collection("Community")
                 .document(comment.getCommunityID())
@@ -107,7 +130,11 @@ public class CommentRepository {
         });
     }
 
-    // delete a comment
+    /**
+     * Delete a comment.
+     * @param comment the comment to delete.
+     * @param callback the callback to handle the result.
+     */
     public void deleteComment(Comment comment, CommentCallback callback) {
         db.collection("Community")
                 .document(comment.getCommunityID())
@@ -126,7 +153,13 @@ public class CommentRepository {
                 });
     }
 
-    // update a comment
+    /**
+     * Update a comment.
+     * @param comment the comment to update.
+     * @param callback the callback to handle the result.
+     *                 <br></br><p>- Comment's <strong>lastModified</strong> is handled automatically by Cloud Function.</p>
+     *
+     */
     public void updateComment(Comment comment, CommentCallback callback) {
         db.collection("Community")
                 .document(comment.getCommunityID())
@@ -145,6 +178,14 @@ public class CommentRepository {
                 });
     }
 
+    /**
+     * Update vote count of a comment/replies.
+     * @param comment the comment to update vote count.
+     * @param userID the user who votes.
+     * @param voteType the vote type: 1 for upvote, -1 for down-vote.
+     *                 <br></br><br></br><strong>*Notes:</strong>
+     *                 <br></br>- If the user has already voted, passing the corresponding voteType will cancel the vote.
+     */
     public void updateVoteCount(Comment comment, String userID, int voteType) {
         DocumentReference commentRef = db.collection("Community")
                 .document(comment.getCommunityID())
@@ -168,8 +209,7 @@ public class CommentRepository {
                     if (voteType == 1) {
                         transaction.update(commentRef, "totalUpVote", FieldValue.increment(1));
                         transaction.update(commentRef, "voteDifference", FieldValue.increment(1));
-                    }
-                    else if (voteType == -1) {
+                    } else if (voteType == -1) {
                         transaction.update(commentRef, "totalDownVote", FieldValue.increment(1));
                         transaction.update(commentRef, "voteDifference", FieldValue.increment(-1));
                     }
@@ -186,8 +226,7 @@ public class CommentRepository {
                         transaction.update(commentRef, "totalUpVote", FieldValue.increment(-1));
                         transaction.update(commentRef, "voteDifference", FieldValue.increment(-1));
                         transaction.update(voteRef, "voteType", 0);
-                    }
-                    else if (voteType == -1) {
+                    } else if (voteType == -1) {
                         transaction.update(commentRef, "totalUpVote", FieldValue.increment(-1));
                         transaction.update(commentRef, "totalDownVote", FieldValue.increment(1));
                         transaction.update(commentRef, "voteDifference", FieldValue.increment(-2));
@@ -199,8 +238,7 @@ public class CommentRepository {
                         transaction.update(commentRef, "totalDownVote", FieldValue.increment(-1));
                         transaction.update(commentRef, "voteDifference", FieldValue.increment(2));
                         transaction.update(voteRef, "voteType", voteType);
-                    }
-                    else if (voteType == -1) {
+                    } else if (voteType == -1) {
                         transaction.update(commentRef, "totalDownVote", FieldValue.increment(-1));
                         transaction.update(commentRef, "voteDifference", FieldValue.increment(1));
                         transaction.update(voteRef, "voteType", 0);
@@ -224,6 +262,12 @@ public class CommentRepository {
 
     }
 
+    /**
+     * Get vote status of a comment.
+     * @param comment the comment to get vote status.
+     * @param userID the user (current user using the app) to get vote status.
+     * @param callback the callback containing the user's current vote status of the comment.
+     */
     public void getVoteStatus(Comment comment, String userID, CommentCallback callback) {
         DocumentReference voteRef = db.collection("Community")
                 .document(comment.getCommunityID())
