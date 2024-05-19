@@ -8,7 +8,9 @@ import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.repository.post.IPostCallback;
 import com.example.eduforum.activity.repository.post.PostRepository;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
+import com.google.firebase.Timestamp;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class CreatePostViewModel extends ViewModel {
@@ -60,8 +62,7 @@ public class CreatePostViewModel extends ViewModel {
         postRepository.addPost(post, new IPostCallback() {
             @Override
             public void onAddPostSuccess(Post newPost) {
-                // TODO: convert timestamp thanh UI doc dc
-                PostViewState newPostViewState = new PostViewState(newPost.getPostID(), newPost.getCreator(), null, newPost.getTitle(), newPost.getContent(), newPost.getAnonymous(), null, newPost.getImage(), newPost.getTaggedUsers(), newPost.getCategory());
+                PostViewState newPostViewState = new PostViewState(newPost.getPostID(), newPost.getCreator(), null, newPost.getTitle(), newPost.getContent(), newPost.getAnonymous(), convertTimestampToReadable(newPost.getTimeCreated()), newPost.getImage(), newPost.getTaggedUsers(), newPost.getCategory());
                 postViewState.setValue(newPostViewState);
                 isPostCreated.setValue(true);
             }
@@ -119,5 +120,9 @@ public class CreatePostViewModel extends ViewModel {
         }
         // other validations ...
         return true;
+    }
+    private String convertTimestampToReadable(Timestamp timestamp){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return sdf.format(timestamp);
     }
 }

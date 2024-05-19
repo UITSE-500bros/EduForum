@@ -82,6 +82,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             binding.time.setText(post.getDate());
             binding.like.setText("0 lượt thích");
             binding.comment.setText("0 bình luận");
+            binding.time.setText(post.getDate());
         }
     }
 }

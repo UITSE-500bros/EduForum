@@ -13,8 +13,10 @@ import com.example.eduforum.activity.repository.post.PostRepository;
 import com.example.eduforum.activity.ui.community.viewstate.FilterViewState;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,9 +117,12 @@ public class NewsFeedViewModel extends ViewModel {
     private List<PostViewState> convertPostListToPostViewStateList(List<Post> posts) {
         List<PostViewState> postViewStateList = new ArrayList<>();
         for(Post post : posts) {
-            // TODO: anh em lam cai nay ne
-            postViewStateList.add(new PostViewState(post.getPostID(), post.getCreator(), currentCommunity.getValue(), post.getTitle(), post.getContent(),post.getAnonymous(), null, null, post.getTaggedUsers(), post.getCategory()));
+            postViewStateList.add(new PostViewState(post.getPostID(), post.getCreator(), currentCommunity.getValue(), post.getTitle(), post.getContent(),post.getAnonymous(), convertTimestampToReadable(post.getTimeCreated()), null, post.getTaggedUsers(), post.getCategory()));
         }
         return postViewStateList;
+    }
+    private String convertTimestampToReadable(Timestamp time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return sdf.format(time.toDate());
     }
 }
