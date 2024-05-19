@@ -112,8 +112,9 @@ public class CommunityActivity extends AppCompatActivity {
         }
 
         if (id == R.id.setting) {
-            Toast.makeText(this, "setting", Toast.LENGTH_SHORT).show();
-            return true;
+           Intent intent = new Intent(this, SettingCommunityActivity.class);
+              startActivity(intent);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

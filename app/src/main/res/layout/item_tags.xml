@@ -10,7 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="20dp">
+        android:layout_height="30dp">
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
