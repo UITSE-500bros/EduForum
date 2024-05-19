@@ -4,6 +4,8 @@ import android.net.Uri;
 
 import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.activity.model.post_manage.Creator;
+import com.example.eduforum.activity.model.post_manage.Post;
+import com.example.eduforum.activity.model.post_manage.PostCategory;
 import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 
@@ -17,11 +19,11 @@ public class PostViewState implements Serializable {
     private String title;
     private String content;
     private String date;
-    private List<Category> tags;
+    private List<PostCategory> tags;
     private List<Uri> image;
     private List<String> taggedUsers;
     private Boolean isAnonymous;
-    public PostViewState(String postId, Creator creator, CreateCommunityViewState community, String title, String content, Boolean isAnonymous, String date, List<Uri> image, List<String> taggedUsers,  List<Category> tags) {
+    public PostViewState(String postId, Creator creator, CreateCommunityViewState community, String title, String content, Boolean isAnonymous, String date, List<Uri> image, List<String> taggedUsers,  List<PostCategory> tags) {
         this.postId = postId;
         this.creator = creator;
         this.community = community;
@@ -69,7 +71,7 @@ public class PostViewState implements Serializable {
     public String getDate() {
         return date;
     }
-    public List<Category> getTags() {
+    public List<PostCategory> getTags() {
         return tags;
     }
     public void setPostId(String postId) {
@@ -90,7 +92,7 @@ public class PostViewState implements Serializable {
     public void setDate(String date) {
         this.date = date;
     }
-    public void setTags(List<Category> tags) {
+    public void setTags(List<PostCategory> tags) {
         this.tags = tags;
     }
     public void setAnonymous(Boolean anonymous) {

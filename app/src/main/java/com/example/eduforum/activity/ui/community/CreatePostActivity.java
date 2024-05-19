@@ -28,6 +28,7 @@ import com.example.eduforum.R;
 import com.example.eduforum.activity.EduForum;
 import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.activity.model.post_manage.Creator;
+import com.example.eduforum.activity.model.post_manage.PostCategory;
 import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.activity.ui.community.adapter.MediaAdapter;
 import com.example.eduforum.activity.ui.community.adapter.MediaItem;
@@ -227,11 +228,12 @@ public class CreatePostActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 // 5. Khi người dùng nhấp vào "OK", cập nhật text của TextView để hiển thị các mục đã chọn
                 StringBuilder selectedItems = new StringBuilder();
-                List<Category> selectedCategories = new ArrayList<>();
+                List<PostCategory> selectedCategories = new ArrayList<>();
                 for (int i = 0; i < checkedItems.length; i++) {
                     if (checkedItems[i]) {
                         selectedItems.append(items[i]).append(", ");
-                        selectedCategories.add(categories.get(i));
+                        PostCategory newPostCategory = new PostCategory(categories.get(i));
+                        selectedCategories.add(newPostCategory);
                     }
                 }
                 // Xóa dấu phẩy cuối cùng

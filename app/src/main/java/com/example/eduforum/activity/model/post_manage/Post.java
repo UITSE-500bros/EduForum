@@ -10,14 +10,14 @@ public class Post extends PostingObject {
     private Boolean isAnonymous;
     private Integer totalComment;
     private List<String> taggedUsers;
-    private List<Category> category;
+    private List<PostCategory> category;
 
 
     public Post() {
         super();
     }
 
-    public Post(String postID, String communityID, String title, String content, Boolean isAnonymous, Timestamp timeCreated, Timestamp lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, Integer totalComment, List<Uri> image, List<String> taggedUsers, List<Category> category) {
+    public Post(String postID, String communityID, String title, String content, Boolean isAnonymous, Timestamp timeCreated, Timestamp lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, Integer totalComment, List<Uri> image, List<String> taggedUsers, List<PostCategory> category) {
         super(communityID, postID, content, timeCreated, lastModified, creator, totalUpVote, totalDownVote, voteDifference, image);
         this.title = title;
         this.isAnonymous = isAnonymous;
@@ -26,7 +26,7 @@ public class Post extends PostingObject {
         this.category = category;
     }
 
-    public Post(String communityID, String postID, String content, Timestamp timeCreated, Timestamp lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<Uri> image, List<String> downloadImage, String title, Boolean isAnonymous, Integer totalComment, List<String> taggedUsers, List<Category> category) {
+    public Post(String communityID, String postID, String content, Timestamp timeCreated, Timestamp lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<Uri> image, List<String> downloadImage, String title, Boolean isAnonymous, Integer totalComment, List<String> taggedUsers, List<PostCategory> category) {
         super(communityID, postID, content, timeCreated, lastModified, creator, totalUpVote, totalDownVote, voteDifference, image, downloadImage);
         this.title = title;
         this.isAnonymous = isAnonymous;
@@ -51,11 +51,11 @@ public class Post extends PostingObject {
         this.taggedUsers = taggedUsers;
     }
 
-    public List<Category> getCategory() {
+    public List<PostCategory> getCategory() {
         return category;
     }
 
-    public void setCategory(List<Category> category) {
+    public void setCategory(List<PostCategory> category) {
         this.category = category;
     }
 

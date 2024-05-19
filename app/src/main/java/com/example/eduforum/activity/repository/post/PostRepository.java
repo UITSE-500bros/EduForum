@@ -10,6 +10,7 @@ import android.util.Log;
 import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.model.subscription_manage.Subscription;
+import com.example.eduforum.activity.repository.post.dto.AddPostDTO;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -62,16 +63,12 @@ public class PostRepository {
     // TODO: add post image to firebase storage - THY
 
     public void addPost(Post post, IPostCallback callback) {
-        post.setTotalComment(0);
-        post.setVoteDifference(0);
-        post.setTotalUpVote(0);
-        post.setTotalUpVote(0);
-
+        AddPostDTO addPostDTO = new AddPostDTO(post);
 
         db.collection("Community")
                 .document(post.getCommunityID())
                 .collection("Post")
-                .add(post)
+                .add(addPostDTO)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -100,11 +97,12 @@ public class PostRepository {
                 .build();
 
         List<Task<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
-
+        List<String> imagePaths = new ArrayList<>();
         for (Uri fileUri : filesUri) {
-            String uniqueFileName = String.format(Locale.US, "%04d-%d-%s", sequenceNumber++, System.currentTimeMillis(), fileUri.getLastPathSegment());
+            String uniqueFileName = String.format(Locale.US, "%04d-%d", sequenceNumber++, System.currentTimeMillis());
 
             StorageReference fileRef = postRef.child(uniqueFileName);
+            imagePaths.add(fileRef.getPath()+"/"+uniqueFileName);
 
             UploadTask uploadTask = fileRef.putFile(fileUri, metadata);
             uploadTasks.add(uploadTask);
@@ -113,14 +111,38 @@ public class PostRepository {
         Tasks.whenAllSuccess(uploadTasks).addOnSuccessListener(new OnSuccessListener<List<Object>>() {
             @Override
             public void onSuccess(List<Object> objects) {
-                callback.onAddPostSuccess(post);
+                post.setDownloadImage(imagePaths);
+                updateDownloadImage(post, callback);
+                Log.d(FlagsList.DEBUG_POST_FLAG, "All images uploaded successfully!");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                Log.w(FlagsList.DEBUG_POST_FLAG, "Error uploading images", e);
                 callback.onAddPostFailure(e.toString());
             }
         });
+    }
+
+    private void updateDownloadImage(Post post, IPostCallback callback) {
+        db.collection("Community")
+                .document(post.getCommunityID())
+                .collection("Post")
+                .document(post.getPostID())
+                .update("downloadImage", post.getDownloadImage())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(FlagsList.DEBUG_POST_FLAG, "downloadImage path updated successfully!");
+                        callback.onAddPostSuccess(post);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(FlagsList.DEBUG_POST_FLAG, "Error updating downloadImage path", e);
+                    }
+                });
     }
 
 

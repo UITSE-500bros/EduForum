@@ -38,7 +38,6 @@ public class CreatePostViewModel extends ViewModel {
         categories.add(new Category("2", "Chia sẻ", false));
         categories.add(new Category("3", "Tuyển dụng", false));
         allCategories.setValue(categories);
-
     }
     public LiveData<String> getErrorMessage() {
         return errorMessage;
