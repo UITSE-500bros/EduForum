@@ -3,6 +3,7 @@ package com.example.eduforum.activity.ui.auth;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
@@ -76,6 +77,8 @@ public class SignUpActivity extends AppCompatActivity {
                     // Callback is invoked after the user selects a media item or closes the
                     // photo picker.
                     if (uri != null) {
+                        Log.d("PhotoPicker", "Selected URI: " + uri);
+
                         SignUpViewState state = viewModel.getUser().getValue();
                         assert state != null;
                         state.setProfilePicture(uri);

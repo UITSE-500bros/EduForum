@@ -72,7 +72,7 @@ public class CreatePostViewModel extends ViewModel {
             return;
         }
         String sth = communityId.getValue();
-        Post post = new Post(newPost.getPostId(), sth, newPost.getTitle(), newPost.getContent(), newPost.getIsAnonymous(), null, null, newPost.getCreator(), 0, 0, 0,0, null, null, newPost.getTags());
+        Post post = new Post(newPost.getPostId(), sth, newPost.getTitle(), newPost.getContent(), newPost.getIsAnonymous(), null, null, newPost.getCreator(), 0, 0, 0,0, newPost.getImage(), null, newPost.getTags());
         // add new post to database
         postRepository.addPost(post, new IPostCallback() {
             @Override
