@@ -123,6 +123,6 @@ public class CreatePostViewModel extends ViewModel {
     }
     private String convertTimestampToReadable(Timestamp timestamp){
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        return sdf.format(timestamp);
+        return sdf.format(timestamp.toDate());
     }
 }
