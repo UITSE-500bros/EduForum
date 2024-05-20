@@ -105,6 +105,30 @@ public class CommunityRepository {
         db.collection("Community").document(community.getCommunityId()).set(community);
     }
 
+    public void exploreCommunity(String userID, IExploreCallback callback) {
+        db.collection("Community")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<Community> communities = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Community community = document.toObject(Community.class);
+                                if (!community.getUserList().contains(userID)) {
+                                    communities.add(community);
+                                }
+                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
+                            }
+                            callback.onGetCommunitySuccess(communities);
+                        } else {
+                            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Error getting documents: ", task.getException());
+                            callback.onGetCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_GET_COMMUNITY);
+                        }
+                    }
+                });
+    }
+
     private void createCommunityNewPost(String communityID, String userID) {
         Map<String, Object> data = new HashMap<>();
         data.put("communityID", communityID);
