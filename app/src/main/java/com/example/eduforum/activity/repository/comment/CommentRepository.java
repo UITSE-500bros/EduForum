@@ -1,5 +1,6 @@
 package com.example.eduforum.activity.repository.comment;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -7,10 +8,13 @@ import androidx.annotation.NonNull;
 import com.example.eduforum.activity.model.post_manage.Comment;
 import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.model.post_manage.PostingObject;
+import com.example.eduforum.activity.repository.comment.dto.AddCommentDTO;
 import com.example.eduforum.activity.repository.post.IPostCallback;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -20,19 +24,24 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class CommentRepository {
     private static CommentRepository instance;
     private final FirebaseFirestore db;
-    private final FirebaseStorage firebaseStorage;
+    private final FirebaseStorage storage;
 
     public CommentRepository() {
         db = FirebaseFirestore.getInstance();
-        firebaseStorage = FirebaseStorage.getInstance();
+        storage = FirebaseStorage.getInstance();
     }
 
     public static synchronized CommentRepository getInstance() {
@@ -69,11 +78,12 @@ public class CommentRepository {
         }
         newComment.setCommunityID(parent.getCommunityID());
         newComment.setPostID(parent.getPostID());
-        commentRef.add(newComment).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        AddCommentDTO addCommentDTO = new AddCommentDTO(newComment);
+        commentRef.add(addCommentDTO).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         newComment.setCommentID(documentReference.getId());
-                        callback.onCreateSuccess(newComment);
+                        uploadCommentImages(newComment, callback);
                         Log.d(FlagsList.DEBUG_COMMENT_FLAG, "Comment written with ID: " + documentReference.getId());
                     }
                 })
@@ -81,10 +91,76 @@ public class CommentRepository {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         callback.onFailure(e.getMessage());
-                        Log.w(FlagsList.DEBUG_COMMENT_FLAG, "Error adding document", e);
+                        Log.w(FlagsList.DEBUG_COMMENT_FLAG, "Error adding comment", e);
                     }
                 });
 
+    }
+
+    private void uploadCommentImages(Comment comment, CommentCallback callback) {
+        StorageReference commentRef = storage.getReference("Post/" + comment.getPostID() + "/" + comment.getCommentID() + "/images");
+
+        List<Uri> filesUri = comment.getImage();
+        if (filesUri == null || filesUri.isEmpty()) {
+            callback.onCreateSuccess(comment);
+            return;
+        }
+        int sequenceNumber = 0;
+
+        StorageMetadata metadata = new StorageMetadata.Builder()
+                .setContentType("image/jpeg")
+                .build();
+
+        List<Task<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
+        List<String> imagePaths = new ArrayList<>();
+        for (Uri fileUri : filesUri) {
+            String uniqueFileName = String.format(Locale.US, "%04d-%d", sequenceNumber++, System.currentTimeMillis());
+
+            StorageReference fileRef = commentRef.child(uniqueFileName);
+            imagePaths.add(fileRef.getPath()+"/"+uniqueFileName);
+
+            UploadTask uploadTask = fileRef.putFile(fileUri, metadata);
+            uploadTasks.add(uploadTask);
+        }
+
+        Tasks.whenAllSuccess(uploadTasks).addOnSuccessListener(new OnSuccessListener<List<Object>>() {
+            @Override
+            public void onSuccess(List<Object> objects) {
+                comment.setDownloadImage(imagePaths);
+                updateDownloadImage(comment, callback);
+                Log.d(FlagsList.DEBUG_COMMENT_FLAG, "All images uploaded successfully!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(FlagsList.DEBUG_COMMENT_FLAG, "Error uploading images", e);
+                callback.onFailure(e.toString());
+            }
+        });
+    }
+
+    private void updateDownloadImage(Comment comment, CommentCallback callback) {
+        db.collection("Community")
+                .document(comment.getCommunityID())
+                .collection("Post")
+                .document(comment.getPostID())
+                .collection("Comment")
+                .document(comment.getCommentID())
+                .update("downloadImage", comment.getDownloadImage())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(FlagsList.DEBUG_COMMENT_FLAG, "downloadImage path updated successfully!");
+                        callback.onCreateSuccess(comment);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(FlagsList.DEBUG_COMMENT_FLAG, "Error updating downloadImage path", e);
+                        callback.onFailure(e.toString());
+                    }
+                });
     }
 
     /**
