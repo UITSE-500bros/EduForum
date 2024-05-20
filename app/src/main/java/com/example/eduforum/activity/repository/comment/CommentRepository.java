@@ -205,7 +205,14 @@ public class CommentRepository {
                 .collection("Comment")
                 .whereEqualTo("replyCommentID", comment.getCommentID());
         commentQuery.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            List<Comment> comments = queryDocumentSnapshots.toObjects(Comment.class);
+            List<Comment> comments = new ArrayList<>();
+            for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                Comment _comment = document.toObject(Comment.class);
+                if (_comment != null) {
+                    _comment.setCommentID(document.getId());
+                    comments.add(_comment);
+                }
+            }
             callback.onLoadRepliesSuccess(comments);
         }).addOnFailureListener(e -> {
             callback.onFailure(e.getMessage());
