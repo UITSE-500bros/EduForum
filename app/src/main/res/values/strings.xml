@@ -45,6 +45,22 @@
         <item>Truyền thông và Mạng máy tính</item>
         <item>Khoa học và Kĩ thuật Thông tin</item>
     </string-array>
+
+    <string-array name="category_community">
+        <item>Khoa học Máy tính</item>
+        <item>Công nghệ Phần mềm</item>
+        <item>Hệ thống thông tin</item>
+        <item>Kỹ thuật máy tính</item>
+        <item>Truyền thông và Mạng máy tính</item>
+        <item>Khoa học và Kĩ thuật Thông tin</item>
+        <item>Khác</item>
+    </string-array>
+
+    <string-array name="access_community">
+        <item>Công khai</item>
+        <item>Riêng tư</item>
+    </string-array>
+
     <string-array name="gioiTinh">
         <item>Nam</item>
         <item>Nữ</item>

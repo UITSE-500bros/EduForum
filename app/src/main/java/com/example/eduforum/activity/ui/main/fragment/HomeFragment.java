@@ -104,7 +104,7 @@ public class HomeFragment extends Fragment {
         createCommunityDialog.setContentView(dialogBinding.getRoot());
         dialogBinding.setViewModel(viewModel);
         dialogBinding.setLifecycleOwner(this);
-        String[] departmentItems = getResources().getStringArray(R.array.ds_khoa);
+        String[] departmentItems = getResources().getStringArray(R.array.category_community);
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(this.getContext(),
                 android.R.layout.simple_dropdown_item_1line, departmentItems);
 

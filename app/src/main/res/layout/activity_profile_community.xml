@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:background="@color/backgroundColor">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:id="@+id/toolBarCreatePost"
+                android:background="@color/secondaryColor"
+                app:title="Tùy chỉnh cộng đồng"
+                app:titleTextColor="@color/white"
+                app:navigationIcon="@drawable/back_icon" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_marginBottom="20dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/ava_community_ImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:maxHeight="150dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/community_background" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:id="@+id/name_community_EditText"
+                    android:hint="Tên cộng đồng"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="26dp"
+                    android:background="@drawable/rectangle"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="30dp"
+                    android:textColorHint="@color/black"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:text=""
+                        android:textSize="14sp"
+                        android:inputType="textPersonName"
+                        android:layout_width="match_parent"
+                        android:backgroundTint="#FFFFFF"
+                        android:layout_height="62dp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:id="@+id/description_commnunity_EditText"
+                    android:hint="Mô tả cộng đồng"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginEnd="20dp"
+                    android:textColorHint="@color/black"
+                    android:layout_marginTop="20dp"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:text=""
+                        android:textSize="14sp"
+                        android:inputType="textPersonName"
+                        android:layout_width="match_parent"
+                        android:backgroundTint="#FFFFFF"
+                        android:layout_height="62dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/category_community_EditText"
+                    style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="62dp"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:hint="@string/community_category"
+                    android:background="@drawable/rectangle"
+                    android:textColorHint="@color/black"
+                    app:cursorColor="@color/primaryColor"
+                    android:textSize="12sp"
+                    >
+                    <AutoCompleteTextView
+                        android:id="@+id/ACTV_Category"
+                        android:layout_width="match_parent"
+                        android:layout_height="62dp"
+                        android:inputType="none"
+                        android:textSize="14sp"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/access_community_EditText"
+                    style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="62dp"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:hint="Quyền riêng tư"
+                    android:background="@drawable/rectangle"
+                    android:textColorHint="@color/black"
+                    app:cursorColor="@color/primaryColor"
+                    android:textSize="12sp"
+                    >
+                    <AutoCompleteTextView
+                        android:id="@+id/ACTV_Access"
+                        android:layout_width="match_parent"
+                        android:layout_height="62dp"
+                        android:textSize="14sp"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <Button
+                    android:id="@+id/update_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cập nhật"
+                    android:textSize="20sp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginEnd="20dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:background="@drawable/login_btn" />
+
+            </LinearLayout>
+        </ScrollView>
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

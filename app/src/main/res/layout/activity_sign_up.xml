@@ -73,6 +73,7 @@
                     >
                     <com.google.android.material.textfield.TextInputEditText
                         android:text="@={viewModel.user.email}"
+                        android:textSize="14sp"
                         android:inputType="textEmailAddress"
                         android:layout_width="match_parent"
                         android:backgroundTint="#FFFFFF"
@@ -93,6 +94,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:text="@={viewModel.user.fullName}"
                         android:inputType="textPersonName"
+                        android:textSize="14sp"
                         android:layout_width="match_parent"
                         android:backgroundTint="#FFFFFF"
                         android:layout_height="62dp"/>
@@ -117,6 +119,7 @@
                         style="@style/ThemeOverlay.Material3.AutoCompleteTextView.FilledBox"
                         android:layout_width="match_parent"
                         android:layout_height="62dp"
+                        android:textSize="14sp"
                         android:backgroundTint="#FFFFFF"
                         android:inputType="textPassword"
                         android:visibility="visible" />
@@ -139,6 +142,7 @@
                         style="@style/ThemeOverlay.Material3.AutoCompleteTextView.FilledBox"
                         android:text="@={viewModel.user.passwordCheck}"
                         android:layout_width="match_parent"
+                        android:textSize="14sp"
                         android:layout_height="62dp"
                         android:backgroundTint="#FFFFFF"
                         android:inputType="textPassword" />
@@ -160,6 +164,7 @@
                         android:text="@={viewModel.user.phoneNumber}"
                         android:inputType="phone"
                         android:layout_width="match_parent"
+                        android:textSize="14sp"
                         android:backgroundTint="#FFFFFF"
                         android:layout_height="62dp" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -180,6 +185,7 @@
                         android:text="@={viewModel.user.schoolYear}"
                         android:inputType="text|number"
                         android:layout_width="match_parent"
+                        android:textSize="14sp"
                         android:backgroundTint="#FFFFFF"
                         android:layout_height="62dp" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -203,6 +209,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="62dp"
                         android:inputType="none"
+                        android:textSize="14sp"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
                 <!--                    cai nay binding lam sao thi de anh em UI lam :))-->
@@ -225,6 +232,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="62dp"
                         android:inputType="none"
+                        android:textSize="14sp"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
