@@ -22,6 +22,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.OnProgressListener;
@@ -249,6 +250,52 @@ public class PostRepository {
                     public void onFailure(@NonNull Exception e) {
                         callback.onDeletePostError(e.toString());
                         Log.w(FlagsList.DEBUG_POST_FLAG, "Error deleting document", e);
+                    }
+                });
+    }
+
+    /**
+     * Search post by keyword
+     *
+     * @param communityID community ID
+     * @param keyword    search keyword
+     * @param callback override onQueryPostSuccess to get the list of posts
+     */
+    public void searchPost(String communityID, String keyword, IPostCallback callback) {
+
+        db.collection("Community")
+                .document(communityID)
+                .collection("Post")
+                .where(Filter.or(
+                        Filter.and(
+                                Filter.greaterThanOrEqualTo("title", keyword),
+                                Filter.lessThanOrEqualTo("title", keyword + "\uf8ff")
+                        ),
+                        Filter.and(
+                                Filter.greaterThanOrEqualTo("content", keyword),
+                                Filter.lessThanOrEqualTo("content", keyword + "\uf8ff")
+                        )
+                ))
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<Post> posts = new ArrayList<>();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Post post = documentSnapshot.toObject(Post.class);
+                            post.setPostID(documentSnapshot.getId());
+                            posts.add(post);
+                            Log.d(FlagsList.DEBUG_POST_FLAG, documentSnapshot.getId() + " => " + documentSnapshot.getData());
+                        }
+
+                        callback.onQueryPostSuccess(posts);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onQueryPostError(e.toString());
+                        Log.w(FlagsList.DEBUG_POST_FLAG, "Error fetching post,", e);
                     }
                 });
     }
