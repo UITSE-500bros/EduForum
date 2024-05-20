@@ -148,13 +148,14 @@
                     android:background="@null"/>
             </LinearLayout>
         </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/nestedRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/nestedRecyclerView"
             android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
-            android:padding="5dp"/>
+            android:padding="5dp" />
 
 
     </LinearLayout>
