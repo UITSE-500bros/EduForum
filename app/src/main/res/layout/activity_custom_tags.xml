@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".activity.ui.community.CustomTagsActivity"
-    >
+    tools:context=".activity.ui.community.CustomTagsActivity">
+
+    <!-- Your layout code here -->
+
+
 <androidx.constraintlayout.widget.ConstraintLayout
 
     android:id="@+id/main"
@@ -19,6 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:fitsSystemWindows="true"
         >
         <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
@@ -42,8 +45,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@color/backgroundColor"
-
-
+        tools:listitem="@layout/item_tags"
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -54,7 +56,9 @@
         android:src="@drawable/icon_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:backgroundTint="@color/primaryColor"/>
+        app:backgroundTint="@color/primaryColor"
+        android:contentDescription="TODO"
+        />
 
 
 
