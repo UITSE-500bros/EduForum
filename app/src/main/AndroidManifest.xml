@@ -65,7 +65,7 @@
             android:exported="true" />
         <activity
             android:name=".activity.ui.main.MainActivity"
-            android:exported="false" />
+            android:exported="true" />
     </application>
 
 </manifest>
