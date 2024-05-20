@@ -50,12 +50,12 @@ public class PostDetailsViewModel extends ViewModel {
             commentViewStates.add(new CommentViewState(
                     comment.getCommentID(),
                     comment.getContent(),
-                    null,
+                    String.valueOf(comment.getTimeCreated()),
                     comment.getCreator(),
                     comment.getTotalUpVote(),
                     comment.getTotalDownVote(),
                     comment.getVoteDifference(),
-                    null,
+                    String.valueOf(comment.getLastModified()),
                     comment.getImage(),
                     comment.getReplyCommentID(),
                     comment.getTotalReply()
@@ -170,7 +170,7 @@ public class PostDetailsViewModel extends ViewModel {
     public void downVote(PostViewState postViewState) {
         Post post = new Post(postViewState.getPostId(), postViewState.getCommunity().getCommunityID(), postViewState.getTitle(), postViewState.getContent(), postViewState.getIsAnonymous(), null, null, postViewState.getCreator(), 0, 0, 0,0, null, null, postViewState.getTags());
 
-        postRepository.updateVoteCount(post, "eV0GJ70ZUKR18TmkNeSyUhRqyG23", -1);
+        postRepository.updateVoteCount(post, FirebaseAuth.getInstance().getCurrentUser().getUid(), -1);
     }
 
     public void addParentComment(CommentViewState comment,String postID, String communityID) {
@@ -243,7 +243,6 @@ public class PostDetailsViewModel extends ViewModel {
     }
 
     public void addChildComment(CommentViewState commentParentViewState, CommentViewState commentChildViewState) {
-
         Comment parentComment = new Comment(
                 commentParentViewState.getCommentID(),
                 commentParentViewState.getContent(),

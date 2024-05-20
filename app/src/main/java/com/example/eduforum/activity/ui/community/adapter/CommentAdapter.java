@@ -56,8 +56,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         }
     }
 
-    public static void setChildCommentList(List<CommentViewState> childCommentList) {
-        CommentAdapter.childCommentList = childCommentList;
+    public  void setChildCommentList(List<CommentViewState> childCommentList) {
+        if (childCommentList != null) {
+            this.childCommentList = childCommentList;
+        } else {
+            this.childCommentList = new ArrayList<>();
+        }
     }
 
     @NonNull
