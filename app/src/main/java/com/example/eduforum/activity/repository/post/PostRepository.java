@@ -411,8 +411,16 @@ public class PostRepository {
 
     }
 
+    /**
+     * Subscribe to a post
+     *
+     * @param communityID community ID
+     * @param postID      post ID
+     * @param userID      user ID
+     * @param callback    override onSubscriptionSuccess to get the list of posts
+     */
     public void subscribePost(String communityID, String postID, String userID, IPostCallback callback) {
-        db.collection("Subscription")
+        db.collection("PostSubscription")
                 .add(new Subscription(communityID, postID, userID))
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
