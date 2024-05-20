@@ -9,7 +9,7 @@ import java.util.List;
 public class CommentViewState {
     private CommentViewState commentViewState;
     private String commentID;
-
+    private String communityID;
     private String content;
     private String timeCreated;
     private Creator creator;
@@ -19,9 +19,9 @@ public class CommentViewState {
     private String lastModified;
     private List<Uri> image;
     private String replyCommentID;
-    private String totalReply;
+    private Integer totalReply;
 
-    public CommentViewState(String commentID, String content, String timeCreated, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, String lastModified, List<Uri> image, String replyCommentID, String totalReply) {
+    public CommentViewState(String commentID, String content, String timeCreated, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, String lastModified, List<Uri> image, String replyCommentID, Integer totalReply) {
         this.commentID = commentID;
         this.content = content;
         this.timeCreated = timeCreated;
@@ -123,11 +123,11 @@ public class CommentViewState {
         this.replyCommentID = replyCommentID;
     }
 
-    public String getTotalReply() {
+    public Integer getTotalReply() {
         return totalReply;
     }
 
-    public void setTotalReply(String totalReply) {
+    public void setTotalReply(Integer totalReply) {
         this.totalReply = totalReply;
     }
 }

@@ -100,6 +100,71 @@ public class CommunityRepository {
                 });
     }
 
+    /**
+     * - Turn on/off notification for a community.
+     * <br></br>
+     * - Please ensure that the user is a member of the community before calling this method.
+     * <br></br>
+     * - Please ensure that the previous notification status is different from the new status.
+     * @param communityID the ID of the community
+     * @param isOn true if turn on, false if turn off
+     */
+    public void toggleNotification(String communityID, boolean isOn) {
+
+        DocumentReference ref = db.collection("Community")
+                .document(communityID)
+                .collection("Subscription")
+                .document("subscription");
+
+        if (isOn) {
+            ref.update("userList", FieldValue.arrayUnion(currentUser.getUid()));
+        } else {
+            ref.update("userList", FieldValue.arrayRemove(currentUser.getUid()));
+        }
+    }
+
+    /**
+     * Get the user's notification status of a community
+     * Call this method to check if the user has turned on notification for a community
+     * @param communityID the ID of the community
+     * @param callBack the callback to be called when the operation is done, providing the notification status (true if on, false if off)
+     */
+    public void getNotificationStatus(String communityID, INotificationStatus callBack) {
+        db.collection("Community")
+                .document(communityID)
+                .collection("Subscription")
+                .document("subscription")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                try {
+                                    List<String> userList = (List<String>) document.get("userList");
+                                    if (userList == null) {
+                                        userList = new ArrayList<>();
+                                        callBack.onNotificationStatusSuccess(false);
+                                    } else {
+                                        callBack.onNotificationStatusSuccess(userList.contains(currentUser.getUid()));
+                                    }
+                                }
+                                catch (Exception e) {
+                                    Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "get notification status failed with: ", task.getException());
+                                }
+                            } else {
+                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "get notification status failed, no document exist! ");
+
+                            }
+                        } else {
+                            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+    }
+
+
     public void deleteCommunity(Community community) {
         db.collection("Community").document(community.getCommunityId()).delete();
     }
@@ -141,7 +206,7 @@ public class CommunityRepository {
     /**
      * Send a request to join a community
      *
-     * @param user   the user who wants to join the community
+     * @param user     the user who wants to join the community
      * @param callback the callback to be called when the operation is done
      */
     public void requestJoinCommunity(String communityID, User user, IRequestCallback callback) {
@@ -233,6 +298,7 @@ public class CommunityRepository {
                 .document(communityID)
                 .update("adminList", FieldValue.arrayUnion(userID));
     }
+
     /**
      * Remove an admin from a community
      *
@@ -322,6 +388,7 @@ public class CommunityRepository {
             }
         });
     }
+
     public void observeDocument(String userID, ICommunityChangeListener listener) {
         getTotalNewPost(userID, new NewPostCallback() {
             @Override

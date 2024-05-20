@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eduforum.R;
-import com.example.eduforum.activity.model.post_manage.Comment;
 import com.example.eduforum.activity.ui.community.PostDetailActivity;
 import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
 import com.example.eduforum.activity.ui.main.adapter.ChildCommentAdapter;
@@ -20,14 +18,21 @@ import com.example.eduforum.databinding.ItemChildCommentBinding;
 import com.example.eduforum.databinding.ItemListCommentBinding;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder>{
     private Context context;
     private static List<CommentViewState> commentList;
 
     private static List<CommentViewState> childCommentList;
+    public interface OnReplyClickListener {
+        void onReplyClick(CommentViewState comment);
+    }
 
-    public CommentAdapter(Context context, List<CommentViewState> commentList, List<CommentViewState> childCommentList) {
+    private OnReplyClickListener onReplyClickListener;
+
+    public CommentAdapter(Context context, List<CommentViewState> commentList, List<CommentViewState> childCommentList, OnReplyClickListener onReplyClickListener) {
         this.context = context;
         if (commentList != null) {
             this.commentList = commentList;
@@ -39,6 +44,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         } else {
             this.childCommentList = new ArrayList<>();
         }
+        this.onReplyClickListener = onReplyClickListener;
 
     }
     public void setCommentList(List<CommentViewState> commentList) {
@@ -65,12 +71,18 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
         CommentViewState comment = commentList.get(position);
-        holder.bind(comment);
-        ChildCommentAdapter childCommentAdapter = new ChildCommentAdapter(childCommentList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-        holder.recyclerView.setLayoutManager(linearLayoutManager);
-        holder.recyclerView.setAdapter(childCommentAdapter);
 
+
+        List<CommentViewState> temp = new ArrayList<>();
+
+        for (CommentViewState commentViewState : childCommentList) {
+            if (Objects.equals(commentViewState.getReplyCommentID(), comment.getCommentID())) {
+                temp.add(commentViewState);
+
+            }
+        }
+
+        holder.bind(comment, onReplyClickListener,temp);
     }
 
     @Override
@@ -80,38 +92,23 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder {
         ItemListCommentBinding binding;
-
-        ItemChildCommentBinding bindingChild;
-
-        RecyclerView recyclerView;
-
-
         public CommentViewHolder(ItemListCommentBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            recyclerView = binding.nestedRecyclerView;
+        }
+        public void bind(CommentViewState comment, OnReplyClickListener onReplyClickListener,List<CommentViewState> temp) {
+            binding.contentNotiParentTextView.setText(comment.getContent());
             binding.replyParentTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Get parent commnent
                     CommentViewState comment = commentList.get(getAdapterPosition());
-                    // Create a new instance of CommentViewState (or whatever class represents your comment)
-                    EditText replyEditText = ((PostDetailActivity) v.getContext()).findViewById(R.id.commentEditText);
-                    replyEditText.setText("@RauCha ");
-
-                    // Create a new instance of CommentViewState (or whatever class represents your comment)
-                    isReply = true;
-                    bindingChild = ItemChildCommentBinding.inflate(LayoutInflater.from(v.getContext()));
-                    bindingChild.contentChildTextView.setText(comment.getContent());
-
+                    onReplyClickListener.onReplyClick(comment);
                 }
             });
+            binding.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+            binding.nestedRecyclerView.setAdapter(new ChildCommentAdapter(temp));
 
-
-
-        }
-        public void bind(CommentViewState comment) {
-            binding.contentNotiParentTextView.setText(comment.getContent());
+            
         }
     }
 }

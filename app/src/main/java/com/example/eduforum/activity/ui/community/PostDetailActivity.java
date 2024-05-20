@@ -26,6 +26,9 @@ import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.activity.viewmodel.community.PostDetailsViewModel;
 import com.example.eduforum.databinding.ActivityPostDetailBinding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PostDetailActivity extends AppCompatActivity {
     private ActivityPostDetailBinding binding;
     private MediaAdapter mediaAdapter;
@@ -37,7 +40,8 @@ public class PostDetailActivity extends AppCompatActivity {
 
     private CommentChildAdapter commentChildAdapter;
 
-    private boolean isReply = false;
+
+    private boolean isParentComment = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +74,7 @@ public class PostDetailActivity extends AppCompatActivity {
             viewModel.setCurrentPost(postViewState);
             binding.titlePost.setText(postViewState.getTitle().toString());
             binding.contentPost.setText(postViewState.getContent().toString());
-            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
+  //          binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
 //            binding.userNameTextView.setText(postViewState.getCreator().name);
 
 //            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
@@ -78,22 +82,65 @@ public class PostDetailActivity extends AppCompatActivity {
             //finish();
         }
 
-        commentAdapter = new CommentAdapter(this, viewModel.getComments().getValue(), viewModel.getComments().getValue());
+        commentAdapter = new CommentAdapter(this, viewModel.getComments().getValue(), viewModel.getComments().getValue(), new CommentAdapter.OnReplyClickListener() {
+            @Override
+            public void onReplyClick(CommentViewState comment) {
+                binding.commentEditText.setText("@Nam ");
+                binding.commentEditText.setVisibility(View.VISIBLE);
+                binding.sendButton.setVisibility(View.VISIBLE);
+                binding.sendButton.setOnClickListener(v -> {
+                    String commentText = binding.commentEditText.getText().toString();
+                    if (!commentText.isEmpty()) {
+                        CommentViewState commentViewState = new CommentViewState(
+                                null,
+                                commentText,
+                                null,
+                                null,
+                                0,
+                                0,
+                                0,
+                                null,
+                                null,
+                                comment.getCommentID(),
+                                0
+                        );
+
+                        viewModel.addChildComment(comment, commentViewState);
+                        binding.commentEditText.setText("");
+                    }
+                });
+            }
+        });
+
+
+
         binding.recyclecomment.setAdapter(commentAdapter);
         binding.recyclecomment.setLayoutManager(new LinearLayoutManager(this));
 
 
+        assert postViewState != null;
+        viewModel.loadComments(postViewState);
 
         viewModel.getComments().observe(this, commentViewStates -> {
+            List<CommentViewState> commentChildList = new ArrayList<>();
+
+            for (CommentViewState commentViewState : commentViewStates) {
+                if (commentViewState.getReplyCommentID() != null) {
+                    commentChildList.add(commentViewState);
+                    commentViewStates.remove(commentViewState);
+                }
+            }
             commentAdapter.setCommentList(commentViewStates);
+            commentAdapter.setChildCommentList(commentChildList);
         });
+
 
 
 
         binding.setLifecycleOwner(this);
         binding.sendButton.setOnClickListener(v -> {
             String commentText = binding.commentEditText.getText().toString();
-            if (!commentText.isEmpty()) {
+            if (!commentText.isEmpty() && this.isParentComment) {
                 CommentViewState commentViewState = new CommentViewState(
                         null,
                         commentText,
@@ -105,7 +152,7 @@ public class PostDetailActivity extends AppCompatActivity {
                         null,
                         null,
                         null,
-                        "0"
+                        0
                 );
 
                 viewModel.addParentComment(commentViewState, postViewState.getPostId(), postViewState.getCommunity().getCommunityID());
@@ -116,12 +163,12 @@ public class PostDetailActivity extends AppCompatActivity {
         binding.downVoteButton.setOnClickListener(v -> {
             assert postViewState != null;
             viewModel.downVote(postViewState);
-            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference() - 1));
+            //binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference() - 1));
         });
 
         binding.upVoteButton.setOnClickListener(v -> {
             viewModel.upVote();
-            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference() + 1));
+            //binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference() + 1));
         });
 
         binding.recycleImage.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
