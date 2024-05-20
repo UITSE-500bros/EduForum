@@ -483,7 +483,7 @@ public class PostRepository {
                         transaction.update(postRef, "voteDifference", FieldValue.increment(-2));
                         transaction.update(voteRef, "voteType", voteType);
                     }
-                } else {
+                } else if (oldVoteType == -1){
                     if (voteType == 1) {
                         transaction.update(postRef, "totalUpVote", FieldValue.increment(1));
                         transaction.update(postRef, "totalDownVote", FieldValue.increment(-1));
@@ -493,6 +493,16 @@ public class PostRepository {
                         transaction.update(postRef, "totalDownVote", FieldValue.increment(-1));
                         transaction.update(postRef, "voteDifference", FieldValue.increment(1));
                         transaction.update(voteRef, "voteType", 0);
+                    }
+                } else {
+                    if (voteType == 1) {
+                        transaction.update(postRef, "totalUpVote", FieldValue.increment(1));
+                        transaction.update(postRef, "voteDifference", FieldValue.increment(1));
+                        transaction.update(voteRef, "voteType", voteType);
+                    } else if (voteType == -1) {
+                        transaction.update(postRef, "totalDownVote", FieldValue.increment(1));
+                        transaction.update(postRef, "voteDifference", FieldValue.increment(-1));
+                        transaction.update(voteRef, "voteType", voteType);
                     }
                 }
 
