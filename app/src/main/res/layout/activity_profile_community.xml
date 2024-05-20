@@ -56,13 +56,14 @@
                     android:layout_marginTop="30dp"
                     android:textColorHint="@color/black"
                     >
+
                     <com.google.android.material.textfield.TextInputEditText
-                        android:text=""
-                        android:textSize="14sp"
-                        android:inputType="textPersonName"
                         android:layout_width="match_parent"
+                        android:layout_height="62dp"
                         android:backgroundTint="#FFFFFF"
-                        android:layout_height="62dp" />
+                        android:inputType="textPersonName"
+                        android:text=""
+                        android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -74,7 +75,7 @@
                     android:layout_marginStart="26dp"
                     android:layout_marginEnd="20dp"
                     android:textColorHint="@color/black"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="30dp"
                     >
                     <com.google.android.material.textfield.TextInputEditText
                         android:text=""
@@ -91,7 +92,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="62dp"
                     android:layout_marginStart="26dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="30dp"
                     android:layout_marginEnd="20dp"
                     android:hint="@string/community_category"
                     android:background="@drawable/rectangle"
@@ -114,7 +115,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="62dp"
                     android:layout_marginStart="26dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="30dp"
                     android:layout_marginEnd="20dp"
                     android:hint="Quyền riêng tư"
                     android:background="@drawable/rectangle"
