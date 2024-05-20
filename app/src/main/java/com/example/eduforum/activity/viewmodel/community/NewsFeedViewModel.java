@@ -28,6 +28,7 @@ public class NewsFeedViewModel extends ViewModel {
     MutableLiveData<List<PostViewState>> postList; // posts displaying in news feed, not always the same as the posts in the community
     MutableLiveData<FilterViewState> currentFilter;
     MutableLiveData<List<PostCategory>> allCategories;
+    MutableLiveData<String> errorMessage;
     CommunityRepository communityRepository;
     PostRepository postRepository;
     public NewsFeedViewModel() {
@@ -47,17 +48,16 @@ public class NewsFeedViewModel extends ViewModel {
         allCategories.setValue(categories);
         currentFilter = new MutableLiveData<>();
         currentFilter.setValue(new FilterViewState());
+        errorMessage = new MutableLiveData<>();
     }
     public void setFilter(FilterViewState filter) {
         currentFilter.setValue(filter);
         postRepository.queryPost(currentCommunity.getValue().getCommunityID(),FirebaseAuth.getInstance().getUid(), filter.getTags(),  filter.getPostQuery(), new IPostCallback() {
             @Override
             public void onGetPostSuccess(List<Post> posts){
-                postList.setValue(convertPostListToPostViewStateList(posts));
             }
             @Override
             public void onGetPostFailure(String errorMsg){
-
             }
             @Override
             public void onAddPostFailure(String errorMsg){
@@ -76,10 +76,11 @@ public class NewsFeedViewModel extends ViewModel {
             }
             @Override
             public void onQueryPostError(String errorMsg){
-
+                errorMessage.setValue("Không thể lấy bài viết");
             }
             @Override
             public void onQueryPostSuccess(List<Post> queryPostResults){
+                postList.setValue(convertPostListToPostViewStateList(queryPostResults));
 
             }
             @Override
@@ -122,7 +123,7 @@ public class NewsFeedViewModel extends ViewModel {
             }
             @Override
             public void onGetPostFailure(String errorMsg){
-                postList.setValue(new ArrayList<>());
+
             }
             @Override
             public void onAddPostFailure(String errorMsg){
@@ -192,7 +193,9 @@ public class NewsFeedViewModel extends ViewModel {
     public LiveData<List<PostCategory>> getAllCategories() {
         return allCategories;
     }
-
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
+    }
     private List<PostViewState> convertPostListToPostViewStateList(List<Post> posts) {
         List<PostViewState> postViewStateList = new ArrayList<>();
         for(Post post : posts) {

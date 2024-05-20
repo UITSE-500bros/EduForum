@@ -11,6 +11,7 @@ public class FlagsList {
     public static final String DEBUG_COMMENT_FLAG = "DEBUG_COMMENT";
     public static final String ERROR_COMMENT = "ERROR_COMMENT";
     public static final String ERROR_CATEGORY = "ERROR_CATEGORY";
+    public static final String ERROR_COMMUNITY_FAILED_TO_GET_COMMUNITY = "ERROR_COMMUNITY_FAILED_TO_GET_COMMUNITY";
     public static String DEBUG_REGISTER_FLAG = "DEBUG_REGISTER";
     public static String DEBUG_LOGIN_FLAG = "DEBUG_LOGIN";
     public static String ERROR_LOGIN_EMAIL_NOT_VERIFIED = "ERROR_LOGIN_EMAIL_NOT_VERIFIED";

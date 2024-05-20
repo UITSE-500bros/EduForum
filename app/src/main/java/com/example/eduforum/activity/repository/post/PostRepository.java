@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.activity.model.post_manage.Post;
+import com.example.eduforum.activity.model.post_manage.PostCategory;
 import com.example.eduforum.activity.model.subscription_manage.Subscription;
 import com.example.eduforum.activity.repository.post.dto.AddPostDTO;
 import com.example.eduforum.activity.util.FlagsList;
@@ -21,6 +22,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.OnProgressListener;
@@ -60,7 +62,6 @@ public class PostRepository {
         return instance;
     }
 
-    // TODO: add post image to firebase storage - THY
 
     public void addPost(Post post, IPostCallback callback) {
         AddPostDTO addPostDTO = new AddPostDTO(post);
@@ -253,6 +254,52 @@ public class PostRepository {
                 });
     }
 
+    /**
+     * Search post by keyword
+     *
+     * @param communityID community ID
+     * @param keyword    search keyword
+     * @param callback override onQueryPostSuccess to get the list of posts
+     */
+    public void searchPost(String communityID, String keyword, IPostCallback callback) {
+
+        db.collection("Community")
+                .document(communityID)
+                .collection("Post")
+                .where(Filter.or(
+                        Filter.and(
+                                Filter.greaterThanOrEqualTo("title", keyword),
+                                Filter.lessThanOrEqualTo("title", keyword + "\uf8ff")
+                        ),
+                        Filter.and(
+                                Filter.greaterThanOrEqualTo("content", keyword),
+                                Filter.lessThanOrEqualTo("content", keyword + "\uf8ff")
+                        )
+                ))
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<Post> posts = new ArrayList<>();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Post post = documentSnapshot.toObject(Post.class);
+                            post.setPostID(documentSnapshot.getId());
+                            posts.add(post);
+                            Log.d(FlagsList.DEBUG_POST_FLAG, documentSnapshot.getId() + " => " + documentSnapshot.getData());
+                        }
+
+                        callback.onQueryPostSuccess(posts);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onQueryPostError(e.toString());
+                        Log.w(FlagsList.DEBUG_POST_FLAG, "Error fetching post,", e);
+                    }
+                });
+    }
+
     public void queryPost(String communityID, String userID, @Nullable List<Category> categories, @Nullable PostQuery condition, IPostCallback callback) {
         // set total new post to 0
         resetNewPost(communityID, userID);
@@ -281,12 +328,13 @@ public class PostRepository {
         }
 
         if (categories != null) {
-            List<String> categoryIDs = new ArrayList<>();
+            List<PostCategory> categoryIDs = new ArrayList<>();
             for (Category category : categories) {
-                categoryIDs.add(category.getCategoryID());
+                PostCategory newCategory = new PostCategory(category);
+                categoryIDs.add(newCategory);
             }
 
-            List<List<String>> batches = new ArrayList<>();
+            List<List<PostCategory>> batches = new ArrayList<>();
             int batchSize = 10;
             for (int i = 0; i < categoryIDs.size(); i += batchSize) {
                 int end = Math.min(categoryIDs.size(), i + batchSize);
@@ -294,8 +342,8 @@ public class PostRepository {
             }
 
             List<Task<QuerySnapshot>> tasks = new ArrayList<>();
-            for (List<String> batch : batches) {
-                Task<QuerySnapshot> task = postQuery.whereArrayContainsAny("categories.categoryID", batch).get();
+            for (List<PostCategory> batch : batches) {
+                Task<QuerySnapshot> task = postQuery.whereArrayContainsAny("category", batch).get();
                 tasks.add(task);
             }
 

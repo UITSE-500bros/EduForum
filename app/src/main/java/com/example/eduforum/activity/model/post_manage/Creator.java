@@ -1,6 +1,8 @@
 package com.example.eduforum.activity.model.post_manage;
 
-public class Creator {
+import java.io.Serializable;
+
+public class Creator implements Serializable {
     public String creatorID;
     public String name;
     public String department;

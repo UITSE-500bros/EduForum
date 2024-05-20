@@ -18,6 +18,7 @@ import com.example.eduforum.R;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.activity.ui.community.adapter.PostAdapter;
 import com.example.eduforum.activity.ui.community.adapter.TagsAdapter;
 import com.example.eduforum.activity.ui.community.viewstate.FilterViewState;
@@ -26,6 +27,9 @@ import com.example.eduforum.activity.viewmodel.community.NewsFeedViewModel;
 import com.example.eduforum.databinding.ActivityCommunityBinding;
 import com.example.eduforum.databinding.CommunityFilterBinding;
 import com.google.android.material.appbar.MaterialToolbar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommunityActivity extends AppCompatActivity {
     ActivityCommunityBinding binding;
@@ -68,6 +72,11 @@ public class CommunityActivity extends AppCompatActivity {
         });
         viewModel.getPostList().observe(this, postList -> {
             postAdapter.setPostList(postList);
+        });
+        viewModel.getErrorMessage().observe(this, errorMessage -> {
+            if (errorMessage != null) {
+                Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+            }
         });
         //setup toolbar
         MaterialToolbar toolbar = binding.toolbar;
@@ -117,7 +126,9 @@ public class CommunityActivity extends AppCompatActivity {
             filterBinding.categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             filterBinding.applyButton.setOnClickListener(v -> {
                 // for testing
-                viewModel.setFilter(new FilterViewState());
+                List<Category> sampleCategories = new ArrayList<>();
+                sampleCategories.add(new Category("1", "Hỏi đáp", false));
+                viewModel.setFilter(new FilterViewState(sampleCategories));
                 filterDialog.dismiss();
             });
 

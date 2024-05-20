@@ -9,7 +9,7 @@ import java.util.List;
 public class Comment extends PostingObject {
     private String commentID;
     private String replyCommentID;
-    private String totalReply;
+    private Integer totalReply;
 
     public Comment() {
         super();
@@ -21,7 +21,7 @@ public class Comment extends PostingObject {
         this.replyCommentID = parentID;
     }
 
-    public Comment(String communityID, String postID, String content, Timestamp timeCreated, Timestamp lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<Uri> image, String commentID, String replyCommentID, String postID1, String communityID1, String totalReply) {
+    public Comment(String communityID, String postID, String content, Timestamp timeCreated, Timestamp lastModified, Creator creator, Integer totalUpVote, Integer totalDownVote, Integer voteDifference, List<Uri> image, String commentID, String replyCommentID, String postID1, String communityID1, Integer totalReply) {
         super(communityID, postID, content, timeCreated, lastModified, creator, totalUpVote, totalDownVote, voteDifference, image);
         this.commentID = commentID;
         this.replyCommentID = replyCommentID;
@@ -30,11 +30,11 @@ public class Comment extends PostingObject {
         this.totalReply = totalReply;
     }
 
-    public String getTotalReply() {
+    public Integer getTotalReply() {
         return totalReply;
     }
 
-    public void setTotalReply(String totalReply) {
+    public void setTotalReply(Integer totalReply) {
         this.totalReply = totalReply;
     }
 

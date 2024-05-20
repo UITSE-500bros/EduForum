@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.eduforum.activity.model.community_manage.Community;
+import com.example.eduforum.activity.model.user_manage.User;
+import com.example.eduforum.activity.repository.community.dto.JoinRequestDTO;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -18,6 +20,7 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -103,6 +106,155 @@ public class CommunityRepository {
 
     public void updateCommunity(Community community) {
         db.collection("Community").document(community.getCommunityId()).set(community);
+    }
+
+    /**
+     * Get all communities that the user is not a member of
+     *
+     * @param userID   the user's ID
+     * @param callback the callback to be called when the operation is done, providing a list of communities
+     */
+    public void exploreCommunity(String userID, IExploreCallback callback) {
+        db.collection("Community")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<Community> communities = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Community community = document.toObject(Community.class);
+                                if (!community.getUserList().contains(userID)) {
+                                    communities.add(community);
+                                }
+                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
+                            }
+                            callback.onGetCommunitySuccess(communities);
+                        } else {
+                            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Error getting documents: ", task.getException());
+                            callback.onGetCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_GET_COMMUNITY);
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Send a request to join a community
+     *
+     * @param user   the user who wants to join the community
+     * @param callback the callback to be called when the operation is done
+     */
+    public void requestJoinCommunity(String communityID, User user, IRequestCallback callback) {
+
+        JoinRequestDTO joinRequestDTO = new JoinRequestDTO(user);
+
+        db.collection("Community")
+                .document(communityID)
+                .collection("MemberApproval")
+                .document(user.getUserId())
+                .set(joinRequestDTO)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        callback.onSuccess("Request sent successfully!");
+                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "MemberApproval successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onFailure("Failed to send request!");
+                        Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error writing MemberApproval", e);
+                    }
+                });
+
+    }
+
+    /**
+     * Get all users who have requested to join a community
+     *
+     * @param communityID the ID of the community
+     * @param callback    the callback to be called when the operation is done, providing a list of users
+     */
+    public void getMemberApproval(String communityID, IGetMemberApproval callback) {
+        db.collection("Community")
+                .document(communityID)
+                .collection("MemberApproval")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<User> users = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                User user = document.toObject(User.class);
+                                users.add(user);
+                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
+                            }
+                            callback.onGetMemberApprovalSuccess(users);
+                        } else {
+                            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Error getting documents: ", task.getException());
+                            callback.onGetMemberApprovalFailure("Failed to fetch MemberApproval!");
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Approve or reject a user's request to join a community
+     *
+     * @param communityID the ID of the community
+     * @param userID      the ID of the user
+     * @param isApprove   true if the request is approved, false if it is rejected
+     */
+    public void approveUser(String communityID, String userID, boolean isApprove) {
+        if (isApprove) {
+            db.collection("Community")
+                    .document(communityID)
+                    .update("userList", FieldValue.arrayUnion(userID));
+        }
+
+
+        db.collection("Community")
+                .document(communityID)
+                .collection("MemberApproval")
+                .document(userID)
+                .delete();
+    }
+
+    /**
+     * Make a user an admin of a community
+     *
+     * @param communityID the ID of the community
+     * @param userID      the ID of the user
+     */
+    public void makeAdmin(String communityID, String userID) {
+        db.collection("Community")
+                .document(communityID)
+                .update("adminList", FieldValue.arrayUnion(userID));
+    }
+    /**
+     * Remove an admin from a community
+     *
+     * @param communityID the ID of the community
+     * @param userID      the ID of the user
+     */
+    public void removeAdmin(String communityID, String userID) {
+        db.collection("Community")
+                .document(communityID)
+                .update("adminList", FieldValue.arrayRemove(userID));
+    }
+
+    /**
+     * Remove a user from a community
+     *
+     * @param communityID the ID of the community
+     * @param userID      the ID of the user
+     */
+    public void removeUser(String communityID, String userID) {
+        db.collection("Community")
+                .document(communityID)
+                .update("userList", FieldValue.arrayRemove(userID));
     }
 
     private void createCommunityNewPost(String communityID, String userID) {
