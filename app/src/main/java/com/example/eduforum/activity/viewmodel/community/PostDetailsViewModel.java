@@ -156,8 +156,10 @@ public class PostDetailsViewModel extends ViewModel {
         postRepository.updateVoteCount(postInstance, FirebaseAuth.getInstance().getCurrentUser().getUid(), 1);
     }
 
-    public void downVote() {
-        postRepository.updateVoteCount(postInstance, FirebaseAuth.getInstance().getCurrentUser().getUid(), -1);
+    public void downVote(PostViewState postViewState) {
+        Post post = new Post(postViewState.getPostId(), postViewState.getCommunity().getCommunityID(), postViewState.getTitle(), postViewState.getContent(), postViewState.getIsAnonymous(), null, null, postViewState.getCreator(), 0, 0, 0,0, null, null, postViewState.getTags());
+
+        postRepository.updateVoteCount(post, "eV0GJ70ZUKR18TmkNeSyUhRqyG23", -1);
     }
 
     public void addParentComment(CommentViewState comment,String postID, String communityID) {
@@ -166,14 +168,14 @@ public class PostDetailsViewModel extends ViewModel {
                 comment.getContent(),
                 communityID,
                 postID,
+                comment.getContent(),
                 null,
                 null,
-                null,
-                null,
+                comment.getCreator(),
                 0,
                 0,
                 0,
-                null
+                comment.getImage()
         );
         commentRepository.createComment(postInstance, newComment, new CommentCallback() {
             @Override
@@ -227,9 +229,6 @@ public class PostDetailsViewModel extends ViewModel {
             }
         });
 
-    }
-
-    public void addComment(CommentViewState commentViewState) {
     }
 
     public void addChildComment(CommentViewState commentParentViewState, CommentViewState commentChildViewState) {

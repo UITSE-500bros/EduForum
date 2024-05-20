@@ -1,6 +1,8 @@
 package com.example.eduforum.activity.ui.community;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -14,7 +16,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.model.post_manage.Comment;
 import com.example.eduforum.activity.ui.community.adapter.CommentAdapter;
+import com.example.eduforum.activity.ui.community.adapter.CommentChildAdapter;
 import com.example.eduforum.activity.ui.community.adapter.PostAdapter;
 import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
@@ -23,11 +27,15 @@ import com.example.eduforum.databinding.ActivityPostDetailBinding;
 
 public class PostDetailActivity extends AppCompatActivity {
     private ActivityPostDetailBinding binding;
+
+
     private PostDetailsViewModel viewModel;
 
     private CommentAdapter commentAdapter;
 
-    private PostAdapter postAdapter;
+    private CommentChildAdapter commentChildAdapter;
+
+    private boolean isReply = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +68,7 @@ public class PostDetailActivity extends AppCompatActivity {
             viewModel.setCurrentPost(postViewState);
             binding.titlePost.setText(postViewState.getTitle().toString());
             binding.contentPost.setText(postViewState.getContent().toString());
+            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
 //            binding.userNameTextView.setText(postViewState.getCreator().name);
 
 //            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
@@ -67,20 +76,25 @@ public class PostDetailActivity extends AppCompatActivity {
             //finish();
         }
 
-        commentAdapter = new CommentAdapter(this, viewModel.getComments().getValue());
+        commentAdapter = new CommentAdapter(this, viewModel.getComments().getValue(), viewModel.getComments().getValue());
         binding.recyclecomment.setAdapter(commentAdapter);
         binding.recyclecomment.setLayoutManager(new LinearLayoutManager(this));
+
+
 
         viewModel.getComments().observe(this, commentViewStates -> {
             commentAdapter.setCommentList(commentViewStates);
         });
+
+
+
         binding.setLifecycleOwner(this);
         binding.sendButton.setOnClickListener(v -> {
-            String comment = binding.commentEditText.getText().toString();
-            if (!comment.isEmpty()) {
+            String commentText = binding.commentEditText.getText().toString();
+            if (!commentText.isEmpty()) {
                 CommentViewState commentViewState = new CommentViewState(
                         null,
-                         comment,
+                        commentText,
                         null,
                         null,
                         0,
@@ -91,14 +105,23 @@ public class PostDetailActivity extends AppCompatActivity {
                         null,
                         "0"
                 );
+
                 viewModel.addParentComment(commentViewState, postViewState.getPostId(), postViewState.getCommunity().getCommunityID());
-                binding.commentEditText.setText(comment);
+                binding.commentEditText.setText("");
             }
         });
 
+        binding.downVoteButton.setOnClickListener(v -> {
+            assert postViewState != null;
+            viewModel.downVote(postViewState);
+            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference() - 1));
+        });
 
+        binding.upVoteButton.setOnClickListener(v -> {
+            viewModel.upVote();
+            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference() + 1));
+        });
 
     }
-
 
 }
