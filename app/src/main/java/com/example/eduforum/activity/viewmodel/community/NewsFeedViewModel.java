@@ -193,6 +193,9 @@ public class NewsFeedViewModel extends ViewModel {
     public LiveData<List<PostCategory>> getAllCategories() {
         return allCategories;
     }
+    public LiveData<FilterViewState> getCurrentFilter() {
+        return currentFilter;
+    }
     public LiveData<String> getErrorMessage() {
         return errorMessage;
     }

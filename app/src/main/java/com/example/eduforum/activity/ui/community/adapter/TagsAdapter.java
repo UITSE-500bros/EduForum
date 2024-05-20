@@ -5,20 +5,31 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eduforum.R;
 import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.model.post_manage.PostCategory;
 import com.example.eduforum.databinding.ItemTagsBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder>{
     private List<PostCategory> tagsList;
+    private List<Category> selectedTags;
+    private Boolean isFiltering;
 
-    public TagsAdapter(List<PostCategory> tagsList) {
+    public TagsAdapter(List<PostCategory> tagsList, List<Category> selectedTags, Boolean isFiltering) {
         this.tagsList = tagsList;
+        if(selectedTags == null) {
+            this.selectedTags = new ArrayList<>();
+        } else {
+            this.selectedTags = selectedTags;
+        }
+        this.isFiltering = isFiltering;
     }
 
     @NonNull
@@ -35,12 +46,26 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
         PostCategory tag = tagsList.get(position);
         holder.binding.setTagText(tag.getTitle());
         holder.binding.executePendingBindings();
-        holder.itemView.setOnClickListener(v -> {
-            //
+        if(isFiltering){
+            holder.itemView.setOnClickListener(v -> {
+                Category category = new Category(tag.getCategoryID(), tag.getTitle(), false);
+                if (selectedTags.contains(category)) {
+                    selectedTags.remove(category);
+                    int unselectedColor = ContextCompat.getColor(holder.itemView.getContext(), R.color.tagBackgroundColor);
+                    holder.binding.tagCardView.setCardBackgroundColor(unselectedColor);
+                } else {
+                    selectedTags.add(category);
+                    int selectedColor = ContextCompat.getColor(holder.itemView.getContext(), R.color.selectedTagBackgroundColor);
+                    holder.binding.tagCardView.setCardBackgroundColor(selectedColor);
+                }
 
-        });
+            });
+        }
     }
 
+    public List<Category> getSelectedTags() {
+        return selectedTags;
+    }
     @Override
     public int getItemCount() {
         return tagsList.size();

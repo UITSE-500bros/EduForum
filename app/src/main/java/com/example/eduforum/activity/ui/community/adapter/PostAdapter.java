@@ -99,7 +99,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             binding.time.setText(post.getDate());
 
             if(post.getTags()!=null){
-                TagsAdapter tagsAdapter = new TagsAdapter(post.getTags());
+                TagsAdapter tagsAdapter = new TagsAdapter(post.getTags(), null, false);
                 binding.tagslayout.setAdapter(tagsAdapter);
                 binding.tagslayout.setLayoutManager(new LinearLayoutManager(binding.tagslayout.getContext(), LinearLayoutManager.HORIZONTAL, false));
             }
