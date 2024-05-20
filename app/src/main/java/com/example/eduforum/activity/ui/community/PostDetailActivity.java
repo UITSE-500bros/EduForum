@@ -40,7 +40,8 @@ public class PostDetailActivity extends AppCompatActivity {
 
     private CommentChildAdapter commentChildAdapter;
 
-
+    private boolean isUpVoted = false;
+    private boolean isDownVoted = false;
     private boolean isParentComment = true;
 
     @Override
@@ -74,7 +75,8 @@ public class PostDetailActivity extends AppCompatActivity {
             viewModel.setCurrentPost(postViewState);
             binding.titlePost.setText(postViewState.getTitle().toString());
             binding.contentPost.setText(postViewState.getContent().toString());
-  //          binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
+            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
+            binding.commentCountTextView.setText(String.valueOf(postViewState.getTotalComment()));
 //            binding.userNameTextView.setText(postViewState.getCreator().name);
 
 //            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
@@ -127,13 +129,12 @@ public class PostDetailActivity extends AppCompatActivity {
             for (CommentViewState commentViewState : commentViewStates) {
                 if (commentViewState.getReplyCommentID() != null) {
                     commentChildList.add(commentViewState);
-                    commentViewStates.remove(commentViewState);
+
                 }
             }
             commentAdapter.setCommentList(commentViewStates);
             commentAdapter.setChildCommentList(commentChildList);
         });
-
 
 
 
@@ -161,14 +162,23 @@ public class PostDetailActivity extends AppCompatActivity {
         });
 
         binding.downVoteButton.setOnClickListener(v -> {
-            assert postViewState != null;
-            viewModel.downVote(postViewState);
-            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference() - 1));
+            if(!isDownVoted){
+                viewModel.downVote(postViewState);
+                binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference() - 1));
+                postViewState.setVoteDifference(postViewState.getVoteDifference() - 1);
+                isDownVoted = true;
+                isUpVoted = false;
+            }
         });
 
         binding.upVoteButton.setOnClickListener(v -> {
-            viewModel.upVote();
-            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference() + 1));
+            if(!isUpVoted){
+                viewModel.upVote();
+                binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference() + 1));
+                postViewState.setVoteDifference(postViewState.getVoteDifference() + 1);
+                isUpVoted = true;
+                isDownVoted = false;
+            }
         });
 
         binding.recycleImage.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));

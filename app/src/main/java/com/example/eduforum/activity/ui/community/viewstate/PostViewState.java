@@ -24,8 +24,10 @@ public class PostViewState implements Serializable {
     private List<String> taggedUsers;
     private Boolean isAnonymous;
 
+    private int totalComment;
+
     private int voteDiff;
-    public PostViewState(String postId, Creator creator, CreateCommunityViewState community, String title, String content, Boolean isAnonymous, String date, List<Uri> image, List<String> taggedUsers,  List<PostCategory> tags, int voteDiff) {
+    public PostViewState(String postId, Creator creator, CreateCommunityViewState community, String title, String content, Boolean isAnonymous, String date, List<Uri> image, List<String> taggedUsers,  List<PostCategory> tags, int voteDiff, int totalComment) {
         this.postId = postId;
         this.creator = creator;
         this.community = community;
@@ -36,6 +38,8 @@ public class PostViewState implements Serializable {
         this.tags = tags;
         this.image = image;
         this.taggedUsers = taggedUsers;
+        this.voteDiff = voteDiff;
+        this.totalComment = totalComment;
     }
     public PostViewState(){
         this.postId = null;
@@ -109,5 +113,13 @@ public class PostViewState implements Serializable {
 
     public int getVoteDifference() {
         return voteDiff;
+    }
+
+    public int getTotalComment() {
+        return totalComment;
+    }
+
+    public void setVoteDifference(int i) {
+        this.voteDiff = i;
     }
 }

@@ -177,7 +177,14 @@ public class CommentRepository {
                 .collection("Comment")
                 .whereEqualTo("replyCommentID", null);
         commentQuery.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            List<Comment> comments = queryDocumentSnapshots.toObjects(Comment.class);
+            List<Comment> comments = new ArrayList<>();
+            for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                Comment comment = document.toObject(Comment.class);
+                if (comment != null) {
+                    comment.setCommentID(document.getId());
+                    comments.add(comment);
+                }
+            }
             callback.onInitialLoadSuccess(comments);
         }).addOnFailureListener(e -> {
             callback.onFailure(e.getMessage());
@@ -198,7 +205,14 @@ public class CommentRepository {
                 .collection("Comment")
                 .whereEqualTo("replyCommentID", comment.getCommentID());
         commentQuery.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            List<Comment> comments = queryDocumentSnapshots.toObjects(Comment.class);
+            List<Comment> comments = new ArrayList<>();
+            for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                Comment _comment = document.toObject(Comment.class);
+                if (_comment != null) {
+                    _comment.setCommentID(document.getId());
+                    comments.add(_comment);
+                }
+            }
             callback.onLoadRepliesSuccess(comments);
         }).addOnFailureListener(e -> {
             callback.onFailure(e.getMessage());
@@ -308,7 +322,7 @@ public class CommentRepository {
                         transaction.update(commentRef, "voteDifference", FieldValue.increment(-2));
                         transaction.update(voteRef, "voteType", voteType);
                     }
-                } else {
+                } else if (oldVoteType == -1) {
                     if (voteType == 1) {
                         transaction.update(commentRef, "totalUpVote", FieldValue.increment(1));
                         transaction.update(commentRef, "totalDownVote", FieldValue.increment(-1));
@@ -318,6 +332,16 @@ public class CommentRepository {
                         transaction.update(commentRef, "totalDownVote", FieldValue.increment(-1));
                         transaction.update(commentRef, "voteDifference", FieldValue.increment(1));
                         transaction.update(voteRef, "voteType", 0);
+                    }
+                } else {
+                    if (voteType == 1) {
+                        transaction.update(commentRef, "totalUpVote", FieldValue.increment(1));
+                        transaction.update(commentRef, "voteDifference", FieldValue.increment(1));
+                        transaction.update(voteRef, "voteType", voteType);
+                    } else if (voteType == -1) {
+                        transaction.update(commentRef, "totalDownVote", FieldValue.increment(1));
+                        transaction.update(commentRef, "voteDifference", FieldValue.increment(-1));
+                        transaction.update(voteRef, "voteType", voteType);
                     }
                 }
 
