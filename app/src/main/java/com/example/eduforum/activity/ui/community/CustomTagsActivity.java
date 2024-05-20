@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eduforum.R;
 import com.example.eduforum.databinding.ActivityCustomTagsBinding;
@@ -30,5 +32,8 @@ public class CustomTagsActivity extends AppCompatActivity {
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        RecyclerView recyclerView = binding.recyclerViewTags;
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
     }
 }

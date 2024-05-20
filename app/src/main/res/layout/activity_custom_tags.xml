@@ -54,7 +54,7 @@
         android:src="@drawable/icon_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:backgroundTint="@color/primaryColor"
+        app:backgroundTint="@color/primaryColor"/>
 
 
 
