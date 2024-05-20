@@ -1,4 +1,4 @@
-package com.example.eduforum.activity.viewmodel.community;
+package com.example.eduforum.activity.ui.community;
 
 import android.os.Bundle;
 
@@ -9,8 +9,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.eduforum.R;
+import com.example.eduforum.databinding.ActivityCustomTagsBinding;
+import com.google.android.material.appbar.MaterialToolbar;
+
+
 
 public class CustomTagsActivity extends AppCompatActivity {
+    private ActivityCustomTagsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,5 +27,8 @@ public class CustomTagsActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 }

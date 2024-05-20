@@ -21,7 +21,8 @@
             android:name=".activity.ui.community.ProfileCommunityActivity"
             android:exported="true" />
         <activity
-            android:name=".activity.viewmodel.community.CustomTagsActivity"
+            android:name=".activity.ui.community.CustomTagsActivity"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
             android:exported="true"/>
         <activity
             android:name=".activity.ui.community.MemberRequestActivity"
