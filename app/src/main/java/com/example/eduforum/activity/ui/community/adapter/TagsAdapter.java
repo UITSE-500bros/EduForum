@@ -39,6 +39,11 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
             //
 
         });
+        holder.itemView.setOnLongClickListener(v -> {
+            tagsList.remove(position);
+            notifyItemRemoved(position);
+            return true;
+        });
     }
 
     @Override
