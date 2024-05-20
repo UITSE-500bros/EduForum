@@ -11,13 +11,17 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.model.post_manage.PostCategory;
+import com.example.eduforum.activity.ui.community.adapter.TagsAdapter;
 import com.example.eduforum.databinding.ActivityCustomTagsBinding;
 import com.google.android.material.appbar.MaterialToolbar;
 
+import java.util.List;
 
 
 public class CustomTagsActivity extends AppCompatActivity {
     private ActivityCustomTagsBinding binding;
+    private TagsAdapter tagsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +34,20 @@ public class CustomTagsActivity extends AppCompatActivity {
             return insets;
         });
 
+        binding = ActivityCustomTagsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(v -> {
+            finish();
+        });
 
         RecyclerView recyclerView = binding.recyclerViewTags;
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+//        tagsAdapter = new TagsAdapter((List<PostCategory>) this);
+//        recyclerView.setAdapter(tagsAdapter);
+
     }
 }
