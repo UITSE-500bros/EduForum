@@ -163,16 +163,16 @@ public class PostDetailActivity extends AppCompatActivity {
         binding.downVoteButton.setOnClickListener(v -> {
             assert postViewState != null;
             viewModel.downVote(postViewState);
-            //binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference() - 1));
+            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference() - 1));
         });
 
         binding.upVoteButton.setOnClickListener(v -> {
             viewModel.upVote();
-            //binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference() + 1));
+            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference() + 1));
         });
 
         binding.recycleImage.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        mediaAdapter = new MediaAdapter(postViewState.getImage());
+        //mediaAdapter = new MediaAdapter(postViewState.getImage());
         binding.recycleImage.setAdapter(mediaAdapter);
 
 
