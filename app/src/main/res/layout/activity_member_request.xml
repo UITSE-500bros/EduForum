@@ -26,67 +26,61 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/main"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:fitsSystemWindows="true">
+
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                android:fitsSystemWindows="true">
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/bottomSheet"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginHorizontal="10dp">
 
-                <ScrollView
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toTopOf="@+id/bottomSheet"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintVertical_bias="0"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginHorizontal="10dp"
-                    app:layout_constraintTop_toTopOf="parent">
+                    tools:listitem="@layout/item_member_request"/>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        tools:listitem="@layout/item_member_request"/>
+            </ScrollView>
 
-                </ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-                <RelativeLayout
-                    android:id="@+id/bottomSheet"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:background="@color/tagBackgroundColor"
-                    >
+        <LinearLayout
+            android:id="@+id/bottomSheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/tagBackgroundColor"
+            android:orientation="horizontal"
+            app:layout_anchor="@+id/main"
+            android:gravity="center"
+            android:fitsSystemWindows="true"
+            app:layout_anchorGravity="bottom|center">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/actAllButton"
-                        style="@style/ThemeOverlay.Material3.Button.TonalButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginStart="5dp"
-                        android:text="@string/accept_all" />
+            <Button
+                android:id="@+id/actAllButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:text="@string/accept_all" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/denyAllButton"
-                        style="@style/ThemeOverlay.Material3.Button.TonalButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="5dp"
-                        android:text="@string/deny_all" />
+            <Button
+                android:id="@+id/denyAllButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/deny_all" />
 
-
-                </RelativeLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
 
 </layout>

@@ -112,7 +112,18 @@ public class PostDetailsViewModel extends ViewModel {
     }
 
     public void loadComments(PostViewState postViewState){
-        Post post = new Post(postViewState.getPostId(), postViewState.getCommunity().getCommunityID(), postViewState.getTitle(), postViewState.getContent(), postViewState.getIsAnonymous(), null, null, postViewState.getCreator(), 0, 0, 0,0, null, null, postViewState.getTags());
+        Post post = new Post(postViewState.getPostId(),
+                postViewState.getCommunity().getCommunityID(),
+                postViewState.getTitle(),
+                postViewState.getContent(),
+                postViewState.getIsAnonymous(),
+                null,
+                null,
+                postViewState.getCreator(),
+                0, 0, 0,0,
+                null, null, postViewState.getTags());
+
+
         commentRepository.loadTopLevelComments(post, new CommentCallback() {
 
             @Override
@@ -167,7 +178,7 @@ public class PostDetailsViewModel extends ViewModel {
                 null,
                 comment.getContent(),
                 communityID,
-                postID,
+                null,
                 comment.getContent(),
                 null,
                 null,
@@ -192,7 +203,7 @@ public class PostDetailsViewModel extends ViewModel {
                         comments.getVoteDifference(),
                         null,
                         comments.getImage(),
-                        comments.getReplyCommentID(),
+                        null,
                         comments.getTotalReply()
                 ));
                 cmts.setValue(commentViewStates);
@@ -232,8 +243,38 @@ public class PostDetailsViewModel extends ViewModel {
     }
 
     public void addChildComment(CommentViewState commentParentViewState, CommentViewState commentChildViewState) {
-        Comment parentComment = new Comment(); // TODO: transfer parentCommentViewState to Comment
-        Comment childComment = new Comment(); // TODO: transfer childCommentViewState to Comment
+
+        Comment parentComment = new Comment(
+                commentParentViewState.getCommentID(),
+                commentParentViewState.getContent(),
+                postInstance.getCommunityID(),
+                null,
+                commentParentViewState.getContent(),
+                null,
+                null,
+                commentParentViewState.getCreator(),
+                0,
+                0,
+                0,
+                commentParentViewState.getImage()
+        );
+
+
+        Comment childComment = new Comment(
+                null,
+                commentChildViewState.getContent(),
+                null,
+                commentParentViewState.getCommentID(),
+                commentChildViewState.getContent(),
+                null,
+                null,
+                commentChildViewState.getCreator(),
+                0,
+                0,
+                0,
+                null
+
+        );
 
         commentRepository.createComment(parentComment, childComment, new CommentCallback() {
             @Override
