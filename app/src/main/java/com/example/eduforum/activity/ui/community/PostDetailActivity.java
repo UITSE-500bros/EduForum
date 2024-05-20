@@ -19,6 +19,7 @@ import com.example.eduforum.R;
 import com.example.eduforum.activity.model.post_manage.Comment;
 import com.example.eduforum.activity.ui.community.adapter.CommentAdapter;
 import com.example.eduforum.activity.ui.community.adapter.CommentChildAdapter;
+import com.example.eduforum.activity.ui.community.adapter.MediaAdapter;
 import com.example.eduforum.activity.ui.community.adapter.PostAdapter;
 import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
@@ -27,6 +28,7 @@ import com.example.eduforum.databinding.ActivityPostDetailBinding;
 
 public class PostDetailActivity extends AppCompatActivity {
     private ActivityPostDetailBinding binding;
+    private MediaAdapter mediaAdapter;
 
 
     private PostDetailsViewModel viewModel;
@@ -121,6 +123,11 @@ public class PostDetailActivity extends AppCompatActivity {
             viewModel.upVote();
             binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference() + 1));
         });
+
+        binding.recycleImage.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        mediaAdapter = new MediaAdapter(postViewState.getImage());
+        binding.recycleImage.setAdapter(mediaAdapter);
+
 
     }
 
