@@ -21,15 +21,18 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
     private List<PostCategory> tagsList;
     private List<Category> selectedTags;
     private Boolean isFiltering;
+    private Boolean isCreatingTag;
 
-    public TagsAdapter(List<PostCategory> tagsList, List<Category> selectedTags, Boolean isFiltering) {
+    public TagsAdapter(List<PostCategory> tagsList, List<Category> selectedTags, Boolean isFiltering, Boolean isCreatingTag) {
         this.tagsList = tagsList;
         if(selectedTags == null) {
             this.selectedTags = new ArrayList<>();
         } else {
             this.selectedTags = selectedTags;
+
         }
         this.isFiltering = isFiltering;
+        this.isCreatingTag = isCreatingTag;
     }
 
     @NonNull
@@ -47,25 +50,43 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
         holder.binding.setTagText(tag.getTitle());
         holder.binding.executePendingBindings();
         if(isFiltering){
+            for(Category category : selectedTags){
+                if(category.getCategoryID().equals(tag.getCategoryID())){
+                    int selectedColor = ContextCompat.getColor(holder.itemView.getContext(), R.color.selectedTagBackgroundColor);
+                    holder.binding.tagCardView.setCardBackgroundColor(selectedColor);
+                    holder.setIsSelected(true);
+                    break;
+                }
+            }
+
             holder.itemView.setOnClickListener(v -> {
                 Category category = new Category(tag.getCategoryID(), tag.getTitle(), false);
-                if (selectedTags.contains(category)) {
-                    selectedTags.remove(category);
+                if (holder.getIsSelected()) {
+                    for(Category selectedCategory : selectedTags){
+                        if(selectedCategory.getCategoryID().equals(category.getCategoryID())){
+                            selectedTags.remove(selectedCategory);
+                            break;
+                        }
+                    }
                     int unselectedColor = ContextCompat.getColor(holder.itemView.getContext(), R.color.tagBackgroundColor);
                     holder.binding.tagCardView.setCardBackgroundColor(unselectedColor);
+                    holder.setIsSelected(false);
                 } else {
                     selectedTags.add(category);
                     int selectedColor = ContextCompat.getColor(holder.itemView.getContext(), R.color.selectedTagBackgroundColor);
                     holder.binding.tagCardView.setCardBackgroundColor(selectedColor);
+                    holder.setIsSelected(true);
                 }
 
             });
         }
-        holder.itemView.setOnLongClickListener(v -> {
-            tagsList.remove(position);
-            notifyItemRemoved(position);
-            return true;
-        });
+        if(isCreatingTag){
+            holder.itemView.setOnLongClickListener(v -> {
+                tagsList.remove(position);
+                notifyItemRemoved(position);
+                return true;
+            });
+        }
 
     }
 
@@ -80,13 +101,17 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
     public class TagsViewHolder extends RecyclerView.ViewHolder{
 
         private ItemTagsBinding binding;
+        Boolean isSelected;
         public TagsViewHolder(ItemTagsBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-
-
-
-
+            this.isSelected = false;
+        }
+        void setIsSelected(Boolean isSelected){
+            this.isSelected = isSelected;
+        }
+        Boolean getIsSelected(){
+            return isSelected;
         }
     }
 }

@@ -157,7 +157,7 @@ public class CommunityActivity extends AppCompatActivity {
                 });
             }
 
-            TagsAdapter tagsAdapter = new TagsAdapter( viewModel.getAllCategories().getValue(), currentFilter.getTags(), true);
+            TagsAdapter tagsAdapter = new TagsAdapter( viewModel.getAllCategories().getValue(), currentFilter.getTags(), true, false);
             filterBinding.categoryRecyclerView.setAdapter(tagsAdapter);
             filterBinding.categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
             filterBinding.applyButton.setOnClickListener(v -> {
