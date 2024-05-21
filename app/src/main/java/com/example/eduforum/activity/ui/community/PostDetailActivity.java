@@ -14,6 +14,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.model.post_manage.Creator;
+import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.activity.ui.community.adapter.CommentAdapter;
 import com.example.eduforum.activity.ui.community.adapter.CommentChildAdapter;
 import com.example.eduforum.activity.ui.community.adapter.MediaAdapter;
@@ -82,7 +84,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
         commentAdapter = new CommentAdapter(this,
                 viewModel.getComments().getValue(),
-                viewModel.getComments().getValue(),
+                viewModel.getCommentsChild().getValue(),
                 new CommentAdapter.OnReplyClickListener() {
                     @Override
                     public void onReplyClick(CommentViewState comment) {
@@ -92,6 +94,7 @@ public class PostDetailActivity extends AppCompatActivity {
                         binding.sendButton.setOnClickListener(v -> {
                             String commentText = binding.commentEditText.getText().toString();
                             if (!commentText.isEmpty()) {
+
                                 CommentViewState commentViewState = new CommentViewState(
                                         null,
                                         commentText,
@@ -108,7 +111,6 @@ public class PostDetailActivity extends AppCompatActivity {
 
                                 viewModel.addChildComment(comment, commentViewState);
                                 binding.commentEditText.setText("");
-                                viewModel.loadChildComments(comment);
 
                             }
                         });
@@ -126,7 +128,17 @@ public class PostDetailActivity extends AppCompatActivity {
                     public void onUpVote(CommentViewState comment) {
                         viewModel.upVote(comment);
                     }
-                });
+                },
+                new CommentAdapter.OnShowUpReplies() {
+                    @Override
+                    public void onShowUpReplies(CommentViewState comment) {
+                        viewModel.loadChildComments(comment);
+
+                    }
+                }
+        )
+
+        ;
 
 
 
@@ -174,7 +186,6 @@ public class PostDetailActivity extends AppCompatActivity {
                 viewModel.addParentComment(commentViewState, postViewState.getPostId(), postViewState.getCommunity().getCommunityID());
                 binding.commentEditText.setText("");
 
-                
             }
         });
 

@@ -100,6 +100,7 @@
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/primaryColor"/>
                     <TextView
+                        android:id="@+id/showReplyParent_TextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"

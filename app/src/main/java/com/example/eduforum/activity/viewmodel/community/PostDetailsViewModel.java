@@ -118,16 +118,10 @@ public class PostDetailsViewModel extends ViewModel {
     private String pt_id;
     private String community_id;
     public void loadComments(PostViewState postViewState){
-        Post post = new Post(postViewState.getPostId(),
-                postViewState.getCommunity().getCommunityID(),
-                postViewState.getTitle(),
-                postViewState.getContent(),
-                postViewState.getIsAnonymous(),
-                null,
-                null,
-                postViewState.getCreator(),
-                0, 0, 0,0,
-                null, null, postViewState.getTags());
+        Post post = new Post();
+        post.setPostID(postViewState.getPostId());
+        post.setCommunityID(postViewState.getCommunity().getCommunityID());
+
 
         pt_id = postViewState.getPostId();
         community_id = postViewState.getCommunity().getCommunityID();
@@ -146,7 +140,7 @@ public class PostDetailsViewModel extends ViewModel {
 
             @Override
             public void onInitialLoadSuccess(List<Comment> comments) {
-                cmts.setValue(convertCommentListToCommentViewStateList(comments));
+                cmts.postValue(convertCommentListToCommentViewStateList(comments));
             }
 
             @Override
@@ -182,20 +176,18 @@ public class PostDetailsViewModel extends ViewModel {
     }
 
     public void addParentComment(CommentViewState comment,String postID, String communityID) {
-        Comment newComment = new Comment(
-                null,
-                comment.getContent(),
-                communityID,
-                null,
-                comment.getContent(),
-                null,
-                null,
-                comment.getCreator(),
-                0,
-                0,
-                0,
-                comment.getImage()
-        );
+        Comment newComment = new Comment();
+        newComment.setContent(comment.getContent());
+        newComment.setCommunityID(community_id);
+        newComment.setPostID(pt_id);
+        newComment.setCreator(comment.getCreator());
+        newComment.setImage(comment.getImage());
+        newComment.setTotalReply(0);
+        newComment.setTotalUpVote(0);
+        newComment.setTotalDownVote(0);
+        newComment.setVoteDifference(0);
+
+
         commentRepository.createComment(postInstance, newComment, new CommentCallback() {
             @Override
             public void onCreateSuccess(Comment comments) {
@@ -251,56 +243,45 @@ public class PostDetailsViewModel extends ViewModel {
     }
 
     public void addChildComment(CommentViewState commentParentViewState, CommentViewState commentChildViewState) {
-        Comment parentComment = new Comment(
-                commentParentViewState.getCommentID(),
-                commentParentViewState.getContent(),
-                postInstance.getCommunityID(),
-                null,
-                commentParentViewState.getContent(),
-                null,
-                null,
-                commentParentViewState.getCreator(),
-                0,
-                0,
-                0,
-                commentParentViewState.getImage()
-        );
+        Comment parentComment = new Comment();
+        parentComment.setCommentID(commentParentViewState.getCommentID());
+        parentComment.setContent(commentParentViewState.getContent());
+        parentComment.setCommunityID(community_id);
+        parentComment.setPostID(pt_id);
+        parentComment.setCreator(commentParentViewState.getCreator());
 
 
-        Comment childComment = new Comment(
-                null,
-                commentChildViewState.getContent(),
-                null,
-                commentParentViewState.getCommentID(),
-                commentChildViewState.getContent(),
-                null,
-                null,
-                commentChildViewState.getCreator(),
-                0,
-                0,
-                0,
-                null
+        Comment childComment = new Comment();
+        childComment.setPostID(pt_id);
+        childComment.setCommunityID(community_id);
+        childComment.setContent(commentChildViewState.getContent());
+        childComment.setCreator(commentChildViewState.getCreator());
+        childComment.setReplyCommentID(commentParentViewState.getCommentID());
+        childComment.setCommentID(null);
+        childComment.setImage(commentChildViewState.getImage());
 
-        );
 
         commentRepository.createComment(parentComment, childComment, new CommentCallback() {
             @Override
             public void onCreateSuccess(Comment comments) {
-                List<CommentViewState> commentViewStates = cmts.getValue();
-                commentViewStates.add(new CommentViewState(
+                CommentViewState commentViewState = new CommentViewState(
                         comments.getCommentID(),
                         comments.getContent(),
-                        null,
+                        comments.getTimeCreated().toString(),
                         comments.getCreator(),
                         comments.getTotalUpVote(),
                         comments.getTotalDownVote(),
                         comments.getVoteDifference(),
-                        null,
+                        comments.getLastModified().toString(),
                         comments.getImage(),
                         comments.getReplyCommentID(),
                         comments.getTotalReply()
-                ));
-                cmts_child.setValue(commentViewStates);
+                );
+
+                List<CommentViewState> commentViewStates = cmts.getValue();
+                assert commentViewStates != null;
+                commentViewStates.add(commentViewState);
+                cmts.setValue(commentViewStates);
             }
 
             @Override
@@ -369,23 +350,7 @@ public class PostDetailsViewModel extends ViewModel {
 
             @Override
             public void onLoadRepliesSuccess(List<Comment> comments) {
-                List<CommentViewState> commentViewStates = cmts.getValue();
-                for(Comment comment: comments){
-                    commentViewStates.add(new CommentViewState(
-                            comment.getCommentID(),
-                            comment.getContent(),
-                            null,
-                            comment.getCreator(),
-                            comment.getTotalUpVote(),
-                            comment.getTotalDownVote(),
-                            comment.getVoteDifference(),
-                            null,
-                            comment.getImage(),
-                            comment.getReplyCommentID(),
-                            comment.getTotalReply()
-                    ));
-                }
-                cmts_child.setValue(commentViewStates);
+                cmts.setValue(convertCommentListToCommentViewStateList(comments));
             }
 
             @Override
