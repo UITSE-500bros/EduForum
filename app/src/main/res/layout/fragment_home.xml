@@ -59,26 +59,11 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
         </LinearLayout>
 
 
-        <TextView
-            android:id="@+id/titleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/homeFragmentTitle"
-            android:textSize="30sp"
-            android:fontFamily="@font/source_sans_pro_semibold"
-            android:textColor="@color/textColor"
-            android:layout_marginTop="15dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/titleLinearLayout" />
-
         <ScrollView
             android:id="@+id/commusScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop=""
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+            app:layout_constraintTop_toBottomOf="@+id/titleLinearLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -88,6 +73,37 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/titleTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/homeFragmentTitle"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:fontFamily="@font/source_sans_pro_semibold"
+                    android:textColor="@color/textColor"
+                    android:layout_marginTop="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/UITCommusTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Cộng đồng UIT"
+                    android:textColor="@color/textColor"
+                    android:textSize="24sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/UITCommunitiesRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    tools:listitem="@layout/item_forum">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <TextView
                     android:id="@+id/generalCommusTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -95,7 +111,7 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                     android:layout_marginTop="16dp"
                     android:text="Cộng đồng của tôi"
                     android:textColor="@color/textColor"
-                    android:textSize="24dp" />
+                    android:textSize="24sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/myCommunitiesRecyclerView"
@@ -111,7 +127,7 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cộng đồng đã tham gia"
-                    android:textSize="24dp"
+                    android:textSize="24sp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
                     android:textColor="@color/textColor" />
