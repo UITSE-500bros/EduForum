@@ -3,14 +3,25 @@ package com.example.eduforum.activity.repository.community.dto;
 import com.example.eduforum.activity.model.user_manage.User;
 
 public class JoinRequestDTO {
+
+    private String userID;
     private String name;
     private String department;
     private String profilePicture;
 
     public JoinRequestDTO(User user) {
+        this.userID = user.getUserId();
         this.name = user.getName();
         this.department = user.getDepartment();
         this.profilePicture = user.getProfilePicture();
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public String getName() {
