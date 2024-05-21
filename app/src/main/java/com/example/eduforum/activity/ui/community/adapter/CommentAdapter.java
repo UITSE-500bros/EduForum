@@ -39,16 +39,22 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         void onDownClick(CommentViewState comment);
     }
 
+    public interface OnShowUpReplies {
+        void onShowUpReplies(CommentViewState comment);
+    }
+
     private OnReplyClickListener onReplyClickListener;
     private static OnUpVoteClickListener onUpVoteClickListener;
     private static OnDownVoteClickListener onDownVoteClickListener;
+    private static OnShowUpReplies onShowUpReplies;
 
     public CommentAdapter(Context context,
                           List<CommentViewState> commentList,
                           List<CommentViewState> childCommentList,
                           OnReplyClickListener onReplyClickListener,
                           OnDownVoteClickListener onDownVoteClickListener,
-                          OnUpVoteClickListener onUpVoteClickListener) {
+                          OnUpVoteClickListener onUpVoteClickListener,
+                          OnShowUpReplies onShowUpReplies) {
         this.context = context;
         if (commentList != null) {
             this.commentList = commentList;
@@ -63,6 +69,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         this.onReplyClickListener = onReplyClickListener;
         this.onUpVoteClickListener = onUpVoteClickListener;
         this.onDownVoteClickListener = onDownVoteClickListener;
+        this.onShowUpReplies = onShowUpReplies;
 
     }
     public void setCommentList(List<CommentViewState> commentList) {
@@ -105,7 +112,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             }
         }
 
-        holder.bind(comment, onReplyClickListener,temp,onDownVoteClickListener,onUpVoteClickListener);
+        holder.bind(comment, onReplyClickListener,temp,onDownVoteClickListener,onUpVoteClickListener, onShowUpReplies);
 
     }
 
@@ -120,7 +127,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             super(binding.getRoot());
             this.binding = binding;
         }
-        public void bind(CommentViewState comment, OnReplyClickListener onReplyClickListener,List<CommentViewState> temp,OnDownVoteClickListener onDownVoteClickListener,OnUpVoteClickListener onUpVoteClickListener) {
+        public void bind(CommentViewState comment, OnReplyClickListener onReplyClickListener,List<CommentViewState> temp,OnDownVoteClickListener onDownVoteClickListener,OnUpVoteClickListener onUpVoteClickListener,OnShowUpReplies onShowUpReplies) {
             binding.contentNotiParentTextView.setText(comment.getContent());
 
             binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference()));
@@ -150,6 +157,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 public void onClick(View v) {
                     binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference() - 1));
                     onDownVoteClickListener.onDownClick(comment);
+                }
+            });
+
+            binding.showReplyParentTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onShowUpReplies.onShowUpReplies(comment);
                 }
             });
 
