@@ -24,6 +24,7 @@ public class PostDetailsViewModel extends ViewModel {
     CommentRepository commentRepository;
 
     MutableLiveData<List<CommentViewState>> cmts;
+    MutableLiveData<List<CommentViewState>> cmts_child;
 
     MutableLiveData<PostViewState> currentPost;
 
@@ -32,6 +33,7 @@ public class PostDetailsViewModel extends ViewModel {
         postRepository = PostRepository.getInstance();
         commentRepository = CommentRepository.getInstance();
         cmts = new MutableLiveData<>();
+        cmts_child = new MutableLiveData<>();
         currentPost = new MutableLiveData<>();
         cmts.setValue(new ArrayList<CommentViewState>());
     }
@@ -41,6 +43,9 @@ public class PostDetailsViewModel extends ViewModel {
     }
     public LiveData<List<CommentViewState>> getComments(){
         return cmts;
+    }
+    public LiveData<List<CommentViewState>> getCommentsChild(){
+        return cmts_child;
     }
 
     // TODO: anh nam lam cai nay ne
@@ -110,7 +115,8 @@ public class PostDetailsViewModel extends ViewModel {
             }
         });
     }
-
+    private String pt_id;
+    private String community_id;
     public void loadComments(PostViewState postViewState){
         Post post = new Post(postViewState.getPostId(),
                 postViewState.getCommunity().getCommunityID(),
@@ -123,6 +129,8 @@ public class PostDetailsViewModel extends ViewModel {
                 0, 0, 0,0,
                 null, null, postViewState.getTags());
 
+        pt_id = postViewState.getPostId();
+        community_id = postViewState.getCommunity().getCommunityID();
 
         commentRepository.loadTopLevelComments(post, new CommentCallback() {
 
@@ -292,7 +300,7 @@ public class PostDetailsViewModel extends ViewModel {
                         comments.getReplyCommentID(),
                         comments.getTotalReply()
                 ));
-                cmts.setValue(commentViewStates);
+                cmts_child.setValue(commentViewStates);
             }
 
             @Override
@@ -377,7 +385,7 @@ public class PostDetailsViewModel extends ViewModel {
                             comment.getTotalReply()
                     ));
                 }
-                cmts.setValue(commentViewStates);
+                cmts_child.setValue(commentViewStates);
             }
 
             @Override
@@ -398,39 +406,21 @@ public class PostDetailsViewModel extends ViewModel {
     }
 
     public void downVote(CommentViewState commentViewState){
-        Comment comment = new Comment(
-                commentViewState.getCommentID(),
-                commentViewState.getContent(),
-                postInstance.getCommunityID(),
-                null,
-                commentViewState.getContent(),
-                null,
-                null,
-                commentViewState.getCreator(),
-                0,
-                0,
-                0,
-                commentViewState.getImage()
-        );
+        Comment comment = new Comment();
+        comment.setCommentID(commentViewState.getCommentID());
+        comment.setContent(commentViewState.getContent());
+        comment.setCommunityID(community_id);
+        comment.setPostID(pt_id);
 
         commentRepository.updateVoteCount(comment, FirebaseAuth.getInstance().getCurrentUser().getUid(), -1);
     }
 
     public void upVote(CommentViewState commentViewState){
-        Comment comment = new Comment(
-                commentViewState.getCommentID(),
-                commentViewState.getContent(),
-                postInstance.getCommunityID(),
-                null,
-                commentViewState.getContent(),
-                null,
-                null,
-                commentViewState.getCreator(),
-                0,
-                0,
-                0,
-                commentViewState.getImage()
-        );
+        Comment comment = new Comment();
+        comment.setCommentID(commentViewState.getCommentID());
+        comment.setContent(commentViewState.getContent());
+        comment.setCommunityID(community_id);
+        comment.setPostID(pt_id);
 
         commentRepository.updateVoteCount(comment, FirebaseAuth.getInstance().getCurrentUser().getUid(), 1);
     }

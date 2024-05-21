@@ -118,9 +118,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 new CommentAdapter.OnDownVoteClickListener() {
                     @Override
                     public void onDownClick(CommentViewState comment) {
-
                         viewModel.downVote(comment);
-
                     }
                 },
                 new CommentAdapter.OnUpVoteClickListener() {
@@ -175,6 +173,8 @@ public class PostDetailActivity extends AppCompatActivity {
 
                 viewModel.addParentComment(commentViewState, postViewState.getPostId(), postViewState.getCommunity().getCommunityID());
                 binding.commentEditText.setText("");
+
+                
             }
         });
 
@@ -199,7 +199,7 @@ public class PostDetailActivity extends AppCompatActivity {
         });
 
         binding.recycleImage.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        mediaAdapter = new MediaAdapter(postViewState.getImage());
+        //mediaAdapter = new MediaAdapter(postViewState.getImage());
         binding.recycleImage.setAdapter(mediaAdapter);
 
 
