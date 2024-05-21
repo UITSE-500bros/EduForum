@@ -99,18 +99,23 @@ public class CommunityActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 viewModel.filterBySearch(query);
+
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    viewModel.refreshPostList();
+                }
                 return true;
             }
         });
 
-
         return true;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

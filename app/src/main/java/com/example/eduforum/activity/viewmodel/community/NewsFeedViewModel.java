@@ -115,7 +115,12 @@ public class NewsFeedViewModel extends ViewModel {
         });
     }
     public void filterBySearch(String keyword) {
-        postRepository.searchPost(communityId.getValue(), keyword, new IPostCallback() {
+        keyword = keyword.trim();
+        if(keyword.isEmpty()) {
+            refreshPostList();
+            return;
+        }
+        postRepository.searchPost(currentCommunity.getValue().getCommunityID(), keyword, new IPostCallback() {
             @Override
             public void onGetPostSuccess(List<Post> posts){
             }
@@ -181,14 +186,18 @@ public class NewsFeedViewModel extends ViewModel {
 
     public void setCurrentCommunity(CreateCommunityViewState community) {
         currentCommunity.setValue(community);
-        postRepository.getPosts(community.getCommunityID(), FirebaseAuth.getInstance().getUid(), new IPostCallback() {
+        refreshPostList();
+    }
+    public void refreshPostList(){
+        postRepository.getPosts(currentCommunity.getValue().getCommunityID(), FirebaseAuth.getInstance().getUid(), new IPostCallback() {
             @Override
             public void onGetPostSuccess(List<Post> posts){
                 postList.setValue(convertPostListToPostViewStateList(posts));
+                errorMessage.setValue("Success");
             }
             @Override
             public void onGetPostFailure(String errorMsg){
-
+                errorMessage.setValue("Không thể lấy bài viết");
             }
             @Override
             public void onAddPostFailure(String errorMsg){
