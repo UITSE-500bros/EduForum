@@ -318,19 +318,13 @@ public class PostDetailsViewModel extends ViewModel {
 
     public void loadChildComments(CommentViewState commentParentViewState) {
         Comment parentComment = new Comment(
-                commentParentViewState.getCommentID(),
-                commentParentViewState.getContent(),
-                postInstance.getCommunityID(),
-                null,
-                commentParentViewState.getContent(),
-                null,
-                null,
-                commentParentViewState.getCreator(),
-                0,
-                0,
-                0,
-                commentParentViewState.getImage()
         );
+        parentComment.setCommentID(commentParentViewState.getCommentID());
+        parentComment.setContent(commentParentViewState.getContent());
+        parentComment.setCommunityID(community_id);
+        parentComment.setPostID(pt_id);
+        parentComment.setCreator(commentParentViewState.getCreator());
+
 
         commentRepository.loadReplies(parentComment, new CommentCallback() {
             @Override
@@ -350,7 +344,9 @@ public class PostDetailsViewModel extends ViewModel {
 
             @Override
             public void onLoadRepliesSuccess(List<Comment> comments) {
-                cmts.setValue(convertCommentListToCommentViewStateList(comments));
+                List<CommentViewState> newCommentViewStates = new ArrayList<>(cmts.getValue());
+                newCommentViewStates.addAll(convertCommentListToCommentViewStateList(comments));
+                cmts.postValue(newCommentViewStates);
             }
 
             @Override
@@ -442,5 +438,169 @@ public class PostDetailsViewModel extends ViewModel {
 
                 }
             });
+    }
+
+    public void deletePost(PostViewState postViewState) {
+        Post post = new Post(postViewState.getPostId(), postViewState.getCommunity().getCommunityID(), postViewState.getTitle(), postViewState.getContent(), postViewState.getIsAnonymous(), null, null, postViewState.getCreator(), 0, 0, 0,0, null, null, postViewState.getTags());
+
+        postRepository.deletePost(post, new IPostCallback() {
+
+            @Override
+            public void onGetPostSuccess(List<Post> posts) {
+
+            }
+
+            @Override
+            public void onGetPostFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onAddPostFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onAddPostSuccess(Post newPost) {
+
+            }
+
+            @Override
+            public void onEditPostSuccess() {
+
+            }
+
+            @Override
+            public void onEditPostFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onQueryPostError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onQueryPostSuccess(List<Post> queryPostResults) {
+
+            }
+
+            @Override
+            public void onDeletePostSuccess() {
+
+            }
+
+            @Override
+            public void onDeletePostError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onSubscriptionSuccess() {
+
+            }
+
+            @Override
+            public void onSubscriptionError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onBookmarkError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onBookmarkSuccess() {
+
+            }
+
+            @Override
+            public void onGetVoteStatusSuccess(int voteType) {
+
+            }
+        });
+    }
+
+    public void editPost(PostViewState postViewState) {
+        Post post = new Post(postViewState.getPostId(), postViewState.getCommunity().getCommunityID(), postViewState.getTitle(), postViewState.getContent(), postViewState.getIsAnonymous(), null, null, postViewState.getCreator(), 0, 0, 0,0, null, null, postViewState.getTags());
+
+        postRepository.editPost(post, new IPostCallback() {
+
+            @Override
+            public void onGetPostSuccess(List<Post> posts) {
+
+            }
+
+            @Override
+            public void onGetPostFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onAddPostFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onAddPostSuccess(Post newPost) {
+
+            }
+
+            @Override
+            public void onEditPostSuccess() {
+
+            }
+
+            @Override
+            public void onEditPostFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onQueryPostError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onQueryPostSuccess(List<Post> queryPostResults) {
+
+            }
+
+            @Override
+            public void onDeletePostSuccess() {
+
+            }
+
+            @Override
+            public void onDeletePostError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onSubscriptionSuccess() {
+
+            }
+
+            @Override
+            public void onSubscriptionError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onBookmarkError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onBookmarkSuccess() {
+
+            }
+
+            @Override
+            public void onGetVoteStatusSuccess(int voteType) {
+
+            }
+        });
     }
 }

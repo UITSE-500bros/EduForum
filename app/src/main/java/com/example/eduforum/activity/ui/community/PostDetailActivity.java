@@ -55,14 +55,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail);
 
-        binding.moreButton.setOnClickListener(v -> {
-            PopupMenu popupMenu = new PopupMenu(this, v);
-            popupMenu.getMenuInflater().inflate(R.menu.post_option_menu, popupMenu.getMenu());
-            //popupMenu.setOnMenuItemClickListener(item -> {
-                //TODO: Handle menu item click
-            //});
-            popupMenu.show();
-        });
+
 
         viewModel = new ViewModelProvider(this).get(PostDetailsViewModel.class);
 
@@ -75,7 +68,7 @@ public class PostDetailActivity extends AppCompatActivity {
             binding.contentPost.setText(postViewState.getContent().toString());
             binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
             binding.commentCountTextView.setText(String.valueOf(postViewState.getTotalComment()));
-//            binding.userNameTextView.setText(postViewState.getCreator().name);
+//            binding.userNameTextView.setText(postViewState.getCreator().getName());
 
 //            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
         } else {
@@ -147,20 +140,20 @@ public class PostDetailActivity extends AppCompatActivity {
         assert postViewState != null;
         viewModel.loadComments(postViewState);
 
-
         viewModel.getComments().observe(this, commentViewStates -> {
             List<CommentViewState> commentChildList = new ArrayList<>();
+            List<CommentViewState> itemsToRemove = new ArrayList<>();
 
             for (CommentViewState commentViewState : commentViewStates) {
                 if (commentViewState.getReplyCommentID() != null) {
                     commentChildList.add(commentViewState);
-                    commentViewStates.remove(commentViewState);
+                    itemsToRemove.add(commentViewState);
                 }
             }
+            commentViewStates.removeAll(itemsToRemove);
             commentAdapter.setCommentList(commentViewStates);
             commentAdapter.setChildCommentList(commentChildList);
         });
-
 
 
         binding.setLifecycleOwner(this);
@@ -212,6 +205,25 @@ public class PostDetailActivity extends AppCompatActivity {
         binding.recycleImage.setAdapter(mediaAdapter);
 
 
+
+        binding.moreButton.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(this, v);
+            popupMenu.getMenuInflater().inflate(R.menu.post_option_menu, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.editPost:
+                        viewModel.editPost(postViewState);
+                        break;
+                    case R.id.deletePost:
+                        viewModel.deletePost(postViewState);
+                        break;
+                }
+                return true;
+            });
+            popupMenu.show();
+        });
     }
+
+
 
 }
