@@ -55,14 +55,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail);
 
-        binding.moreButton.setOnClickListener(v -> {
-            PopupMenu popupMenu = new PopupMenu(this, v);
-            popupMenu.getMenuInflater().inflate(R.menu.post_option_menu, popupMenu.getMenu());
-            //popupMenu.setOnMenuItemClickListener(item -> {
-                //TODO: Handle menu item click
-            //});
-            popupMenu.show();
-        });
+
 
         viewModel = new ViewModelProvider(this).get(PostDetailsViewModel.class);
 
@@ -212,6 +205,25 @@ public class PostDetailActivity extends AppCompatActivity {
         binding.recycleImage.setAdapter(mediaAdapter);
 
 
+
+        binding.moreButton.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(this, v);
+            popupMenu.getMenuInflater().inflate(R.menu.post_option_menu, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.editPost:
+                        viewModel.editPost(postViewState);
+                        break;
+                    case R.id.deletePost:
+                        viewModel.deletePost(postViewState);
+                        break;
+                }
+                return true;
+            });
+            popupMenu.show();
+        });
     }
+
+
 
 }
