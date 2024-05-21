@@ -1,10 +1,8 @@
 package com.example.eduforum.activity.ui.community;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,11 +14,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.eduforum.R;
-import com.example.eduforum.activity.model.post_manage.Comment;
 import com.example.eduforum.activity.ui.community.adapter.CommentAdapter;
 import com.example.eduforum.activity.ui.community.adapter.CommentChildAdapter;
 import com.example.eduforum.activity.ui.community.adapter.MediaAdapter;
-import com.example.eduforum.activity.ui.community.adapter.PostAdapter;
 import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.activity.viewmodel.community.PostDetailsViewModel;
@@ -84,35 +80,55 @@ public class PostDetailActivity extends AppCompatActivity {
             //finish();
         }
 
-        commentAdapter = new CommentAdapter(this, viewModel.getComments().getValue(), viewModel.getComments().getValue(), new CommentAdapter.OnReplyClickListener() {
-            @Override
-            public void onReplyClick(CommentViewState comment) {
-                binding.commentEditText.setText("@Nam ");
-                binding.commentEditText.setVisibility(View.VISIBLE);
-                binding.sendButton.setVisibility(View.VISIBLE);
-                binding.sendButton.setOnClickListener(v -> {
-                    String commentText = binding.commentEditText.getText().toString();
-                    if (!commentText.isEmpty()) {
-                        CommentViewState commentViewState = new CommentViewState(
-                                null,
-                                commentText,
-                                null,
-                                null,
-                                0,
-                                0,
-                                0,
-                                null,
-                                null,
-                                comment.getCommentID(),
-                                0
-                        );
+        commentAdapter = new CommentAdapter(this,
+                viewModel.getComments().getValue(),
+                viewModel.getComments().getValue(),
+                new CommentAdapter.OnReplyClickListener() {
+                    @Override
+                    public void onReplyClick(CommentViewState comment) {
+                        binding.commentEditText.setText("@Nam ");
+                        binding.commentEditText.setVisibility(View.VISIBLE);
+                        binding.sendButton.setVisibility(View.VISIBLE);
+                        binding.sendButton.setOnClickListener(v -> {
+                            String commentText = binding.commentEditText.getText().toString();
+                            if (!commentText.isEmpty()) {
+                                CommentViewState commentViewState = new CommentViewState(
+                                        null,
+                                        commentText,
+                                        null,
+                                        null,
+                                        0,
+                                        0,
+                                        0,
+                                        null,
+                                        null,
+                                        comment.getCommentID(),
+                                        0
+                                );
 
-                        viewModel.addChildComment(comment, commentViewState);
-                        binding.commentEditText.setText("");
+                                viewModel.addChildComment(comment, commentViewState);
+                                binding.commentEditText.setText("");
+                                viewModel.loadChildComments(comment);
+
+                            }
+                        });
+                    }
+
+                },
+                new CommentAdapter.OnDownVoteClickListener() {
+                    @Override
+                    public void onDownClick(CommentViewState comment) {
+
+                        viewModel.downVote(comment);
+
+                    }
+                },
+                new CommentAdapter.OnUpVoteClickListener() {
+                    @Override
+                    public void onUpVote(CommentViewState comment) {
+                        viewModel.upVote(comment);
                     }
                 });
-            }
-        });
 
 
 
@@ -123,13 +139,14 @@ public class PostDetailActivity extends AppCompatActivity {
         assert postViewState != null;
         viewModel.loadComments(postViewState);
 
+
         viewModel.getComments().observe(this, commentViewStates -> {
             List<CommentViewState> commentChildList = new ArrayList<>();
 
             for (CommentViewState commentViewState : commentViewStates) {
                 if (commentViewState.getReplyCommentID() != null) {
                     commentChildList.add(commentViewState);
-
+                    commentViewStates.remove(commentViewState);
                 }
             }
             commentAdapter.setCommentList(commentViewStates);

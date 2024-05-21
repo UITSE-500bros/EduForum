@@ -326,4 +326,166 @@ public class PostDetailsViewModel extends ViewModel {
             }
         });
     }
+
+    public void loadChildComments(CommentViewState commentParentViewState) {
+        Comment parentComment = new Comment(
+                commentParentViewState.getCommentID(),
+                commentParentViewState.getContent(),
+                postInstance.getCommunityID(),
+                null,
+                commentParentViewState.getContent(),
+                null,
+                null,
+                commentParentViewState.getCreator(),
+                0,
+                0,
+                0,
+                commentParentViewState.getImage()
+        );
+
+        commentRepository.loadReplies(parentComment, new CommentCallback() {
+            @Override
+            public void onCreateSuccess(Comment comments) {
+
+            }
+
+            @Override
+            public void onFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onInitialLoadSuccess(List<Comment> comments) {
+
+            }
+
+            @Override
+            public void onLoadRepliesSuccess(List<Comment> comments) {
+                List<CommentViewState> commentViewStates = cmts.getValue();
+                for(Comment comment: comments){
+                    commentViewStates.add(new CommentViewState(
+                            comment.getCommentID(),
+                            comment.getContent(),
+                            null,
+                            comment.getCreator(),
+                            comment.getTotalUpVote(),
+                            comment.getTotalDownVote(),
+                            comment.getVoteDifference(),
+                            null,
+                            comment.getImage(),
+                            comment.getReplyCommentID(),
+                            comment.getTotalReply()
+                    ));
+                }
+                cmts.setValue(commentViewStates);
+            }
+
+            @Override
+            public void onDeleteSuccess() {
+
+            }
+
+            @Override
+            public void onUpdateSuccess(Comment comment) {
+
+            }
+
+            @Override
+            public void onGetVoteStatusSuccess(int voteType) {
+
+            }
+        });
+    }
+
+    public void downVote(CommentViewState commentViewState){
+        Comment comment = new Comment(
+                commentViewState.getCommentID(),
+                commentViewState.getContent(),
+                postInstance.getCommunityID(),
+                null,
+                commentViewState.getContent(),
+                null,
+                null,
+                commentViewState.getCreator(),
+                0,
+                0,
+                0,
+                commentViewState.getImage()
+        );
+
+        commentRepository.updateVoteCount(comment, FirebaseAuth.getInstance().getCurrentUser().getUid(), -1);
+    }
+
+    public void upVote(CommentViewState commentViewState){
+        Comment comment = new Comment(
+                commentViewState.getCommentID(),
+                commentViewState.getContent(),
+                postInstance.getCommunityID(),
+                null,
+                commentViewState.getContent(),
+                null,
+                null,
+                commentViewState.getCreator(),
+                0,
+                0,
+                0,
+                commentViewState.getImage()
+        );
+
+        commentRepository.updateVoteCount(comment, FirebaseAuth.getInstance().getCurrentUser().getUid(), 1);
+    }
+
+    public void getVoteStatus(CommentViewState commentViewState){
+        Comment comment = new Comment(
+                commentViewState.getCommentID(),
+                commentViewState.getContent(),
+                postInstance.getCommunityID(),
+                commentViewState.getReplyCommentID(),
+                commentViewState.getContent(),
+                null,
+                null,
+                commentViewState.getCreator(),
+                commentViewState.getTotalUpVote(),
+                commentViewState.getTotalDownVote(),
+                commentViewState.getVoteDifference(),
+                commentViewState.getImage()
+        );
+
+            commentRepository.getVoteStatus(comment, FirebaseAuth.getInstance().getCurrentUser().getUid(), new CommentCallback() {
+                @Override
+                public void onCreateSuccess(Comment comments) {
+
+                }
+
+                @Override
+                public void onFailure(String errorMsg) {
+
+                }
+
+                @Override
+                public void onInitialLoadSuccess(List<Comment> comments) {
+
+                }
+
+                @Override
+                public void onLoadRepliesSuccess(List<Comment> comments) {
+
+                }
+
+                @Override
+                public void onDeleteSuccess() {
+
+                }
+
+                @Override
+                public void onUpdateSuccess(Comment comment) {
+
+                }
+
+                @Override
+                public void onGetVoteStatusSuccess(int voteType) {
+
+                }
+            });
+    }
 }
