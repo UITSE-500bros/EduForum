@@ -1,5 +1,6 @@
 package com.example.eduforum.activity.ui.community;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.SearchView;
 import android.widget.Toast;
 
@@ -62,10 +66,19 @@ public class CommunityActivity extends AppCompatActivity {
         binding.postRecyclerView.setAdapter(postAdapter);
         binding.postRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        ActivityResultLauncher<Intent> createPostActivityResult = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        viewModel.refreshPostList();
+                    }
+                }
+        );
+
         binding.createPostEditTextButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, CreatePostActivity.class);
             intent.putExtra("communityId", currentCommunity.getCommunityID());
-            startActivity(intent);
+            createPostActivityResult.launch(intent);
         });
         viewModel.getCurrentCommunity().observe(this, community -> {
             if (community != null) {

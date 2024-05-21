@@ -1,5 +1,6 @@
 package com.example.eduforum.activity.ui.community;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.net.Uri;
@@ -88,6 +89,7 @@ public class CreatePostActivity extends AppCompatActivity {
         initComponents();
         viewModel.getIsPostCreated().observe(this, isCreated -> {
             if(isCreated){
+                setResult(Activity.RESULT_OK);
                 finish();
             }
         });
@@ -244,7 +246,6 @@ public class CreatePostActivity extends AppCompatActivity {
                 assert postViewState != null;
                 postViewState.setTags(selectedCategories);
                 viewModel.setPostViewState(postViewState);
-
             }
         });
         builder.setNegativeButton("Cancel", null);
