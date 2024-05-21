@@ -8,7 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
-import android.widget.SearchView;
+import androidx.appcompat.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -95,22 +95,18 @@ public class CommunityActivity extends AppCompatActivity {
         inflater.inflate(R.menu.community_menu, menu);
 
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//
-//            //event  when user submit the search query
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return true;
-//            }
-//
-//            //event when user change the search query
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                viewModel.filterBySearch(query);
+                return true;
+            }
 
-//               postAdapter.getFilter().filter(newText);
-//                return true;
-//            }
-//        });
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return true;
+            }
+        });
 
 
         return true;

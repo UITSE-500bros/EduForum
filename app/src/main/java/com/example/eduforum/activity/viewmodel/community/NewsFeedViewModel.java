@@ -114,6 +114,71 @@ public class NewsFeedViewModel extends ViewModel {
 
         });
     }
+    public void filterBySearch(String keyword) {
+        postRepository.searchPost(communityId.getValue(), keyword, new IPostCallback() {
+            @Override
+            public void onGetPostSuccess(List<Post> posts){
+            }
+            @Override
+            public void onGetPostFailure(String errorMsg){
+            }
+            @Override
+            public void onAddPostFailure(String errorMsg){
+
+            }
+            @Override
+            public void onAddPostSuccess(Post newPost){
+
+            }
+            @Override
+            public void onEditPostSuccess(){
+
+            }
+            @Override
+            public void onEditPostFailure(String errorMsg){
+
+            }
+            @Override
+            public void onQueryPostError(String errorMsg){
+                errorMessage.setValue("Đã xảy ra lỗi! Không thể tìm kiếm bài viết!");
+
+            }
+            @Override
+            public void onQueryPostSuccess(List<Post> queryPostResults){
+                postList.setValue(convertPostListToPostViewStateList(queryPostResults));
+
+            }
+            @Override
+            public void onDeletePostSuccess(){
+
+            }
+            @Override
+            public void onDeletePostError(String errorMsg){
+            }
+            @Override
+            public void onSubscriptionSuccess(){
+
+            }
+            @Override
+            public void onSubscriptionError(String errorMsg){
+
+            }
+            @Override
+            public void onBookmarkError(String errorMsg){
+
+            }
+            @Override
+            public void onBookmarkSuccess(){
+
+            }
+
+            @Override
+            public void onGetVoteStatusSuccess(int voteType) {
+
+            }
+        });
+    }
+
     public void setCurrentCommunity(CreateCommunityViewState community) {
         currentCommunity.setValue(community);
         postRepository.getPosts(community.getCommunityID(), FirebaseAuth.getInstance().getUid(), new IPostCallback() {
