@@ -75,7 +75,7 @@ public class PostDetailActivity extends AppCompatActivity {
             binding.contentPost.setText(postViewState.getContent().toString());
             binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
             binding.commentCountTextView.setText(String.valueOf(postViewState.getTotalComment()));
-//            binding.userNameTextView.setText(postViewState.getCreator().name);
+//            binding.userNameTextView.setText(postViewState.getCreator().getName());
 
 //            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
         } else {
@@ -147,20 +147,20 @@ public class PostDetailActivity extends AppCompatActivity {
         assert postViewState != null;
         viewModel.loadComments(postViewState);
 
-
         viewModel.getComments().observe(this, commentViewStates -> {
             List<CommentViewState> commentChildList = new ArrayList<>();
+            List<CommentViewState> itemsToRemove = new ArrayList<>();
 
             for (CommentViewState commentViewState : commentViewStates) {
                 if (commentViewState.getReplyCommentID() != null) {
                     commentChildList.add(commentViewState);
-                    commentViewStates.remove(commentViewState);
+                    itemsToRemove.add(commentViewState);
                 }
             }
+            commentViewStates.removeAll(itemsToRemove);
             commentAdapter.setCommentList(commentViewStates);
             commentAdapter.setChildCommentList(commentChildList);
         });
-
 
 
         binding.setLifecycleOwner(this);

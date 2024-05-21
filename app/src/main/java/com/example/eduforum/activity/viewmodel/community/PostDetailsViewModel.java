@@ -318,19 +318,13 @@ public class PostDetailsViewModel extends ViewModel {
 
     public void loadChildComments(CommentViewState commentParentViewState) {
         Comment parentComment = new Comment(
-                commentParentViewState.getCommentID(),
-                commentParentViewState.getContent(),
-                postInstance.getCommunityID(),
-                null,
-                commentParentViewState.getContent(),
-                null,
-                null,
-                commentParentViewState.getCreator(),
-                0,
-                0,
-                0,
-                commentParentViewState.getImage()
         );
+        parentComment.setCommentID(commentParentViewState.getCommentID());
+        parentComment.setContent(commentParentViewState.getContent());
+        parentComment.setCommunityID(community_id);
+        parentComment.setPostID(pt_id);
+        parentComment.setCreator(commentParentViewState.getCreator());
+
 
         commentRepository.loadReplies(parentComment, new CommentCallback() {
             @Override
@@ -350,7 +344,9 @@ public class PostDetailsViewModel extends ViewModel {
 
             @Override
             public void onLoadRepliesSuccess(List<Comment> comments) {
-                cmts.setValue(convertCommentListToCommentViewStateList(comments));
+                List<CommentViewState> newCommentViewStates = new ArrayList<>(cmts.getValue());
+                newCommentViewStates.addAll(convertCommentListToCommentViewStateList(comments));
+                cmts.postValue(newCommentViewStates);
             }
 
             @Override
