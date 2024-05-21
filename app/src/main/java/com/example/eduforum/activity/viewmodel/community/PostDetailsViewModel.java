@@ -267,12 +267,12 @@ public class PostDetailsViewModel extends ViewModel {
                 CommentViewState commentViewState = new CommentViewState(
                         comments.getCommentID(),
                         comments.getContent(),
-                        comments.getTimeCreated().toString(),
+                        null,
                         comments.getCreator(),
                         comments.getTotalUpVote(),
                         comments.getTotalDownVote(),
                         comments.getVoteDifference(),
-                        comments.getLastModified().toString(),
+                        null,
                         comments.getImage(),
                         comments.getReplyCommentID(),
                         comments.getTotalReply()
