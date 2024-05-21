@@ -111,7 +111,6 @@ public class PostDetailActivity extends AppCompatActivity {
 
                                 viewModel.addChildComment(comment, commentViewState);
                                 binding.commentEditText.setText("");
-
                             }
                         });
                     }
@@ -133,7 +132,6 @@ public class PostDetailActivity extends AppCompatActivity {
                     @Override
                     public void onShowUpReplies(CommentViewState comment) {
                         viewModel.loadChildComments(comment);
-
                     }
                 }
         )
