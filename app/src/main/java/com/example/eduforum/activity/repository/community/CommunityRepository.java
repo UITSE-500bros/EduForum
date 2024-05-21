@@ -158,7 +158,7 @@ public class CommunityRepository {
 
                             }
                         } else {
-                            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "get failed with ", task.getException());
+                            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Notification status get failed with ", task.getException());
                         }
                     }
                 });
@@ -216,13 +216,12 @@ public class CommunityRepository {
         db.collection("Community")
                 .document(communityID)
                 .collection("MemberApproval")
-                .document(user.getUserId())
-                .set(joinRequestDTO)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                .add(joinRequestDTO)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
+                    public void onSuccess(DocumentReference documentReference) {
                         callback.onSuccess("Request sent successfully!");
-                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "MemberApproval successfully written!");
+                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "MemberApproval written with ID: " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
