@@ -285,7 +285,7 @@ public class PostRepository {
                             Post post = documentSnapshot.toObject(Post.class);
                             post.setPostID(documentSnapshot.getId());
                             posts.add(post);
-                            Log.d(FlagsList.DEBUG_POST_FLAG, documentSnapshot.getId() + " => " + documentSnapshot.getData());
+                            Log.d(FlagsList.DEBUG_POST_FLAG, "Searched post: " + documentSnapshot.getId() + " => " + documentSnapshot.getData());
                         }
 
                         callback.onQueryPostSuccess(posts);
