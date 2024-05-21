@@ -94,7 +94,7 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
                     dialog.dismiss();
                 });
                 builder.show();
-                
+
                 return true;
             });
         }
