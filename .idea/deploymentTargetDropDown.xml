@@ -2,7 +2,10 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="app">
+      <entry key="CustomTagsActivity">
+        <State />
+      </entry>
+      <entry key="PostDetailActivity">
         <State />
       </entry>
     </value>
