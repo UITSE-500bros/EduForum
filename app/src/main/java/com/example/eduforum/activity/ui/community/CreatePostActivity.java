@@ -172,8 +172,8 @@ public class CreatePostActivity extends AppCompatActivity {
         ActivityResultLauncher<PickVisualMediaRequest> pickImages =
                 registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uris -> {
                     if (uris != null) {
-                        ArrayList<MediaItem> uriList = new ArrayList<>();
-                        ArrayList<Uri> uriList1 = new ArrayList<>();
+                        List<Uri> uriList = new ArrayList<>();
+                        List<Uri> uriList1 = new ArrayList<>();
                         // Get the current list of images
                         PostViewState postViewState = viewModel.getPostViewState().getValue();
                         if (postViewState != null && postViewState.getImage() != null) {
@@ -187,7 +187,6 @@ public class CreatePostActivity extends AppCompatActivity {
                             int sizeInPx = (int) (sizeInDp * scale + 0.5f);
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(sizeInPx, sizeInPx);
                             imageView.setLayoutParams(layoutParams);
-                            uriList.add(new MediaItem(uris.get(i), false));
                             uriList1.add(uris.get(i));
                         }
                         MediaAdapter imageAdapter = new MediaAdapter(uriList);

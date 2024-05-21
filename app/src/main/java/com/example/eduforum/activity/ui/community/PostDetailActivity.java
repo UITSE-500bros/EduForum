@@ -182,7 +182,7 @@ public class PostDetailActivity extends AppCompatActivity {
         });
 
         binding.recycleImage.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        //mediaAdapter = new MediaAdapter(postViewState.getImage());
+        mediaAdapter = new MediaAdapter(postViewState.getImage());
         binding.recycleImage.setAdapter(mediaAdapter);
 
 
