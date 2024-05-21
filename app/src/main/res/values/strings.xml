@@ -83,7 +83,7 @@
     <string name="community_name">Tên cộng đồng (*)</string>
     <string name="community_description">Mô tả cộng đồng</string>
     <string name="community_category">Phân loại</string>
-    <string name="choose_from_device">Chọn hình ảnh từ thiết bị</string>
+    <string name="choose_from_device">Chọn ảnh từ thiết bị</string>
     <string name="cancel">Hủy bỏ</string>
     <string name="confirm">Xác nhận</string>
     <string name="join">Tham gia</string>
