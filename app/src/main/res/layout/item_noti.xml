@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/noti_CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -12,7 +13,7 @@
         app:cardCornerRadius="18dp"
         app:cardElevation="10dp"
         app:strokeColor="@color/secondaryColor"
-        android:backgroundTint="@color/secondaryColor">
+        android:backgroundTint="@color/unReadComment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -24,71 +25,71 @@
                 android:layout_height="45dp"
                 android:layout_marginVertical="10dp"
                 android:layout_marginStart="10dp"
+                android:src="@drawable/congrats_image"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/congrats_image"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
                 android:id="@+id/commuNoti_LinearLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:maxWidth="100dp"
                 android:orientation="vertical"
-                app:layout_constraintStart_toEndOf="@id/avatar_CardView"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/moreOption_ImageButton"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="10dp">
+                app:layout_constraintEnd_toStartOf="@id/moreOption_ImageButton"
+                app:layout_constraintStart_toEndOf="@id/avatar_CardView"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/commuNoti_TextView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:maxWidth="250dp"
-                    android:textSize="16sp"
-                    android:maxLines="1"
                     android:ellipsize="end"
+                    android:maxWidth="250dp"
+                    android:maxLines="1"
                     android:text="Nhập môn di động"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/contentNoti_TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxWidth="250dp"
-                    android:textSize="14sp"
-                    android:layout_marginTop="2dp"
-                    android:maxLines="2"
+                    android:layout_marginTop="1dp"
                     android:ellipsize="end"
+                    android:maxWidth="250dp"
+                    android:maxLines="2"
                     android:text="Râu cha và 5 người khác đã thích bài viết của bạn"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/timeNoti_TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
+                    android:layout_marginTop="1dp"
                     android:text="10 phút trước"
-                    android:layout_marginTop="2dp"/>
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
             </LinearLayout>
 
 
             <ImageButton
+                android:id="@+id/moreOption_ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/moreOption_ImageButton"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@null"
                 android:contentDescription="@null"
                 android:src="@drawable/more_horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/commuNoti_LinearLayout"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="5dp"
-                android:background="@null"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

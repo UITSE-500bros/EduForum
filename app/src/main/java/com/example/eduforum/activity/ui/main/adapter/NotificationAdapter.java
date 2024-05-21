@@ -35,6 +35,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             //});
             popupMenu.show();
         });
+        holder.binding.notiCardView.setOnClickListener(v -> {
+            v.setBackgroundColor(context.getResources().getColor(R.color.readComment));
+        });
     }
 
     @Override

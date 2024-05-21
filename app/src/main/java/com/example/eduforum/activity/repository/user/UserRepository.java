@@ -42,7 +42,10 @@ public class UserRepository {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             Log.d(FlagsList.DEBUG_USER_FLAG, "Current user data: " + document.getData());
-                            callback.onGetUserSuccess(document.toObject(User.class));
+                            User user = document.toObject(User.class);
+                            assert user != null;
+                            user.setUserId(document.getId());
+                            callback.onGetUserSuccess(user);
                         } else {
                             Log.d(FlagsList.DEBUG_USER_FLAG, "No such user exists!");
                             callback.onGetUserFailure(FlagsList.ERROR_USER_NOT_FOUND);

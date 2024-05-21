@@ -83,9 +83,6 @@ public class HomeFragment extends Fragment {
         binding.createCommuButton.setOnClickListener(v -> {
             showCreateCommunityDialog();
         });
-        binding.joinCommuButton.setOnClickListener(v -> {
-            showJoinCommunityDialog();
-        });
 
         viewModel.getJoinedCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
             joinedCommunitiesAdapter.setCommunityList(joinedCommunities);

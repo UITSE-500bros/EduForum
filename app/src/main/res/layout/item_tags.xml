@@ -13,6 +13,7 @@
         android:layout_height="30dp">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/tagCardView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"

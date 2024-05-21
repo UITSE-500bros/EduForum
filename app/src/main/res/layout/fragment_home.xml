@@ -10,58 +10,98 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
         android:layout_height="match_parent"
         android:background="@color/backgroundColor">
 
-        <TextView
-            android:id="@+id/titleTextView"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/titleLinearLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/homeFragmentTitle"
-            android:textSize="30dp"
-            android:fontFamily="@font/source_sans_pro_semibold"
-            android:textColor="@color/textColor"
-            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:paddingVertical="10dp"
+            android:gravity="center"
+            android:background="@color/secondaryColor">
+            <ImageView
+                android:id="@+id/notiIcon"
+                android:layout_width="150dp"
+                android:contentDescription="@null"
+                app:iconGravity="start"
+                android:layout_height="40dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/eduforumlogo"/>
 
-        <Button
-            android:id="@+id/joinCommuButton"
-            app:icon="@drawable/icon_right_arrow"
-            android:background="@drawable/loginbuttonshape"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView"
-            android:text="@string/join"
-            />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clickable="false"/>
 
-        <Button
-            android:id="@+id/createCommuButton"
-            app:icon="@drawable/icon_add"
-            android:background="@drawable/loginbuttonshape"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-           app:layout_constraintTop_toTopOf="@+id/joinCommuButton"
-            app:layout_constraintBottom_toBottomOf="@+id/joinCommuButton"
-            app:layout_constraintStart_toEndOf="@+id/joinCommuButton"
-            android:text="@string/create_community" />
+            <Button
+                android:id="@+id/searchButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="10dp"
+                style="Widget.MaterialComponents.Button.TextButton.Icon"
+                app:icon="@drawable/search_icon2"
+                android:backgroundTint="@color/secondaryColor"
+                app:iconGravity="textStart"/>
+
+            <Button
+                android:id="@+id/createCommuButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="10dp"
+                style="Widget.MaterialComponents.Button.TextButton.Icon"
+                app:icon="@drawable/icon_add2"
+                android:backgroundTint="@color/secondaryColor"
+                app:iconGravity="textStart"/>
+
+        </LinearLayout>
+
 
         <ScrollView
             android:id="@+id/commusScrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="140dp"
-            app:layout_constraintTop_toBottomOf="@+id/joinCommuButton"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/titleLinearLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintEnd_toEndOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/titleTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/homeFragmentTitle"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:fontFamily="@font/source_sans_pro_semibold"
+                    android:textColor="@color/textColor"
+                    android:layout_marginTop="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/UITCommusTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Cộng đồng UIT"
+                    android:textColor="@color/textColor"
+                    android:textSize="24sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/UITCommunitiesRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    tools:listitem="@layout/item_forum">
+
+                </androidx.recyclerview.widget.RecyclerView>
 
                 <TextView
                     android:id="@+id/generalCommusTextView"
@@ -71,7 +111,7 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                     android:layout_marginTop="16dp"
                     android:text="Cộng đồng của tôi"
                     android:textColor="@color/textColor"
-                    android:textSize="24dp" />
+                    android:textSize="24sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/myCommunitiesRecyclerView"
@@ -87,7 +127,7 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cộng đồng đã tham gia"
-                    android:textSize="24dp"
+                    android:textSize="24sp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
                     android:textColor="@color/textColor" />

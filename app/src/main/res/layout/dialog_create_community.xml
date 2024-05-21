@@ -55,7 +55,8 @@
                     android:layout_marginLeft="160dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="48dp"
-                    android:text="@string/choose_from_device" />
+                    android:text="@string/choose_from_device"
+                    android:foreground="?attr/selectableItemBackground"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -118,21 +119,23 @@
                 android:layout_marginTop="16dp"
                 android:gravity="end"
                 android:orientation="horizontal">
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/cancelCreateCommunityButton"
                     android:background="@drawable/loginbuttonshape"
                     android:onClick="@{() -> viewModel.onCancelCreateCommunityButtonClicked()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:foreground="?attr/selectableItemBackground"
                     android:text="@string/cancel" />
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/confirmCreateCommunityButton"
                     android:onClick="@{() -> viewModel.onConfirmCreateCommunityButtonClicked()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
                     android:background="@drawable/loginbuttonshape"
-                    android:text="@string/confirm" />
+                    android:text="@string/confirm"
+                    android:foreground="?attr/selectableItemBackground"/>
 
             </LinearLayout>
 

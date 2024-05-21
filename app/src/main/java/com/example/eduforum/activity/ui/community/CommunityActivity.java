@@ -7,7 +7,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.SearchView;
+import android.widget.RadioButton;
+import androidx.appcompat.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -17,8 +18,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.eduforum.R;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eduforum.activity.model.post_manage.Category;
+import com.example.eduforum.activity.repository.post.PostQuery;
 import com.example.eduforum.activity.ui.community.adapter.PostAdapter;
 import com.example.eduforum.activity.ui.community.adapter.TagsAdapter;
 import com.example.eduforum.activity.ui.community.viewstate.FilterViewState;
@@ -92,26 +95,27 @@ public class CommunityActivity extends AppCompatActivity {
         inflater.inflate(R.menu.community_menu, menu);
 
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//
-//            //event  when user submit the search query
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return true;
-//            }
-//
-//            //event when user change the search query
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                viewModel.filterBySearch(query);
 
-//               postAdapter.getFilter().filter(newText);
-//                return true;
-//            }
-//        });
+                return true;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    viewModel.refreshPostList();
+                }
+                return true;
+            }
+        });
 
         return true;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -121,17 +125,62 @@ public class CommunityActivity extends AppCompatActivity {
             CommunityFilterBinding filterBinding = CommunityFilterBinding.inflate(getLayoutInflater());
             filterDialog.setContentView(filterBinding.getRoot());
             filterBinding.setLifecycleOwner(this);
-            TagsAdapter tagsAdapter = new TagsAdapter( viewModel.getAllCategories().getValue());
+
+            // get the previous filter state
+            FilterViewState currentFilter = viewModel.getCurrentFilter().getValue();
+            switch (currentFilter.getPostQuery()) {
+                case NEWEST:
+                    filterBinding.newestRadioButton.setChecked(true);
+                    break;
+                case OLDEST:
+                    filterBinding.oldestRadioButton.setChecked(true);
+                    break;
+                case MOST_COMMENTED:
+                    filterBinding.mostCommentRadioButton.setChecked(true);
+                    break;
+                case MOST_VOTED:
+                    filterBinding.mostVoteRadioButton.setChecked(true);
+                    break;
+            }
+            //setup RadioButtons (allow only one selection)
+            List<RadioButton> radioButtons = new ArrayList<>();
+            radioButtons.add(filterBinding.newestRadioButton);
+            radioButtons.add(filterBinding.oldestRadioButton);
+            radioButtons.add(filterBinding.mostCommentRadioButton);
+            radioButtons.add(filterBinding.mostVoteRadioButton);
+            for(RadioButton radioButton : radioButtons) {
+                radioButton.setOnClickListener(v -> {
+                    for(RadioButton rb : radioButtons) {
+                        if (rb != radioButton) {
+                            rb.setChecked(false);
+                        }
+                    }
+                });
+            }
+
+            TagsAdapter tagsAdapter = new TagsAdapter( viewModel.getAllCategories().getValue(), currentFilter.getTags(), true, false);
             filterBinding.categoryRecyclerView.setAdapter(tagsAdapter);
-            filterBinding.categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            filterBinding.categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
             filterBinding.applyButton.setOnClickListener(v -> {
-                // for testing
-                List<Category> sampleCategories = new ArrayList<>();
-                sampleCategories.add(new Category("1", "Hỏi đáp", false));
-                viewModel.setFilter(new FilterViewState(sampleCategories));
+                FilterViewState filterViewState = new FilterViewState();
+                if (filterBinding.newestRadioButton.isChecked()) {
+                    filterViewState.setPostQuery(PostQuery.NEWEST);
+                } else if (filterBinding.oldestRadioButton.isChecked()) {
+                    filterViewState.setPostQuery(PostQuery.OLDEST);
+                } else if (filterBinding.mostCommentRadioButton.isChecked()) {
+                    filterViewState.setPostQuery(PostQuery.MOST_COMMENTED);
+                } else if (filterBinding.mostVoteRadioButton.isChecked()) {
+                    filterViewState.setPostQuery(PostQuery.MOST_VOTED);
+                }
+                if(tagsAdapter.getSelectedTags().size() != 0){
+                    filterViewState.setTags(tagsAdapter.getSelectedTags());
+                }
+                viewModel.setFilter(filterViewState);
                 filterDialog.dismiss();
             });
-
+            filterBinding.cancelButton.setOnClickListener(v -> {
+                filterDialog.dismiss();
+            });
 
             filterDialog.show();
             return true;

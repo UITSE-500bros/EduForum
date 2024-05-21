@@ -114,16 +114,90 @@ public class NewsFeedViewModel extends ViewModel {
 
         });
     }
-    public void setCurrentCommunity(CreateCommunityViewState community) {
-        currentCommunity.setValue(community);
-        postRepository.getPosts(community.getCommunityID(), FirebaseAuth.getInstance().getUid(), new IPostCallback() {
+    public void filterBySearch(String keyword) {
+        keyword = keyword.trim();
+        if(keyword.isEmpty()) {
+            refreshPostList();
+            return;
+        }
+        postRepository.searchPost(currentCommunity.getValue().getCommunityID(), keyword, new IPostCallback() {
             @Override
             public void onGetPostSuccess(List<Post> posts){
-                postList.setValue(convertPostListToPostViewStateList(posts));
             }
             @Override
             public void onGetPostFailure(String errorMsg){
+            }
+            @Override
+            public void onAddPostFailure(String errorMsg){
 
+            }
+            @Override
+            public void onAddPostSuccess(Post newPost){
+
+            }
+            @Override
+            public void onEditPostSuccess(){
+
+            }
+            @Override
+            public void onEditPostFailure(String errorMsg){
+
+            }
+            @Override
+            public void onQueryPostError(String errorMsg){
+                errorMessage.setValue("Đã xảy ra lỗi! Không thể tìm kiếm bài viết!");
+
+            }
+            @Override
+            public void onQueryPostSuccess(List<Post> queryPostResults){
+                postList.setValue(convertPostListToPostViewStateList(queryPostResults));
+
+            }
+            @Override
+            public void onDeletePostSuccess(){
+
+            }
+            @Override
+            public void onDeletePostError(String errorMsg){
+            }
+            @Override
+            public void onSubscriptionSuccess(){
+
+            }
+            @Override
+            public void onSubscriptionError(String errorMsg){
+
+            }
+            @Override
+            public void onBookmarkError(String errorMsg){
+
+            }
+            @Override
+            public void onBookmarkSuccess(){
+
+            }
+
+            @Override
+            public void onGetVoteStatusSuccess(int voteType) {
+
+            }
+        });
+    }
+
+    public void setCurrentCommunity(CreateCommunityViewState community) {
+        currentCommunity.setValue(community);
+        refreshPostList();
+    }
+    public void refreshPostList(){
+        postRepository.getPosts(currentCommunity.getValue().getCommunityID(), FirebaseAuth.getInstance().getUid(), new IPostCallback() {
+            @Override
+            public void onGetPostSuccess(List<Post> posts){
+                postList.setValue(convertPostListToPostViewStateList(posts));
+                errorMessage.setValue("Success");
+            }
+            @Override
+            public void onGetPostFailure(String errorMsg){
+                errorMessage.setValue("Không thể lấy bài viết");
             }
             @Override
             public void onAddPostFailure(String errorMsg){
@@ -192,6 +266,9 @@ public class NewsFeedViewModel extends ViewModel {
     }
     public LiveData<List<PostCategory>> getAllCategories() {
         return allCategories;
+    }
+    public LiveData<FilterViewState> getCurrentFilter() {
+        return currentFilter;
     }
     public LiveData<String> getErrorMessage() {
         return errorMessage;

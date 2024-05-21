@@ -66,7 +66,7 @@
         <item>Nữ</item>
         <item>Other</item>
     </string-array>
-    <string name="homeFragmentTitle">DANH SÁCH FORUM</string>
+    <string name="homeFragmentTitle">CỘNG ĐỒNG CỦA BẠN</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- Strings used for fragments for navigation -->
@@ -83,7 +83,7 @@
     <string name="community_name">Tên cộng đồng (*)</string>
     <string name="community_description">Mô tả cộng đồng</string>
     <string name="community_category">Phân loại</string>
-    <string name="choose_from_device">Chọn hình ảnh từ thiết bị</string>
+    <string name="choose_from_device">Chọn ảnh từ thiết bị</string>
     <string name="cancel">Hủy bỏ</string>
     <string name="confirm">Xác nhận</string>
     <string name="join">Tham gia</string>
@@ -113,5 +113,7 @@ Nh\u00e1\u00ba\u00adp m\u00c3\u00b4n l\u00e1\u00ba\u00adp tr\u00c3\u00acnh\n500 
 
     <string name="accept_all">Phê duyệt tất cả</string>
     <string name="deny_all">Từ chối tất cả</string>
+
+    <string name="read_all">Đánh dấu tất cả là đã đọc</string>
 
 </resources>

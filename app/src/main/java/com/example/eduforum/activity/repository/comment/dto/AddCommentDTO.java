@@ -15,6 +15,7 @@ public class AddCommentDTO {
     private List<String> downloadImage;
     private Integer totalUpVote;
     private Integer totalDownVote;
+    private Integer voteDifference;
     private Integer totalReply;
     private Timestamp timeCreated;
     private Timestamp lastModified;
@@ -30,9 +31,18 @@ public class AddCommentDTO {
         this.downloadImage = comment.getDownloadImage();
         this.totalUpVote = 0;
         this.totalDownVote = 0;
+        this.voteDifference = 0;
         this.totalReply = 0;
         this.timeCreated = null;
         this.lastModified = null;
+    }
+
+    public Integer getVoteDifference() {
+        return voteDifference;
+    }
+
+    public void setVoteDifference(Integer voteDifference) {
+        this.voteDifference = voteDifference;
     }
 
     public String getPostID() {

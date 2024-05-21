@@ -14,43 +14,73 @@
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingVertical="10dp"
+        android:gravity="center"
+        android:background="@color/secondaryColor">
         <ImageView
             android:id="@+id/notiIcon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@drawable/notiicon"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp" />
-
+            android:layout_marginStart="15dp"/>
 
         <TextView
             android:id="@+id/titleTextView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="Thông báo"
             android:textColor="@color/white"
-            android:textSize="35sp"
+            android:textSize="25sp"
             android:fontFamily="@font/source_sans_pro_semibold"
             android:textStyle="bold"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp" />
+            android:layout_marginStart="10dp"/>
+
+        <Button
+            android:id="@+id/search_noti_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="10dp"
+            style="Widget.MaterialComponents.Button.TextButton.Icon"
+            app:icon="@drawable/search_icon2"
+            android:backgroundTint="@color/secondaryColor"
+            app:iconGravity="textStart"/>
+
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/notiRecyclerView"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/readAllButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/backgroundColor"
+        android:layout_marginEnd="8dp"
+        android:text="@string/read_all"
+        android:textColor="@color/primaryColor"
+        android:textSize="12sp"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleLinearLayout"
+        android:layout_marginVertical="3dp"/>
+
+
+
+    <ScrollView
+        android:id="@+id/scrollViewNoti"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="70dp"
-        android:padding="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleLinearLayout"
-        app:layout_constraintVertical_bias="1.0"
-        tools:listitem="@layout/item_noti" />
+        app:layout_constraintTop_toBottomOf="@id/readAllButton">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/notiRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="5dp"
+            tools:listitem="@layout/item_noti" />
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

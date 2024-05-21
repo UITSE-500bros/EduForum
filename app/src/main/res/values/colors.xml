@@ -12,6 +12,7 @@
     <color name="primaryColor">#0097FB</color>
     <color name="secondaryColor">#001D3D</color>
     <color name="tagBackgroundColor">#2C353D</color>
+    <color name="selectedTagBackgroundColor">#2C355F</color>
     <color name="cardViewBackgroundColor">#001D3D</color>
     <color name="login_editText">#0097FB80</color>
     <color name="mainEditTextBackgroundColor">#E3D5CACC</color>
@@ -19,5 +20,7 @@
     <color name="bottomNavigationColor">#262D34</color>
     <color name="hintColorText">#803C3C43</color>
     <color name="red">#FF0808</color>
+    <color name="unReadComment">#3D5A80 </color>
+    <color name="readComment">#001D3D</color>
 
 </resources>

@@ -18,12 +18,16 @@
         android:theme="@style/Theme.EduForum"
         tools:targetApi="31">
         <activity
+            android:name=".activity.ui.community.AdminMemberListActivity"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            android:exported="true" />
+        <activity
             android:name=".activity.ui.community.ProfileCommunityActivity"
             android:exported="true" />
         <activity
             android:name=".activity.ui.community.CustomTagsActivity"
-            android:theme="@style/Theme.Material3.Light.NoActionBar"
-            android:exported="true"/>
+            android:exported="true"
+            android:theme="@style/Theme.Material3.Light.NoActionBar" />
         <activity
             android:name=".activity.ui.community.MemberRequestActivity"
             android:exported="true" />
@@ -66,7 +70,7 @@
             android:exported="true" />
         <activity
             android:name=".activity.ui.main.MainActivity"
-            android:exported="false" />
+            android:exported="true" />
     </application>
 
 </manifest>
