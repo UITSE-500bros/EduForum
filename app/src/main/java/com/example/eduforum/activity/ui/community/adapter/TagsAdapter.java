@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -78,6 +79,23 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
                     holder.setIsSelected(true);
                 }
 
+            });
+
+            holder.itemView.setOnLongClickListener(v -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+
+                builder.setTitle("Xóa tag");
+                builder.setMessage("Bạn muốn xóa tag này?");
+                builder.setPositiveButton("Yes", (dialog, which) -> {
+                    tagsList.remove(position);
+                    notifyItemRemoved(position);
+                });
+                builder.setNegativeButton("No", (dialog, which) -> {
+                    dialog.dismiss();
+                });
+                builder.show();
+                
+                return true;
             });
         }
         if(isCreatingTag){
