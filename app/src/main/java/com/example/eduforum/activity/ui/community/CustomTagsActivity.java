@@ -22,6 +22,8 @@ import java.util.List;
 public class CustomTagsActivity extends AppCompatActivity {
     private ActivityCustomTagsBinding binding;
     private TagsAdapter tagsAdapter;
+    private List<PostCategory> tagsList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class CustomTagsActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = binding.recyclerViewTags;
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-//        tagsAdapter = new TagsAdapter((List<PostCategory>) this);
+//       tagsAdapter = new TagsAdapter( tagsList);
 //        recyclerView.setAdapter(tagsAdapter);
 
     }
