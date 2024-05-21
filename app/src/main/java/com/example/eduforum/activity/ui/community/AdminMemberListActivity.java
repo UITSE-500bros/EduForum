@@ -13,12 +13,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.model.community_manage.CommunityMember;
+import com.example.eduforum.activity.ui.community.adapter.MemberListAdapter;
 import com.example.eduforum.databinding.ActivityAdminMemberListBinding;
 import com.google.android.material.appbar.MaterialToolbar;
 import  androidx.appcompat.widget.SearchView;
 
+import java.util.List;
+
 public class AdminMemberListActivity extends AppCompatActivity {
     private ActivityAdminMemberListBinding binding;
+    private MemberListAdapter memberListAdapter;
+    private List<CommunityMember> adminList;
+    private List<CommunityMember> memberList;
+
 
 
     @Override
@@ -40,11 +48,19 @@ public class AdminMemberListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // setup recyclerView
+        //admin recycler view
         RecyclerView adminMemberListRecyclerView = binding.AdminrecyclerView;
         adminMemberListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adminMemberListRecyclerView.setHasFixedSize(true);
+        memberListAdapter = new MemberListAdapter(adminList);
+        adminMemberListRecyclerView.setAdapter(memberListAdapter);
 
-
+        //member recycler view
+        RecyclerView memberListRecyclerView = binding.MemberrecyclerView;
+        memberListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        memberListRecyclerView.setHasFixedSize(true);
+        memberListAdapter = new MemberListAdapter(memberList);
+        memberListRecyclerView.setAdapter(memberListAdapter);
 
 
 
@@ -57,7 +73,7 @@ public class AdminMemberListActivity extends AppCompatActivity {
         searchView.setQueryHint("Tìm kiếm thành viên");
 
         ((EditText) searchView.findViewById(androidx.appcompat.R.id.search_src_text)).setTextColor(getResources().getColor((R.color.white)));
-
+        ((EditText) searchView.findViewById(androidx.appcompat.R.id.search_src_text)).setHintTextColor(getResources().getColor((R.color.hintColorText)));
 
 //        searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
 //            @Override
