@@ -5,6 +5,9 @@
       <entry key="AdminMemberListActivity">
         <State />
       </entry>
+      <entry key="CreatePostActivity">
+        <State />
+      </entry>
     </value>
   </component>
 </project>

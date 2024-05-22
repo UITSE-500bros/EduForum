@@ -34,6 +34,7 @@ import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.activity.ui.community.adapter.MediaAdapter;
 import com.example.eduforum.activity.ui.community.adapter.MediaItem;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
+import com.example.eduforum.activity.util.LoadingDialog;
 import com.example.eduforum.activity.viewmodel.community.CreatePostViewModel;
 import com.example.eduforum.activity.viewmodel.shared.UserViewModel;
 import com.example.eduforum.databinding.ActivityCreatePostBinding;
@@ -102,6 +103,10 @@ public class CreatePostActivity extends AppCompatActivity {
         RecyclerView ImageRecyclerView = binding.imageRecyclerView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         ImageRecyclerView.setLayoutManager(layoutManager);
+
+
+
+
     }
     private void initComponents(){
         //Stlye rich editor through binding
@@ -174,7 +179,6 @@ public class CreatePostActivity extends AppCompatActivity {
         ActivityResultLauncher<PickVisualMediaRequest> pickImages =
                 registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uris -> {
                     if (uris != null) {
-                        List<Uri> uriList = new ArrayList<>();
                         List<Uri> uriList1 = new ArrayList<>();
                         // Get the current list of images
                         PostViewState postViewState = viewModel.getPostViewState().getValue();
@@ -191,7 +195,7 @@ public class CreatePostActivity extends AppCompatActivity {
                             imageView.setLayoutParams(layoutParams);
                             uriList1.add(uris.get(i));
                         }
-                        MediaAdapter imageAdapter = new MediaAdapter(uriList);
+                        MediaAdapter imageAdapter = new MediaAdapter(uriList1);
                         binding.imageRecyclerView.setAdapter(imageAdapter);
                         postViewState.setImage(uriList1);
                         viewModel.setPostViewState(postViewState);
