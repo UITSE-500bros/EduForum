@@ -43,7 +43,6 @@ public class NewsFeedViewModel extends ViewModel {
         currentCommunity.setValue(new CreateCommunityViewState());
         postList = new MutableLiveData<>();
         allCategories = new MutableLiveData<>();
-        updateCategories();
 
         currentFilter = new MutableLiveData<>();
         currentFilter.setValue(new FilterViewState());

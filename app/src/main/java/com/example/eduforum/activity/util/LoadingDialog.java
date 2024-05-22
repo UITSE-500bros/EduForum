@@ -8,11 +8,11 @@ import com.example.eduforum.R;
 public class LoadingDialog {
     Activity activity;
     android.app.AlertDialog dialog;
-    LoadingDialog(Activity myActivity) {
+    public LoadingDialog(Activity myActivity) {
         activity = myActivity;
     }
 
-    void startLoadingDialog() {
+   public  void startLoadingDialog() {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(activity);
         LayoutInflater inflater = activity.getLayoutInflater();
         builder.setView(inflater.inflate(R.layout.dialog_loading, null));
@@ -20,7 +20,7 @@ public class LoadingDialog {
         dialog = builder.create();
         dialog.show();
     }
-    void dismissDialog() {
+   public  void dismissDialog() {
         dialog.dismiss();
     }
 }

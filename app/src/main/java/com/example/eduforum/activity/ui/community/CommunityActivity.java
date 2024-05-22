@@ -60,6 +60,7 @@ public class CommunityActivity extends AppCompatActivity {
         CreateCommunityViewState currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
         if (currentCommunity != null) {
             viewModel.setCurrentCommunity(currentCommunity);
+            viewModel.updateCategories();
         } else {
             //finish();
         }
@@ -79,6 +80,7 @@ public class CommunityActivity extends AppCompatActivity {
 
         binding.createPostEditTextButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, CreatePostActivity.class);
+            assert currentCommunity != null;
             intent.putExtra("communityId", currentCommunity.getCommunityID());
             createPostActivityResult.launch(intent);
         });

@@ -37,7 +37,7 @@ public class CreatePostViewModel extends ViewModel {
         postRepository = PostRepository.getInstance();
         categoryRepository = CategoryRepository.getInstance();
         allCategories = new MutableLiveData<>();
-        updateCategories();
+        allCategories.setValue(new ArrayList<>());
     }
     public void updateCategories() {
         Community community = new Community();
@@ -45,10 +45,15 @@ public class CreatePostViewModel extends ViewModel {
         categoryRepository.fetchCategory(community, new CategoryCallback() {
             @Override
             public void onSuccess(List<Category> categories) {
-                allCategories.setValue(categories);
+                if(categories == null) {
+                    allCategories.setValue(new ArrayList<>());
+                }
+                else allCategories.setValue(categories);
             }
             @Override
-            public void onFailure(String errorMsg) {}
+            public void onFailure(String errorMsg) {
+                errorMessage.setValue("Không thể tải danh sách chuyên mục");
+            }
 
         });
     }

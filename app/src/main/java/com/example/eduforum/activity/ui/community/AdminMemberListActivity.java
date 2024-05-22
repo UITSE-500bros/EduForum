@@ -1,6 +1,7 @@
 package com.example.eduforum.activity.ui.community;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuInflater;
 import android.widget.EditText;
 
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.eduforum.R;
 import com.example.eduforum.activity.model.community_manage.CommunityMember;
 import com.example.eduforum.activity.ui.community.adapter.MemberListAdapter;
+import com.example.eduforum.activity.util.LoadingDialog;
 import com.example.eduforum.databinding.ActivityAdminMemberListBinding;
 import com.google.android.material.appbar.MaterialToolbar;
 import  androidx.appcompat.widget.SearchView;
@@ -62,6 +64,14 @@ public class AdminMemberListActivity extends AppCompatActivity {
         memberListAdapter = new MemberListAdapter(memberList);
         memberListRecyclerView.setAdapter(memberListAdapter);
 
+        LoadingDialog loadingDialog = new LoadingDialog(this);
+        loadingDialog.startLoadingDialog();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadingDialog.dismissDialog();
+            }
+        }, 3000); // Delay of 3 seconds (3000 milliseconds)
 
 
     }

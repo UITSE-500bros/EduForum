@@ -62,14 +62,16 @@ public class CustomTagsViewModel extends ViewModel {
         categoryRepository.createCategory(community, newCategory, new CategoryCallback() {
             @Override
             public void onSuccess(List<Category> categories) {
-//                List<PostCategory> newCategoryList = categoryList.getValue();
-//                newCategoryList.add(category);
-//                categoryList.setValue(newCategoryList);
             }
 
             @Override
             public void onFailure(String errorMsg) {
                 errorMessage.setValue(errorMsg);
+            }
+            public void onCreateCategorySuccess(Category newCategory) {
+                List<PostCategory> currentCategoryList = categoryList.getValue();
+                currentCategoryList.add(new PostCategory(newCategory.getCategoryID(), newCategory.getTitle()));
+                categoryList.setValue(currentCategoryList);
             }
 
     });

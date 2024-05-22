@@ -42,7 +42,6 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, CommunityActivity.class);
             intent.putExtra("currentCommunity", communityList.get(position));
-            if(communityList.get(position)!=null)
             context.startActivity(intent);
         });
     }

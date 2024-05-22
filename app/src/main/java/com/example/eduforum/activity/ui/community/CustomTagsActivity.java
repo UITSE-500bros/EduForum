@@ -37,8 +37,12 @@ public class CustomTagsActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         viewModel = new ViewModelProvider(this).get(CustomTagsViewModel.class);
         binding.setLifecycleOwner(this);
-        viewModel.refreshCategories();
 
+        String communityId = getIntent().getStringExtra("communityId");
+        if(communityId != null) {
+            viewModel.setCommunityId(communityId);
+            viewModel.refreshCategories();
+        }
         MaterialToolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> {

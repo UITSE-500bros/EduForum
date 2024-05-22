@@ -7,4 +7,5 @@ import java.util.List;
 public abstract class CategoryCallback {
     public abstract void onSuccess(List<Category> categories);
     public abstract void onFailure(String errorMsg);
+    public void onCreateCategorySuccess(Category newCategory) {};
 }
