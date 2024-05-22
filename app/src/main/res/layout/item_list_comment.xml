@@ -51,7 +51,7 @@
                         android:layout_height="match_parent"
                         android:textSize="12sp"
                         android:maxLines="1"
-                        android:layout_gravity=""
+                        android:layout_marginEnd="3dp"
                         android:gravity="center_vertical"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -120,10 +120,18 @@
                 android:id="@+id/interactionParentLinearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="3dp"
                 android:layout_marginEnd="10dp"
                 android:orientation="vertical"
-                android:layout_gravity="top|end">
+                android:layout_gravity="top|center">
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/moreChildComment_Button"
+                    android:src="@drawable/more_horizontal"
+                    android:background="@null"
+                    android:layout_marginBottom="3dp"/>
 
                 <ImageButton
                     android:id="@+id/upVoteParentButton"
@@ -157,6 +165,38 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
             android:padding="5dp" />
+
+        <LinearLayout
+            android:id="@+id/hideReplyParentLinearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="7dp"
+            android:layout_marginStart="30dp"
+            >
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="2dp"
+                android:textSize="16sp"
+                android:background="@drawable/loginbuttonshape"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/primaryColor"/>
+            <TextView
+                android:id="@+id/hideReplyParent_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="@string/hideReply_comment"
+                android:textColor="@color/primaryColor"/>
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="2dp"
+                android:textSize="16sp"
+                android:background="@drawable/loginbuttonshape"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/primaryColor"/>
+        </LinearLayout>
+
 
 
     </LinearLayout>

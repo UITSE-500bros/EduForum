@@ -10,13 +10,14 @@
         android:background="@color/backgroundColor"
         android:orientation="horizontal">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/avatarChildrenComment"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/congrats_image"/>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/avatarChildrenComment"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@drawable/congrats_image"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"/>
 
         <LinearLayout
             android:id="@+id/contentChild_LinearLayout"
@@ -88,10 +89,19 @@
             android:id="@+id/interactionChild_LinearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="3dp"
             android:layout_marginEnd="10dp"
             android:orientation="vertical"
-            android:layout_gravity="top|end">
+            android:layout_gravity="top|center">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/moreChildComment_Button"
+                android:src="@drawable/more_horizontal"
+                android:background="@null"
+                android:layout_marginBottom="3dp"/>
+
 
             <ImageButton
                 android:id="@+id/upVoteChildComment_Button"
@@ -104,7 +114,7 @@
                 android:id="@+id/voteCountChild_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:text="50"
                 android:textColor="@color/white"
                 android:layout_gravity="center"/>
@@ -115,6 +125,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/icon_circle_down"
                 android:background="@null"/>
+
         </LinearLayout>
     </LinearLayout>
 </layout>

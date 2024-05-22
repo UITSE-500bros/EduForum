@@ -22,7 +22,6 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
             android:gravity="center"
             android:background="@color/secondaryColor">
             <ImageView
-                android:id="@+id/notiIcon"
                 android:layout_width="150dp"
                 android:contentDescription="@null"
                 app:iconGravity="start"

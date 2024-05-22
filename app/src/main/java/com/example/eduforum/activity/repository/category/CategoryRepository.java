@@ -74,7 +74,8 @@ public class CategoryRepository {
         categoryRef.add(category)
                 .addOnSuccessListener(documentReference -> {
                     Log.d(FlagsList.DEBUG_CATEGORY_FLAG, "Category written with ID: " + documentReference.getId());
-                    callback.onSuccess(null);
+                    category.setCategoryID(documentReference.getId());
+                    callback.onCreateCategorySuccess(category);
                 })
                 .addOnFailureListener(e -> {
                     Log.w(FlagsList.DEBUG_CATEGORY_FLAG, "Error adding category", e);
