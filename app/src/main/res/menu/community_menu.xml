@@ -16,7 +16,7 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/setting"
-        android:icon="@drawable/settingicon"
+        android:icon="@drawable/setting_forum_icon"
         android:title="Setting"
         app:showAsAction="ifRoom" />
 </menu>
