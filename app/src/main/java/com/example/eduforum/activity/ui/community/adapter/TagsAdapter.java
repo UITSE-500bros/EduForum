@@ -98,7 +98,7 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
 
             });
 
-
+        }
         if(isCreatingTag){
             holder.itemView.setOnLongClickListener(v -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
@@ -116,8 +116,6 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
                 return true;
             });
         }
-        }
-
     }
 
     public List<Category> getSelectedTags() {
