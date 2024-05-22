@@ -8,6 +8,8 @@ import com.example.eduforum.activity.model.community_manage.Community;
 import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.model.post_manage.PostCategory;
+import com.example.eduforum.activity.repository.category.CategoryCallback;
+import com.example.eduforum.activity.repository.category.CategoryRepository;
 import com.example.eduforum.activity.repository.community.CommunityRepository;
 import com.example.eduforum.activity.repository.community.ICommunityCallBack_C;
 import com.example.eduforum.activity.repository.post.IPostCallback;
@@ -31,24 +33,38 @@ public class NewsFeedViewModel extends ViewModel {
     MutableLiveData<String> errorMessage;
     CommunityRepository communityRepository;
     PostRepository postRepository;
+    CategoryRepository categoryRepository;
     public NewsFeedViewModel() {
         communityRepository = CommunityRepository.getInstance();
         postRepository = PostRepository.getInstance();
+        categoryRepository = CategoryRepository.getInstance();
         communityId = new MutableLiveData<>();
         currentCommunity = new MutableLiveData<>();
         currentCommunity.setValue(new CreateCommunityViewState());
         postList = new MutableLiveData<>();
         allCategories = new MutableLiveData<>();
-        // allCategories.setValue(communityRepository.getCategories());
-        // for now, hardcode the categories
-        List<PostCategory> categories = new ArrayList<>();
-        categories.add(new PostCategory("1", "Hỏi đáp"));
-        categories.add(new PostCategory("2", "Chia sẻ"));
-        categories.add(new PostCategory("3", "Tuyển dụng"));
-        allCategories.setValue(categories);
+        updateCategories();
+
         currentFilter = new MutableLiveData<>();
         currentFilter.setValue(new FilterViewState());
         errorMessage = new MutableLiveData<>();
+    }
+    public void updateCategories() {
+        Community community = new Community();
+        community.setCommunityId(currentCommunity.getValue().getCommunityID());
+        categoryRepository.fetchCategory(community, new CategoryCallback() {
+            @Override
+            public void onSuccess(List<Category> categories) {
+                List<PostCategory> postCategories = new ArrayList<>();
+                for(Category category : categories) {
+                    postCategories.add(new PostCategory(category.getCategoryID(), category.getTitle()));
+                }
+                allCategories.setValue(postCategories);
+            }
+            @Override
+            public void onFailure(String errorMsg) {}
+
+        });
     }
     public void setFilter(FilterViewState filter) {
         currentFilter.setValue(filter);

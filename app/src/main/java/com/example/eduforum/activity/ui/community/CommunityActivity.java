@@ -31,6 +31,7 @@ import com.example.eduforum.activity.ui.community.adapter.TagsAdapter;
 import com.example.eduforum.activity.ui.community.viewstate.FilterViewState;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.viewmodel.community.NewsFeedViewModel;
+import com.example.eduforum.activity.viewmodel.community.settings.CustomTagsViewModel;
 import com.example.eduforum.databinding.ActivityCommunityBinding;
 import com.example.eduforum.databinding.CommunityFilterBinding;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -41,7 +42,7 @@ import java.util.List;
 public class CommunityActivity extends AppCompatActivity {
     ActivityCommunityBinding binding;
     NewsFeedViewModel viewModel;
-
+    //CustomTagsViewModel customTagsViewModel;
     PostAdapter postAdapter;
 
 
@@ -53,6 +54,7 @@ public class CommunityActivity extends AppCompatActivity {
         binding = ActivityCommunityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         viewModel = new ViewModelProvider(this).get(NewsFeedViewModel.class);
+        //customTagsViewModel = new ViewModelProvider(this).get(CustomTagsViewModel.class);
         binding.setLifecycleOwner(this);
 
         CreateCommunityViewState currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");

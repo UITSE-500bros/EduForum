@@ -4,8 +4,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.eduforum.activity.model.community_manage.Community;
 import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.activity.model.post_manage.Post;
+import com.example.eduforum.activity.model.post_manage.PostCategory;
+import com.example.eduforum.activity.repository.category.CategoryCallback;
+import com.example.eduforum.activity.repository.category.CategoryRepository;
 import com.example.eduforum.activity.repository.post.IPostCallback;
 import com.example.eduforum.activity.repository.post.PostRepository;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
@@ -22,6 +26,7 @@ public class CreatePostViewModel extends ViewModel {
     MutableLiveData<Boolean> isPostCreated;
     MutableLiveData<List<Category>> allCategories;
     PostRepository postRepository;
+    CategoryRepository categoryRepository;
     public CreatePostViewModel() {
         postViewState = new MutableLiveData<>();
         postViewState.setValue(new PostViewState());
@@ -30,14 +35,22 @@ public class CreatePostViewModel extends ViewModel {
         isPostCreated = new MutableLiveData<>();
         isPostCreated.setValue(false);
         postRepository = PostRepository.getInstance();
+        categoryRepository = CategoryRepository.getInstance();
         allCategories = new MutableLiveData<>();
-        // allCategories.setValue(communityRepository.getAllCategories());
-        // for now, just hard code the categories
-        List<Category> categories = new ArrayList<>();
-        categories.add(new Category("1", "Hỏi đáp", false));
-        categories.add(new Category("2", "Chia sẻ", false));
-        categories.add(new Category("3", "Tuyển dụng", false));
-        allCategories.setValue(categories);
+        updateCategories();
+    }
+    public void updateCategories() {
+        Community community = new Community();
+        community.setCommunityId(communityId.getValue());
+        categoryRepository.fetchCategory(community, new CategoryCallback() {
+            @Override
+            public void onSuccess(List<Category> categories) {
+                allCategories.setValue(categories);
+            }
+            @Override
+            public void onFailure(String errorMsg) {}
+
+        });
     }
     public LiveData<String> getErrorMessage() {
         return errorMessage;
