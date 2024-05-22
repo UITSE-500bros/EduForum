@@ -1,14 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.ui.main.fragment.ExploreFragment">
+    tools:context=".activity.ui.main.fragment.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:background="@color/backgroundColor">
 
-</FrameLayout>
+        <LinearLayout
+            android:id="@+id/titleLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingVertical="10dp"
+            android:gravity="center"
+            android:background="@color/secondaryColor">
+            <ImageView
+                android:layout_width="150dp"
+                android:contentDescription="@null"
+                app:iconGravity="start"
+                android:layout_height="40dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/eduforumlogo"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clickable="false"/>
+
+            <Button
+                android:id="@+id/searchButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="10dp"
+                style="Widget.MaterialComponents.Button.TextButton.Icon"
+                app:icon="@drawable/search_icon2"
+                android:backgroundTint="@color/secondaryColor"
+                app:iconGravity="textStart"/>
+
+            <Button
+                android:id="@+id/createCommuButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="10dp"
+                style="Widget.MaterialComponents.Button.TextButton.Icon"
+                app:icon="@drawable/icon_add2"
+                android:backgroundTint="@color/secondaryColor"
+                app:iconGravity="textStart"/>
+
+        </LinearLayout>
+
+
+        <ScrollView
+            android:id="@+id/commusScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/titleLinearLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/exploreCommusTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Cộng đồng gợi ý"
+                    android:textColor="@color/textColor"
+                    android:textSize="27sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/exploreCommusRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    tools:listitem="@layout/item_explore_community">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

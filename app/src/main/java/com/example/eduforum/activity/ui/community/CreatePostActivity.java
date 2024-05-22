@@ -112,65 +112,75 @@ public class CreatePostActivity extends AppCompatActivity {
         binding.contentRichEditor.setEditorBackgroundColor(Color.WHITE);
         binding.contentRichEditor.setPadding(10, 10, 10, 10);
 
-        //set up action buttons
-        binding.textDefineRichEditor.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+        binding.actionUndo.addOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                if (checkedId == binding.actionUndo.getId()) {
-                    binding.contentRichEditor.undo();
-                } else if (checkedId == binding.actionRedo.getId()) {
-                    binding.contentRichEditor.redo();
-                } else if (checkedId == binding.actionBold.getId()) {
-                    binding.contentRichEditor.setBold();
-                } else if (checkedId == binding.actionUnderline.getId()){
-                    binding.contentRichEditor.setUnderline();
-                } else if (checkedId == binding.actionItalic.getId()){
-                    binding.contentRichEditor.setItalic();
-                } else if (checkedId == binding.actionAlignLeft.getId()){
-                    binding.contentRichEditor.setAlignLeft();
-                } else if (checkedId == binding.actionAlignRight.getId()){
-                    binding.contentRichEditor.setAlignRight();
-                } else if (checkedId == binding.actionAlignCenter.getId()){
-                    binding.contentRichEditor.setAlignCenter();
-                } else if (checkedId == binding.actionHeading1.getId()){
-                    binding.contentRichEditor.setHeading(1);
-                } else if (checkedId == binding.actionHeading2.getId()){
-                    binding.contentRichEditor.setHeading(2);
-                } else if (checkedId == binding.actionHeading3.getId()){
-                    binding.contentRichEditor.setHeading(3);
-                } else if (checkedId == binding.actionInsertBullets.getId()){
-                    binding.contentRichEditor.setBullets();
-                } else if (checkedId == binding.actionInsertNumbers.getId()){
-                    binding.contentRichEditor.setNumbers();
-                } else if (checkedId == binding.actionInsertLink.getId()){
-                    AlertDialog builder = new AlertDialog.Builder(this).create();
-                    builder.setTitle("Chèn link vào bài viết");
-
-                    LinearLayout layout = new LinearLayout(this);
-                    layout.setOrientation(LinearLayout.VERTICAL);
-
-                    final EditText textInput = new EditText(this);
-                    textInput.setHint("Text");
-                    layout.addView(textInput);
-                    final EditText urlInput = new EditText(this);
-                    urlInput.setHint("URL");
-                    layout.addView(urlInput);
-
-                    builder.setView(layout);
-
-                    builder.setButton(DialogInterface.BUTTON_POSITIVE, "OK", (dialog, which) -> {
-                        String text = textInput.getText().toString();
-                        String url = urlInput.getText().toString();
-                        binding.contentRichEditor.insertLink(url, text);
-                    });
-
-                    builder.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.cancel());
-
-                    builder.show();
-                }
+                binding.contentRichEditor.undo();
             }
         });
+        binding.actionRedo.addOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                binding.contentRichEditor.redo();
+            }
+        });
+        binding.actionBold.addOnCheckedChangeListener((buttonView, isChecked) -> {
+                binding.contentRichEditor.setBold();
+        });
+        binding.actionUnderline.addOnCheckedChangeListener((buttonView, isChecked) -> {
+                binding.contentRichEditor.setUnderline();
+        });
+        binding.actionItalic.addOnCheckedChangeListener((buttonView, isChecked) -> {
+                binding.contentRichEditor.setItalic();
+        });
+        binding.actionAlignLeft.addOnCheckedChangeListener((buttonView, isChecked) -> {
+                binding.contentRichEditor.setAlignLeft();
+        });
+        binding.actionAlignRight.addOnCheckedChangeListener((buttonView, isChecked) -> {
+                binding.contentRichEditor.setAlignRight();
+        });
+        binding.actionAlignCenter.addOnCheckedChangeListener((buttonView, isChecked) -> {
+                binding.contentRichEditor.setAlignCenter();
+        });
+        binding.actionHeading1.addOnCheckedChangeListener((buttonView, isChecked) -> {
+                binding.contentRichEditor.setHeading(1);
+        });
+        binding.actionHeading2.addOnCheckedChangeListener((buttonView, isChecked) -> {
+                binding.contentRichEditor.setHeading(2);
+        });
+        binding.actionHeading3.addOnCheckedChangeListener((buttonView, isChecked) -> {
+                binding.contentRichEditor.setHeading(3);
+        });
+        binding.actionInsertBullets.addOnCheckedChangeListener((buttonView, isChecked) -> {
+                binding.contentRichEditor.setBullets();
+        });
+        binding.actionInsertNumbers.addOnCheckedChangeListener((buttonView, isChecked) -> {
+                binding.contentRichEditor.setNumbers();
+        });
+        binding.actionInsertLink.addOnCheckedChangeListener((buttonView, isChecked) -> {
+                AlertDialog builder = new AlertDialog.Builder(this).create();
+                builder.setTitle("Chèn link vào bài viết");
 
-        //set up image
+                LinearLayout layout = new LinearLayout(this);
+                layout.setOrientation(LinearLayout.VERTICAL);
+
+                final EditText textInput = new EditText(this);
+                textInput.setHint("Text");
+                layout.addView(textInput);
+                final EditText urlInput = new EditText(this);
+                urlInput.setHint("URL");
+                layout.addView(urlInput);
+
+                builder.setView(layout);
+
+                builder.setButton(DialogInterface.BUTTON_POSITIVE, "OK", (dialog, which) -> {
+                    String text = textInput.getText().toString();
+                    String url = urlInput.getText().toString();
+                    binding.contentRichEditor.insertLink(url, text);
+                });
+
+                builder.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.cancel());
+
+                builder.show();
+        });
         ActivityResultLauncher<PickVisualMediaRequest> pickImages =
                 registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uris -> {
                     if (uris != null) {

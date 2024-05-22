@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -101,6 +102,15 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
         CommentViewState comment = commentList.get(position);
+
+        holder.binding.moreChildCommentButton.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(context, holder.binding.moreChildCommentButton);
+            popupMenu.inflate(R.menu.comment_menu);
+            //popupMenu.setOnMenuItemClickListener(item -> {
+            //TODO: Handle menu item click
+            //});
+            popupMenu.show();
+        });
 
 
         List<CommentViewState> temp = new ArrayList<>();

@@ -3,8 +3,12 @@ package com.example.eduforum.activity.ui.community.adapter;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.eduforum.R;
 import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
 import com.example.eduforum.databinding.ItemChildCommentBinding;
 import com.example.eduforum.databinding.ItemListCommentBinding;
@@ -43,6 +47,15 @@ public class CommentChildAdapter extends RecyclerView.Adapter<CommentChildAdapte
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
         CommentViewState comment = commentList.get(position);
         holder.bind(comment);
+
+        holder.binding.moreChildCommentButton.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(context, holder.binding.moreChildCommentButton);
+            popupMenu.inflate(R.menu.comment_menu);
+            //popupMenu.setOnMenuItemClickListener(item -> {
+            //TODO: Handle menu item click
+            //});
+            popupMenu.show();
+        });
 
     }
 

@@ -102,6 +102,7 @@ Nh\u00e1\u00ba\u00adp m\u00c3\u00b4n l\u00e1\u00ba\u00adp tr\u00c3\u00acnh\n500 
     <string name="contenthint_activity_create_post">Hãy nhập nội dung bài viết</string>
     <string name="reply_comment">Phản hồi</string>
     <string name="showReply_comment">Hiển thị các phản hồi</string>
+    <string name="hideReply_comment">Ẩn các phản hồi</string>
 
     <string name="title_setting_community">Thông tin cộng đồng</string>
     <string name="title_member_request">Yêu cầu làm thành viên</string>
