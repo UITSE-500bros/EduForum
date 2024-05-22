@@ -2,88 +2,101 @@
 <layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
          <com.google.android.material.card.MaterialCardView
             android:id="@+id/forumCardView"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-             app:layout_constraintStart_toStartOf="parent"
-             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_height="wrap_content"
+             android:layout_marginTop="10dp"
+             android:layout_marginStart="10dp"
+             android:layout_marginEnd="10dp"
+             app:cardCornerRadius="18dp"
+             app:cardElevation="10dp"
+             app:strokeWidth="0dp"
              app:layout_constraintBottom_toBottomOf="parent"
-             app:cardElevation="6dp"
-             app:cardCornerRadius="20dp"
+             android:backgroundTint="@color/secondaryColor"
             >
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_marginLeft="28dp"
-                    android:layout_marginTop="16dp"
-                    app:cardCornerRadius="15dp"
-                    app:cardElevation="5dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-                    <ImageView
-                        android:id="@+id/communityImage"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        />
-                    <ImageView
-                        android:id="@+id/forumImage"
+               <de.hdodenhof.circleimageview.CircleImageView
+                   android:layout_width="45dp"
+                   android:layout_height="45dp"
+                   android:id="@+id/communityImage"
+                   android:layout_marginVertical="10dp"
+                   android:layout_marginStart="10dp"
+                   android:src="@drawable/congrats_image"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toTopOf="parent"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/commuNoti_LinearLayout"
+                    app:layout_constraintStart_toEndOf="@id/communityImage"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/unReadPostCardView">
+
+                    <TextView
+                        android:id="@+id/communityNameTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/congrats_image" />
-                </androidx.cardview.widget.CardView>
+                        android:text="UIT"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
 
-                <TextView
-                    android:id="@+id/communityNameTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginTop="8dp"
-                    android:text="UIT"
-                    android:textSize="28dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/primaryColor"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cardView" />
+                    <TextView
+                        android:id="@+id/communityDepartmentTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Công nghệ phần mềm"
+                        android:textSize="11sp"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="2dp"/>
 
-                <TextView
-                    android:id="@+id/communityDepartmentTextView"
+                    <TextView
+                        android:id="@+id/communityNewPostNotiTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Admin đã thêm một bài viết"
+                        android:maxWidth="250dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textSize="11sp"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="2dp"/>
+
+                </LinearLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/unReadPostCardView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="KHOA CNPM"
-                    android:textSize="16dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/communityNameTextView"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginLeft="24dp"/>
-                <!--
-                <TextView
-                    android:id="@+id/membersTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="500 thành viên"
-                    android:textSize="12dp"
-                    android:textColor="@color/gray"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginBottom="12dp"/>
-                    -->
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/commuNoti_LinearLayout"
+                    app:cardCornerRadius="90dp"
+                    app:strokeWidth="0dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    app:cardBackgroundColor="@color/tagBackgroundColor">
+
+                    <TextView
+                        android:id="@+id/unReadPostTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="50"
+                        android:textColor="@color/primaryColor"
+                        android:textSize="12sp" />
+                </com.google.android.material.card.MaterialCardView>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

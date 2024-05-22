@@ -71,7 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="5dp"
                 android:text="Mình nè bạn ơi. Add mình với Idol"
                 android:textColor="@color/white"/>
 

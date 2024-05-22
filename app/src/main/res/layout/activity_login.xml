@@ -31,7 +31,8 @@
                 app:layout_constraintDimensionRatio="2:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHeight_percent="0.1"
-                app:layout_constraintHorizontal_bias="0.057"
+                app:layout_constraintHorizontal_bias="0.0"
+                android:layout_marginStart="2dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -132,13 +133,13 @@
         <Button
             android:onClick="@{() -> viewModel.onLoginClicked()}"
             android:id="@+id/login_btn"
-            android:layout_width="322dp"
+            android:layout_width="match_parent"
             android:layout_height="59dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             android:text="@string/login_btn"
             android:layout_marginTop="450dp"
-            android:layout_marginLeft="26dp"
+            android:layout_marginHorizontal="26dp"
             android:layout_centerInParent="true"
             android:background="@drawable/login_btn"
             android:foreground="?attr/selectableItemBackground"
