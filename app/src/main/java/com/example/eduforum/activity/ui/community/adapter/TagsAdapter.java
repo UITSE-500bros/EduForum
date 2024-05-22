@@ -13,6 +13,7 @@ import com.example.eduforum.R;
 import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.model.post_manage.PostCategory;
+import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.databinding.ItemTagsBinding;
 
 import java.util.ArrayList;
@@ -23,9 +24,18 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
     private List<Category> selectedTags;
     private Boolean isFiltering;
     private Boolean isCreatingTag;
+    private OnTagInteractionListener listener;
+
+    public interface OnTagInteractionListener {
+        void onTagDeleted(PostCategory deletedTag);
+    }
 
     public TagsAdapter(List<PostCategory> tagsList, List<Category> selectedTags, Boolean isFiltering, Boolean isCreatingTag) {
-        this.tagsList = tagsList;
+        if(tagsList == null) {
+            this.tagsList = new ArrayList<>();
+        } else {
+            this.tagsList = tagsList;
+        }
         if(selectedTags == null) {
             this.selectedTags = new ArrayList<>();
         } else {
@@ -34,6 +44,13 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
         }
         this.isFiltering = isFiltering;
         this.isCreatingTag = isCreatingTag;
+    }
+    public void setTagsList(List<PostCategory> tagsList) {
+        this.tagsList = tagsList;
+        notifyDataSetChanged();
+    }
+    public void setOnTagInteractionListener(OnTagInteractionListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -81,14 +98,15 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
 
             });
 
+
+        if(isCreatingTag){
             holder.itemView.setOnLongClickListener(v -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
 
                 builder.setTitle("Xóa tag");
                 builder.setMessage("Bạn muốn xóa tag này?");
                 builder.setPositiveButton("Yes", (dialog, which) -> {
-                    tagsList.remove(position);
-                    notifyItemRemoved(position);
+                    listener.onTagDeleted(tagsList.get(position));
                 });
                 builder.setNegativeButton("No", (dialog, which) -> {
                     dialog.dismiss();
@@ -98,12 +116,6 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
                 return true;
             });
         }
-        if(isCreatingTag){
-            holder.itemView.setOnLongClickListener(v -> {
-                tagsList.remove(position);
-                notifyItemRemoved(position);
-                return true;
-            });
         }
 
     }

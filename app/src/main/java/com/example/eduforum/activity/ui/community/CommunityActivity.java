@@ -201,6 +201,7 @@ public class CommunityActivity extends AppCompatActivity {
 
         if (id == R.id.setting) {
            Intent intent = new Intent(this, SettingCommunityActivity.class);
+           intent.putExtra("communityId", viewModel.getCurrentCommunity().getValue().getCommunityID());
               startActivity(intent);
                 return true;
         }
