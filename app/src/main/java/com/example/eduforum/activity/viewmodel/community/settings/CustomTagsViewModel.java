@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.eduforum.activity.model.community_manage.Community;
 import com.example.eduforum.activity.model.post_manage.Category;
+import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.model.post_manage.PostCategory;
 import com.example.eduforum.activity.repository.category.CategoryCallback;
 import com.example.eduforum.activity.repository.category.CategoryRepository;
@@ -68,8 +69,11 @@ public class CustomTagsViewModel extends ViewModel {
             public void onFailure(String errorMsg) {
                 errorMessage.setValue(errorMsg);
             }
+            @Override
             public void onCreateCategorySuccess(Category newCategory) {
+                // ham nay dang bi goi 2 lan -> them 2 item cung 1 luc
                 List<PostCategory> currentCategoryList = categoryList.getValue();
+
                 currentCategoryList.add(new PostCategory(newCategory.getCategoryID(), newCategory.getTitle()));
                 categoryList.setValue(currentCategoryList);
             }
