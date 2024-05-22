@@ -210,14 +210,14 @@ public class PostDetailActivity extends AppCompatActivity {
             PopupMenu popupMenu = new PopupMenu(this, v);
             popupMenu.getMenuInflater().inflate(R.menu.post_option_menu, popupMenu.getMenu());
             popupMenu.setOnMenuItemClickListener(item -> {
-                switch (item.getItemId()) {
-                    case R.id.editPost:
-                        viewModel.editPost(postViewState);
-                        break;
-                    case R.id.deletePost:
-                        viewModel.deletePost(postViewState);
-                        break;
-                }
+//                switch (item.getItemId()) {
+//                    case R.id.editPost:
+//                        viewModel.editPost(postViewState);
+//                        break;
+//                    case R.id.deletePost:
+//                        viewModel.deletePost(postViewState);
+//                        break;
+//                }
                 return true;
             });
             popupMenu.show();
