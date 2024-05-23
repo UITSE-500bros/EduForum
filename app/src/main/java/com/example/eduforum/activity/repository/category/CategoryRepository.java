@@ -58,6 +58,7 @@ public class CategoryRepository {
                 assert value != null;
                 for (QueryDocumentSnapshot doc : value) {
                     Category category = doc.toObject(Category.class);
+                    category.setCategoryID(doc.getId());
                     categories.add(category);
                 }
                 Log.d(FlagsList.DEBUG_CATEGORY_FLAG, "Current categories in " + community.getName() + ": " + categories);
