@@ -7,5 +7,5 @@ import java.util.List;
 public interface ICommunityCallBack_C {
     void onRoleAdmin(List<Community> communityList);
 
-    void getCommunityInfo(Community community);
+    void onGetCommunityMemberSuccess(List<String> userIds, List<String> adminIds);
 }

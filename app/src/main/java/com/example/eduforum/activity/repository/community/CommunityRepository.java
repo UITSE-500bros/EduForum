@@ -439,8 +439,13 @@ public class CommunityRepository {
 
     }
 
-    public void getCommunity(String communityId, ICommunityCallBack_C callBackC) {
-
+    /**
+     * Get community's member list
+     *
+     * @param communityId   community ID
+     * @param callBackC callback provides list of user ID and admin ID in the community
+     */
+    public void getCommunityMember(String communityId, ICommunityCallBack_C callBackC) {
         db.collection("Community")
                 .document(communityId)
                 .get()
@@ -450,7 +455,16 @@ public class CommunityRepository {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                callBackC.getCommunityInfo(document.toObject(Community.class));
+                                Object userListObject = document.get("userList");
+                                Object adminListObject = document.get("adminList");
+
+                                if (userListObject instanceof List<?> && adminListObject instanceof List<?>) {
+                                    List<String> userIds = (List<String>) userListObject;
+                                    List<String> adminIds = (List<String>) adminListObject;
+                                    callBackC.onGetCommunityMemberSuccess(userIds, adminIds);
+                                } else {
+                                    Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Member: Failed to cast to List<String>");
+                                }
                             } else {
                                 Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "No such document");
                             }

@@ -206,6 +206,7 @@ public class PostRepository {
         db.collection("Community")
                 .document(communityID)
                 .collection("Post")
+                .orderBy("timeCreated", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
