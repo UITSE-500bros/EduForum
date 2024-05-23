@@ -7,20 +7,46 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.model.user_manage.User;
+import com.example.eduforum.activity.ui.community.adapter.MemberRequestsAdapter;
+import com.example.eduforum.activity.viewmodel.community.settings.MemberRequestsViewModel;
+import com.example.eduforum.databinding.ActivityMemberRequestBinding;
 
 public class MemberRequestActivity extends AppCompatActivity {
 
+    ActivityMemberRequestBinding binding;
+    MemberRequestsViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_member_request);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+        binding = ActivityMemberRequestBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        viewModel = new ViewModelProvider(this).get(MemberRequestsViewModel.class);
+
+        String communityId = getIntent().getStringExtra("communityId");
+        if(communityId != null) {
+            viewModel.setCommunityId(communityId);
+        }
+        RecyclerView recyclerView = binding.recyclerView;
+        // set adapter
+        MemberRequestsAdapter adapter = new MemberRequestsAdapter(viewModel.getMemberRequests().getValue());
+        adapter.setOnMemberRequestListener(new MemberRequestsAdapter.OnMemberRequestListener() {
+            @Override
+            public void onReview(User user, Boolean isApproved) {
+                viewModel.memberApproval(user.getUserId(), isApproved);
+            }
+        });
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        viewModel.getMemberRequests().observe(this, users -> {
+            adapter.setMemberRequests(users);
         });
     }
 }

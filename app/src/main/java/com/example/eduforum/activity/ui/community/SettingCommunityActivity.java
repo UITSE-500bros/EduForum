@@ -33,5 +33,12 @@ public class SettingCommunityActivity extends AppCompatActivity {
             intent.putExtra("communityId", communityId);
             startActivity(intent);
         });
+
+        binding.memberRequest.setOnClickListener(v -> {
+            //if user is admin- need a check from database
+            Intent intent = new Intent(this, MemberRequestActivity.class);
+            intent.putExtra("communityId", communityId);
+            startActivity(intent);
+        });
     }
 }
