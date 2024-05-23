@@ -22,6 +22,7 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
     private OnMemberClickListener onMemberClickListener;
     public interface OnMemberClickListener {
         void onMemberClick(CommunityMember member);
+        void onMemberLongClick(CommunityMember member);
     }
     public void setOnMemberClickListener(OnMemberClickListener onMemberClickListener) {
         this.onMemberClickListener = onMemberClickListener;
@@ -44,39 +45,16 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
         CommunityMember member = memberList.get(position);
         holder.binding.setMember(member);
         holder.binding.executePendingBindings();
-        holder.binding.cardView.setOnClickListener(v -> {
+        holder.itemView.setOnClickListener(v -> {
             if (onMemberClickListener != null) {
                 onMemberClickListener.onMemberClick(member);
             }
         });
 
         holder.itemView.setOnLongClickListener(v -> {
-            // Create and show the BottomSheetDialog
-            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(v.getContext());
-            bottomSheetDialog.setContentView(R.layout.bottom_dialog_member_list);
-
-            // Set up the TextView in the BottomSheetDialog
-            TextView deleteTextView = bottomSheetDialog.findViewById(R.id.delete);
-
-            // Set the text based on the member data
-            deleteTextView.setText(String.format("Xóa %s khỏi nhóm ?", member.getName()));
-
-            // Set up the buttons in the BottomSheetDialog
-            LinearLayout btnPromote = bottomSheetDialog.findViewById(R.id.btnpromote);
-            LinearLayout btnDelete = bottomSheetDialog.findViewById(R.id.btndelete);
-
-
-            btnPromote.setOnClickListener(v1 -> {
-                // Promote the member to admin
-                bottomSheetDialog.dismiss();
-            });
-
-            btnDelete.setOnClickListener(v1 -> {
-                // Delete the member
-                bottomSheetDialog.dismiss();
-            });
-
-            bottomSheetDialog.show();
+            if (onMemberClickListener != null) {
+                onMemberClickListener.onMemberLongClick(member);
+            }
             return true;
         });
 

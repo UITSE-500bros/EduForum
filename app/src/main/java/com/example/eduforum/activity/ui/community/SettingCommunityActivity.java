@@ -29,6 +29,7 @@ public class SettingCommunityActivity extends AppCompatActivity {
         }
 
         binding.categorySetting.setOnClickListener(v -> {
+            //if user is admin- need a check from database
             Intent intent = new Intent(this, CustomTagsActivity.class);
             intent.putExtra("communityId", communityId);
             startActivity(intent);
@@ -38,6 +39,13 @@ public class SettingCommunityActivity extends AppCompatActivity {
             //if user is admin- need a check from database
             Intent intent = new Intent(this, MemberRequestActivity.class);
             intent.putExtra("communityId", communityId);
+            startActivity(intent);
+        });
+        binding.memberSetting.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AdminMemberListActivity.class);
+            intent.putExtra("communityId", communityId);
+            // isAdmin is set to true for testing
+            intent.putExtra("isAdmin", true);
             startActivity(intent);
         });
     }

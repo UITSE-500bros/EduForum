@@ -5,6 +5,7 @@ import android.net.Uri;
 public class CommunityMember {
     private String communityId;
     private String name;
+    private String memberId;
 
     private Uri profileImage;
     private String createdDate;
@@ -15,13 +16,17 @@ public class CommunityMember {
     public CommunityMember() {
     }
 
-    public CommunityMember(String communityId, String name, Uri profileImage, String createdDate, String department, Boolean isAdmin) {
+    public CommunityMember(String communityId, String memberId, String name, Uri profileImage, String createdDate, String department, Boolean isAdmin) {
         this.communityId = communityId;
+        this.memberId = memberId;
         this.name = name;
         this.profileImage = profileImage;
         this.createdDate = createdDate;
         this.department = department;
         this.isAdmin = isAdmin;
+    }
+    public String getMemberId() {
+        return memberId;
     }
 
     public String getCommunityId() {
@@ -30,6 +35,9 @@ public class CommunityMember {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 
     public String getName() {
