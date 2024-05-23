@@ -69,14 +69,7 @@ public class CustomTagsViewModel extends ViewModel {
             public void onFailure(String errorMsg) {
                 errorMessage.setValue(errorMsg);
             }
-            @Override
-            public void onCreateCategorySuccess(Category newCategory) {
-                // ham nay dang bi goi 2 lan -> them 2 item cung 1 luc
-                List<PostCategory> currentCategoryList = categoryList.getValue();
 
-                currentCategoryList.add(new PostCategory(newCategory.getCategoryID(), newCategory.getTitle()));
-                categoryList.setValue(currentCategoryList);
-            }
 
     });
     }
@@ -87,14 +80,7 @@ public class CustomTagsViewModel extends ViewModel {
         categoryRepository.deleteCategory(community, newCategory, new CategoryCallback() {
             @Override
             public void onSuccess(List<Category> categories) {
-                List<PostCategory> currentCategoryList = categoryList.getValue();
-                for(int i = 0; i < currentCategoryList.size(); i++) {
-                    if(currentCategoryList.get(i).getCategoryID().equals(category.getCategoryID())) {
-                        currentCategoryList.remove(i);
-                        categoryList.setValue(currentCategoryList);
-                        break;
-                    }
-                }
+
             }
 
             @Override
