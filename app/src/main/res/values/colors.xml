@@ -22,5 +22,6 @@
     <color name="red">#FF0808</color>
     <color name="unReadComment">#3D5A80 </color>
     <color name="readComment">#001D3D</color>
-
+    <color name="likedButtonColor">#0097FB</color>
+    <color name="unLikedButtonColor">#FFFFFFFF</color>
 </resources>

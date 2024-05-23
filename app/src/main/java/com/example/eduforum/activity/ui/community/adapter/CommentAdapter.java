@@ -1,6 +1,7 @@
 package com.example.eduforum.activity.ui.community.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.EditText;
 import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -159,6 +161,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 public void onClick(View v) {
                     binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference() + 1));
                     onUpVoteClickListener.onUpVote(comment);
+                    ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
+                    binding.upVoteParentButton.setIconTint(colorStateList);
                 }
             });
 
@@ -167,6 +171,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 public void onClick(View v) {
                     binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference() - 1));
                     onDownVoteClickListener.onDownClick(comment);
+                    ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
+                    binding.downVoteParentButton.setIconTint(colorStateList);
                 }
             });
 

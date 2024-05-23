@@ -131,13 +131,17 @@
                     android:id="@+id/moreChildComment_Button"
                     android:src="@drawable/more_horizontal"
                     android:background="@null"
-                    android:layout_marginBottom="3dp"/>
+                    android:paddingStart="2dp"
+                    android:layout_marginBottom="1dp"/>
 
-                <ImageButton
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.Material3.Button.IconButton"
                     android:id="@+id/upVoteParentButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_circle_up"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:iconGravity="textStart"
+                    app:icon="@drawable/arrow_circle_up"
+                    app:iconTint="@color/unLikedButtonColor"
                     android:background="@null"/>
 
                 <TextView
@@ -149,11 +153,14 @@
                     android:textColor="@color/white"
                     android:layout_gravity="center"/>
 
-                <ImageButton
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.Material3.Button.IconButton"
                     android:id="@+id/downVoteParentButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/icon_circle_down"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:icon="@drawable/icon_circle_down"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/unLikedButtonColor"
                     android:background="@null"/>
             </LinearLayout>
         </LinearLayout>

@@ -159,19 +159,17 @@
                                 android:textSize="16sp"
                                 android:textStyle="normal" />
 
+
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/recycleImage"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
-                                android:layout_marginEnd="10dp"
                                 android:layout_marginTop="10dp"
+                                android:layout_marginEnd="10dp"
                                 android:layout_marginBottom="10dp"
                                 android:fitsSystemWindows="true"
                                 tools:listitem="@layout/item_image" />
-
-
-
 
                             <LinearLayout
                                 android:layout_width="match_parent"

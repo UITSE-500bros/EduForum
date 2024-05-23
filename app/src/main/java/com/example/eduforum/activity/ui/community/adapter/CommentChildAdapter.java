@@ -48,6 +48,7 @@ public class CommentChildAdapter extends RecyclerView.Adapter<CommentChildAdapte
         CommentViewState comment = commentList.get(position);
         holder.bind(comment);
 
+
         holder.binding.moreChildCommentButton.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(context, holder.binding.moreChildCommentButton);
             popupMenu.inflate(R.menu.comment_menu);
@@ -75,5 +76,10 @@ public class CommentChildAdapter extends RecyclerView.Adapter<CommentChildAdapte
         public void bind(CommentViewState comment) {
             binding.contentChildTextView.setText(comment.getContent());
         }
+
+        //TODO: set Icon Color through method: setIconTint
+
+        //TODO: set Icon Color through method: setIconTint
+
     }
 }
