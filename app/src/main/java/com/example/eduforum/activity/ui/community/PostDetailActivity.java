@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eduforum.R;
 import com.example.eduforum.activity.model.post_manage.Creator;
@@ -127,12 +128,9 @@ public class PostDetailActivity extends AppCompatActivity {
                         viewModel.loadChildComments(comment);
                     }
                 }
-        )
+        );
 
-        ;
-
-
-
+        
         binding.recyclecomment.setAdapter(commentAdapter);
         binding.recyclecomment.setLayoutManager(new LinearLayoutManager(this));
 

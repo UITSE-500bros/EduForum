@@ -1,15 +1,19 @@
 package com.example.eduforum.activity.ui.community.adapter;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eduforum.activity.ui.community.ImageDetailActivity;
 import com.example.eduforum.databinding.ItemImageBinding;
+import com.example.eduforum.generated.callback.OnClickListener;
 
 import java.util.List;
 
@@ -56,8 +60,17 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ImageViewHol
                         dialog.dismiss();
                     })
                     .show();
+
             return true;
         });
+//        holder.binding.image.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(v.getContext(), ImageDetailActivity.class);
+//                intent.setData(mediaItem);
+//                v.getContext().startActivity(intent);
+//            }
+//        });
     }
 
     public void removeItem(int position) {
@@ -71,6 +84,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ImageViewHol
 
     static class ImageViewHolder extends RecyclerView.ViewHolder {
         private ItemImageBinding binding;
+
 
         ImageViewHolder(ItemImageBinding binding) {
             super(binding.getRoot());
