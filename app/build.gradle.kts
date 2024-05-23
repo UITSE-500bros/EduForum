@@ -75,6 +75,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-storage")
     implementation ("com.firebaseui:firebase-ui-storage:7.2.0")
+    implementation("com.google.firebase:firebase-functions")
+
 
 
 

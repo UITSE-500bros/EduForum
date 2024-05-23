@@ -11,6 +11,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.storage.FirebaseStorage;
 
 public class LoginRepository {
@@ -19,11 +20,13 @@ public class LoginRepository {
     protected FirebaseAuth mAuth;
     protected FirebaseFirestore db;
     protected FirebaseStorage storage;
+    protected FirebaseFunctions mFunctions;
 
     public LoginRepository() {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
+        mFunctions = FirebaseFunctions.getInstance();
         configFirebaseEmulator();
     }
 
@@ -81,6 +84,7 @@ public class LoginRepository {
         mAuth.useEmulator("10.0.2.2", 9099);
         db.useEmulator("10.0.2.2", 8080);
         storage.useEmulator("10.0.2.2", 9199);
+        mFunctions.useEmulator("10.0.2.2", 5001);
     }
 
 }

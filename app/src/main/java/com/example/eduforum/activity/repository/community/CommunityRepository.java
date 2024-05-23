@@ -28,6 +28,8 @@ import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
 
 
 import java.util.ArrayList;
@@ -40,6 +42,7 @@ import java.util.Objects;
 public class CommunityRepository {
     private static CommunityRepository instance;
     protected FirebaseFirestore db;
+    protected FirebaseFunctions mFunctions;
     List<String> communitiesID;
     List<Community> communities;
 
@@ -59,6 +62,7 @@ public class CommunityRepository {
         communitiesID = new ArrayList<>();
         communities = new ArrayList<>();
         currentUser = FirebaseAuth.getInstance();
+        mFunctions = FirebaseFunctions.getInstance();
 
     }
 
@@ -442,35 +446,56 @@ public class CommunityRepository {
     /**
      * Get community's member list
      *
-     * @param communityId   community ID
+     * @param communityID   community ID
      * @param callBackC callback provides list of user ID and admin ID in the community
      */
-    public void getCommunityMember(String communityId, ICommunityCallBack_C callBackC) {
-        db.collection("Community")
-                .document(communityId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Object userListObject = document.get("userList");
-                                Object adminListObject = document.get("adminList");
+    public void getCommunityMember(String communityID, ICommunityCallBack_C callBackC) {
+        // Create a Map to hold the data
+        Map<String, Object> data = new HashMap<>();
+        data.put("communityID", communityID);
 
-                                if (userListObject instanceof List<?> && adminListObject instanceof List<?>) {
-                                    List<String> userIds = (List<String>) userListObject;
-                                    List<String> adminIds = (List<String>) adminListObject;
-                                    callBackC.onGetCommunityMemberSuccess(userIds, adminIds);
-                                } else {
-                                    Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Member: Failed to cast to List<String>");
-                                }
-                            } else {
-                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "No such document");
-                            }
-                        } else {
-                            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "get failed with ", task.getException());
+        // Call the function and add listeners
+        mFunctions.getHttpsCallable("getMemberInfoFunction")
+                .call(data)
+                .addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+                    @Override
+                    public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                        // The function executed successfully, parse the result
+                        Map<String, Object> result = (Map<String, Object>) httpsCallableResult.getData();
+                        List<Object> userListRaw = (List<Object>) result.get("userList");
+                        List<Object> adminListRaw = (List<Object>) result.get("adminList");
+                        // parse the raw object into User object
+                        List<User> userList = new ArrayList<>();
+                        List<User> adminList = new ArrayList<>();
+                        assert userListRaw != null;
+                        for (Object userRaw : userListRaw) {
+                            Map<String, Object> userMap = (Map<String, Object>) userRaw;
+                            User user = new User();
+                            user.setUserId((String) userMap.get("userID"));
+                            user.setName((String) userMap.get("name"));
+                            user.setProfilePicture((String) userMap.get("profilePicture"));
+                            user.setDepartment((String) userMap.get("department"));
+                            userList.add(user);
                         }
+                        assert adminListRaw != null;
+                        for (Object adminRaw : adminListRaw) {
+                            Map<String, Object> adminMap = (Map<String, Object>) adminRaw;
+                            User admin = new User();
+                            admin.setUserId((String) adminMap.get("userID"));
+                            admin.setName((String) adminMap.get("name"));
+                            admin.setProfilePicture((String) adminMap.get("profilePicture"));
+                            admin.setDepartment((String) adminMap.get("department"));
+                            adminList.add(admin);
+                        }
+
+                        callBackC.onGetCommunityMemberSuccess(userList, adminList);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // The function execution failed
+                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "get community member failed with: ", e);
                     }
                 });
     }
