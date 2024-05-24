@@ -17,13 +17,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 
-import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -42,9 +42,7 @@ import com.google.firebase.storage.UploadTask;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 
@@ -113,7 +111,7 @@ public class CommunityRepository {
                                     // map the result to community object
                                     community.setUserList((List<String>) result.get("userList"));
                                     community.setTotalPost((Integer) result.get("totalPost"));
-                                    community.setCreatedDate((String) result.get("timeCreated"));
+                                    community.setTimeCreated((Timestamp) result.get("timeCreated"));
                                     community.setInviteCode((String) result.get("inviteCode"));
                                     callBack.onCreateCommunitySuccess(newCommunityRef.getId());
                                 }
@@ -205,8 +203,9 @@ public class CommunityRepository {
      * - Please ensure that the user is a member of the community before calling this method.
      * <br></br>
      * - Please ensure that the previous notification status is different from the new status.
+     *
      * @param communityID the ID of the community
-     * @param isOn true if turn on, false if turn off
+     * @param isOn        true if turn on, false if turn off
      */
     public void toggleNotification(String communityID, boolean isOn) {
 
@@ -225,8 +224,9 @@ public class CommunityRepository {
     /**
      * Get the user's notification status of a community
      * Call this method to check if the user has turned on notification for a community
+     *
      * @param communityID the ID of the community
-     * @param callBack the callback to be called when the operation is done, providing the notification status (true if on, false if off)
+     * @param callBack    the callback to be called when the operation is done, providing the notification status (true if on, false if off)
      */
     public void getNotificationStatus(String communityID, INotificationStatus callBack) {
         db.collection("Community")
@@ -248,8 +248,7 @@ public class CommunityRepository {
                                     } else {
                                         callBack.onNotificationStatusSuccess(userList.contains(currentUser.getUid()));
                                     }
-                                }
-                                catch (Exception e) {
+                                } catch (Exception e) {
                                     Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "get notification status failed with: ", task.getException());
                                 }
                             } else {
@@ -488,13 +487,18 @@ public class CommunityRepository {
         });
     }
 
+    // TODO: tìm cách gọi lại hàm observeDocument khi navigate từ community về home
     public void observeDocument(String userID, ICommunityChangeListener listener) {
         getTotalNewPost(userID, new NewPostCallback() {
             @Override
             public void onCallback(Map<String, Integer> newPosts) {
                 registration = db.collection("Community")
-                        .whereArrayContains("userList", userID)
-                        .addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
+                        .where(
+                                Filter.or(
+                                        Filter.arrayContains("userList", userID),
+                                        Filter.arrayContains("adminList", userID)
+                                )
+                        ).addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
                                 if (e != null) {
@@ -509,6 +513,7 @@ public class CommunityRepository {
                                     Community community = doc.toObject(Community.class);
                                     // TODO: make sure this is correct
                                     community.setTotalNewPost(newPosts.get(community.getCommunityId()));
+                                    community.setCommunityId(doc.getId());
                                     if (community.getAdminList().contains(userID)) {
                                         isAdminOf.add(community);
                                     } else if (community.getUserList().contains(userID)) {
@@ -543,8 +548,8 @@ public class CommunityRepository {
     /**
      * Get community's member list
      *
-     * @param communityID   community ID
-     * @param callBackC callback provides list of user ID and admin ID in the community
+     * @param communityID community ID
+     * @param callBackC   callback provides list of user ID and admin ID in the community
      */
     public void getCommunityMember(String communityID, ICommunityCallBack_C callBackC) {
         // Create a Map to hold the data

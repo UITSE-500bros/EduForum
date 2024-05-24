@@ -2,20 +2,31 @@ package com.example.eduforum.activity.model.community_manage;
 
 import android.net.Uri;
 
+import com.google.firebase.Timestamp;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Community {
     private String communityId;
     private String name;
 
     private List<String> adminList = new ArrayList<>();
+    /**
+     * profileImage is the uri of the image in client side used for uploading
+     */
     private Uri profileImage;
+    /**
+     * profilePicture is the url of the image in server side used for downloading
+     */
     private String profilePicture;
-    private String createdDate;
+    private Timestamp timeCreated;
     private String description;
     private String department;
     private Integer totalPost;
+    
     private Integer totalNewPost;
     private String inviteCode;
 
@@ -26,23 +37,23 @@ public class Community {
     }
 
 
-    public Community(String communityId, String name, List<String> adminList, Uri profileImage, String createdDate, String description, String department, List<String> userList) {
+    public Community(String communityId, String name, List<String> adminList, Uri profileImage, Timestamp timeCreated, String description, String department, List<String> userList) {
         this.communityId = communityId;
         this.name = name;
         this.adminList = adminList;
         this.profileImage = profileImage;
-        this.createdDate = createdDate;
+        this.timeCreated = timeCreated;
         this.description = description;
         this.department = department;
         this.userList = userList;
     }
 
-    public Community(String communityId, String name, List<String> adminList, Uri profileImage, String createdDate, String description, String department, Integer totalPost, Integer totalNewPost, List<String> userList) {
+    public Community(String communityId, String name, List<String> adminList, Uri profileImage, Timestamp timeCreated, String description, String department, Integer totalPost, Integer totalNewPost, List<String> userList) {
         this.communityId = communityId;
         this.name = name;
         this.adminList = adminList;
         this.profileImage = profileImage;
-        this.createdDate = createdDate;
+        this.timeCreated = timeCreated;
         this.description = description;
         this.department = department;
         this.totalPost = totalPost;
@@ -111,8 +122,14 @@ public class Community {
         return profileImage;
     }
 
-    public String getCreatedDate() {
-        return createdDate;
+    /**
+     * Convert firebase timestamp to string in (DD/MM/YYYY) format
+     * @return timeCreated in (DD/MM/YYYY) format
+     */
+    public String getTimeCreated() {
+        // Convert firebase timestamp to string in (DD/MM/YYYY) format
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        return sdf.format(timeCreated.toDate());
     }
 
     public String getDepartment() {
@@ -127,8 +144,8 @@ public class Community {
         this.profileImage = profileImage;
     }
 
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
+    public void setTimeCreated(Timestamp timeCreated) {
+        this.timeCreated = timeCreated;
     }
 
     public void setDescription(String description) {
