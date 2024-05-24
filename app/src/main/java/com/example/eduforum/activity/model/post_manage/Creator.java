@@ -1,6 +1,7 @@
 package com.example.eduforum.activity.model.post_manage;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public class Creator implements Serializable {
     public String creatorID;
@@ -47,5 +48,14 @@ public class Creator implements Serializable {
 
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public Map<String, Object> convertToDataObject() {
+        Map<String, Object> data = new java.util.HashMap<>();
+        data.put("creatorID", creatorID);
+        data.put("name", name);
+        data.put("department", department);
+        data.put("profilePicture", profilePicture);
+        return data;
     }
 }

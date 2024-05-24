@@ -6,8 +6,10 @@ import com.example.eduforum.activity.model.post_manage.PostCategory;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 public class AddPostDTO {
+    private String postID;
     private String communityID;
     private String title;
     private String content;
@@ -15,33 +17,39 @@ public class AddPostDTO {
     private List<PostCategory> category;
     private Boolean isAnonymous;
     private List<String> downloadImage;
-    private Integer totalComment;
-    private Integer totalUpVote;
-    private Integer totalDownVote;
-    private Integer voteDifference;
-    private Timestamp timeCreated;
-    private Timestamp lastModified;
+
 
 
     public AddPostDTO(Post post) {
+        this.postID = post.getPostID();
         this.communityID = post.getCommunityID();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.category = post.getCategory();
         this.creator = post.getCreator();
-        this.isAnonymous = post.getAnonymous();
         this.downloadImage = post.getDownloadImage();
-        this.totalComment = 0;
-        this.totalUpVote = 0;
-        this.totalDownVote = 0;
-        this.voteDifference = 0;
-        this.timeCreated = null;
-        this.lastModified = null;
+        this.isAnonymous = (post.getAnonymous() != null && post.getAnonymous());
     }
 
-    public String getCommunityID() {
-        return communityID;
+    public Map<String, Object> convertToDataObject() {
+        Map<String, Object> data = new java.util.HashMap<>();
+        data.put("postID", postID);
+        data.put("communityID", communityID);
+        data.put("title", title);
+        data.put("content", content);
+        data.put("creator", creator.convertToDataObject());
+        // convert the category list to a list of data object
+        List<Map<String, Object>> categoryList = new java.util.ArrayList<>();
+        for (PostCategory postCategory : this.category) {
+            categoryList.add(postCategory.convertToDataObject());
+        }
+        data.put("category", categoryList);
+        data.put("isAnonymous", isAnonymous);
+        data.put("downloadImage", downloadImage);
+        return data;
     }
+
+    public String getCommunityID() { return communityID; }
 
     public void setCommunityID(String communityID) {
         this.communityID = communityID;
@@ -95,52 +103,12 @@ public class AddPostDTO {
         this.downloadImage = downloadImage;
     }
 
-    public Integer getTotalComment() {
-        return totalComment;
+    public String getPostID() {
+        return postID;
     }
 
-    public void setTotalComment(Integer totalComment) {
-        this.totalComment = totalComment;
-    }
-
-    public Integer getTotalUpVote() {
-        return totalUpVote;
-    }
-
-    public void setTotalUpVote(Integer totalUpVote) {
-        this.totalUpVote = totalUpVote;
-    }
-
-    public Integer getTotalDownVote() {
-        return totalDownVote;
-    }
-
-    public void setTotalDownVote(Integer totalDownVote) {
-        this.totalDownVote = totalDownVote;
-    }
-
-    public Integer getVoteDifference() {
-        return voteDifference;
-    }
-
-    public void setVoteDifference(Integer voteDifference) {
-        this.voteDifference = voteDifference;
-    }
-
-    public Timestamp getTimeCreated() {
-        return timeCreated;
-    }
-
-    public void setTimeCreated(Timestamp timeCreated) {
-        this.timeCreated = timeCreated;
-    }
-
-    public Timestamp getLastModified() {
-        return lastModified;
-    }
-
-    public void setLastModified(Timestamp lastModified) {
-        this.lastModified = lastModified;
+    public void setPostID(String postID) {
+        this.postID = postID;
     }
 }
 

@@ -20,8 +20,10 @@ import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NewsFeedViewModel extends ViewModel {
@@ -295,11 +297,13 @@ public class NewsFeedViewModel extends ViewModel {
         }
         return postViewStateList;
     }
+
     private String convertTimestampToReadable(Timestamp time) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         if(time == null) {
             return "";
         }
         return sdf.format(time.toDate());
+
     }
 }

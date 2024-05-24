@@ -1,5 +1,7 @@
 package com.example.eduforum.activity.model.post_manage;
 
+import java.util.Map;
+
 public class PostCategory {
     private String categoryID;
     private String title;
@@ -16,6 +18,12 @@ public class PostCategory {
         this.title = category.getTitle();
     }
 
+    public Map<String, Object> convertToDataObject() {
+        Map<String, Object> data = new java.util.HashMap<>();
+        data.put("categoryID", categoryID);
+        data.put("title", title);
+        return data;
+    }
     public String getCategoryID() {
         return categoryID;
     }

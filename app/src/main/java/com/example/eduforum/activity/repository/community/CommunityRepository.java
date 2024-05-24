@@ -122,7 +122,7 @@ public class CommunityRepository {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 // The function execution failed
-                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "get community member failed with: ", e);
+                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "create community failed with: ", e);
                             }
                         });
 
@@ -220,7 +220,6 @@ public class CommunityRepository {
                 .document(communityID)
                 .collection("Subscription")
                 .document("subscription");
-
         if (isOn) {
             ref.update("userList", FieldValue.arrayUnion(currentUser.getUid()));
         } else {

@@ -11,6 +11,7 @@ import com.example.eduforum.activity.model.post_manage.Category;
 import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.model.post_manage.PostCategory;
 import com.example.eduforum.activity.model.subscription_manage.Subscription;
+import com.example.eduforum.activity.repository.post.IUpload;
 import com.example.eduforum.activity.repository.post.dto.AddPostDTO;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,6 +19,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -32,6 +34,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.StorageMetadata;
@@ -49,10 +53,12 @@ public class PostRepository {
     private static PostRepository instance;
     private final FirebaseFirestore db;
     private final FirebaseStorage storage;
+    private final FirebaseFunctions mFunctions;
 
     public PostRepository() {
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
+        mFunctions = FirebaseFunctions.getInstance();
     }
 
     public static synchronized PostRepository getInstance() {
@@ -64,35 +70,84 @@ public class PostRepository {
 
 
     public void addPost(Post post, IPostCallback callback) {
-        AddPostDTO addPostDTO = new AddPostDTO(post);
-
-        db.collection("Community")
+        DocumentReference postRef = db.collection("Community")
                 .document(post.getCommunityID())
                 .collection("Post")
-                .add(addPostDTO)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        post.setPostID(documentReference.getId());
-                        uploadPostImages(post, callback);
-                        Log.d(FlagsList.DEBUG_POST_FLAG, "New post written with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        callback.onAddPostFailure(e.toString());
-                        Log.w(FlagsList.DEBUG_POST_FLAG, "Error adding post", e);
-                    }
-                });
+                .document();
+        post.setPostID(postRef.getId());
+        uploadPostImages(post, new IUpload() {
+            @Override
+            public void onSuccess(List<String> url) {
+                post.setDownloadImage(url);
+                AddPostDTO addPostDTO = new AddPostDTO(post);
+                mFunctions.getHttpsCallable("createPost")
+                        .call(addPostDTO.convertToDataObject())
+                        .addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+                            @Override
+                            public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                                // The function executed successfully, parse the result
+                                Map<String, Object> result = (Map<String, Object>) httpsCallableResult.getData();
+                                if (result.containsKey("error")) {
+                                    callback.onAddPostFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE);
+                                    Log.d(FlagsList.DEBUG_POST_FLAG, "Create post failed, DTO validation failed!");
+                                } else {
+                                    // map the result to community object
+                                    post.setTotalUpVote((Integer) result.get("totalUpVote"));
+                                    post.setTotalDownVote((Integer) result.get("totalDownVote"));
+                                    post.setVoteDifference((Integer) result.get("voteDifference"));
+                                    post.setTotalComment((Integer) result.get("totalComment"));
+                                    post.setTimeCreated((Timestamp) result.get("timeCreated"));
+                                    post.setLastModified((Timestamp) result.get("lastModified"));
+                                    callback.onAddPostSuccess(post);
+                                }
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // The function execution failed
+                                Log.d(FlagsList.DEBUG_POST_FLAG, "create post failed with: ", e);
+                                callback.onAddPostFailure(e.toString());
+                            }
+                        });
+            }
+
+            @Override
+            public void onFailed(String message) {
+                callback.onAddPostFailure(message);
+            }
+        });
+
+
+//        db.collection("Community")
+//                .document(post.getCommunityID())
+//                .collection("Post")
+//                .add(addPostDTO)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        post.setPostID(documentReference.getId());
+//                        uploadPostImages(post, callback);
+//                        Log.d(FlagsList.DEBUG_POST_FLAG, "New post written with ID: " + documentReference.getId());
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        callback.onAddPostFailure(e.toString());
+//                        Log.w(FlagsList.DEBUG_POST_FLAG, "Error adding post", e);
+//                    }
+//                });
     }
 
-    private void uploadPostImages(Post post, IPostCallback callback) {
+
+    private void uploadPostImages(Post post, IUpload callback) {
         StorageReference postRef = storage.getReference("Community/" + post.getCommunityID() + "/Post/" + post.getPostID() + "/images");
 
         List<Uri> filesUri = post.getImage();
         if (filesUri == null || filesUri.isEmpty()) {
-            callback.onAddPostSuccess(post);
+            callback.onSuccess(new ArrayList<>());
             return;
         }
         int sequenceNumber = 0;
@@ -116,39 +171,38 @@ public class PostRepository {
         Tasks.whenAllSuccess(uploadTasks).addOnSuccessListener(new OnSuccessListener<List<Object>>() {
             @Override
             public void onSuccess(List<Object> objects) {
-                post.setDownloadImage(imagePaths);
-                updateDownloadImage(post, callback);
+                callback.onSuccess(imagePaths);
                 Log.d(FlagsList.DEBUG_POST_FLAG, "All images uploaded successfully!");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.w(FlagsList.DEBUG_POST_FLAG, "Error uploading images", e);
-                callback.onAddPostFailure(e.toString());
+                callback.onFailed(e.toString());
             }
         });
     }
 
-    private void updateDownloadImage(Post post, IPostCallback callback) {
-        db.collection("Community")
-                .document(post.getCommunityID())
-                .collection("Post")
-                .document(post.getPostID())
-                .update("downloadImage", post.getDownloadImage())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(FlagsList.DEBUG_POST_FLAG, "downloadImage path updated successfully!");
-                        callback.onAddPostSuccess(post);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(FlagsList.DEBUG_POST_FLAG, "Error updating downloadImage path", e);
-                    }
-                });
-    }
+//    private void updateDownloadImage(Post post, IPostCallback callback) {
+//        db.collection("Community")
+//                .document(post.getCommunityID())
+//                .collection("Post")
+//                .document(post.getPostID())
+//                .update("downloadImage", post.getDownloadImage())
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        Log.d(FlagsList.DEBUG_POST_FLAG, "downloadImage path updated successfully!");
+//                        callback.onAddPostSuccess(post);
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(FlagsList.DEBUG_POST_FLAG, "Error updating downloadImage path", e);
+//                    }
+//                });
+//    }
 
 
     public void editPost(Post post, IPostCallback callback) {
