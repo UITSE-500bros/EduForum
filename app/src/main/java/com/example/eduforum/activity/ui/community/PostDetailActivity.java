@@ -1,5 +1,6 @@
 package com.example.eduforum.activity.ui.community;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.PopupMenu;
@@ -24,6 +25,7 @@ import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.activity.viewmodel.community.PostDetailsViewModel;
 import com.example.eduforum.databinding.ActivityPostDetailBinding;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private boolean isUpVoted = false;
     private boolean isDownVoted = false;
     private boolean isParentComment = true;
+    private MaterialAlertDialogBuilder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,10 @@ public class PostDetailActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(PostDetailsViewModel.class);
 
+        //set up turn back button in ActionBar
+        binding.toolBarCreatePost.setNavigationOnClickListener(v -> {
+            finish();
+        });
 
 
         PostViewState postViewState = (PostViewState) getIntent().getSerializableExtra("currentPost");
@@ -212,7 +219,9 @@ public class PostDetailActivity extends AppCompatActivity {
 //                    case R.id.editPost:
 //                        viewModel.editPost(postViewState);
 //                        break;
-//                    case R.id.deletePost:
+                    if(item.getItemId() == R.id.deletePost){
+                        builder.show();
+                    }
 //                        viewModel.deletePost(postViewState);
 //                        break;
 //                }
@@ -224,7 +233,23 @@ public class PostDetailActivity extends AppCompatActivity {
 
     }
 
-
+    public void createDeleteDialog(){
+        builder = new MaterialAlertDialogBuilder(binding.getRoot().getContext());
+        builder.setTitle("Thông báo");
+        builder.setMessage("Bạn có chắc muốn xóa bài viết này chứ?");
+        builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //TODO: Delete Comment
+            }
+        });
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+    }
 
 
 }

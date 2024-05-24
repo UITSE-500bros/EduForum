@@ -31,10 +31,10 @@ public class WelcomeActivity extends AppCompatActivity {
         public void onPageSelected(int position){
             setDotIndicator(position);
             if(position < 3){
-                binding.nextButton.setText("Next");
+                binding.nextButton.setText("Tiếp theo");
             }
             else {
-                binding.nextButton.setText("Finish");
+                binding.nextButton.setText("Kết thúc");
             }
         }
         @Override

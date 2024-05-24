@@ -46,6 +46,11 @@ public class ProfileCommunityActivity extends AppCompatActivity {
                 });
 
 
+        //set up turn back button in ActionBar
+        binding.toolBarProfileCommunity.setNavigationOnClickListener(v -> {
+            finish();
+        });
+
         binding.avaCommunityImageView.setOnClickListener(v -> {
             pickImage.launch(new PickVisualMediaRequest());
         });

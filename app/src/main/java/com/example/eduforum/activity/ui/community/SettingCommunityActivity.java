@@ -22,6 +22,11 @@ public class SettingCommunityActivity extends AppCompatActivity {
         binding = ActivitySettingCommunityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        //set up turn back button in ActionBar
+        binding.toolBarSettingCommunity.setNavigationOnClickListener(v -> {
+            finish();
+        });
+
         String communityId = getIntent().getStringExtra("communityId");
         if(communityId == null) {
             Log.e("Intent to SettingCommunityActivity", "communityId is null");

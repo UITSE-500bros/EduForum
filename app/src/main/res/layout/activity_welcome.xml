@@ -8,15 +8,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/backgroundColor"
-        tools:context=".activity.ui.welcome.WelcomeActivity">
+        tools:context=".activity.ui.welcome.WelcomeActivity"
+        android:fitsSystemWindows="true">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/slideViewPager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_marginTop="60dp"
-            android:layout_marginBottom="100dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@id/nextButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -45,7 +46,8 @@
             android:background="@drawable/transparent_btn"
             android:id="@+id/dotIdicator"
             android:orientation="horizontal"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nextButton"
             app:layout_constraintStart_toStartOf="parent"
@@ -55,21 +57,20 @@
             android:id="@+id/nextButton"
             android:layout_width="244dp"
             android:layout_height="wrap_content"
-            android:foreground="?attr/selectableItemBackground"
-            android:drawableEnd="@drawable/nextarrow"
             android:background="@drawable/next_slider_shape"
+            android:drawableEnd="@drawable/nextarrow"
             android:fontFamily="@font/source_sans_pro_semibold"
+            android:foreground="?attr/selectableItemBackground"
             android:paddingStart="50dp"
             android:paddingEnd="10dp"
             android:text="TIẾP THEO"
             android:textAlignment="center"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginBottom="25dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/dotIdicator"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/slideViewPager"/>
+            app:layout_constraintTop_toBottomOf="@id/slideViewPager" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

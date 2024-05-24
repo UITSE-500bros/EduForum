@@ -28,6 +28,10 @@ public class MemberRequestActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         viewModel = new ViewModelProvider(this).get(MemberRequestsViewModel.class);
 
+        binding.toolBarMemberRequest.setNavigationOnClickListener(v -> {
+            finish();
+        });
+
         String communityId = getIntent().getStringExtra("communityId");
         if(communityId != null) {
             viewModel.setCommunityId(communityId);

@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
     app:flow_horizontalAlign="center"
+    android:fitsSystemWindows="true"
+    android:padding="15dp"
     xmlns:tools="http://schemas.android.com/apk/res-auto">
 
     <TextView
@@ -13,30 +15,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="50dp"
         android:fontFamily="@font/source_sans_pro_semibold"
         android:text="@string/screen0"
         android:textColor="@color/white"
-        android:textSize="40sp"
+        android:textSize="35sp"
         android:textStyle="bold" />
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="256dp"
+        android:layout_height="200dp"
         android:src="@drawable/eduforumlogo"
         android:layout_gravity="center"
         android:scaleType="centerCrop"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="30dp"/>
 
     <TextView
         android:id="@+id/sliderDescriptionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
+        android:textSize="25sp"
         android:text="@string/desscreen0"
+        android:maxLines="1"
         android:textColor="@color/white"
         android:layout_gravity="center"
         android:fontFamily="@font/source_sans_pro_semibold"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="30dp"/>
 
 </LinearLayout>

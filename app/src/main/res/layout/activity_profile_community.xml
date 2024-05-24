@@ -18,7 +18,7 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:id="@+id/toolBarCreatePost"
+                android:id="@+id/toolBarProfileCommunity"
                 android:background="@color/secondaryColor"
                 app:title="Tùy chỉnh cộng đồng"
                 app:titleTextColor="@color/white"

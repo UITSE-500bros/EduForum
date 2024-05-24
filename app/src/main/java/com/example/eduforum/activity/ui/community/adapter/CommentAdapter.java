@@ -1,14 +1,19 @@
 package com.example.eduforum.activity.ui.community.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +24,8 @@ import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
 import com.example.eduforum.activity.ui.main.adapter.ChildCommentAdapter;
 import com.example.eduforum.databinding.ItemChildCommentBinding;
 import com.example.eduforum.databinding.ItemListCommentBinding;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +36,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private static List<CommentViewState> commentList;
 
     private static List<CommentViewState> childCommentList;
-
+    private MaterialAlertDialogBuilder builder;
 
 
     public interface OnReplyClickListener {
@@ -103,14 +110,24 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
+
+        createDeleteDialog();
+
         CommentViewState comment = commentList.get(position);
+
 
         holder.binding.moreChildCommentButton.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(context, holder.binding.moreChildCommentButton);
             popupMenu.inflate(R.menu.comment_menu);
-            //popupMenu.setOnMenuItemClickListener(item -> {
-            //TODO: Handle menu item click
-            //});
+            popupMenu.setOnMenuItemClickListener(item -> {
+                if (item.getItemId() == R.id.deleteComment) {
+                    builder.show();
+                }
+                else {
+                    //TODO: Edit Comment
+                }
+                return true;
+            });
             popupMenu.show();
         });
 
@@ -126,6 +143,24 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
         holder.bind(comment, onReplyClickListener,temp,onDownVoteClickListener,onUpVoteClickListener, onShowUpReplies);
 
+    }
+
+    public void createDeleteDialog() {
+        builder = new MaterialAlertDialogBuilder(context);
+        builder.setTitle("Thông báo");
+        builder.setMessage("Bạn có chắc muốn xóa bình luận này chứ?");
+        builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //TODO: Delete Comment
+            }
+        });
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
     }
 
     @Override
@@ -183,7 +218,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 }
             });
 
-            
         }
     }
 }
