@@ -109,10 +109,11 @@
                 style="@style/Widget.Material3.Button.IconButton"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                app:iconGravity="textStart"
+                android:background="@null"
                 app:icon="@drawable/arrow_circle_up"
-                app:iconTint="@color/unLikedButtonColor"
-                android:background="@null"/>
+                app:iconGravity="textStart"
+                app:iconSize="24dp"
+                app:iconTint="@color/unLikedButtonColor" />
 
             <TextView
                 android:id="@+id/voteCountChild_TextView"
@@ -129,6 +130,7 @@
                 style="@style/Widget.Material3.Button.IconButton"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                app:iconSize="24dp"
                 app:icon="@drawable/icon_circle_down"
                 app:iconGravity="textStart"
                 app:iconTint="@color/unLikedButtonColor"

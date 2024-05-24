@@ -139,6 +139,7 @@
                     android:id="@+id/upVoteParentButton"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    app:iconSize="24dp"
                     app:iconGravity="textStart"
                     app:icon="@drawable/arrow_circle_up"
                     app:iconTint="@color/unLikedButtonColor"
@@ -158,6 +159,7 @@
                     android:id="@+id/downVoteParentButton"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    app:iconSize="24dp"
                     app:icon="@drawable/icon_circle_down"
                     app:iconGravity="textStart"
                     app:iconTint="@color/unLikedButtonColor"
@@ -173,36 +175,6 @@
             android:layout_marginTop="10dp"
             android:padding="5dp" />
 
-        <LinearLayout
-            android:id="@+id/hideReplyParentLinearLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="7dp"
-            android:layout_marginStart="30dp"
-            >
-            <TextView
-                android:layout_width="30dp"
-                android:layout_height="2dp"
-                android:textSize="16sp"
-                android:background="@drawable/loginbuttonshape"
-                android:layout_gravity="center_vertical"
-                android:textColor="@color/primaryColor"/>
-            <TextView
-                android:id="@+id/hideReplyParent_TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="@string/hideReply_comment"
-                android:textColor="@color/primaryColor"/>
-            <TextView
-                android:layout_width="30dp"
-                android:layout_height="2dp"
-                android:textSize="16sp"
-                android:background="@drawable/loginbuttonshape"
-                android:layout_gravity="center_vertical"
-                android:textColor="@color/primaryColor"/>
-        </LinearLayout>
 
 
 
