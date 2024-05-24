@@ -98,7 +98,7 @@ public class CommentRepository {
     }
 
     private void uploadCommentImages(Comment comment, CommentCallback callback) {
-        StorageReference commentRef = storage.getReference("Post/" + comment.getPostID() + "/" + comment.getCommentID() + "/images");
+        StorageReference commentRef = storage.getReference("Community/"+ comment.getCommunityID() + "/Post/" + comment.getPostID() + "/Comment/" + comment.getCommentID() + "/images");
 
         List<Uri> filesUri = comment.getImage();
         if (filesUri == null || filesUri.isEmpty()) {

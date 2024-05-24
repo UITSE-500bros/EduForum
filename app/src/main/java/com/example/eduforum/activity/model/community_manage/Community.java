@@ -11,11 +11,13 @@ public class Community {
 
     private List<String> adminList = new ArrayList<>();
     private Uri profileImage;
+    private String profilePicture;
     private String createdDate;
     private String description;
     private String department;
     private Integer totalPost;
     private Integer totalNewPost;
+    private String inviteCode;
 
 
     private List<String> userList = new ArrayList<>();
@@ -46,6 +48,22 @@ public class Community {
         this.totalPost = totalPost;
         this.totalNewPost = totalNewPost;
         this.userList = userList;
+    }
+
+    public String getInviteCode() {
+        return inviteCode;
+    }
+
+    public void setInviteCode(String inviteCode) {
+        this.inviteCode = inviteCode;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     public Integer getTotalPost() {
