@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/delete"
-            android:text= "Xóa @{member.name} khỏi cộng đồng ?"
+            android:text="@{String.format(@string/delete_member, member.name)}"
             android:textColor="@color/white"
             android:textSize="16sp"
 
@@ -108,7 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/addAdmin"
-            android:text="Thêm @{member.name} làm quản trị viên ? "
+            android:text="@{String.format(@string/add_admin, member.name)}"
             android:textColor="@color/white"
             android:textSize="16sp"
             />
