@@ -109,25 +109,25 @@ public class AdminMemberListActivity extends AppCompatActivity {
             @Override
             public void onMemberLongClick(CommunityMember member) {
                 // create and show the BottomSheetDialog for admin
-                BottomDialogMemberlistAdminviewBinding bottomDialogBinding = BottomDialogMemberlistAdminviewBinding.inflate(getLayoutInflater());
-                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(AdminMemberListActivity.this);
-                bottomSheetDialog.setContentView(bottomDialogBinding.getRoot());
-
-                bottomDialogBinding.setMember(member);
-
-                // Set up the buttons in the BottomSheetDialog
-
-                bottomDialogBinding.btnremoveadmin.setOnClickListener(v1 -> {
-                    viewModel.manageAdmin(member.getMemberId(), false);
-                    bottomSheetDialog.dismiss();
-                });
-
-                bottomDialogBinding.btndelete.setOnClickListener(v1 -> {
-                    viewModel.deleteMember(member.getMemberId());
-                    bottomSheetDialog.dismiss();
-                });
-
-                bottomSheetDialog.show();
+//                BottomDialogMemberlistAdminviewBinding bottomDialogBinding = BottomDialogMemberlistAdminviewBinding.inflate(getLayoutInflater());
+//                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(AdminMemberListActivity.this);
+//                bottomSheetDialog.setContentView(bottomDialogBinding.getRoot());
+//
+//                bottomDialogBinding.setMember(member);
+//
+//                // Set up the buttons in the BottomSheetDialog
+//
+//                bottomDialogBinding.btnremoveadmin.setOnClickListener(v1 -> {
+//                    viewModel.manageAdmin(member.getMemberId(), false);
+//                    bottomSheetDialog.dismiss();
+//                });
+//
+//                bottomDialogBinding.btndelete.setOnClickListener(v1 -> {
+//                    viewModel.deleteMember(member.getMemberId());
+//                    bottomSheetDialog.dismiss();
+//                });
+//
+//                bottomSheetDialog.show();
 
             }
             });
