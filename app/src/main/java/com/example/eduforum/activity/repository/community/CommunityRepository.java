@@ -97,7 +97,7 @@ public class CommunityRepository {
                 CreateCommunityDTO createCommunityDTO = new CreateCommunityDTO(community);
                 Map<String, Object> data = createCommunityDTO.convertToDataObject();
                 // call the createCommunity cloud function
-                mFunctions.getHttpsCallable("getMemberInfo")
+                mFunctions.getHttpsCallable("createCommunity")
                         .call(data)
                         .addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
                             @Override
