@@ -171,6 +171,13 @@ public class CommunityRepository {
         StorageReference communityRef = storage.getReference("Community/" + community.getCommunityId() + "/images");
 
         Uri fileUri = community.getProfileImage();
+        if (fileUri == null) {
+//            callBack.onUploadFailed("No image to upload");
+            // for now, assume the uri is not null
+            callBack.onUploadSuccess("default");
+            return;
+
+        }
         StorageReference userImgRef = communityRef.child(UUID.randomUUID().toString());
 
         StorageMetadata metadata = new StorageMetadata.Builder()

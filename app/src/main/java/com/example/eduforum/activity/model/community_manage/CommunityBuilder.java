@@ -2,9 +2,11 @@ package com.example.eduforum.activity.model.community_manage;
 
 import android.net.Uri;
 
+import com.google.firebase.Timestamp;
+
 public interface CommunityBuilder {
     CommunityBuilder setName(String name);
-    CommunityBuilder setCreatedDate(String createdDate);
+    CommunityBuilder setTimeCreated(Timestamp timeCreated);
     CommunityBuilder setDepartment(String department);
     CommunityBuilder setDescription(String description);
     Community build();

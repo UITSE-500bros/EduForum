@@ -11,6 +11,7 @@ public class CreateCommunityDTO {
     private String name;
     private String description;
     private String profilePicture;
+    private String department;
     private List<String> adminList;
     private String visibility;
     private Boolean waitForApproval;
@@ -19,6 +20,7 @@ public class CreateCommunityDTO {
         this.communityID = community.getCommunityId();
         this.name = community.getName();
         this.description = community.getDescription();
+        this.department = community.getDepartment();
         this.profilePicture = community.getProfilePicture();
         this.adminList = community.getAdminList();
         this.visibility = "public";
@@ -26,13 +28,31 @@ public class CreateCommunityDTO {
     }
     public Map<String, Object> convertToDataObject() {
         Map<String, Object> data = new java.util.HashMap<>();
+        data.put("communityID", communityID);
         data.put("name", name);
         data.put("description", description);
+        data.put("department", department);
         data.put("profilePicture", profilePicture);
         data.put("adminList", adminList);
         data.put("visibility", visibility);
         data.put("waitForApproval", waitForApproval);
         return data;
+    }
+
+    public String getCommunityID() {
+        return communityID;
+    }
+
+    public void setCommunityID(String communityID) {
+        this.communityID = communityID;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     public String getName() {
