@@ -455,7 +455,7 @@ public class CommunityRepository {
         data.put("communityID", communityID);
 
         // Call the function and add listeners
-        mFunctions.getHttpsCallable("getMemberInfoFunction")
+        mFunctions.getHttpsCallable("getMemberInfo")
                 .call(data)
                 .addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
                     @Override
