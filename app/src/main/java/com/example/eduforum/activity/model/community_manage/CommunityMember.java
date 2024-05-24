@@ -31,6 +31,7 @@ public class CommunityMember {
     public CommunityMember(String communityId, User user, Boolean isAdmin) {
         this.communityId = communityId;
         this.name = user.getName();
+        this.memberId = user.getUserId();
         this.isAdmin = isAdmin;
         this.department = user.getDepartment();
         //this.profileImage = user.getProfileImage();

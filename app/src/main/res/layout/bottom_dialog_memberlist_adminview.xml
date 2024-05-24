@@ -79,7 +79,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/btnpromote"
+            android:id="@+id/btnremoveadmin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -95,7 +95,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/addAdminIcon"
+                android:id="@+id/removeAdminIcon"
                 android:textColor="@color/white"
                 android:background="@drawable/delete_member"
                 android:paddingStart="8dp"
@@ -107,7 +107,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/addAdmin"
+                android:id="@+id/removeAdmin"
                 android:text="Xóa quyền quản trị viên của @{member.name} ?"
                 android:textColor="@color/white"
                 android:textSize="16sp"

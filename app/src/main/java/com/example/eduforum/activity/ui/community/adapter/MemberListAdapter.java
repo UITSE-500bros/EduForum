@@ -41,7 +41,7 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         ItemMemberListBinding itemMemberListBinding = ItemMemberListBinding.inflate(layoutInflater, parent, false);
 
-        return null;
+        return new MemberViewHolder(itemMemberListBinding);
     }
 
     @Override

@@ -23,6 +23,7 @@ import com.example.eduforum.activity.util.LoadingDialog;
 import com.example.eduforum.activity.viewmodel.community.settings.AdminMemberListViewModel;
 import com.example.eduforum.databinding.ActivityAdminMemberListBinding;
 import com.example.eduforum.databinding.BottomDialogMemberListBinding;
+import com.example.eduforum.databinding.BottomDialogMemberlistAdminviewBinding;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -108,8 +109,26 @@ public class AdminMemberListActivity extends AppCompatActivity {
             @Override
             public void onMemberLongClick(CommunityMember member) {
                 // create and show the BottomSheetDialog for admin
-                // viewModel.manageAdmin(member.getMemberId(), false);
-                // viewModel.deleteMember(member.getMemberId());
+                BottomDialogMemberlistAdminviewBinding bottomDialogBinding = BottomDialogMemberlistAdminviewBinding.inflate(getLayoutInflater());
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(AdminMemberListActivity.this);
+                bottomSheetDialog.setContentView(bottomDialogBinding.getRoot());
+
+                bottomDialogBinding.setMember(member);
+
+                // Set up the buttons in the BottomSheetDialog
+
+                bottomDialogBinding.btnremoveadmin.setOnClickListener(v1 -> {
+                    viewModel.manageAdmin(member.getMemberId(), false);
+                    bottomSheetDialog.dismiss();
+                });
+
+                bottomDialogBinding.btndelete.setOnClickListener(v1 -> {
+                    viewModel.deleteMember(member.getMemberId());
+                    bottomSheetDialog.dismiss();
+                });
+
+                bottomSheetDialog.show();
+
             }
             });
         adminListRecyclerView.setAdapter(adminListAdapter);
