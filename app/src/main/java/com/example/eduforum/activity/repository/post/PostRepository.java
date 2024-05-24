@@ -88,7 +88,7 @@ public class PostRepository {
     }
 
     private void uploadPostImages(Post post, IPostCallback callback) {
-        StorageReference postRef = storage.getReference("Post/" + post.getPostID() + "/images");
+        StorageReference postRef = storage.getReference("Community/" + post.getCommunityID() + "/Post/" + post.getPostID() + "/images");
 
         List<Uri> filesUri = post.getImage();
         if (filesUri == null || filesUri.isEmpty()) {

@@ -2,6 +2,8 @@ package com.example.eduforum.activity.model.community_manage;
 
 import android.net.Uri;
 
+import com.google.firebase.Timestamp;
+
 import java.util.List;
 
 public class CommunityConcreteBuilder implements CommunityBuilder{
@@ -10,7 +12,7 @@ public class CommunityConcreteBuilder implements CommunityBuilder{
 
     private List<String> adminList;
     private Uri profileImg;
-    private String createdDate;
+    private Timestamp timeCreated;
     private String department;
     private String description;
 
@@ -22,8 +24,8 @@ public class CommunityConcreteBuilder implements CommunityBuilder{
     }
 
     @Override
-    public CommunityBuilder setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
+    public CommunityBuilder setTimeCreated(Timestamp timeCreated) {
+        this.timeCreated = timeCreated;
         return this;
     }
 
@@ -42,7 +44,7 @@ public class CommunityConcreteBuilder implements CommunityBuilder{
     @Override
     public Community build() {
 
-        return new Community(communityId, name, adminList, profileImg, createdDate, description, department, null);
+        return new Community(communityId, name, adminList, profileImg, timeCreated, description, department, null);
     }
 
     @Override

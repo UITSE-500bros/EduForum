@@ -1,5 +1,6 @@
 package com.example.eduforum.activity.repository.community;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -7,6 +8,7 @@ import androidx.annotation.Nullable;
 
 import com.example.eduforum.activity.model.community_manage.Community;
 import com.example.eduforum.activity.model.user_manage.User;
+import com.example.eduforum.activity.repository.community.dto.CreateCommunityDTO;
 import com.example.eduforum.activity.repository.community.dto.JoinRequestDTO;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -15,12 +17,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -30,19 +33,24 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.UUID;
 
 
 public class CommunityRepository {
     private static CommunityRepository instance;
     protected FirebaseFirestore db;
     protected FirebaseFunctions mFunctions;
+    protected FirebaseStorage storage;
     List<String> communitiesID;
     List<Community> communities;
 
@@ -63,6 +71,7 @@ public class CommunityRepository {
         communities = new ArrayList<>();
         currentUser = FirebaseAuth.getInstance();
         mFunctions = FirebaseFunctions.getInstance();
+        storage = FirebaseStorage.getInstance();
 
     }
 
@@ -72,36 +81,127 @@ public class CommunityRepository {
     }
 
     public void createCommunity(Community community, ICommunityCallBack callBack) {
-        List<String> admin = new ArrayList<>();
-        admin.add(currentUser.getUid());
-        community.setAdminList(admin);
-
-        List<String> userList = new ArrayList<>();
-        userList.add(currentUser.getUid());
-        community.setUserList(userList);
-
-        community.setTotalPost(0);
-
         // Create a new document and get its ID
         DocumentReference newCommunityRef = db.collection("Community").document();
         community.setCommunityId(newCommunityRef.getId());
+        // upload the community picture to storage,
+        // then retrieve the download URL and set to community.profilePicture
+        uploadCommunityPicture(community, new IUpload() {
+            @Override
+            public void onUploadSuccess(String path) {
+                community.setProfilePicture(path);
+                List<String> admin = new ArrayList<>();
+                admin.add(currentUser.getUid());
+                community.setAdminList(admin);
 
-        newCommunityRef
-                .set(community)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "DocumentSnapshot written with ID: " + newCommunityRef.getId());
-                        callBack.onCreateCommunitySuccess(newCommunityRef.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error adding document", e);
-                        callBack.onCreateCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE);
-                    }
-                });
+                CreateCommunityDTO createCommunityDTO = new CreateCommunityDTO(community);
+                Map<String, Object> data = createCommunityDTO.convertToDataObject();
+                // call the createCommunity cloud function
+                mFunctions.getHttpsCallable("createCommunity")
+                        .call(data)
+                        .addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+                            @Override
+                            public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                                // The function executed successfully, parse the result
+                                Map<String, Object> result = (Map<String, Object>) httpsCallableResult.getData();
+                                if (result.containsKey("error")) {
+                                    callBack.onCreateCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE);
+                                    Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Create community failed, DTO validation failed!");
+                                } else {
+                                    // map the result to community object
+                                    community.setUserList((List<String>) result.get("userList"));
+                                    community.setTotalPost((Integer) result.get("totalPost"));
+                                    community.setTimeCreated((Timestamp) result.get("timeCreated"));
+                                    community.setInviteCode((String) result.get("inviteCode"));
+                                    callBack.onCreateCommunitySuccess(newCommunityRef.getId());
+                                }
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // The function execution failed
+                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "get community member failed with: ", e);
+                            }
+                        });
+
+            }
+
+            @Override
+            public void onUploadFailed(String message) {
+                callBack.onCreateCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE);
+            }
+        });
+
+//        List<String> admin = new ArrayList<>();
+//        admin.add(currentUser.getUid());
+//        community.setAdminList(admin);
+//
+//        List<String> userList = new ArrayList<>();
+//        userList.add(currentUser.getUid());
+//        community.setUserList(userList);
+//
+//        community.setTotalPost(0);
+
+        // Create a new document and get its ID
+//        DocumentReference newCommunityRef = db.collection("Community").document();
+//        community.setCommunityId(newCommunityRef.getId());
+//
+//        newCommunityRef
+//                .set(community)
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "DocumentSnapshot written with ID: " + newCommunityRef.getId());
+//                        callBack.onCreateCommunitySuccess(newCommunityRef.getId());
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error adding document", e);
+//                        callBack.onCreateCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE);
+//                    }
+//                });
+    }
+
+    private void uploadCommunityPicture(Community community, IUpload callBack) {
+        // upload the community picture to storage, then retrieve the download URL and set to community.profilePicture
+        StorageReference communityRef = storage.getReference("Community/" + community.getCommunityId() + "/images");
+
+        Uri fileUri = community.getProfileImage();
+        if (fileUri == null) {
+//            callBack.onUploadFailed("No image to upload");
+            // for now, assume the uri is not null
+            callBack.onUploadSuccess("default");
+            return;
+
+        }
+        StorageReference userImgRef = communityRef.child(UUID.randomUUID().toString());
+
+        StorageMetadata metadata = new StorageMetadata.Builder()
+                .setContentType("image/jpeg")
+                .build();
+
+        UploadTask uploadTask = userImgRef.putFile(fileUri, metadata);
+
+        // Register observers to listen for when the upload is done or if it fails
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                callBack.onUploadFailed(exception.getMessage());
+                Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Image upload failed: ", exception);
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Image uploaded successfully!");
+                callBack.onUploadSuccess(userImgRef.getPath());
+            }
+        });
     }
 
     /**
@@ -110,8 +210,9 @@ public class CommunityRepository {
      * - Please ensure that the user is a member of the community before calling this method.
      * <br></br>
      * - Please ensure that the previous notification status is different from the new status.
+     *
      * @param communityID the ID of the community
-     * @param isOn true if turn on, false if turn off
+     * @param isOn        true if turn on, false if turn off
      */
     public void toggleNotification(String communityID, boolean isOn) {
 
@@ -130,8 +231,9 @@ public class CommunityRepository {
     /**
      * Get the user's notification status of a community
      * Call this method to check if the user has turned on notification for a community
+     *
      * @param communityID the ID of the community
-     * @param callBack the callback to be called when the operation is done, providing the notification status (true if on, false if off)
+     * @param callBack    the callback to be called when the operation is done, providing the notification status (true if on, false if off)
      */
     public void getNotificationStatus(String communityID, INotificationStatus callBack) {
         db.collection("Community")
@@ -153,8 +255,7 @@ public class CommunityRepository {
                                     } else {
                                         callBack.onNotificationStatusSuccess(userList.contains(currentUser.getUid()));
                                     }
-                                }
-                                catch (Exception e) {
+                                } catch (Exception e) {
                                     Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "get notification status failed with: ", task.getException());
                                 }
                             } else {
@@ -312,6 +413,7 @@ public class CommunityRepository {
         db.collection("Community")
                 .document(communityID)
                 .update("adminList", FieldValue.arrayRemove(userID));
+
     }
 
     /**
@@ -392,12 +494,18 @@ public class CommunityRepository {
         });
     }
 
+    // TODO: tìm cách gọi lại hàm observeDocument khi navigate từ community về home
     public void observeDocument(String userID, ICommunityChangeListener listener) {
         getTotalNewPost(userID, new NewPostCallback() {
             @Override
             public void onCallback(Map<String, Integer> newPosts) {
                 registration = db.collection("Community")
-                        .addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
+                        .where(
+                                Filter.or(
+                                        Filter.arrayContains("userList", userID),
+                                        Filter.arrayContains("adminList", userID)
+                                )
+                        ).addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
                                 if (e != null) {
@@ -412,6 +520,7 @@ public class CommunityRepository {
                                     Community community = doc.toObject(Community.class);
                                     // TODO: make sure this is correct
                                     community.setTotalNewPost(newPosts.get(community.getCommunityId()));
+                                    community.setCommunityId(doc.getId());
                                     if (community.getAdminList().contains(userID)) {
                                         isAdminOf.add(community);
                                     } else if (community.getUserList().contains(userID)) {
@@ -446,8 +555,8 @@ public class CommunityRepository {
     /**
      * Get community's member list
      *
-     * @param communityID   community ID
-     * @param callBackC callback provides list of user ID and admin ID in the community
+     * @param communityID community ID
+     * @param callBackC   callback provides list of user ID and admin ID in the community
      */
     public void getCommunityMember(String communityID, ICommunityCallBack_C callBackC) {
         // Create a Map to hold the data
