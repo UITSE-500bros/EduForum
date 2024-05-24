@@ -114,6 +114,13 @@ public class AdminMemberListActivity extends AppCompatActivity {
             });
         adminListRecyclerView.setAdapter(adminListAdapter);
 
+        viewModel.getMemberList().observe(this, communityMembers -> {
+            memberListAdapter.setMemberList(communityMembers);
+        });
+        viewModel.getAdminList().observe(this, communityMembers -> {
+            adminListAdapter.setMemberList(communityMembers);
+        });
+
         LoadingDialog loadingDialog = new LoadingDialog(this);
         loadingDialog.startLoadingDialog();
         new Handler().postDelayed(new Runnable() {

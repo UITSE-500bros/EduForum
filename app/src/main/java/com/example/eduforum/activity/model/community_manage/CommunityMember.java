@@ -2,6 +2,8 @@ package com.example.eduforum.activity.model.community_manage;
 
 import android.net.Uri;
 
+import com.example.eduforum.activity.model.user_manage.User;
+
 public class CommunityMember {
     private String communityId;
     private String name;
@@ -25,6 +27,15 @@ public class CommunityMember {
         this.department = department;
         this.isAdmin = isAdmin;
     }
+
+    public CommunityMember(String communityId, User user, Boolean isAdmin) {
+        this.communityId = communityId;
+        this.name = user.getName();
+        this.isAdmin = isAdmin;
+        this.department = user.getDepartment();
+        //this.profileImage = user.getProfileImage();
+    }
+
     public String getMemberId() {
         return memberId;
     }

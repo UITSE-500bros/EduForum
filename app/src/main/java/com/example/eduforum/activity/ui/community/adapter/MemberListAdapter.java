@@ -27,6 +27,10 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
     public void setOnMemberClickListener(OnMemberClickListener onMemberClickListener) {
         this.onMemberClickListener = onMemberClickListener;
     }
+    public void setMemberList(List<CommunityMember> memberList) {
+        this.memberList = memberList;
+        notifyDataSetChanged();
+    }
 
     public MemberListAdapter(List<CommunityMember> memberList) {
         this.memberList = memberList;
@@ -62,7 +66,7 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
 
     @Override
     public int getItemCount() {
-        return 0;
+        return memberList.size();
     }
 
     public class MemberViewHolder extends RecyclerView.ViewHolder{
@@ -72,5 +76,6 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
             binding = itemView;
 
         }
+
     }
 }

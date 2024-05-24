@@ -4,8 +4,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.eduforum.activity.model.community_manage.Community;
 import com.example.eduforum.activity.model.community_manage.CommunityMember;
+import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.activity.repository.community.CommunityRepository;
+import com.example.eduforum.activity.repository.community.ICommunityCallBack_C;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,14 +35,20 @@ public class AdminMemberListViewModel extends ViewModel {
     }
     public void setCommunityId(String communityId) {
         this.communityId.setValue(communityId);
-        refreshMemberList();
-        refreshAdminList();
+        refreshMemberAdminLists();
     }
-    public void refreshMemberList() {
-        // communityRepository.getMemberList(communityId.getValue(), ...);
-    }
-    public void refreshAdminList(){
-        // communityRepository.getAdminList(communityId.getValue(), ...);
+    public void refreshMemberAdminLists() {
+        communityRepository.getCommunityMember(communityId.getValue(), new ICommunityCallBack_C() {
+            @Override
+            public void onRoleAdmin(List<Community> communityList) {
+            }
+
+            @Override
+            public void onGetCommunityMemberSuccess(List<User> userList, List<User> newAdminList) {
+                memberList.setValue(convertUserListToCommunityMemberList(userList, false));
+                adminList.setValue(convertUserListToCommunityMemberList(newAdminList, true));
+            }
+        });
     }
     public void manageAdmin(String memberId, Boolean makeAdmin){
         if(memberId==null) return;
@@ -49,15 +58,19 @@ public class AdminMemberListViewModel extends ViewModel {
         else{
             communityRepository.removeAdmin(communityId.getValue(), memberId);
         }
-        // temporary solution (Thy chua co callback), co the modify cac list thu cong
-        refreshAdminList();
-        refreshMemberList();
+        refreshMemberAdminLists();
+    }
+    private List<CommunityMember> convertUserListToCommunityMemberList(List<User> userList, Boolean isAdminList){
+        List<CommunityMember> communityMemberList = new ArrayList<>();
+        for(User user: userList){
+            communityMemberList.add(new CommunityMember(communityId.getValue(), user, isAdminList));
+        }
+        return communityMemberList;
     }
     public void deleteMember(String memberId){
         if(memberId==null) return;
         communityRepository.removeUser(communityId.getValue(), memberId);
-        // temporary solution (Thy chua co callback), callback chi can boolean -> modify thu cong, khong can fetch lai
-        refreshMemberList();
+        refreshMemberAdminLists();
     }
     public LiveData<List<CommunityMember>> getMemberList() {
         return memberList;
