@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-        //viewModel.getSignedInUser().observe(this, this::updateUI);
+        viewModel.getSignedInUser().observe(this, this::updateUI);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         EduForum app = (EduForum) getApplication();
         userViewModel = app.getSharedViewModel(UserViewModel.class);

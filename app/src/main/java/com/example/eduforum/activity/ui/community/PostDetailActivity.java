@@ -76,7 +76,10 @@ public class PostDetailActivity extends AppCompatActivity {
             binding.contentPost.setText(postViewState.getContent().toString());
             binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
             binding.commentCountTextView.setText(String.valueOf(postViewState.getTotalComment()));
-//            binding.userNameTextView.setText(postViewState.getCreator().getName());
+            binding.userNameTextView.setText(postViewState.getCreator().getName());
+//            binding.avatarImageView.setImageResource(postViewState.getCreator().getProfilePicture());
+            binding.timeCommentTextView.setText(postViewState.getDate());
+            binding.khoaTextView.setText(postViewState.getCreator().getDepartment());
 
 //            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
         } else {
