@@ -2,6 +2,8 @@ package com.example.eduforum.activity.ui.main.fragment;
 
 import android.net.Uri;
 
+import com.example.eduforum.activity.model.community_manage.Community;
+
 import java.io.Serializable;
 
 public class CreateCommunityViewState implements Serializable {
@@ -9,6 +11,7 @@ public class CreateCommunityViewState implements Serializable {
     String description;
     String category;
     Uri commuAvt;
+    String communityProfilePicture;
     String communityID;
     Boolean isDialogClosed;
     String errorMessage;
@@ -25,6 +28,21 @@ public class CreateCommunityViewState implements Serializable {
     public CreateCommunityViewState() {
         this.isDialogClosed = false;
         this.errorMessage = null;
+    }
+
+    public CreateCommunityViewState(Community community) {
+        this.name = community.getName();
+        this.description = community.getDescription();
+        this.category = community.getDepartment();
+        this.communityProfilePicture = community.getProfilePicture();
+        this.communityID = community.getCommunityId();
+    }
+
+    public void setCommunityProfilePicture(String communityProfilePicture) {
+        this.communityProfilePicture = communityProfilePicture;
+    }
+    public String getCommunityProfilePicture() {
+        return communityProfilePicture;
     }
 
     public Uri getCommuAvt() {

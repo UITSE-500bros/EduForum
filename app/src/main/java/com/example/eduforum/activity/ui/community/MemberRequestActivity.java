@@ -1,6 +1,7 @@
 package com.example.eduforum.activity.ui.community;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,6 +52,7 @@ public class MemberRequestActivity extends AppCompatActivity {
 
         viewModel.getMemberRequests().observe(this, users -> {
             adapter.setMemberRequests(users);
+
         });
     }
 }
