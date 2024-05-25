@@ -31,8 +31,7 @@
             android:layout_height="match_parent"
             android:background="@color/backgroundColor"
             tools:context=".activity.ui.community.PostDetailActivity"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            >
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -263,7 +262,7 @@
                 android:layout_alignParentBottom="true"
                 android:fitsSystemWindows="true"
                 android:orientation="vertical"
-                android:layout_marginBottom="30dp">
+                android:layout_marginBottom="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"

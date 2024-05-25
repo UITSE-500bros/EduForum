@@ -28,202 +28,211 @@
         </com.google.android.material.appbar.AppBarLayout>
 
 
-        <LinearLayout
-            android:id="@+id/main"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".activity.ui.community.SettingCommunityActivity"
-            android:backgroundTint="@color/backgroundColor"
-            android:orientation="vertical"
             app:layout_anchorGravity="center|top"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
+                android:id="@+id/main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/settingCommunity"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp"
-                android:layout_marginHorizontal="10dp"
-                android:foreground="?attr/selectableItemBackground">
-               <TextView
-                   android:layout_width="0dp"
-                   android:layout_weight="1"
-                   android:layout_height="wrap_content"
-                   android:text="@string/title_setting_community"
-                   android:textColor="@color/white"
-                   android:textSize="18sp"
-                   android:layout_gravity="start"/>
+                android:layout_marginTop="10dp"
+                tools:context=".activity.ui.community.SettingCommunityActivity"
+                android:backgroundTint="@color/backgroundColor"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/next_icon"
-                    android:layout_gravity="center_vertical|end"
-                    android:background="@drawable/transparent_btn"
-                    android:baselineAlignBottom="true"/>
+                    android:id="@+id/settingCommunity"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:foreground="?attr/selectableItemBackground">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="@string/title_setting_community"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:layout_gravity="start"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/next_icon"
+                        android:layout_gravity="center_vertical|end"
+                        android:background="@drawable/transparent_btn"
+                        android:baselineAlignBottom="true"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/memberRequest"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:foreground="?attr/selectableItemBackground">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="@string/title_member_request"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:layout_gravity="start"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/next_icon"
+                        android:layout_gravity="center_vertical|end"
+                        android:background="@drawable/transparent_btn"
+                        android:baselineAlignBottom="true"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/categorySetting"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:foreground="?attr/selectableItemBackground">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="@string/title_category_setting"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:layout_gravity="start"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/next_icon"
+                        android:layout_gravity="center_vertical|end"
+                        android:background="@drawable/transparent_btn"
+                        android:baselineAlignBottom="true"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/memberSetting"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_weight="1"
+                        android:text="@string/title_member_in_commmunity"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/next_icon"
+                        android:layout_gravity="center_vertical|end"
+                        android:background="@drawable/transparent_btn"
+                        android:baselineAlignBottom="true"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/notificationSetting"
+                    android:orientation="horizontal"
+                    android:layout_marginVertical="15dp"
+                    android:layout_marginHorizontal="10dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="@string/title_noti_setting"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:layout_gravity="center"/>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/notiButtonSetting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
+                        android:textColor="@color/white"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/leaveCommunity"
+                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="10dp"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_weight="1"
+                        android:text="@string/title_leave_community"
+                        android:textColor="@color/red"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/leave_icon"
+                        android:layout_gravity="center_vertical|end"
+                        android:background="@drawable/transparent_btn"
+                        android:baselineAlignBottom="true"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/removeCommunity"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_weight="1"
+                        android:text="@string/title_remove_community"
+                        android:textColor="@color/red"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/remove_community_icon"
+                        android:layout_gravity="center_vertical|end"
+                        android:background="@drawable/transparent_btn"
+                        android:baselineAlignBottom="true"/>
+                </LinearLayout>
+
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/memberRequest"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp"
-                android:layout_marginHorizontal="10dp"
-                android:foreground="?attr/selectableItemBackground">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="@string/title_member_request"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:layout_gravity="start"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/next_icon"
-                    android:layout_gravity="center_vertical|end"
-                    android:background="@drawable/transparent_btn"
-                    android:baselineAlignBottom="true"/>
-            </LinearLayout>
+        </ScrollView>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/categorySetting"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp"
-                android:layout_marginHorizontal="10dp"
-                android:foreground="?attr/selectableItemBackground">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="@string/title_category_setting"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:layout_gravity="start"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/next_icon"
-                    android:layout_gravity="center_vertical|end"
-                    android:background="@drawable/transparent_btn"
-                    android:baselineAlignBottom="true"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/memberSetting"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp"
-                android:layout_marginHorizontal="10dp"
-                android:foreground="?attr/selectableItemBackground">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_weight="1"
-                    android:text="@string/title_member_in_commmunity"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/next_icon"
-                    android:layout_gravity="center_vertical|end"
-                    android:background="@drawable/transparent_btn"
-                    android:baselineAlignBottom="true"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/notificationSetting"
-                android:orientation="horizontal"
-                android:layout_marginVertical="15dp"
-                android:layout_marginHorizontal="10dp">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="@string/title_noti_setting"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:layout_gravity="center"/>
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/notiButtonSetting"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center"/>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/leaveCommunity"
-                android:orientation="horizontal"
-                android:layout_marginHorizontal="10dp"
-                android:foreground="?attr/selectableItemBackground">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_weight="1"
-                    android:text="@string/title_leave_community"
-                    android:textColor="@color/red"
-                    android:textSize="18sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/leave_icon"
-                    android:layout_gravity="center_vertical|end"
-                    android:background="@drawable/transparent_btn"
-                    android:baselineAlignBottom="true"/>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/removeCommunity"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp"
-                android:layout_marginHorizontal="10dp"
-                android:foreground="?attr/selectableItemBackground">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_weight="1"
-                    android:text="@string/title_remove_community"
-                    android:textColor="@color/red"
-                    android:textSize="18sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/remove_community_icon"
-                    android:layout_gravity="center_vertical|end"
-                    android:background="@drawable/transparent_btn"
-                    android:baselineAlignBottom="true"/>
-            </LinearLayout>
-
-        </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
