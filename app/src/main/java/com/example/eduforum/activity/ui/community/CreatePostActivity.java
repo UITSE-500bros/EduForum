@@ -278,7 +278,7 @@ public class CreatePostActivity extends AppCompatActivity {
             //newPost.setDate(LocalDate.now().toString());
             // newPost.setCategory(...);
             viewModel.setPostViewState(newPost);
-            viewModel.createPost();
+            viewModel.createPost(viewModel.getPostViewState().getValue());
         });
     }
     private Creator mapToCreator(User user) {
