@@ -1,5 +1,7 @@
 package com.example.eduforum.activity.viewmodel.community.settings;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -42,6 +44,7 @@ public class CustomTagsViewModel extends ViewModel {
     public void refreshCategories(){
         Community community = new Community();
         community.setCommunityId(communityId.getValue());
+        Log.d("CustomTagsViewModel", "refreshCategories");
         categoryRepository.fetchCategory(community, new CategoryCallback() {
             @Override
             public void onSuccess(List<Category> categories) {
@@ -55,6 +58,7 @@ public class CustomTagsViewModel extends ViewModel {
                 errorMessage.setValue(errorMsg);
             }
       });
+
     }
     public void addCategory(PostCategory category) {
         Category newCategory = new Category(category.getCategoryID(), category.getTitle(), false);
@@ -88,5 +92,11 @@ public class CustomTagsViewModel extends ViewModel {
                 errorMessage.setValue(errorMsg);
             }
         });
+    }
+
+    protected void onCleared() {
+        super.onCleared();
+        Log.d("CustomTagsViewModel", "onCleared");
+        categoryRepository.removeListener(communityId.getValue());
     }
 }

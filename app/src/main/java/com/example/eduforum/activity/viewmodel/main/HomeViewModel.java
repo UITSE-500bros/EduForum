@@ -1,4 +1,6 @@
 package com.example.eduforum.activity.viewmodel.main;
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -45,6 +47,14 @@ public class HomeViewModel extends ViewModel{
         isAdminCommunityList = new MutableLiveData<>();
         joinedCommunityList.setValue(new ArrayList<>());
         isAdminCommunityList.setValue(new ArrayList<>());
+
+    }
+    public void removeListener(){
+        Log.d("HomeViewModel", "removeListener");
+        communityRepository.removeListener();
+    }
+    public void setUpListener(){
+        Log.d("HomeViewModel", "setUpListener");
         communityRepository.observeDocument(FirebaseAuth.getInstance().getUid(), new ICommunityChangeListener() {
             @Override
             public void onCommunityFetch(List<Community> communities) {
@@ -61,7 +71,7 @@ public class HomeViewModel extends ViewModel{
                 isAdminCommunityList.setValue(convertToViewStateList(communities));
             }
 
-    });
+        });
     }
     //-------------------------------------------------------------------------------
     // Getters and Setters
@@ -120,7 +130,7 @@ public class HomeViewModel extends ViewModel{
         return builder.setName(UIState.getName())
                 .setDepartment(UIState.getCategory())
                 .setDescription(UIState.getDescription())
-                //.setProfileImage(UIState.getCommuAvt())
+                .setProfileImage(UIState.getCommuAvt())
                 .build();
     }
 
@@ -172,7 +182,9 @@ public class HomeViewModel extends ViewModel{
         List<CreateCommunityViewState> viewStates = new ArrayList<>();
         for (Community community : communities) {
             if(community.getCommunityId() == null) continue;
-            viewStates.add(new CreateCommunityViewState(community.getName(), community.getDescription(), community.getDepartment(), community.getProfileImage(), community.getCommunityId()));
+            CreateCommunityViewState state = new CreateCommunityViewState(community.getName(), community.getDescription(), community.getDepartment(), community.getProfileImage(), community.getCommunityId());
+            state.setCommunityProfilePicture(community.getProfilePicture());
+            viewStates.add(state);
         }
         return viewStates;
     }
