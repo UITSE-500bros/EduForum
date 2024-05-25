@@ -10,6 +10,7 @@ import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostViewState implements Serializable {
@@ -21,23 +22,28 @@ public class PostViewState implements Serializable {
     private String date;
     private List<PostCategory> tags;
     private List<Uri> image;
+    private List<String> pictures;
     private List<String> taggedUsers;
     private Boolean isAnonymous;
 
     private int totalComment;
-
     private int voteDiff;
+
     public PostViewState(String postId, Creator creator, CreateCommunityViewState community, String title, String content, Boolean isAnonymous, String date, List<Uri> image, List<String> taggedUsers,  List<PostCategory> tags, int voteDiff, int totalComment) {
         this.postId = postId;
         this.creator = creator;
         this.community = community;
         this.title = title;
-        this.content = content;
+        if(content==null) this.content = "";
+        else this.content = content;
         this.isAnonymous = isAnonymous;
         this.date = date;
-        this.tags = tags;
-        this.image = image;
-        this.taggedUsers = taggedUsers;
+        if(tags==null) this.tags = new ArrayList<>();
+        else this.tags = tags;
+        if(image==null) this.image = new ArrayList<>();
+         else  this.image = image;
+        if(taggedUsers==null) this.taggedUsers = new ArrayList<>();
+        else this.taggedUsers = taggedUsers;
         this.voteDiff = voteDiff;
         this.totalComment = totalComment;
     }
@@ -46,12 +52,18 @@ public class PostViewState implements Serializable {
         this.creator = null;
         this.community = null;
         this.title = null;
-        this.content = null;
+        this.content = "";
         this.date = null;
-        this.tags = null;
+        this.tags = new ArrayList<>();
+        this.pictures = new ArrayList<>();
+        this.taggedUsers = new ArrayList<>();
+        this.image = new ArrayList<>();
     }
     public List<Uri> getImage() {
         return image;
+    }
+    public List<String> getPictures() {
+        return pictures;
     }
     public List<String> getTaggedUsers() {
         return taggedUsers;
@@ -82,6 +94,9 @@ public class PostViewState implements Serializable {
     }
     public void setPostId(String postId) {
         this.postId = postId;
+    }
+    public void setPictures(List<String> pictures) {
+        this.pictures = pictures;
     }
     public void setCreator(Creator creator) {
         this.creator = creator;

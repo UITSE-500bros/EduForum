@@ -293,7 +293,9 @@ public class NewsFeedViewModel extends ViewModel {
     private List<PostViewState> convertPostListToPostViewStateList(List<Post> posts) {
         List<PostViewState> postViewStateList = new ArrayList<>();
         for(Post post : posts) {
-            postViewStateList.add(new PostViewState(post.getPostID(), post.getCreator(), currentCommunity.getValue(), post.getTitle(), post.getContent(),post.getAnonymous(), convertTimestampToReadable(post.getTimeCreated()), null, post.getTaggedUsers(), post.getCategory(), post.getVoteDifference(),post.getTotalComment()));
+            PostViewState state = new PostViewState(post.getPostID(), post.getCreator(), currentCommunity.getValue(), post.getTitle(), post.getContent(),post.getAnonymous(), convertTimestampToReadable(post.getTimeCreated()), post.getImage(), post.getTaggedUsers(), post.getCategory(), post.getVoteDifference(),post.getTotalComment());
+            state.setPictures(post.getDownloadImage());
+            postViewStateList.add(state);
         }
         return postViewStateList;
     }
