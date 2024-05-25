@@ -31,6 +31,7 @@ import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
 import com.google.firebase.storage.FirebaseStorage;
@@ -397,9 +398,28 @@ public class CommunityRepository {
      * @param userID      the ID of the user
      */
     public void makeAdmin(String communityID, String userID) {
-        db.collection("Community")
-                .document(communityID)
-                .update("adminList", FieldValue.arrayUnion(userID));
+        // batch write to delete the user from userList and add to adminList
+        WriteBatch batch = db.batch();
+
+        // Get a reference to the community document
+        DocumentReference communityRef = db.collection("Community").document(communityID);
+
+        // Add the user to the adminList and remove from the userList
+        batch.update(communityRef, "adminList", FieldValue.arrayUnion(userID));
+        batch.update(communityRef, "userList", FieldValue.arrayRemove(userID));
+
+        // Commit the batch
+        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "User " + userID + " is now an admin of community " + communityID);
+                } else {
+                    Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error making user an admin", task.getException());
+                }
+            }
+        });
+
     }
 
     /**
@@ -424,7 +444,19 @@ public class CommunityRepository {
     public void removeUser(String communityID, String userID) {
         db.collection("Community")
                 .document(communityID)
-                .update("userList", FieldValue.arrayRemove(userID));
+                .update("userList", FieldValue.arrayRemove(userID))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "user successfully removed!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error removing user", e);
+                    }
+                });
     }
 
     private void createCommunityNewPost(String communityID, String userID) {
