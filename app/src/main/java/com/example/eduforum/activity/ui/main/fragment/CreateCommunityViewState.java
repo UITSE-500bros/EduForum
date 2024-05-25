@@ -9,6 +9,7 @@ public class CreateCommunityViewState implements Serializable {
     String description;
     String category;
     Uri commuAvt;
+    String communityProfilePicture;
     String communityID;
     Boolean isDialogClosed;
     String errorMessage;
@@ -25,6 +26,12 @@ public class CreateCommunityViewState implements Serializable {
     public CreateCommunityViewState() {
         this.isDialogClosed = false;
         this.errorMessage = null;
+    }
+    public void setCommunityProfilePicture(String communityProfilePicture) {
+        this.communityProfilePicture = communityProfilePicture;
+    }
+    public String getCommunityProfilePicture() {
+        return communityProfilePicture;
     }
 
     public Uri getCommuAvt() {

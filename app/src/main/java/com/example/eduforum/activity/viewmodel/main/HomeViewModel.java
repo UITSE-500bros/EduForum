@@ -130,7 +130,7 @@ public class HomeViewModel extends ViewModel{
         return builder.setName(UIState.getName())
                 .setDepartment(UIState.getCategory())
                 .setDescription(UIState.getDescription())
-                //.setProfileImage(UIState.getCommuAvt())
+                .setProfileImage(UIState.getCommuAvt())
                 .build();
     }
 
@@ -182,7 +182,9 @@ public class HomeViewModel extends ViewModel{
         List<CreateCommunityViewState> viewStates = new ArrayList<>();
         for (Community community : communities) {
             if(community.getCommunityId() == null) continue;
-            viewStates.add(new CreateCommunityViewState(community.getName(), community.getDescription(), community.getDepartment(), community.getProfileImage(), community.getCommunityId()));
+            CreateCommunityViewState state = new CreateCommunityViewState(community.getName(), community.getDescription(), community.getDepartment(), community.getProfileImage(), community.getCommunityId());
+            state.setCommunityProfilePicture(community.getProfilePicture());
+            viewStates.add(state);
         }
         return viewStates;
     }

@@ -8,10 +8,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.eduforum.activity.ui.community.CommunityActivity;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.databinding.ItemForumBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -60,9 +63,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
         void bind(CreateCommunityViewState community) {
             binding.communityNameTextView.setText(community.getName());
             binding.communityDepartmentTextView.setText(community.getCategory());
-            if(community.getCommuAvt()!=null){
-                //binding.communityImage.setImageURI(community.getCommuAvt());
-            }
+
         }
 
     }

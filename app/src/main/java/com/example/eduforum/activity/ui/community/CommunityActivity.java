@@ -19,6 +19,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.eduforum.R;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,6 +36,8 @@ import com.example.eduforum.activity.viewmodel.community.settings.CustomTagsView
 import com.example.eduforum.databinding.ActivityCommunityBinding;
 import com.example.eduforum.databinding.CommunityFilterBinding;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +91,10 @@ public class CommunityActivity extends AppCompatActivity {
             if (community != null) {
                 binding.communityName.setText(community.getName());
                 binding.descriptionContentTextview.setText(community.getDescription());
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference(community.getCommunityProfilePicture());
+                Glide.with(binding.getRoot().getContext())
+                        .load(storageReference)
+                        .into(binding.postImageView);
             }
         });
         viewModel.getPostList().observe(this, postList -> {
