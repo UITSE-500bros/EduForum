@@ -377,18 +377,28 @@ public class CommunityRepository {
      * @param isApprove   true if the request is approved, false if it is rejected
      */
     public void approveUser(String communityID, String userID, boolean isApprove) {
+        WriteBatch batch = db.batch();
         if (isApprove) {
-            db.collection("Community")
-                    .document(communityID)
-                    .update("userList", FieldValue.arrayUnion(userID));
+            DocumentReference communityRef = db.collection("Community").document(communityID);
+            batch.update(communityRef, "userList", FieldValue.arrayUnion(userID));
         }
 
-
-        db.collection("Community")
+        DocumentReference memberApprovalRef = db.collection("Community")
                 .document(communityID)
                 .collection("MemberApproval")
-                .document(userID)
-                .delete();
+                .document(userID);
+
+        batch.delete(memberApprovalRef);
+        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "User " + userID + " is approved to join community " + communityID);
+                } else {
+                    Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error approving user", task.getException());
+                }
+            }
+        }
     }
 
     /**
