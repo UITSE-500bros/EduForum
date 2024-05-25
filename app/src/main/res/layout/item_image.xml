@@ -12,6 +12,8 @@
             android:id="@+id/image"
             android:layout_width="250dp"
             android:layout_height="250dp"
+            android:maxHeight="250dp"
+            android:maxWidth="250dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_launcher_background"
             android:layout_marginStart="5dp"
@@ -19,7 +21,6 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:maxWidth="100dp"
             tools:ignore="missingConstraints" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
