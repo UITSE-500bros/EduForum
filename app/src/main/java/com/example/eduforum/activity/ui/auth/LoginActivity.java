@@ -18,6 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.eduforum.R;
 import com.example.eduforum.activity.EduForum;
+import com.example.eduforum.activity.model.user_manage.User;
+import com.example.eduforum.activity.repository.user.IUserCallback;
 import com.example.eduforum.activity.ui.main.MainActivity;
 import com.example.eduforum.activity.ui.welcome.WelcomeActivity;
 import com.example.eduforum.activity.util.FlagsList;
@@ -98,8 +100,17 @@ public class LoginActivity extends AppCompatActivity {
         viewModel.getIsEmailVerified().observe(this, isEmailVerified -> {
             if(isEmailVerified){
                 Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                userViewModel.getCurrentUser(new IUserCallback() {
+                    @Override
+                    public void onGetUserSuccess(User user) {
+                        startActivity(intent);
+                        finish();
+                    }
+                    @Override
+                    public void onGetUserFailure(String errorMsg) {
+                        Snackbar.make(binding.getRoot(), "Đã có lỗi xảy ra, vui lòng chờ giây lát!", Snackbar.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 

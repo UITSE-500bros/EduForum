@@ -294,7 +294,8 @@ public class CommunityRepository {
                             List<Community> communities = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Community community = document.toObject(Community.class);
-                                if (!community.getUserList().contains(userID)) {
+                                if (!community.getUserList().contains(userID) && !community.getAdminList().contains(userID)) {
+                                    community.setCommunityId(document.getId());
                                     communities.add(community);
                                 }
                                 Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
@@ -321,12 +322,13 @@ public class CommunityRepository {
         db.collection("Community")
                 .document(communityID)
                 .collection("MemberApproval")
-                .add(joinRequestDTO)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                .document(user.getUserId())
+                .set(joinRequestDTO)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
+                    public void onSuccess(Void sth) {
                         callback.onSuccess("Request sent successfully!");
-                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "MemberApproval written with ID: " + documentReference.getId());
+                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "MemberApproval written");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -357,6 +359,7 @@ public class CommunityRepository {
                             List<User> users = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 User user = document.toObject(User.class);
+                                user.setUserId(document.getData().get("userID").toString());
                                 users.add(user);
                                 Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
                             }
@@ -398,7 +401,7 @@ public class CommunityRepository {
                     Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error approving user", task.getException());
                 }
             }
-        }
+        });
     }
 
     /**
