@@ -37,7 +37,7 @@ public class MemberRequestsAdapter extends RecyclerView.Adapter<MemberRequestsAd
     public MemberRequestsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         ItemMemberRequestBinding itemMemberRequestBinding = ItemMemberRequestBinding.inflate(layoutInflater, parent, false);
-        return null;
+        return new MemberRequestsViewHolder(itemMemberRequestBinding);
     }
 
     @Override

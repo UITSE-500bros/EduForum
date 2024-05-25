@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.eduforum.activity.model.community_manage.Community;
 import com.example.eduforum.activity.model.community_manage.CommunityBuilder;
 import com.example.eduforum.activity.model.community_manage.CommunityConcreteBuilder;
+import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.activity.repository.community.CommunityRepository;
 import com.example.eduforum.activity.repository.community.ICommunityCallBack;
 import com.example.eduforum.activity.repository.community.ICommunityCallBack_A;
@@ -30,6 +31,7 @@ public class HomeViewModel extends ViewModel{
     private final MutableLiveData<JoinCommunityViewState> joinCommunityLiveData;
     private final MutableLiveData<List<CreateCommunityViewState>> joinedCommunityList;
     private final MutableLiveData<List<CreateCommunityViewState>> isAdminCommunityList;
+    private final MutableLiveData<User> currentUser;
     CommunityRepository communityRepository;
     LoginRepository loginRepository;
 
@@ -40,7 +42,7 @@ public class HomeViewModel extends ViewModel{
         newCommunityLiveData.setValue(new CreateCommunityViewState());
         communityRepository = CommunityRepository.getInstance();
         loginRepository = LoginRepository.getInstance();
-
+        currentUser = new MutableLiveData<>();
         joinCommunityLiveData = new MutableLiveData<>();
         joinCommunityLiveData.setValue(new JoinCommunityViewState());
         joinedCommunityList = new MutableLiveData<>();
@@ -49,13 +51,16 @@ public class HomeViewModel extends ViewModel{
         isAdminCommunityList.setValue(new ArrayList<>());
 
     }
+    public void setCurrentUser(User user){
+        currentUser.setValue(user);
+    }
     public void removeListener(){
         Log.d("HomeViewModel", "removeListener");
         communityRepository.removeListener();
     }
     public void setUpListener(){
         Log.d("HomeViewModel", "setUpListener");
-        communityRepository.observeDocument(FirebaseAuth.getInstance().getUid(), new ICommunityChangeListener() {
+        communityRepository.observeDocument(currentUser.getValue().getUserId(), new ICommunityChangeListener() {
             @Override
             public void onCommunityFetch(List<Community> communities) {
                 joinedCommunityList.setValue(convertToViewStateList(communities));

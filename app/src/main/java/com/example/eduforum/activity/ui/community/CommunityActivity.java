@@ -91,10 +91,12 @@ public class CommunityActivity extends AppCompatActivity {
             if (community != null) {
                 binding.communityName.setText(community.getName());
                 binding.descriptionContentTextview.setText(community.getDescription());
-                StorageReference storageReference = FirebaseStorage.getInstance().getReference(community.getCommunityProfilePicture());
-                Glide.with(binding.getRoot().getContext())
-                        .load(storageReference)
-                        .into(binding.postImageView);
+                if(community.getCommunityProfilePicture()!=null){
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReference(community.getCommunityProfilePicture());
+                    Glide.with(binding.getRoot().getContext())
+                            .load(storageReference)
+                            .into(binding.postImageView);
+                }
             }
         });
         viewModel.getPostList().observe(this, postList -> {

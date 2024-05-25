@@ -1,5 +1,7 @@
 package com.example.eduforum.activity.viewmodel.community.settings;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -35,6 +37,9 @@ public class MemberRequestsViewModel extends ViewModel {
             public void onGetMemberApprovalSuccess(List<User> users) {
                 if(users != null) {
                     memberRequests.setValue(users);
+                    if(users.size()!=0 && users.get(0).getUserId()==null){
+                        Log.d("MemberRequestViewModel", "Here");
+                    }
                 }
                 else memberRequests.setValue(new ArrayList<>());
             }

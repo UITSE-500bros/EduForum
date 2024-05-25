@@ -19,9 +19,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.EduForum;
+import com.example.eduforum.activity.model.post_manage.Creator;
+import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.activity.ui.main.adapter.CommunityAdapter;
 
 import com.example.eduforum.activity.viewmodel.main.HomeViewModel;
+import com.example.eduforum.activity.viewmodel.shared.UserViewModel;
 import com.example.eduforum.databinding.DialogCreateCommunityBinding;
 import com.example.eduforum.databinding.DialogJoinCommunityBinding;
 import com.example.eduforum.databinding.FragmentHomeBinding;
@@ -32,6 +36,7 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private HomeViewModel viewModel;
+    private UserViewModel userViewModel;
     private CommunityAdapter joinedCommunitiesAdapter;
     private CommunityAdapter myCommunitiesAdapter;
     private ActivityResultLauncher<String> mGetContent;
@@ -54,12 +59,25 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        EduForum app  = (EduForum) getActivity().getApplication();
+        userViewModel = app.getSharedViewModel(UserViewModel.class);
+        userViewModel.getCurrentUserLiveData().observe(getViewLifecycleOwner(), user -> {
+            if(user != null) {
+                viewModel.setCurrentUser(user);
+                Log.d("HomeFragment", "User: "+user.getName());
+            }
+        });
         return binding.getRoot();
     }
     public void onStart(){
         super.onStart();
         // onStart is called after onCreate, so we can safely set up the listener here
+    }
+    public void onResume(){
+        super.onResume();
+        Log.d("HomeFragment", "onResume");
         viewModel.setUpListener();
+
     }
     public void onStop(){
         super.onStop();
@@ -131,10 +149,10 @@ public class HomeFragment extends Fragment {
                     .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                     .build());
         });
-
-        viewModel.getIsAdminCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
-            myCommunitiesAdapter.setCommunityList(joinedCommunities);
-        });
+//
+//        viewModel.getIsAdminCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
+//            myCommunitiesAdapter.setCommunityList(joinedCommunities);
+//        });
         viewModel.getNewCommunityLiveData().observe(getViewLifecycleOwner(), newCommunity -> {
             if(newCommunity.getErrorMessage() != null){
                 Snackbar.make(dialogBinding.getRoot(), newCommunity.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
