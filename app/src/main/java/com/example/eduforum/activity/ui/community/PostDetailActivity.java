@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.EduForum;
 import com.example.eduforum.activity.model.post_manage.Creator;
 import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.activity.ui.community.adapter.CommentAdapter;
@@ -24,6 +25,7 @@ import com.example.eduforum.activity.ui.community.adapter.MediaAdapter;
 import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.activity.viewmodel.community.PostDetailsViewModel;
+import com.example.eduforum.activity.viewmodel.shared.UserViewModel;
 import com.example.eduforum.databinding.ActivityPostDetailBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -45,6 +47,11 @@ public class PostDetailActivity extends AppCompatActivity {
     private boolean isDownVoted = false;
     private boolean isParentComment = true;
     private MaterialAlertDialogBuilder builder;
+
+    private UserViewModel userViewModel;
+    private Creator creator;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,17 +75,29 @@ public class PostDetailActivity extends AppCompatActivity {
             finish();
         });
 
+        EduForum app = (EduForum) getApplication();
+        userViewModel = app.getSharedViewModel(UserViewModel.class);
+        userViewModel.getCurrentUserLiveData().observe(this, user -> {
+            if(user != null){
+                creator = mapToCreator(user);
+            }
+        });
 
         PostViewState postViewState = (PostViewState) getIntent().getSerializableExtra("currentPost");
         if (postViewState != null) {
             viewModel.setCurrentPost(postViewState);
-            binding.titlePost.setText(postViewState.getTitle().toString());
-            binding.contentPost.setText(postViewState.getContent().toString());
-            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
+            binding.toolBarCreatePost.setTitle(postViewState.getCommunity().getName());
+            binding.titlePost.setText(postViewState.getTitle());
+            binding.khoaTextView.setText(postViewState.getCreator().getDepartment());
+            binding.contentPost.setText(postViewState.getContent());
             binding.commentCountTextView.setText(String.valueOf(postViewState.getTotalComment()));
-//            binding.userNameTextView.setText(postViewState.getCreator().getName());
+            binding.userNameTextView.setText(postViewState.getCreator().getName());
+            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
+            binding.timeCommentTextView.setText(postViewState.getDate());
+            binding.recycleImage.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+            mediaAdapter = new MediaAdapter(postViewState.getImage());
+            binding.recycleImage.setAdapter(mediaAdapter);
 
-//            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
         } else {
             //finish();
         }
@@ -89,7 +108,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 new CommentAdapter.OnReplyClickListener() {
                     @Override
                     public void onReplyClick(CommentViewState comment) {
-                        binding.commentEditText.setText("@Nam ");
+                        binding.commentEditText.setText("@" + comment.getCreator().getName() + " ");
                         binding.commentEditText.setVisibility(View.VISIBLE);
                         binding.sendButton.setVisibility(View.VISIBLE);
                         binding.sendButton.setOnClickListener(v -> {
@@ -100,7 +119,7 @@ public class PostDetailActivity extends AppCompatActivity {
                                         null,
                                         commentText,
                                         null,
-                                        null,
+                                        creator,
                                         0,
                                         0,
                                         0,
@@ -169,7 +188,7 @@ public class PostDetailActivity extends AppCompatActivity {
                         null,
                         commentText,
                         null,
-                        null,
+                        creator,
                         0,
                         0,
                         0,
@@ -251,5 +270,7 @@ public class PostDetailActivity extends AppCompatActivity {
         });
     }
 
-
+    private Creator mapToCreator(User user) {
+        return new Creator(user.getUserId(), user.getName(), user.getDepartment(),  user.getProfilePicture());
+    }
 }
