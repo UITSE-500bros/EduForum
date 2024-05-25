@@ -86,6 +86,7 @@ public class HomeFragment extends Fragment {
                 });
         joinedCommunitiesAdapter = new CommunityAdapter(getContext(), viewModel.getJoinedCommunityList().getValue(),  FirebaseAuth.getInstance());
         myCommunitiesAdapter = new CommunityAdapter(getContext(), viewModel.getIsAdminCommunityList().getValue(), FirebaseAuth.getInstance());
+        myCommunitiesAdapter.setIsAdminList(true);
         binding.joinedCommunitiesRecyclerView.setAdapter(joinedCommunitiesAdapter);
         binding.myCommunitiesRecyclerView.setAdapter(myCommunitiesAdapter);
         binding.joinedCommunitiesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));

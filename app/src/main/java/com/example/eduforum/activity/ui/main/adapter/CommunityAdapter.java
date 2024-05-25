@@ -22,11 +22,16 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
 
     Context context;
     List<CreateCommunityViewState> communityList;
+    Boolean isAdminList;
     FirebaseAuth currentUser;
     public CommunityAdapter(Context context, List<CreateCommunityViewState> communityList, FirebaseAuth currentUser) {
         this.context = context;
         this.communityList = communityList;
         this.currentUser = currentUser;
+        isAdminList = false;
+    }
+    public void setIsAdminList(Boolean isAdminList) {
+        this.isAdminList = isAdminList;
     }
     public void setCommunityList(List<CreateCommunityViewState> communityList) {
         this.communityList = communityList;
@@ -45,6 +50,9 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, CommunityActivity.class);
             intent.putExtra("currentCommunity", communityList.get(position));
+            if(isAdminList) {
+                intent.putExtra("isAdmin", true);
+            }
             context.startActivity(intent);
         });
     }
