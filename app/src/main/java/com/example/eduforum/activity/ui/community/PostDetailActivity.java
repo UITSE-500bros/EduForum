@@ -92,11 +92,9 @@ public class PostDetailActivity extends AppCompatActivity {
             binding.contentPost.setText(postViewState.getContent());
             binding.commentCountTextView.setText(String.valueOf(postViewState.getTotalComment()));
             binding.userNameTextView.setText(postViewState.getCreator().getName());
-            binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference()));
+//            binding.avatarImageView.setImageResource(postViewState.getCreator().getProfilePicture());
             binding.timeCommentTextView.setText(postViewState.getDate());
-            binding.recycleImage.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-            mediaAdapter = new MediaAdapter(postViewState.getImage());
-            binding.recycleImage.setAdapter(mediaAdapter);
+            binding.khoaTextView.setText(postViewState.getCreator().getDepartment());
 
         } else {
             //finish();

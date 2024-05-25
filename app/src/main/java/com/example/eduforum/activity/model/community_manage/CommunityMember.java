@@ -9,7 +9,7 @@ public class CommunityMember {
     private String name;
     private String memberId;
 
-    private Uri profileImage;
+    private String profileImage;
     private String createdDate;
     private String department;
 
@@ -18,7 +18,7 @@ public class CommunityMember {
     public CommunityMember() {
     }
 
-    public CommunityMember(String communityId, String memberId, String name, Uri profileImage, String createdDate, String department, Boolean isAdmin) {
+    public CommunityMember(String communityId, String memberId, String name, String profileImage, String createdDate, String department, Boolean isAdmin) {
         this.communityId = communityId;
         this.memberId = memberId;
         this.name = name;
@@ -34,7 +34,7 @@ public class CommunityMember {
         this.memberId = user.getUserId();
         this.isAdmin = isAdmin;
         this.department = user.getDepartment();
-        //this.profileImage = user.getProfileImage();
+        this.profileImage = user.getProfilePicture();
     }
 
     public String getMemberId() {
@@ -60,11 +60,11 @@ public class CommunityMember {
         this.name = name;
     }
 
-    public Uri getProfileImage() {
+    public String getProfileImage() {
         return profileImage;
     }
 
-    public void setProfileImage(Uri profileImage) {
+    public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
     }
 

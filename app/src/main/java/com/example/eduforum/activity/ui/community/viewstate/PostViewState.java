@@ -122,4 +122,5 @@ public class PostViewState implements Serializable {
     public void setVoteDifference(int i) {
         this.voteDiff = i;
     }
+
 }

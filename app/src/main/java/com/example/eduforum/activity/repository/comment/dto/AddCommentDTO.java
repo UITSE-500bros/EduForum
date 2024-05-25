@@ -4,21 +4,20 @@ import com.example.eduforum.activity.model.post_manage.Comment;
 import com.example.eduforum.activity.model.post_manage.Creator;
 import com.google.firebase.Timestamp;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AddCommentDTO {
+    private String commentID;
     private String postID;
     private String communityID;
     private String content;
     private String replyCommentID;
     private Creator creator;
     private List<String> downloadImage;
-    private Integer totalUpVote;
-    private Integer totalDownVote;
-    private Integer voteDifference;
-    private Integer totalReply;
-    private Timestamp timeCreated;
-    private Timestamp lastModified;
+
 
     public AddCommentDTO() {
     }
@@ -29,20 +28,15 @@ public class AddCommentDTO {
         this.replyCommentID = comment.getReplyCommentID();
         this.creator = comment.getCreator();
         this.downloadImage = comment.getDownloadImage();
-        this.totalUpVote = 0;
-        this.totalDownVote = 0;
-        this.voteDifference = 0;
-        this.totalReply = 0;
-        this.timeCreated = null;
-        this.lastModified = null;
+        this.commentID = comment.getCommentID();
     }
 
-    public Integer getVoteDifference() {
-        return voteDifference;
+    public String getCommentID() {
+        return commentID;
     }
 
-    public void setVoteDifference(Integer voteDifference) {
-        this.voteDifference = voteDifference;
+    public void setCommentID(String commentID) {
+        this.commentID = commentID;
     }
 
     public String getPostID() {
@@ -93,43 +87,17 @@ public class AddCommentDTO {
         this.downloadImage = downloadImage;
     }
 
-    public Integer getTotalUpVote() {
-        return totalUpVote;
-    }
-
-    public void setTotalUpVote(Integer totalUpVote) {
-        this.totalUpVote = totalUpVote;
-    }
-
-    public Integer getTotalDownVote() {
-        return totalDownVote;
-    }
-
-    public void setTotalDownVote(Integer totalDownVote) {
-        this.totalDownVote = totalDownVote;
-    }
-
-    public Integer getTotalReply() {
-        return totalReply;
-    }
-
-    public void setTotalReply(Integer totalReply) {
-        this.totalReply = totalReply;
-    }
-
-    public Timestamp getTimeCreated() {
-        return timeCreated;
-    }
-
-    public void setTimeCreated(Timestamp timeCreated) {
-        this.timeCreated = timeCreated;
-    }
-
-    public Timestamp getLastModified() {
-        return lastModified;
-    }
-
-    public void setLastModified(Timestamp lastModified) {
-        this.lastModified = lastModified;
+    public Map<String, Object> convertToDataObject() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("communityID", communityID);
+        data.put("commentID", commentID);
+        data.put("postID", postID);
+        data.put("content", content);
+        if (replyCommentID != null) data.put("replyCommentID", replyCommentID);
+        data.put("creator", creator.convertToDataObject());
+        if (downloadImage != null) {
+            data.put("downloadImage", downloadImage);
+        } else data.put("downloadImage", new ArrayList<String>());
+        return data;
     }
 }

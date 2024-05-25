@@ -7,8 +7,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.databinding.ItemMemberRequestBinding;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -34,7 +37,7 @@ public class MemberRequestsAdapter extends RecyclerView.Adapter<MemberRequestsAd
     public MemberRequestsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         ItemMemberRequestBinding itemMemberRequestBinding = ItemMemberRequestBinding.inflate(layoutInflater, parent, false);
-        return null;
+        return new MemberRequestsViewHolder(itemMemberRequestBinding);
     }
 
     @Override
@@ -58,7 +61,6 @@ public class MemberRequestsAdapter extends RecyclerView.Adapter<MemberRequestsAd
             User user = memberRequests.get(position);
             binding.userNameTextView.setText(user.getName());
             binding.khoaTextView.setText(user.getDepartment());
-            // user avt
 
             // buttons action
             binding.acceptRequestButton.setOnClickListener(v -> {
@@ -71,6 +73,12 @@ public class MemberRequestsAdapter extends RecyclerView.Adapter<MemberRequestsAd
                     listener.onReview(user, false);
                 }
             });
+            if(memberRequests.get(position).getProfilePicture()!=null){
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference(memberRequests.get(position).getProfilePicture());
+                Glide.with(binding.getRoot().getContext())
+                        .load(storageReference)
+                        .into(binding.memberRequestAva);
+            }
 
         }
     }
