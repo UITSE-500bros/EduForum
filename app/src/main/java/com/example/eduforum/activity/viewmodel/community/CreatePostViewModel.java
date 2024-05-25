@@ -79,8 +79,8 @@ public class CreatePostViewModel extends ViewModel {
         this.communityId.setValue(communityId);
     }
     // ----------------------------------------------------------------------------
-    public void createPost(){
-        PostViewState newPost = postViewState.getValue();
+    public void createPost(PostViewState state){
+        PostViewState newPost = state;
         if(newPost == null){
             errorMessage.setValue("Không thể tạo bài viết");
             return;
@@ -150,7 +150,10 @@ public class CreatePostViewModel extends ViewModel {
             errorMessage.setValue("Tiêu đề không được để trống");
             return false;
         }
-        // other validations ...
+        if(post.getContent() == null || post.getContent().isEmpty()){
+            errorMessage.setValue("Nội dung không được để trống");
+            return false;
+        }
         return true;
     }
     private String convertTimestampToReadable(Timestamp timestamp){

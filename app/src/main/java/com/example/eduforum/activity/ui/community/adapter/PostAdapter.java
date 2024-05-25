@@ -87,10 +87,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             if(post.getCreator()!=null){
                 binding.username.setText(post.getCreator().getName());
                 binding.falcuty.setText(post.getCreator().getDepartment());
-                StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(post.getCreator().getProfilePicture());
-                Glide.with(binding.getRoot().getContext())
-                        .load(storageReference)
-                        .into(binding.avatar);
+                if(post.getCreator().getProfilePicture()!=null){
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(post.getCreator().getProfilePicture());
+                    Glide.with(binding.getRoot().getContext())
+                            .load(storageReference)
+                            .into(binding.avatar);
+                }
             }
             binding.title.setText(post.getTitle());
             binding.time.setText(post.getDate());
