@@ -54,7 +54,16 @@ public class HomeFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         return binding.getRoot();
     }
-
+    public void onStart(){
+        super.onStart();
+        // onStart is called after onCreate, so we can safely set up the listener here
+        viewModel.setUpListener();
+    }
+    public void onStop(){
+        super.onStop();
+        // onStop is back to onStart (never directly back to onResume), not onResume, so we can remove listener here and set up listener again in onStart
+        viewModel.removeListener();
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

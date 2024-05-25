@@ -1,4 +1,6 @@
 package com.example.eduforum.activity.viewmodel.main;
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -45,6 +47,14 @@ public class HomeViewModel extends ViewModel{
         isAdminCommunityList = new MutableLiveData<>();
         joinedCommunityList.setValue(new ArrayList<>());
         isAdminCommunityList.setValue(new ArrayList<>());
+
+    }
+    public void removeListener(){
+        Log.d("HomeViewModel", "removeListener");
+        communityRepository.removeListener();
+    }
+    public void setUpListener(){
+        Log.d("HomeViewModel", "setUpListener");
         communityRepository.observeDocument(FirebaseAuth.getInstance().getUid(), new ICommunityChangeListener() {
             @Override
             public void onCommunityFetch(List<Community> communities) {
@@ -61,7 +71,7 @@ public class HomeViewModel extends ViewModel{
                 isAdminCommunityList.setValue(convertToViewStateList(communities));
             }
 
-    });
+        });
     }
     //-------------------------------------------------------------------------------
     // Getters and Setters
