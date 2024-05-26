@@ -141,7 +141,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             }
         }
 
-        holder.bind(comment, onReplyClickListener, temp, onDownVoteClickListener, onUpVoteClickListener, onShowUpReplies);
+        holder.bind(comment, onReplyClickListener, temp, onDownVoteClickListener, onUpVoteClickListener, onShowUpReplies, commentChildAdapter);
     }
 
     public void createDeleteDialog() {
@@ -178,11 +178,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                          List<CommentViewState> temp,
                          OnDownVoteClickListener onDownVoteClickListener,
                          OnUpVoteClickListener onUpVoteClickListener,
-                         OnShowUpReplies onShowUpReplies) {
+                         OnShowUpReplies onShowUpReplies,
+                         CommentChildAdapter commentChildAdapter) {
             binding.contentNotiParentTextView.setText(comment.getContent());
             binding.userNameParentTextView.setText(comment.getCreator().getName());
             binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference()));
             binding.timeParentCommentTextView.setText(comment.getLastModified());
+
+
+
+
 
 
             if(comment.getCreator().getProfilePicture()!=null){
@@ -200,7 +205,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 }
             });
             binding.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-            binding.nestedRecyclerView.setAdapter(new ChildCommentAdapter(temp));
+            binding.nestedRecyclerView.setAdapter(commentChildAdapter);
+
+
+
+
+
+
+
+
+
 
 
 
@@ -230,6 +244,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     onShowUpReplies.onShowUpReplies(comment);
                 }
             });
+
+
 
 
 

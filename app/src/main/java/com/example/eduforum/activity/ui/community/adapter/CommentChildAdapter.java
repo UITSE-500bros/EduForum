@@ -170,7 +170,7 @@ public class CommentChildAdapter extends RecyclerView.Adapter<CommentChildAdapte
         }
 
         public void bind(CommentViewState comment, CommentAdapter.OnReplyClickListener onReplyClickListener, List<CommentViewState> temp, CommentAdapter.OnDownVoteClickListener onDownVoteClickListener, CommentAdapter.OnUpVoteClickListener onUpVoteClickListener, CommentAdapter.OnShowUpReplies onShowUpReplies) {
-            binding.contentNotiParentTextView.setText("4");
+            binding.contentNotiParentTextView.setText(comment.getContent());
             binding.userNameParentTextView.setText(comment.getCreator().getName());
             binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference()));
             binding.timeParentCommentTextView.setText(comment.getLastModified());

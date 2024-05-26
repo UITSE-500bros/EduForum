@@ -117,39 +117,7 @@ public class PostDetailActivity extends AppCompatActivity {
             //finish();
         }
 
-        commentChildAdapter = new CommentChildAdapter(this, viewModel.getComments().getValue(),viewModel.getCommentsChild().getValue(),
-                comment -> {
-                    binding.commentEditText.setText("@" + comment.getCreator().getName() + " ");
-                    binding.commentEditText.setVisibility(View.VISIBLE);
-                    binding.sendButton.setVisibility(View.VISIBLE);
-                    binding.sendButton.setOnClickListener(v -> {
-                        String commentText = binding.commentEditText.getText().toString();
-                        if (!commentText.isEmpty()) {
 
-                            CommentViewState commentViewState = new CommentViewState(
-                                    null,
-                                    commentText,
-                                    null,
-                                    creator,
-                                    0,
-                                    0,
-                                    0,
-                                    null,
-                                    null,
-                                    comment.getCommentID(),
-                                    0
-                            );
-
-                            viewModel.addChildComment(comment, commentViewState);
-                            binding.commentEditText.setText("");
-                        }
-                    });
-                },
-                comment -> viewModel.downVote(comment),
-                comment -> viewModel.upVote(comment),
-                comment -> {
-                    viewModel.loadChildComments(comment);
-                });
 
         commentAdapter = new CommentAdapter(this,
                 viewModel.getComments().getValue(),
@@ -160,6 +128,7 @@ public class PostDetailActivity extends AppCompatActivity {
                         binding.commentEditText.setText("@" + comment.getCreator().getName() + " ");
                         binding.commentEditText.setVisibility(View.VISIBLE);
                         binding.sendButton.setVisibility(View.VISIBLE);
+
 
                         System.out.println("Comment ID: " + comment.getCommentID());
                         binding.sendButton.setOnClickListener(v -> {
@@ -205,7 +174,40 @@ public class PostDetailActivity extends AppCompatActivity {
                         viewModel.loadChildComments(comment);
                     }
                 },
-                commentChildAdapter
+                commentChildAdapter = new CommentChildAdapter(this, viewModel.getComments().getValue(), viewModel.getCommentsChild().getValue(),
+                        new CommentAdapter.OnReplyClickListener() {
+                            @Override
+                            public void onReplyClick(CommentViewState comment) {
+                                binding.commentEditText.setText("@" + comment.getCreator().getName() + " ");
+                                binding.commentEditText.setVisibility(View.VISIBLE);
+                                binding.sendButton.setVisibility(View.VISIBLE);
+                                binding.sendButton.setOnClickListener(v -> {
+                                    String commentText = binding.commentEditText.getText().toString();
+                                    if (!commentText.isEmpty()) {
+                                        CommentViewState commentViewState = new CommentViewState(
+                                                null,
+                                                commentText,
+                                                null,
+                                                creator,
+                                                0,
+                                                0,
+                                                0,
+                                                null,
+                                                null,
+                                                comment.getCommentID(),
+                                                0
+                                        );
+
+                                        viewModel.addChildComment(comment, commentViewState);
+                                        binding.commentEditText.setText("");
+                                    }
+                                });
+                            }},
+                        comment -> viewModel.downVote(comment),
+                        comment -> viewModel.upVote(comment),
+                        comment -> {
+                            viewModel.loadChildComments(comment);
+                        })
         );
 
 
