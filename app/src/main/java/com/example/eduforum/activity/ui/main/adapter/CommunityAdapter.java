@@ -2,6 +2,7 @@ package com.example.eduforum.activity.ui.main.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -71,7 +72,8 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
         void bind(CreateCommunityViewState community) {
             binding.communityNameTextView.setText(community.getName());
             binding.communityDepartmentTextView.setText(community.getCategory());
-
+            if(community.getUnReadposts()==null) Log.d("CommunityAdapter", "Unreadposts is null");
+            else binding.unReadPostTextView.setText(community.getUnReadposts().toString());
         }
 
     }

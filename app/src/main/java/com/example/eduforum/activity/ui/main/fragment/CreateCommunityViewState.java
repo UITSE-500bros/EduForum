@@ -15,6 +15,7 @@ public class CreateCommunityViewState implements Serializable {
     String communityID;
     Boolean isDialogClosed;
     String errorMessage;
+    Integer unReadposts;
 
     public CreateCommunityViewState(String name, String description, String category, Uri commuAvt, String communityID) {
         this.name = name;
@@ -24,10 +25,12 @@ public class CreateCommunityViewState implements Serializable {
         this.communityID = communityID;
         this.isDialogClosed = false;
         this.errorMessage = null;
+        this.unReadposts = 0;
     }
     public CreateCommunityViewState() {
         this.isDialogClosed = false;
         this.errorMessage = null;
+        this.unReadposts = 0;
     }
 
     public CreateCommunityViewState(Community community) {
@@ -36,8 +39,15 @@ public class CreateCommunityViewState implements Serializable {
         this.category = community.getDepartment();
         this.communityProfilePicture = community.getProfilePicture();
         this.communityID = community.getCommunityId();
+        if(community.getTotalNewPost()!=null) this.unReadposts = community.getTotalNewPost();
+        else this.unReadposts = 0;
     }
-
+    public void setUnReadposts(Integer unReadposts) {
+        this.unReadposts = unReadposts;
+    }
+    public Integer getUnReadposts() {
+        return unReadposts;
+    }
     public void setCommunityProfilePicture(String communityProfilePicture) {
         this.communityProfilePicture = communityProfilePicture;
     }

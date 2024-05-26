@@ -31,8 +31,7 @@
             android:layout_height="match_parent"
             android:background="@color/backgroundColor"
             tools:context=".activity.ui.community.PostDetailActivity"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:fitsSystemWindows="true">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -40,7 +39,6 @@
                 android:layout_above="@id/commentsa"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="0dp"
-                android:fitsSystemWindows="true"
                 android:layout_marginBottom="2dp">
 
                 <LinearLayout
@@ -167,9 +165,8 @@
                                 android:layout_marginStart="10dp"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginEnd="10dp"
-                                android:layout_marginBottom="10dp"
-                                android:fitsSystemWindows="true"
-                                tools:listitem="@layout/item_image" />
+                                android:src="@drawable/community_background"
+                                android:layout_marginBottom="10dp"/>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -265,7 +262,7 @@
                 android:layout_alignParentBottom="true"
                 android:fitsSystemWindows="true"
                 android:orientation="vertical"
-                android:layout_marginBottom="30dp">
+                android:layout_marginBottom="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
