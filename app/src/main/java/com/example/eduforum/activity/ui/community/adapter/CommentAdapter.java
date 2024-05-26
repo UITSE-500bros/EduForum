@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.eduforum.R;
 import com.example.eduforum.activity.ui.community.PostDetailActivity;
 import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
@@ -25,6 +26,8 @@ import com.example.eduforum.activity.ui.main.adapter.ChildCommentAdapter;
 import com.example.eduforum.databinding.ItemChildCommentBinding;
 import com.example.eduforum.databinding.ItemListCommentBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +60,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private static OnUpVoteClickListener onUpVoteClickListener;
     private static OnDownVoteClickListener onDownVoteClickListener;
     private static OnShowUpReplies onShowUpReplies;
+    private CommentChildAdapter commentChildAdapter;
 
     public CommentAdapter(Context context,
                           List<CommentViewState> commentList,
@@ -64,7 +68,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                           OnReplyClickListener onReplyClickListener,
                           OnDownVoteClickListener onDownVoteClickListener,
                           OnUpVoteClickListener onUpVoteClickListener,
-                          OnShowUpReplies onShowUpReplies) {
+                          OnShowUpReplies onShowUpReplies,
+                          CommentChildAdapter commentChildAdapter) {
         this.context = context;
         if (commentList != null) {
             this.commentList = commentList;
@@ -80,7 +85,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         this.onUpVoteClickListener = onUpVoteClickListener;
         this.onDownVoteClickListener = onDownVoteClickListener;
         this.onShowUpReplies = onShowUpReplies;
-
+        this.commentChildAdapter = commentChildAdapter;
     }
     public void setCommentList(List<CommentViewState> commentList) {
         if (commentList != null) {
@@ -110,11 +115,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-
         createDeleteDialog();
 
         CommentViewState comment = commentList.get(position);
-
 
         holder.binding.moreChildCommentButton.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(context, holder.binding.moreChildCommentButton);
@@ -122,8 +125,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             popupMenu.setOnMenuItemClickListener(item -> {
                 if (item.getItemId() == R.id.deleteComment) {
                     builder.show();
-                }
-                else {
+                } else {
                     //TODO: Edit Comment
                 }
                 return true;
@@ -131,18 +133,15 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             popupMenu.show();
         });
 
-
         List<CommentViewState> temp = new ArrayList<>();
 
         for (CommentViewState commentViewState : childCommentList) {
             if (Objects.equals(commentViewState.getReplyCommentID(), comment.getCommentID())) {
                 temp.add(commentViewState);
-
             }
         }
 
-        holder.bind(comment, onReplyClickListener,temp,onDownVoteClickListener,onUpVoteClickListener, onShowUpReplies);
-
+        holder.bind(comment, onReplyClickListener, temp, onDownVoteClickListener, onUpVoteClickListener, onShowUpReplies);
     }
 
     public void createDeleteDialog() {
@@ -174,11 +173,24 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             super(binding.getRoot());
             this.binding = binding;
         }
-        public void bind(CommentViewState comment, OnReplyClickListener onReplyClickListener,List<CommentViewState> temp,OnDownVoteClickListener onDownVoteClickListener,OnUpVoteClickListener onUpVoteClickListener,OnShowUpReplies onShowUpReplies) {
+        public void bind(CommentViewState comment,
+                         OnReplyClickListener onReplyClickListener,
+                         List<CommentViewState> temp,
+                         OnDownVoteClickListener onDownVoteClickListener,
+                         OnUpVoteClickListener onUpVoteClickListener,
+                         OnShowUpReplies onShowUpReplies) {
             binding.contentNotiParentTextView.setText(comment.getContent());
-
+            binding.userNameParentTextView.setText(comment.getCreator().getName());
             binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference()));
+            binding.timeParentCommentTextView.setText(comment.getLastModified());
 
+
+            if(comment.getCreator().getProfilePicture()!=null){
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(comment.getCreator().getProfilePicture());
+                Glide.with(binding.getRoot().getContext())
+                        .load(storageReference)
+                        .into(binding.avatarParentComment);
+            }
 
             binding.replyParentTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -189,6 +201,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             });
             binding.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
             binding.nestedRecyclerView.setAdapter(new ChildCommentAdapter(temp));
+
 
 
             binding.upVoteParentButton.setOnClickListener(new View.OnClickListener() {
@@ -217,6 +230,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     onShowUpReplies.onShowUpReplies(comment);
                 }
             });
+
+
 
         }
     }

@@ -31,6 +31,7 @@ import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
 import com.google.firebase.storage.FirebaseStorage;
@@ -293,7 +294,8 @@ public class CommunityRepository {
                             List<Community> communities = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Community community = document.toObject(Community.class);
-                                if (!community.getUserList().contains(userID)) {
+                                if (!community.getUserList().contains(userID) && !community.getAdminList().contains(userID)) {
+                                    community.setCommunityId(document.getId());
                                     communities.add(community);
                                 }
                                 Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
@@ -320,12 +322,13 @@ public class CommunityRepository {
         db.collection("Community")
                 .document(communityID)
                 .collection("MemberApproval")
-                .add(joinRequestDTO)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                .document(user.getUserId())
+                .set(joinRequestDTO)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
+                    public void onSuccess(Void sth) {
                         callback.onSuccess("Request sent successfully!");
-                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "MemberApproval written with ID: " + documentReference.getId());
+                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "MemberApproval written");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -356,6 +359,7 @@ public class CommunityRepository {
                             List<User> users = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 User user = document.toObject(User.class);
+                                user.setUserId(document.getData().get("userID").toString());
                                 users.add(user);
                                 Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
                             }
@@ -376,18 +380,28 @@ public class CommunityRepository {
      * @param isApprove   true if the request is approved, false if it is rejected
      */
     public void approveUser(String communityID, String userID, boolean isApprove) {
+        WriteBatch batch = db.batch();
         if (isApprove) {
-            db.collection("Community")
-                    .document(communityID)
-                    .update("userList", FieldValue.arrayUnion(userID));
+            DocumentReference communityRef = db.collection("Community").document(communityID);
+            batch.update(communityRef, "userList", FieldValue.arrayUnion(userID));
         }
 
-
-        db.collection("Community")
+        DocumentReference memberApprovalRef = db.collection("Community")
                 .document(communityID)
                 .collection("MemberApproval")
-                .document(userID)
-                .delete();
+                .document(userID);
+
+        batch.delete(memberApprovalRef);
+        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "User " + userID + " is approved to join community " + communityID);
+                } else {
+                    Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error approving user", task.getException());
+                }
+            }
+        });
     }
 
     /**
@@ -397,9 +411,28 @@ public class CommunityRepository {
      * @param userID      the ID of the user
      */
     public void makeAdmin(String communityID, String userID) {
-        db.collection("Community")
-                .document(communityID)
-                .update("adminList", FieldValue.arrayUnion(userID));
+        // batch write to delete the user from userList and add to adminList
+        WriteBatch batch = db.batch();
+
+        // Get a reference to the community document
+        DocumentReference communityRef = db.collection("Community").document(communityID);
+
+        // Add the user to the adminList and remove from the userList
+        batch.update(communityRef, "adminList", FieldValue.arrayUnion(userID));
+        batch.update(communityRef, "userList", FieldValue.arrayRemove(userID));
+
+        // Commit the batch
+        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "User " + userID + " is now an admin of community " + communityID);
+                } else {
+                    Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error making user an admin", task.getException());
+                }
+            }
+        });
+
     }
 
     /**
@@ -424,7 +457,19 @@ public class CommunityRepository {
     public void removeUser(String communityID, String userID) {
         db.collection("Community")
                 .document(communityID)
-                .update("userList", FieldValue.arrayRemove(userID));
+                .update("userList", FieldValue.arrayRemove(userID))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "user successfully removed!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error removing user", e);
+                    }
+                });
     }
 
     private void createCommunityNewPost(String communityID, String userID) {

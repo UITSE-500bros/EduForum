@@ -14,7 +14,6 @@ public class UserViewModel extends ViewModel {
     public UserViewModel() {
         userRepository = UserRepository.getInstance();
         currentUser = new MutableLiveData<>();
-        getCurrentUser();
     }
 
     public LiveData<User> getCurrentUserLiveData() {
@@ -25,15 +24,17 @@ public class UserViewModel extends ViewModel {
         currentUser.setValue(user);
     }
 
-    private void getCurrentUser() {
+    public void getCurrentUser(IUserCallback callback) {
         userRepository.getCurrentUser(new IUserCallback() {
             @Override
             public void onGetUserSuccess(User user) {
                 currentUser.setValue(user);
+                callback.onGetUserSuccess(user);
             }
             @Override
             public void onGetUserFailure(String errorCode) {
                 currentUser.setValue(null);
+                callback.onGetUserFailure(errorCode);
             }
         });
     }
