@@ -1,11 +1,19 @@
 package com.example.eduforum.activity.ui.community;
 
 import android.content.DialogInterface;
+import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -15,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.eduforum.R;
 import com.example.eduforum.activity.EduForum;
 import com.example.eduforum.activity.model.post_manage.Creator;
@@ -28,6 +37,8 @@ import com.example.eduforum.activity.viewmodel.community.PostDetailsViewModel;
 import com.example.eduforum.activity.viewmodel.shared.UserViewModel;
 import com.example.eduforum.databinding.ActivityPostDetailBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,9 +103,11 @@ public class PostDetailActivity extends AppCompatActivity {
             binding.contentPost.setText(postViewState.getContent());
             binding.commentCountTextView.setText(String.valueOf(postViewState.getTotalComment()));
             binding.userNameTextView.setText(postViewState.getCreator().getName());
-            if(postViewState.getPictures()!=null){
+            if(postViewState.getImage()!=null){
                 RecyclerView recyclerView = binding.recycleImage;
-                // mediaAdapter =...
+                mediaAdapter = new MediaAdapter(postViewState.getImage());
+                recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                recyclerView.setAdapter(mediaAdapter);
             }
 
             binding.timeCommentTextView.setText(postViewState.getDate());
@@ -103,6 +116,40 @@ public class PostDetailActivity extends AppCompatActivity {
         } else {
             //finish();
         }
+
+        commentChildAdapter = new CommentChildAdapter(this, viewModel.getComments().getValue(),viewModel.getCommentsChild().getValue(),
+                comment -> {
+                    binding.commentEditText.setText("@" + comment.getCreator().getName() + " ");
+                    binding.commentEditText.setVisibility(View.VISIBLE);
+                    binding.sendButton.setVisibility(View.VISIBLE);
+                    binding.sendButton.setOnClickListener(v -> {
+                        String commentText = binding.commentEditText.getText().toString();
+                        if (!commentText.isEmpty()) {
+
+                            CommentViewState commentViewState = new CommentViewState(
+                                    null,
+                                    commentText,
+                                    null,
+                                    creator,
+                                    0,
+                                    0,
+                                    0,
+                                    null,
+                                    null,
+                                    comment.getCommentID(),
+                                    0
+                            );
+
+                            viewModel.addChildComment(comment, commentViewState);
+                            binding.commentEditText.setText("");
+                        }
+                    });
+                },
+                comment -> viewModel.downVote(comment),
+                comment -> viewModel.upVote(comment),
+                comment -> {
+                    viewModel.loadChildComments(comment);
+                });
 
         commentAdapter = new CommentAdapter(this,
                 viewModel.getComments().getValue(),
@@ -113,6 +160,8 @@ public class PostDetailActivity extends AppCompatActivity {
                         binding.commentEditText.setText("@" + comment.getCreator().getName() + " ");
                         binding.commentEditText.setVisibility(View.VISIBLE);
                         binding.sendButton.setVisibility(View.VISIBLE);
+
+                        System.out.println("Comment ID: " + comment.getCommentID());
                         binding.sendButton.setOnClickListener(v -> {
                             String commentText = binding.commentEditText.getText().toString();
                             if (!commentText.isEmpty()) {
@@ -155,8 +204,11 @@ public class PostDetailActivity extends AppCompatActivity {
                     public void onShowUpReplies(CommentViewState comment) {
                         viewModel.loadChildComments(comment);
                     }
-                }
+                },
+                commentChildAdapter
         );
+
+
 
         
         binding.recyclecomment.setAdapter(commentAdapter);
@@ -168,6 +220,8 @@ public class PostDetailActivity extends AppCompatActivity {
 
         viewModel.getComments().observe(this, commentViewStates -> {
             List<CommentViewState> commentChildList = new ArrayList<>();
+            List<CommentViewState> commentGrandChildList = new ArrayList<>();
+
             List<CommentViewState> itemsToRemove = new ArrayList<>();
 
             for (CommentViewState commentViewState : commentViewStates) {
@@ -175,6 +229,7 @@ public class PostDetailActivity extends AppCompatActivity {
                     commentChildList.add(commentViewState);
                     itemsToRemove.add(commentViewState);
                 }
+
             }
             commentViewStates.removeAll(itemsToRemove);
             commentAdapter.setCommentList(commentViewStates);
@@ -199,11 +254,37 @@ public class PostDetailActivity extends AppCompatActivity {
                         null,
                         0
                 );
-
                 viewModel.addParentComment(commentViewState, postViewState.getPostId(), postViewState.getCommunity().getCommunityID());
                 binding.commentEditText.setText("");
-
             }
+            
+//            ActivityResultLauncher<PickVisualMediaRequest> pickImages =
+//                    registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uris -> {
+//                        if (uris != null) {
+//                            List<Uri> uriList1 = new ArrayList<>();
+//                            // Get the current list of images
+//                            CommentViewState commentViewState = viewModel.getComments().getValue();
+//                            if (postViewState != null && postViewState.getImage() != null) {
+//                                uriList1.addAll(postViewState.getImage());
+//                            }
+//                            for(int i = 0; i < uris.size(); i++) {
+//                                ImageView imageView = new ImageView(this);
+//                                imageView.setImageURI(uris.get(i));
+//                                int sizeInDp = 40;
+//                                float scale = getResources().getDisplayMetrics().density;
+//                                int sizeInPx = (int) (sizeInDp * scale + 0.5f);
+//                                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(sizeInPx, sizeInPx);
+//                                imageView.setLayoutParams(layoutParams);
+//                                uriList1.add(uris.get(i));
+//                            }
+//                            MediaAdapter imageAdapter = new MediaAdapter(uriList1);
+//                            binding.recycleImage.setAdapter(imageAdapter);
+//                            postViewState.setImage(uriList1);
+//
+//                        } else {
+//                            // TODO: Show errors
+//                        }
+//                    });
         });
 
         binding.downVoteButton.setOnClickListener(v -> {
@@ -226,9 +307,7 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
-        binding.recycleImage.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        //mediaAdapter = new MediaAdapter(postViewState.getImage());
-        binding.recycleImage.setAdapter(mediaAdapter);
+
 
 
 
@@ -249,6 +328,18 @@ public class PostDetailActivity extends AppCompatActivity {
                 return true;
             });
             popupMenu.show();
+        });
+
+
+
+        binding.incognitoModeButton.setOnClickListener(v -> {
+//            if (binding.incognitoModeButton.isChecked()) {
+//                binding.userNameTextView.setText("Ẩn danh");
+//                binding.avatarImageView.setImageResource(R.drawable.ic_baseline_account_circle_24);
+//            } else {
+//                binding.userNameTextView.setText(postViewState.getCreator().getName());
+//                binding.avatarImageView.setImageResource(R.drawable.ic_baseline_account_circle_24);
+//            }
         });
 
 

@@ -2,11 +2,13 @@ package com.example.eduforum.activity.ui.community.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eduforum.R;
@@ -33,6 +35,7 @@ public class CommentLevel3Adapter extends RecyclerView.Adapter<CommentLevel3Adap
 
     public void setCommentChildList(List<CommentViewState> commentChildList) {
         this.commentChildList = commentChildList;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -82,6 +85,12 @@ public class CommentLevel3Adapter extends RecyclerView.Adapter<CommentLevel3Adap
             popupMenu.show();
         });
 
+        // If the comment has child comments, set up a new CommentLevel3Adapter for them
+//        if (comment.getChildComments() != null) {
+//            CommentLevel3Adapter childCommentAdapter = new CommentLevel3Adapter(context, comment.getChildComments());
+//            holder.binding.childCommentRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+//            holder.binding.childCommentRecyclerView.setAdapter(childCommentAdapter);
+//        }
 
 
     }
@@ -100,6 +109,21 @@ public class CommentLevel3Adapter extends RecyclerView.Adapter<CommentLevel3Adap
         }
 
         public void bind(CommentViewState comment) {
+            binding.contentChildTextView.setText("2");
+//            binding.timeCreatedChildTextView.setText(comment.getTimeCreated());
+//            binding.creatorChildTextView.setText(comment.getCreator().getUsername());
+//            binding.totalUpVoteChildTextView.setText(String.valueOf(comment.getTotalUpVote()));
+
+            binding.upVoteChildCommentButton.setOnClickListener(v -> {
+
+                ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
+                binding.downVoteChildButton.setIconTint(colorStateList);
+            });
+
+            binding.downVoteChildButton.setOnClickListener(v -> {
+                ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
+                binding.downVoteChildButton.setIconTint(colorStateList);
+            });
 
         }
     }
