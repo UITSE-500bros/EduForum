@@ -46,23 +46,15 @@ import java.util.List;
 public class PostDetailActivity extends AppCompatActivity {
     private ActivityPostDetailBinding binding;
     private MediaAdapter mediaAdapter;
-
-
     private PostDetailsViewModel viewModel;
-
     private CommentAdapter commentAdapter;
-
     private CommentChildAdapter commentChildAdapter;
-
     private boolean isUpVoted = false;
     private boolean isDownVoted = false;
     private boolean isParentComment = true;
     private MaterialAlertDialogBuilder builder;
-
     private UserViewModel userViewModel;
     private Creator creator;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,15 +69,16 @@ public class PostDetailActivity extends AppCompatActivity {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail);
 
-
-
         viewModel = new ViewModelProvider(this).get(PostDetailsViewModel.class);
+
+        binding.setLifecycleOwner(this);
 
         //set up turn back button in ActionBar
         binding.toolBarCreatePost.setNavigationOnClickListener(v -> {
             finish();
         });
 
+        /* Get current user */
         EduForum app = (EduForum) getApplication();
         userViewModel = app.getSharedViewModel(UserViewModel.class);
         userViewModel.getCurrentUserLiveData().observe(this, user -> {
@@ -94,6 +87,7 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
+        /*Binding current post*/
         PostViewState postViewState = (PostViewState) getIntent().getSerializableExtra("currentPost");
         if (postViewState != null) {
             viewModel.setCurrentPost(postViewState);
@@ -116,8 +110,6 @@ public class PostDetailActivity extends AppCompatActivity {
         } else {
             //finish();
         }
-
-
 
         commentAdapter = new CommentAdapter(this,
                 viewModel.getComments().getValue(),
@@ -219,7 +211,6 @@ public class PostDetailActivity extends AppCompatActivity {
 
         assert postViewState != null;
         viewModel.loadComments(postViewState);
-
         viewModel.getComments().observe(this, commentViewStates -> {
             List<CommentViewState> commentChildList = new ArrayList<>();
             List<CommentViewState> commentGrandChildList = new ArrayList<>();
@@ -239,7 +230,6 @@ public class PostDetailActivity extends AppCompatActivity {
         });
 
 
-        binding.setLifecycleOwner(this);
         binding.sendButton.setOnClickListener(v -> {
             String commentText = binding.commentEditText.getText().toString();
             if (!commentText.isEmpty() && this.isParentComment) {
@@ -343,6 +333,35 @@ public class PostDetailActivity extends AppCompatActivity {
 //                binding.avatarImageView.setImageResource(R.drawable.ic_baseline_account_circle_24);
 //            }
         });
+
+
+//        ActivityResultLauncher<PickVisualMediaRequest> pickImages =
+//                registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uris -> {
+//                    if (uris != null) {
+//                        List<Uri> uriList1 = new ArrayList<>();
+//                        // Get the current list of images
+//                        postViewState = viewModel.getPostViewState().getValue();
+//                        if (postViewState != null && postViewState.getImage() != null) {
+//                            uriList1.addAll(postViewState.getImage());
+//                        }
+//                        for(int i = 0; i < uris.size(); i++) {
+//                            ImageView imageView = new ImageView(this);
+//                            imageView.setImageURI(uris.get(i));
+//                            int sizeInDp = 40;
+//                            float scale = getResources().getDisplayMetrics().density;
+//                            int sizeInPx = (int) (sizeInDp * scale + 0.5f);
+//                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(sizeInPx, sizeInPx);
+//                            imageView.setLayoutParams(layoutParams);
+//                            uriList1.add(uris.get(i));
+//                        }
+//                        MediaAdapter imageAdapter = new MediaAdapter(uriList1);
+//                        binding.imageRecyclerView.setAdapter(imageAdapter);
+//                        postViewState.setImage(uriList1);
+//                        viewModel.setPostViewState(postViewState);
+//                    } else {
+//                        // TODO: Show errors
+//                    }
+//                });
 
 
     }

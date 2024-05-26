@@ -182,13 +182,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                          CommentChildAdapter commentChildAdapter) {
             binding.contentNotiParentTextView.setText(comment.getContent());
             binding.userNameParentTextView.setText(comment.getCreator().getName());
-            binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference()));
+            binding.voteCountParentTextView.setText("0");
             binding.timeParentCommentTextView.setText(comment.getLastModified());
-
-
-
-
-
+            if (comment.getLastModified() == null) {
+                binding.timeParentCommentTextView.setText("Just now");
+            }else{
+                binding.timeParentCommentTextView.setText(comment.getLastModified());
+            }
 
             if(comment.getCreator().getProfilePicture()!=null){
                 StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(comment.getCreator().getProfilePicture());
@@ -206,17 +206,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             });
             binding.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
             binding.nestedRecyclerView.setAdapter(commentChildAdapter);
-
-
-
-
-
-
-
-
-
-
-
 
             binding.upVoteParentButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -244,11 +233,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     onShowUpReplies.onShowUpReplies(comment);
                 }
             });
-
-
-
-
-
         }
     }
 }
