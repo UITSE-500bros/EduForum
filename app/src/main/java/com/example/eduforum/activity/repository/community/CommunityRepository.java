@@ -563,8 +563,8 @@ public class CommunityRepository {
                                 for (QueryDocumentSnapshot doc : snapshots) {
                                     Community community = doc.toObject(Community.class);
                                     // TODO: make sure this is correct
-                                    community.setTotalNewPost(newPosts.get(community.getCommunityId()));
                                     community.setCommunityId(doc.getId());
+                                    community.setTotalNewPost(newPosts.get(community.getCommunityId()));
                                     if (community.getAdminList().contains(userID)) {
                                         isAdminOf.add(community);
                                     } else if (community.getUserList().contains(userID)) {
