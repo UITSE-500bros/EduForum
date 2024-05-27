@@ -2,9 +2,7 @@ package com.example.eduforum.activity.viewmodel.community;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
-
 import com.example.eduforum.activity.model.post_manage.Comment;
 import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.repository.comment.CommentCallback;
@@ -14,7 +12,6 @@ import com.example.eduforum.activity.repository.post.PostRepository;
 import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,13 +19,9 @@ import java.util.List;
 public class PostDetailsViewModel extends ViewModel {
     PostRepository postRepository;
     CommentRepository commentRepository;
-
     MutableLiveData<List<CommentViewState>> cmts;
     MutableLiveData<List<CommentViewState>> cmts_child;
-    MutableLiveData<List<CommentViewState>> cmts_child_child;
-
     MutableLiveData<PostViewState> currentPost;
-
 
     public PostDetailsViewModel() {
         postRepository = PostRepository.getInstance();
@@ -37,12 +30,8 @@ public class PostDetailsViewModel extends ViewModel {
         cmts_child = new MutableLiveData<>();
         currentPost = new MutableLiveData<>();
         cmts.setValue(new ArrayList<CommentViewState>());
-        cmts_child_child= new MutableLiveData<>();
-    }
-    public LiveData<List<CommentViewState>> getCmts_child_child() {
-        return cmts_child_child;
-    }
 
+    }
     public LiveData<PostViewState> getPost(){
         return currentPost;
     }
@@ -79,41 +68,30 @@ public class PostDetailsViewModel extends ViewModel {
     // TODO: anh em lam cai nay ne
     public void setCurrentPost(PostViewState postViewState) {
         currentPost.setValue(postViewState);
-
         Post post = new Post(postViewState.getPostId(), postViewState.getCommunity().getCommunityID(), postViewState.getTitle(), postViewState.getContent(), postViewState.getIsAnonymous(), null, null, postViewState.getCreator(), 0, 0, 0,0, null, null, postViewState.getTags());
         postInstance = post;
         commentRepository.loadTopLevelComments(post, new CommentCallback() {
-
             @Override
             public void onCreateSuccess(Comment comments) {
 
             }
-
             @Override
             public void onFailure(String errorMsg) {
 
             }
-
             @Override
             public void onInitialLoadSuccess(List<Comment> comments) {
-
             }
-
             @Override
             public void onLoadRepliesSuccess(List<Comment> comments) {
-
             }
-
             @Override
             public void onDeleteSuccess() {
-
             }
-
             @Override
             public void onUpdateSuccess(Comment comment) {
 
             }
-
             @Override
             public void onGetVoteStatusSuccess(int voteType) {
 
@@ -126,13 +104,9 @@ public class PostDetailsViewModel extends ViewModel {
         Post post = new Post();
         post.setPostID(postViewState.getPostId());
         post.setCommunityID(postViewState.getCommunity().getCommunityID());
-
-
         pt_id = postViewState.getPostId();
         community_id = postViewState.getCommunity().getCommunityID();
-
         commentRepository.loadTopLevelComments(post, new CommentCallback() {
-
             @Override
             public void onCreateSuccess(Comment comments) {
 
@@ -170,15 +144,7 @@ public class PostDetailsViewModel extends ViewModel {
         });
     }
 
-    public void upVote() {
-        postRepository.updateVoteCount(postInstance, FirebaseAuth.getInstance().getCurrentUser().getUid(), 1);
-    }
 
-    public void downVote(PostViewState postViewState) {
-        Post post = new Post(postViewState.getPostId(), postViewState.getCommunity().getCommunityID(), postViewState.getTitle(), postViewState.getContent(), postViewState.getIsAnonymous(), null, null, postViewState.getCreator(), 0, 0, 0,0, null, null, postViewState.getTags());
-
-        postRepository.updateVoteCount(post, FirebaseAuth.getInstance().getCurrentUser().getUid(), -1);
-    }
 
     public void addParentComment(CommentViewState comment,String postID, String communityID) {
         Comment newComment = new Comment();
@@ -191,8 +157,6 @@ public class PostDetailsViewModel extends ViewModel {
         newComment.setTotalUpVote(0);
         newComment.setTotalDownVote(0);
         newComment.setVoteDifference(0);
-
-
         commentRepository.createComment(postInstance, newComment, new CommentCallback() {
             @Override
             public void onCreateSuccess(Comment comments) {
@@ -264,7 +228,6 @@ public class PostDetailsViewModel extends ViewModel {
         childComment.setReplyCommentID(commentParentViewState.getCommentID());
         childComment.setCommentID(null);
         childComment.setImage(commentChildViewState.getImage());
-
 
         commentRepository.createComment(parentComment, childComment, new CommentCallback() {
             @Override
@@ -370,6 +333,16 @@ public class PostDetailsViewModel extends ViewModel {
             }
         });
     }
+
+    public void upVote() {
+        postRepository.updateVoteCount(postInstance, FirebaseAuth.getInstance().getCurrentUser().getUid(), 1);
+    }
+
+    public void downVote(PostViewState postViewState) {
+        Post post = new Post(postViewState.getPostId(), postViewState.getCommunity().getCommunityID(), postViewState.getTitle(), postViewState.getContent(), postViewState.getIsAnonymous(), null, null, postViewState.getCreator(), 0, 0, 0,0, null, null, postViewState.getTags());
+        postRepository.updateVoteCount(post, FirebaseAuth.getInstance().getCurrentUser().getUid(), -1);
+    }
+
 
     public void downVote(CommentViewState commentViewState){
         Comment comment = new Comment();

@@ -37,11 +37,8 @@ import java.util.Objects;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder>{
     private Context context;
     private static List<CommentViewState> commentList;
-
     private static List<CommentViewState> childCommentList;
     private MaterialAlertDialogBuilder builder;
-
-
     public interface OnReplyClickListener {
         void onReplyClick(CommentViewState comment);
     }
@@ -56,11 +53,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         void onShowUpReplies(CommentViewState comment);
     }
 
-    private OnReplyClickListener onReplyClickListener;
+    private static OnReplyClickListener onReplyClickListener;
     private static OnUpVoteClickListener onUpVoteClickListener;
     private static OnDownVoteClickListener onDownVoteClickListener;
     private static OnShowUpReplies onShowUpReplies;
-    private CommentChildAdapter commentChildAdapter;
+
 
     public CommentAdapter(Context context,
                           List<CommentViewState> commentList,
@@ -68,8 +65,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                           OnReplyClickListener onReplyClickListener,
                           OnDownVoteClickListener onDownVoteClickListener,
                           OnUpVoteClickListener onUpVoteClickListener,
-                          OnShowUpReplies onShowUpReplies,
-                          CommentChildAdapter commentChildAdapter) {
+                          OnShowUpReplies onShowUpReplies
+                          ) {
         this.context = context;
         if (commentList != null) {
             this.commentList = commentList;
@@ -85,7 +82,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         this.onUpVoteClickListener = onUpVoteClickListener;
         this.onDownVoteClickListener = onDownVoteClickListener;
         this.onShowUpReplies = onShowUpReplies;
-        this.commentChildAdapter = commentChildAdapter;
+
     }
     public void setCommentList(List<CommentViewState> commentList) {
         if (commentList != null) {
@@ -141,7 +138,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             }
         }
 
-        holder.bind(comment, onReplyClickListener, temp, onDownVoteClickListener, onUpVoteClickListener, onShowUpReplies, commentChildAdapter);
+        holder.bind(comment, onReplyClickListener, temp, onDownVoteClickListener, onUpVoteClickListener, onShowUpReplies);
     }
 
     public void createDeleteDialog() {
@@ -178,8 +175,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                          List<CommentViewState> temp,
                          OnDownVoteClickListener onDownVoteClickListener,
                          OnUpVoteClickListener onUpVoteClickListener,
-                         OnShowUpReplies onShowUpReplies,
-                         CommentChildAdapter commentChildAdapter) {
+                         OnShowUpReplies onShowUpReplies
+                       ) {
             binding.contentNotiParentTextView.setText(comment.getContent());
             binding.userNameParentTextView.setText(comment.getCreator().getName());
             binding.voteCountParentTextView.setText("0");
@@ -205,7 +202,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 }
             });
             binding.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-            binding.nestedRecyclerView.setAdapter(commentChildAdapter);
+            binding.nestedRecyclerView.setAdapter(new CommentChildAdapter(this.binding.getRoot().getContext(),
+                    temp,
+                    onReplyClickListener,
+                    onDownVoteClickListener,
+                    onUpVoteClickListener,
+                    onShowUpReplies
+            ));
 
             binding.upVoteParentButton.setOnClickListener(new View.OnClickListener() {
                 @Override

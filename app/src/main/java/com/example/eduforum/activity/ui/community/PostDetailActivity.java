@@ -117,7 +117,9 @@ public class PostDetailActivity extends AppCompatActivity {
                 new CommentAdapter.OnReplyClickListener() {
                     @Override
                     public void onReplyClick(CommentViewState comment) {
-                        binding.commentEditText.setText("@" + comment.getCreator().getName() + " ");
+                        String replyText = "@" + comment.getCreator().getName() + " ";
+                        binding.commentEditText.setText(replyText);
+                        binding.commentEditText.setSelection(replyText.length());
                         binding.commentEditText.setVisibility(View.VISIBLE);
                         binding.sendButton.setVisibility(View.VISIBLE);
 
@@ -165,56 +167,17 @@ public class PostDetailActivity extends AppCompatActivity {
                     public void onShowUpReplies(CommentViewState comment) {
                         viewModel.loadChildComments(comment);
                     }
-                },
-                commentChildAdapter = new CommentChildAdapter(this, viewModel.getComments().getValue(), viewModel.getCommentsChild().getValue(),
-                        new CommentAdapter.OnReplyClickListener() {
-                            @Override
-                            public void onReplyClick(CommentViewState comment) {
-                                binding.commentEditText.setText("@" + comment.getCreator().getName() + " ");
-                                binding.commentEditText.setVisibility(View.VISIBLE);
-                                binding.sendButton.setVisibility(View.VISIBLE);
-                                binding.sendButton.setOnClickListener(v -> {
-                                    String commentText = binding.commentEditText.getText().toString();
-                                    if (!commentText.isEmpty()) {
-                                        CommentViewState commentViewState = new CommentViewState(
-                                                null,
-                                                commentText,
-                                                null,
-                                                creator,
-                                                0,
-                                                0,
-                                                0,
-                                                null,
-                                                null,
-                                                comment.getCommentID(),
-                                                0
-                                        );
-
-                                        viewModel.addChildComment(comment, commentViewState);
-                                        binding.commentEditText.setText("");
-                                    }
-                                });
-                            }},
-                        comment -> viewModel.downVote(comment),
-                        comment -> viewModel.upVote(comment),
-                        comment -> {
-                            viewModel.loadChildComments(comment);
-                        })
+                }
         );
 
 
-
-        
         binding.recyclecomment.setAdapter(commentAdapter);
         binding.recyclecomment.setLayoutManager(new LinearLayoutManager(this));
-
 
         assert postViewState != null;
         viewModel.loadComments(postViewState);
         viewModel.getComments().observe(this, commentViewStates -> {
             List<CommentViewState> commentChildList = new ArrayList<>();
-            List<CommentViewState> commentGrandChildList = new ArrayList<>();
-
             List<CommentViewState> itemsToRemove = new ArrayList<>();
 
             for (CommentViewState commentViewState : commentViewStates) {
@@ -301,8 +264,6 @@ public class PostDetailActivity extends AppCompatActivity {
 
 
 
-
-
         binding.moreButton.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(this, v);
             popupMenu.getMenuInflater().inflate(R.menu.post_option_menu, popupMenu.getMenu());
@@ -333,36 +294,6 @@ public class PostDetailActivity extends AppCompatActivity {
 //                binding.avatarImageView.setImageResource(R.drawable.ic_baseline_account_circle_24);
 //            }
         });
-
-
-//        ActivityResultLauncher<PickVisualMediaRequest> pickImages =
-//                registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uris -> {
-//                    if (uris != null) {
-//                        List<Uri> uriList1 = new ArrayList<>();
-//                        // Get the current list of images
-//                        postViewState = viewModel.getPostViewState().getValue();
-//                        if (postViewState != null && postViewState.getImage() != null) {
-//                            uriList1.addAll(postViewState.getImage());
-//                        }
-//                        for(int i = 0; i < uris.size(); i++) {
-//                            ImageView imageView = new ImageView(this);
-//                            imageView.setImageURI(uris.get(i));
-//                            int sizeInDp = 40;
-//                            float scale = getResources().getDisplayMetrics().density;
-//                            int sizeInPx = (int) (sizeInDp * scale + 0.5f);
-//                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(sizeInPx, sizeInPx);
-//                            imageView.setLayoutParams(layoutParams);
-//                            uriList1.add(uris.get(i));
-//                        }
-//                        MediaAdapter imageAdapter = new MediaAdapter(uriList1);
-//                        binding.imageRecyclerView.setAdapter(imageAdapter);
-//                        postViewState.setImage(uriList1);
-//                        viewModel.setPostViewState(postViewState);
-//                    } else {
-//                        // TODO: Show errors
-//                    }
-//                });
-
 
     }
 
