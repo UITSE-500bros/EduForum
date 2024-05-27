@@ -24,32 +24,6 @@
             android:scaleType="centerCrop"
             android:src="@drawable/eduforumlogo" />
 
-        <TextView
-            android:id="@+id/ng_nh_p"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="26dp"
-            android:fontFamily="@font/source_sans_pro_semibold"
-            android:gravity="top"
-            android:lineHeight="33sp"
-            android:text="@string/Dang_ky"
-            android:textColor="@color/white"
-            android:textSize="26sp" />
-        <TextView
-            android:id="@+id/ng_nh_p_b_n"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="26dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/taotk"
-            android:textSize="21sp"
-            android:textColor="@color/white"
-            android:gravity="top"
-            android:fontFamily="@font/source_sans_pro_semibold"
-            android:lineHeight="10sp"
-            />
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -58,6 +32,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/ng_nh_p"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="26dp"
+                    android:fontFamily="@font/source_sans_pro_semibold"
+                    android:gravity="top"
+                    android:lineHeight="33sp"
+                    android:text="@string/Dang_ky"
+                    android:textColor="@color/white"
+                    android:textSize="26sp" />
+                <TextView
+                    android:id="@+id/ng_nh_p_b_n"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/taotk"
+                    android:textSize="21sp"
+                    android:textColor="@color/white"
+                    android:gravity="top"
+                    android:fontFamily="@font/source_sans_pro_semibold"
+                    android:lineHeight="10sp"
+                    />
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
