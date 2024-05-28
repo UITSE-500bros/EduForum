@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
@@ -27,6 +28,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -40,30 +42,28 @@
                     android:id="@+id/numberMemberRequestTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:text="50 thành viên mới"
-                    android:layout_marginTop="10dp"
                     android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:text="50 thành viên mới"
+                    android:textColor="@color/white"
                     android:textSize="20sp"
-                    android:textColor="@color/white"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/numberMemberRequestTextView"
                     android:layout_marginHorizontal="10dp"
-                    tools:listitem="@layout/item_member_request"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/numberMemberRequestTextView" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
-
 
         <LinearLayout
             android:id="@+id/bottomSheet"
@@ -71,10 +71,11 @@
             android:layout_height="wrap_content"
             android:background="@color/tagBackgroundColor"
             android:orientation="horizontal"
-            app:layout_anchor="@+id/main"
             android:gravity="center"
-            android:fitsSystemWindows="true"
-            app:layout_anchorGravity="bottom|center">
+            android:padding="8dp"
+            app:layout_anchorGravity="bottom"
+            app:layout_anchor="@id/scrollView"
+            >
 
             <Button
                 android:id="@+id/actAllButton"
@@ -91,6 +92,7 @@
                 android:text="@string/deny_all" />
 
         </LinearLayout>
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
