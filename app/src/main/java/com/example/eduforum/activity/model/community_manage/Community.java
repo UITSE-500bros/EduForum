@@ -29,6 +29,8 @@ public class Community {
     
     private Integer totalNewPost;
     private String inviteCode;
+    private String visibility;
+    private Boolean requestSent;
 
 
     private List<String> userList = new ArrayList<>();
@@ -59,6 +61,22 @@ public class Community {
         this.totalPost = totalPost;
         this.totalNewPost = totalNewPost;
         this.userList = userList;
+    }
+
+    public String getVisibility() {
+        return visibility;
+    }
+
+    public Boolean getRequestSent() {
+        return requestSent;
+    }
+
+    public void setRequestSent(Boolean requestSent) {
+        this.requestSent = requestSent;
+    }
+
+    public void setVisibility(String visibility) {
+        this.visibility = visibility;
     }
 
     public String getInviteCode() {

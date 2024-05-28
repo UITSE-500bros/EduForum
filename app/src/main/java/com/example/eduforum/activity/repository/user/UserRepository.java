@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.eduforum.activity.model.user_manage.User;
+import com.example.eduforum.activity.repository.user.dto.UpdateProfileDTO;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,6 +30,24 @@ public class UserRepository {
     private UserRepository() {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+    }
+    public void signOut() {
+        mAuth.signOut();
+    }
+
+    public void updateProfile(User user, IUserCallback callback) {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            UpdateProfileDTO updateProfileDTO = new UpdateProfileDTO(user);
+            db.collection("User")
+                    .document(user.getUserId())
+                    .update(updateProfileDTO.toMap())
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(FlagsList.DEBUG_USER_FLAG, "DocumentSnapshot successfully updated!");
+//                        callback.onUpdateUserSuccess();
+                    });
+
+        }
     }
 
     public void getCurrentUser(IUserCallback callback) {

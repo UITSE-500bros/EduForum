@@ -60,6 +60,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private static OnUpVoteClickListener onUpVoteClickListener;
     private static OnDownVoteClickListener onDownVoteClickListener;
     private static OnShowUpReplies onShowUpReplies;
+    private CommentChildAdapter commentChildAdapter;
 
     public CommentAdapter(Context context,
                           List<CommentViewState> commentList,
@@ -67,7 +68,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                           OnReplyClickListener onReplyClickListener,
                           OnDownVoteClickListener onDownVoteClickListener,
                           OnUpVoteClickListener onUpVoteClickListener,
-                          OnShowUpReplies onShowUpReplies) {
+                          OnShowUpReplies onShowUpReplies,
+                          CommentChildAdapter commentChildAdapter) {
         this.context = context;
         if (commentList != null) {
             this.commentList = commentList;
@@ -83,7 +85,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         this.onUpVoteClickListener = onUpVoteClickListener;
         this.onDownVoteClickListener = onDownVoteClickListener;
         this.onShowUpReplies = onShowUpReplies;
-
+        this.commentChildAdapter = commentChildAdapter;
     }
     public void setCommentList(List<CommentViewState> commentList) {
         if (commentList != null) {
@@ -113,11 +115,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-
         createDeleteDialog();
 
         CommentViewState comment = commentList.get(position);
-
 
         holder.binding.moreChildCommentButton.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(context, holder.binding.moreChildCommentButton);
@@ -125,8 +125,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             popupMenu.setOnMenuItemClickListener(item -> {
                 if (item.getItemId() == R.id.deleteComment) {
                     builder.show();
-                }
-                else {
+                } else {
                     //TODO: Edit Comment
                 }
                 return true;
@@ -134,18 +133,15 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             popupMenu.show();
         });
 
-
         List<CommentViewState> temp = new ArrayList<>();
 
         for (CommentViewState commentViewState : childCommentList) {
             if (Objects.equals(commentViewState.getReplyCommentID(), comment.getCommentID())) {
                 temp.add(commentViewState);
-
             }
         }
 
-        holder.bind(comment, onReplyClickListener,temp,onDownVoteClickListener,onUpVoteClickListener, onShowUpReplies);
-
+        holder.bind(comment, onReplyClickListener, temp, onDownVoteClickListener, onUpVoteClickListener, onShowUpReplies);
     }
 
     public void createDeleteDialog() {
@@ -214,6 +210,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 }
             });
 
+
             binding.upVoteParentButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -240,6 +237,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     onShowUpReplies.onShowUpReplies(comment);
                 }
             });
+
+
 
         }
     }

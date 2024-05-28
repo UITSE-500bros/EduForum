@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,6 +32,7 @@ import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
 import com.google.firebase.storage.FirebaseStorage;
@@ -284,27 +286,75 @@ public class CommunityRepository {
      * @param callback the callback to be called when the operation is done, providing a list of communities
      */
     public void exploreCommunity(String userID, IExploreCallback callback) {
-        db.collection("Community")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            List<Community> communities = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Community community = document.toObject(Community.class);
-                                if (!community.getUserList().contains(userID)) {
-                                    communities.add(community);
+        getAllCommunityInMemberApprovalOfUser(userID, new IGetMemberApprovalState() {
+            @Override
+            public void onGetMemberApprovalStateSuccess(List<String> memberApprovalState) {
+                db.collection("Community")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    List<Community> communities = new ArrayList<>();
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        Community community = document.toObject(Community.class);
+                                        if (!community.getUserList().contains(userID) && !community.getAdminList().contains(userID) && !community.getVisibility().equals("all")) {
+                                            community.setCommunityId(document.getId());
+                                            Boolean isMemberApproval = memberApprovalState.contains(community.getCommunityId());
+                                            community.setRequestSent(isMemberApproval);
+                                            communities.add(community);
+                                        }
+                                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
+                                    }
+                                    callback.onGetCommunitySuccess(communities);
+                                } else {
+                                    Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Error getting documents: ", task.getException());
+                                    callback.onGetCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_GET_COMMUNITY);
                                 }
-                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
                             }
-                            callback.onGetCommunitySuccess(communities);
-                        } else {
-                            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Error getting documents: ", task.getException());
-                            callback.onGetCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_GET_COMMUNITY);
+                        });
+            }
+
+            @Override
+            public void onGetMemberApprovalStateFailure(String message) {
+                 callback.onGetCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_GET_COMMUNITY);
+            }
+        });
+
+    }
+
+
+    public void getAllCommunityInMemberApprovalOfUser(String userID, IGetMemberApprovalState callback) {
+        List<String> res = new ArrayList<>();
+        try {
+            db.collectionGroup("MemberApproval")
+                    .whereEqualTo(FieldPath.documentId(), userID)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
+                                String commuID = document.getReference().getParent().getParent().getId();
+                                res.add(commuID);
+                            }
+                            callback.onGetMemberApprovalStateSuccess(res);
                         }
-                    }
-                });
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            callback.onGetMemberApprovalStateFailure("Failed to fetch MemberApproval State!");
+                            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Failed to fetch MemberApproval State documents: ", e);
+                        }
+                    });
+        } catch (Exception e) {
+            callback.onGetMemberApprovalStateFailure("Failed to fetch MemberApproval State!");
+            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Failed to fetch MemberApproval State documents: ", e);
+        }
+
+
+
     }
 
     /**
@@ -320,12 +370,13 @@ public class CommunityRepository {
         db.collection("Community")
                 .document(communityID)
                 .collection("MemberApproval")
-                .add(joinRequestDTO)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                .document(user.getUserId())
+                .set(joinRequestDTO)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
+                    public void onSuccess(Void sth) {
                         callback.onSuccess("Request sent successfully!");
-                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "MemberApproval written with ID: " + documentReference.getId());
+                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "MemberApproval written");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -356,6 +407,7 @@ public class CommunityRepository {
                             List<User> users = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 User user = document.toObject(User.class);
+                                user.setUserId(document.getData().get("userID").toString());
                                 users.add(user);
                                 Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
                             }
@@ -376,18 +428,28 @@ public class CommunityRepository {
      * @param isApprove   true if the request is approved, false if it is rejected
      */
     public void approveUser(String communityID, String userID, boolean isApprove) {
+        WriteBatch batch = db.batch();
         if (isApprove) {
-            db.collection("Community")
-                    .document(communityID)
-                    .update("userList", FieldValue.arrayUnion(userID));
+            DocumentReference communityRef = db.collection("Community").document(communityID);
+            batch.update(communityRef, "userList", FieldValue.arrayUnion(userID));
         }
 
-
-        db.collection("Community")
+        DocumentReference memberApprovalRef = db.collection("Community")
                 .document(communityID)
                 .collection("MemberApproval")
-                .document(userID)
-                .delete();
+                .document(userID);
+
+        batch.delete(memberApprovalRef);
+        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "User " + userID + " is approved to join community " + communityID);
+                } else {
+                    Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error approving user", task.getException());
+                }
+            }
+        });
     }
 
     /**
@@ -397,9 +459,28 @@ public class CommunityRepository {
      * @param userID      the ID of the user
      */
     public void makeAdmin(String communityID, String userID) {
-        db.collection("Community")
-                .document(communityID)
-                .update("adminList", FieldValue.arrayUnion(userID));
+        // batch write to delete the user from userList and add to adminList
+        WriteBatch batch = db.batch();
+
+        // Get a reference to the community document
+        DocumentReference communityRef = db.collection("Community").document(communityID);
+
+        // Add the user to the adminList and remove from the userList
+        batch.update(communityRef, "adminList", FieldValue.arrayUnion(userID));
+        batch.update(communityRef, "userList", FieldValue.arrayRemove(userID));
+
+        // Commit the batch
+        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "User " + userID + " is now an admin of community " + communityID);
+                } else {
+                    Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error making user an admin", task.getException());
+                }
+            }
+        });
+
     }
 
     /**
@@ -424,7 +505,19 @@ public class CommunityRepository {
     public void removeUser(String communityID, String userID) {
         db.collection("Community")
                 .document(communityID)
-                .update("userList", FieldValue.arrayRemove(userID));
+                .update("userList", FieldValue.arrayRemove(userID))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "user successfully removed!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(FlagsList.DEBUG_COMMUNITY_FLAG, "Error removing user", e);
+                    }
+                });
     }
 
     private void createCommunityNewPost(String communityID, String userID) {
@@ -502,7 +595,8 @@ public class CommunityRepository {
                         .where(
                                 Filter.or(
                                         Filter.arrayContains("userList", userID),
-                                        Filter.arrayContains("adminList", userID)
+                                        Filter.arrayContains("adminList", userID),
+                                        Filter.equalTo("visibility", "all")
                                 )
                         ).addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
                             @Override
@@ -515,19 +609,23 @@ public class CommunityRepository {
 
                                 List<Community> isMemberOf = new ArrayList<>();
                                 List<Community> isAdminOf = new ArrayList<>();
+                                List<Community> isGlobal = new ArrayList<>();
                                 for (QueryDocumentSnapshot doc : snapshots) {
                                     Community community = doc.toObject(Community.class);
                                     // TODO: make sure this is correct
-                                    community.setTotalNewPost(newPosts.get(community.getCommunityId()));
                                     community.setCommunityId(doc.getId());
+                                    community.setTotalNewPost(newPosts.get(community.getCommunityId()));
                                     if (community.getAdminList().contains(userID)) {
                                         isAdminOf.add(community);
                                     } else if (community.getUserList().contains(userID)) {
                                         isMemberOf.add(community);
+                                    } else {
+                                        isGlobal.add(community);
                                     }
                                 }
                                 listener.onCommunityFetch(isMemberOf);
                                 listener.onCreateNewCommunity(isAdminOf);
+                                listener.onGlobalCommunityFetch(isGlobal);
                             }
                         });
             }

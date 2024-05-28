@@ -16,6 +16,8 @@ public class CreateCommunityViewState implements Serializable {
     Boolean isDialogClosed;
     String errorMessage;
     Integer unReadposts;
+    Integer totalPosts;
+    Integer totalMembers;
 
     public CreateCommunityViewState(String name, String description, String category, Uri commuAvt, String communityID) {
         this.name = name;
@@ -26,11 +28,15 @@ public class CreateCommunityViewState implements Serializable {
         this.isDialogClosed = false;
         this.errorMessage = null;
         this.unReadposts = 0;
+        this.totalMembers = 0;
+        this.totalPosts = 0;
     }
     public CreateCommunityViewState() {
         this.isDialogClosed = false;
         this.errorMessage = null;
         this.unReadposts = 0;
+        this.totalMembers = 0;
+        this.totalPosts = 0;
     }
 
     public CreateCommunityViewState(Community community) {
@@ -41,12 +47,27 @@ public class CreateCommunityViewState implements Serializable {
         this.communityID = community.getCommunityId();
         if(community.getTotalNewPost()!=null) this.unReadposts = community.getTotalNewPost();
         else this.unReadposts = 0;
+        if(community.getTotalPost()!=null) this.totalPosts = community.getTotalPost();
+        else this.totalPosts = 0;
+        this.totalMembers = community.getUserList().size();
     }
     public void setUnReadposts(Integer unReadposts) {
         this.unReadposts = unReadposts;
     }
     public Integer getUnReadposts() {
         return unReadposts;
+    }
+    public void setTotalPosts(Integer totalPosts) {
+        this.totalPosts = totalPosts;
+    }
+    public Integer getTotalPosts() {
+        return totalPosts;
+    }
+    public void setTotalMembers(Integer totalMembers) {
+        this.totalMembers = totalMembers;
+    }
+    public Integer getTotalMembers() {
+        return totalMembers;
     }
     public void setCommunityProfilePicture(String communityProfilePicture) {
         this.communityProfilePicture = communityProfilePicture;

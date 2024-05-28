@@ -77,7 +77,6 @@ public class HomeFragment extends Fragment {
         super.onResume();
         Log.d("HomeFragment", "onResume");
         viewModel.setUpListener();
-
     }
     public void onStop(){
         super.onStop();

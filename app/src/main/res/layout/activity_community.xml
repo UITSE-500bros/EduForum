@@ -98,6 +98,7 @@
                         android:textSize="15sp"
                         android:textColor="@color/white"
                         android:layout_marginStart="15dp"
+                        android:id="@+id/memberCountTextview"
                         />
                     <TextView
                         android:layout_width="wrap_content"
@@ -112,6 +113,7 @@
                         android:textSize="15sp"
                         android:textColor="@color/white"
                         android:layout_marginStart="15dp"
+                        android:id="@+id/postCountTextview"
                         />
                     <TextView
                         android:layout_width="wrap_content"
@@ -123,7 +125,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Khoa học máy tính"
+                    android:text=""
                     android:textSize="15sp"
                     android:textColor="@color/white"
                     app:layout_constraintTop_toBottomOf="@+id/memberlayout"
@@ -136,7 +138,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Đây là cộng đồng chuyên chia sẻ kiến thức về lập trình. Ai thắc mắc gì cứ đăng bài hỏi nha."
+                    android:text=""
                     android:textSize="15sp"
                     android:textColor="@color/white"
                     app:layout_constraintTop_toBottomOf="@+id/descriptionTextview"
