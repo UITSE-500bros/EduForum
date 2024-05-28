@@ -64,12 +64,16 @@ public class ExploreCommunityAdapter extends RecyclerView.Adapter<ExploreCommuni
         void bind(Community community, ExploreCommunityAdapter.OnJoinCommunityClickListener listener){
             binding.communityNameTextView.setText(community.getName());
             binding.communityMemberNumberTextView.setText(community.getUserList().size()+" thành viên");
-            binding.joinButton.setOnClickListener(v -> {
-                listener.onJoinCommunityClick(v, community.getCommunityId());
-                binding.joinButton.setText("Đang chờ phê duyệt");
-                binding.joinButton.setEnabled(false);
-            });
-
+            if(!community.getRequestSent()) {
+                binding.joinButton.setOnClickListener(v -> {
+                    listener.onJoinCommunityClick(v, community.getCommunityId());
+                    binding.joinButton.setText("Đang chờ phê duyệt");
+                    binding.joinButton.setEnabled(false);
+                });
+            }
+            else{
+                binding.joinButton.setText("Đã gửi yêu cầu");
+            }
         }
     }
 }
