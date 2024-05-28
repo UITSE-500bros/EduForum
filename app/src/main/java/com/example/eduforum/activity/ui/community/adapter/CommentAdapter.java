@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.eduforum.R;
 import com.example.eduforum.activity.ui.community.PostDetailActivity;
 import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
@@ -25,6 +26,8 @@ import com.example.eduforum.activity.ui.main.adapter.ChildCommentAdapter;
 import com.example.eduforum.databinding.ItemChildCommentBinding;
 import com.example.eduforum.databinding.ItemListCommentBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -174,12 +177,35 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             super(binding.getRoot());
             this.binding = binding;
         }
-        public void bind(CommentViewState comment, OnReplyClickListener onReplyClickListener,List<CommentViewState> temp,OnDownVoteClickListener onDownVoteClickListener,OnUpVoteClickListener onUpVoteClickListener,OnShowUpReplies onShowUpReplies) {
+
+        private void bindingComponents(CommentViewState comment) {
             binding.contentNotiParentTextView.setText(comment.getContent());
-
             binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference()));
+            binding.timeParentCommentTextView.setText(comment.getTimeCreated());
+            binding.userNameParentTextView.setText(comment.getCreator().getName());
+            binding.khoaParentTextView.setText(comment.getCreator().getDepartment());
 
 
+            if(comment.getCreator().getProfilePicture()!=null){
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(comment.getCreator().getProfilePicture());
+                Glide.with(binding.getRoot().getContext())
+                        .load(storageReference)
+                        .into(binding.avatarParentComment);
+            }
+
+
+        }
+
+        public void bind(CommentViewState comment, OnReplyClickListener onReplyClickListener,List<CommentViewState> temp,OnDownVoteClickListener onDownVoteClickListener,OnUpVoteClickListener onUpVoteClickListener,OnShowUpReplies onShowUpReplies) {
+
+            bindingComponents(comment);
+
+            /*Set up RecyclerView*/
+            binding.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+            binding.nestedRecyclerView.setAdapter(new ChildCommentAdapter(temp));
+
+
+            /*Set up click listener*/
             binding.replyParentTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -187,9 +213,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     onReplyClickListener.onReplyClick(comment);
                 }
             });
-            binding.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-            binding.nestedRecyclerView.setAdapter(new ChildCommentAdapter(temp));
-
 
             binding.upVoteParentButton.setOnClickListener(new View.OnClickListener() {
                 @Override

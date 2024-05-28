@@ -15,17 +15,17 @@ import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 // TODO: Nam lam cai nay ne Nam
 public class PostDetailsViewModel extends ViewModel {
     PostRepository postRepository;
     CommentRepository commentRepository;
-
     MutableLiveData<List<CommentViewState>> cmts;
     MutableLiveData<List<CommentViewState>> cmts_child;
-
     MutableLiveData<PostViewState> currentPost;
 
 
@@ -51,16 +51,18 @@ public class PostDetailsViewModel extends ViewModel {
     // TODO: anh nam lam cai nay ne
     private List<CommentViewState> convertCommentListToCommentViewStateList(List<Comment> comments){
         List<CommentViewState> commentViewStates = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
+
         for(Comment comment: comments){
             commentViewStates.add(new CommentViewState(
                     comment.getCommentID(),
                     comment.getContent(),
-                    String.valueOf(comment.getTimeCreated()),
+                    dateFormat.format(comment.getTimeCreated().toDate()), // Convert timestamp to string
                     comment.getCreator(),
                     comment.getTotalUpVote(),
                     comment.getTotalDownVote(),
                     comment.getVoteDifference(),
-                    String.valueOf(comment.getLastModified()),
+                    dateFormat.format(comment.getLastModified().toDate()), // Convert timestamp to string
                     comment.getImage(),
                     comment.getReplyCommentID(),
                     comment.getTotalReply()
