@@ -326,27 +326,33 @@ public class CommunityRepository {
 
     public void getAllCommunityInMemberApprovalOfUser(String userID, IGetMemberApprovalState callback) {
         List<String> res = new ArrayList<>();
-        db.collectionGroup("MemberApproval")
-                .whereEqualTo(FieldPath.documentId(), userID)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
-                            String commuID = document.getReference().getParent().getParent().getId();
-                            res.add(commuID);
+        try {
+            db.collectionGroup("MemberApproval")
+                    .whereEqualTo(FieldPath.documentId(), userID)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
+                                String commuID = document.getReference().getParent().getParent().getId();
+                                res.add(commuID);
+                            }
+                            callback.onGetMemberApprovalStateSuccess(res);
                         }
-                        callback.onGetMemberApprovalStateSuccess(res);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        callback.onGetMemberApprovalStateFailure("Failed to fetch MemberApproval State!");
-                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Failed to fetch MemberApproval State documents: ", e);
-                    }
-                });
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            callback.onGetMemberApprovalStateFailure("Failed to fetch MemberApproval State!");
+                            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Failed to fetch MemberApproval State documents: ", e);
+                        }
+                    });
+        } catch (Exception e) {
+            callback.onGetMemberApprovalStateFailure("Failed to fetch MemberApproval State!");
+            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Failed to fetch MemberApproval State documents: ", e);
+        }
+
 
 
     }
