@@ -29,7 +29,10 @@ public class ExploreViewModel extends ViewModel {
     }
     public void setCurrentUser(User user){
         currentUser.setValue(user);
-        communityRepository.exploreCommunity(user.getUserId(), new IExploreCallback(){
+        fetchCommunityList();
+    }
+    public void fetchCommunityList(){
+        communityRepository.exploreCommunity(currentUser.getValue().getUserId(), new IExploreCallback(){
 
             @Override
             public void onGetCommunitySuccess(List<Community> communities) {

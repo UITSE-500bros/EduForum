@@ -31,6 +31,7 @@ public class HomeViewModel extends ViewModel{
     private final MutableLiveData<JoinCommunityViewState> joinCommunityLiveData;
     private final MutableLiveData<List<CreateCommunityViewState>> joinedCommunityList;
     private final MutableLiveData<List<CreateCommunityViewState>> isAdminCommunityList;
+    private final MutableLiveData<List<CreateCommunityViewState>> globalCommunityList;
     private final MutableLiveData<User> currentUser;
     CommunityRepository communityRepository;
     LoginRepository loginRepository;
@@ -47,9 +48,10 @@ public class HomeViewModel extends ViewModel{
         joinCommunityLiveData.setValue(new JoinCommunityViewState());
         joinedCommunityList = new MutableLiveData<>();
         isAdminCommunityList = new MutableLiveData<>();
+        globalCommunityList = new MutableLiveData<>();
         joinedCommunityList.setValue(new ArrayList<>());
         isAdminCommunityList.setValue(new ArrayList<>());
-
+        globalCommunityList.setValue(new ArrayList<>());
     }
     public void setCurrentUser(User user){
         currentUser.setValue(user);
@@ -78,7 +80,7 @@ public class HomeViewModel extends ViewModel{
 
             @Override
             public void onGlobalCommunityFetch(List<Community> communities) {
-
+                globalCommunityList.setValue(convertToViewStateList(communities));
             }
 
 
@@ -91,6 +93,9 @@ public class HomeViewModel extends ViewModel{
     }
     public LiveData<List<CreateCommunityViewState>> getIsAdminCommunityList() {
         return isAdminCommunityList;
+    }
+    public LiveData<List<CreateCommunityViewState>> getGlobalCommunityList() {
+        return globalCommunityList;
     }
     public LiveData<JoinCommunityViewState> getJoinCommuLiveData() {
         return joinCommunityLiveData;
@@ -218,6 +223,10 @@ public class HomeViewModel extends ViewModel{
         boolean isValid = true;
         if (state.getName() == null || state.getName().isEmpty()) {
             state.setErrorMessage("Tên cộng đồng không thể trống");
+            isValid = false;
+        }
+        else if(state.getDescription() == null || state.getDescription().isEmpty()){
+            state.setErrorMessage("Mô tả không thể trống");
             isValid = false;
         }
         else if (state.getCategory() == null || state.getCategory().isEmpty()) {
