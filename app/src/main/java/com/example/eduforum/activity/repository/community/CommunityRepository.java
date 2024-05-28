@@ -298,7 +298,9 @@ public class CommunityRepository {
                                     List<Community> communities = new ArrayList<>();
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         Community community = document.toObject(Community.class);
-                                        if (!community.getUserList().contains(userID) && !community.getAdminList().contains(userID) && !community.getVisibility().equals("all")) {
+                                        Boolean hasVisibility = community.getVisibility() != null;
+                                        Boolean isFetchedCommunity = (hasVisibility) ? community.getVisibility().equals("all") : false;
+                                        if (!community.getUserList().contains(userID) && !community.getAdminList().contains(userID) && !community.getVisibility().equals("all") && !isFetchedCommunity) {
                                             community.setCommunityId(document.getId());
                                             Boolean isMemberApproval = memberApprovalState.contains(community.getCommunityId());
                                             community.setRequestSent(isMemberApproval);
