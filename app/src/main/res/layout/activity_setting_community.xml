@@ -77,14 +77,17 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginHorizontal="10dp"
                     android:foreground="?attr/selectableItemBackground">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/title_member_request"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:layout_gravity="start"/>
+
+
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="@string/title_member_request"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:layout_gravity="start"/>
 
                     <ImageView
                         android:layout_width="wrap_content"
