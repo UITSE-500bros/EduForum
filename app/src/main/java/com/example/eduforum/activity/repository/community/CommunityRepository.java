@@ -355,8 +355,14 @@ public class CommunityRepository {
                         }
                     });
         } catch (Exception e) {
-            callback.onGetMemberApprovalStateFailure("Failed to fetch MemberApproval State!");
-            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Failed to fetch MemberApproval State documents: ", e);
+            if (e instanceof IllegalArgumentException) {
+                // no document found
+                callback.onGetMemberApprovalStateSuccess(res);
+            } else {
+                // other errors
+                callback.onGetMemberApprovalStateFailure("Failed to fetch MemberApproval State!");
+                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Failed to fetch MemberApproval State documents: ", e);
+            }
         }
 
 
