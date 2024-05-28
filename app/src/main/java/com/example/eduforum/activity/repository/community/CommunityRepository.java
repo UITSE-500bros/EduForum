@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -289,7 +290,7 @@ public class CommunityRepository {
     public void exploreCommunity(String userID, IExploreCallback callback) {
         getAllCommunityInMemberApprovalOfUser(userID, new IGetMemberApprovalState() {
             @Override
-            public void onGetMemberApprovalStateSuccess(List<String> memberApprovalState) {
+            public void onGetMemberApprovalStateSuccess(Map<String, Boolean> memberApprovalState) {
                 db.collection("Community")
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -303,7 +304,7 @@ public class CommunityRepository {
                                         Boolean isFetchedCommunity = (hasVisibility) ? community.getVisibility().equals("all") : false;
                                         if (!community.getUserList().contains(userID) && !community.getAdminList().contains(userID) && !community.getVisibility().equals("all") && !isFetchedCommunity) {
                                             community.setCommunityId(document.getId());
-                                            Boolean isMemberApproval = memberApprovalState.contains(community.getCommunityId());
+                                            Boolean isMemberApproval = memberApprovalState.containsKey(community.getCommunityId());
                                             community.setRequestSent(isMemberApproval);
                                             communities.add(community);
                                         }
@@ -328,10 +329,10 @@ public class CommunityRepository {
 
 
     public void getAllCommunityInMemberApprovalOfUser(String userID, IGetMemberApprovalState callback) {
-        List<String> res = new ArrayList<>();
+        Map<String, Boolean> res = new HashMap<>();
         try {
             db.collectionGroup("MemberApproval")
-                    .whereEqualTo(FieldPath.documentId(), userID)
+                    .whereEqualTo("userID", userID)
                     .get()
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
@@ -339,7 +340,7 @@ public class CommunityRepository {
                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                                 Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
                                 String commuID = document.getReference().getParent().getParent().getId();
-                                res.add(commuID);
+                                res.put(commuID, true);
                             }
                             callback.onGetMemberApprovalStateSuccess(res);
                         }
@@ -360,6 +361,7 @@ public class CommunityRepository {
         } catch (Exception e) {
             if (e instanceof IllegalArgumentException) {
                 // no document found
+                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "No document found!" + e.getMessage());
                 callback.onGetMemberApprovalStateSuccess(res);
             } else {
                 // other errors
