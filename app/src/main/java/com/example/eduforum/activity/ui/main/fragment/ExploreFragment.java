@@ -61,6 +61,10 @@ public class ExploreFragment extends Fragment {
 
         return binding.getRoot();
     }
+    public void onResume() {
+        super.onResume();
+        viewModel.fetchCommunityList();
+    }
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
         adapter = new ExploreCommunityAdapter(viewModel.getCommunityList().getValue());

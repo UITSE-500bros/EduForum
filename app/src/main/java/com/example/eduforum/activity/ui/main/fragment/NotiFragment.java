@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.ui.main.adapter.NotificationAdapter;
+import com.example.eduforum.activity.viewmodel.main.NotificationViewModel;
+import com.example.eduforum.activity.viewmodel.shared.UserViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +19,9 @@ import com.example.eduforum.R;
  * create an instance of this fragment.
  */
 public class NotiFragment extends Fragment {
+    private NotificationViewModel viewModel;
+    private UserViewModel userViewModel;
+    private NotificationAdapter adapter;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

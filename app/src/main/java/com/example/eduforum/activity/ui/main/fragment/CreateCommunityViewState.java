@@ -83,6 +83,7 @@ public class CreateCommunityViewState implements Serializable {
         return name;
     }
     public String getDescription() {
+        if(this.description==null) this.description = "";
         return description;
     }
     public String getCategory() {
