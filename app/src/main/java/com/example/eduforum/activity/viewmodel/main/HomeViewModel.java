@@ -195,6 +195,8 @@ public class HomeViewModel extends ViewModel{
             if(community.getCommunityId() == null) continue;
             CreateCommunityViewState state = new CreateCommunityViewState(community.getName(), community.getDescription(), community.getDepartment(), community.getProfileImage(), community.getCommunityId());
             state.setCommunityProfilePicture(community.getProfilePicture());
+            state.setTotalMembers(community.getUserList().size());
+            state.setTotalPosts(community.getTotalPost());
             if(community.getTotalNewPost()==null) Log.d("HomeViewModel", community.getName()+ "getTotalNewPost is null");
             else state.setUnReadposts(community.getTotalNewPost());
             viewStates.add(state);
