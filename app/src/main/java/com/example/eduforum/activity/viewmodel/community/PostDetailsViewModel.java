@@ -36,11 +36,9 @@ public class PostDetailsViewModel extends ViewModel {
         cmts_child = new MutableLiveData<>();
         currentPost = new MutableLiveData<>();
         cmts.setValue(new ArrayList<CommentViewState>());
-        cmts_child_child= new MutableLiveData<>();
+
     }
-    public LiveData<List<CommentViewState>> getCmts_child_child() {
-        return cmts_child_child;
-    }
+
 
     public LiveData<PostViewState> getPost(){
         return currentPost;
