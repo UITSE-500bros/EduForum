@@ -294,7 +294,7 @@ public class CommunityRepository {
                             List<Community> communities = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Community community = document.toObject(Community.class);
-                                if (!community.getUserList().contains(userID) && !community.getAdminList().contains(userID)) {
+                                if (!community.getUserList().contains(userID) && !community.getAdminList().contains(userID) && !community.getVisibility().equals("all")) {
                                     community.setCommunityId(document.getId());
                                     communities.add(community);
                                 }
@@ -547,7 +547,8 @@ public class CommunityRepository {
                         .where(
                                 Filter.or(
                                         Filter.arrayContains("userList", userID),
-                                        Filter.arrayContains("adminList", userID)
+                                        Filter.arrayContains("adminList", userID),
+                                        Filter.equalTo("visibility", "all")
                                 )
                         ).addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
                             @Override
@@ -569,6 +570,8 @@ public class CommunityRepository {
                                         isAdminOf.add(community);
                                     } else if (community.getUserList().contains(userID)) {
                                         isMemberOf.add(community);
+                                    } else {
+                                        isAdminOf.add(community);
                                     }
                                 }
                                 listener.onCommunityFetch(isMemberOf);

@@ -56,11 +56,12 @@ public class SignUpRepository {
                             fUser.sendEmailVerification()
                                     .addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
-                                            callback.onSignUpSuccess();
+                                            uploadProfilePicture(user);
+                                            writeNewUserToFirestore(user, FlagsList.CONNECTION_RETRIES, callback);
                                         }
                                     });
-                            uploadProfilePicture(user);
-                            writeNewUserToFirestore(user, FlagsList.CONNECTION_RETRIES);
+//                            uploadProfilePicture(user);
+//                            writeNewUserToFirestore(user, FlagsList.CONNECTION_RETRIES);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(FlagsList.DEBUG_REGISTER_FLAG, "createUserWithEmail:failure", task.getException());
@@ -101,13 +102,14 @@ public class SignUpRepository {
         });
     }
 
-    protected void writeNewUserToFirestore(User user, int retries) {
+    protected void writeNewUserToFirestore(User user, int retries, ISignUpCallback callback) {
         db.collection("User").document(user.getUserId())
                 .set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(FlagsList.DEBUG_REGISTER_FLAG, "User successfully written to Firestore!");
+                        callback.onSignUpSuccess();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -115,9 +117,10 @@ public class SignUpRepository {
                     public void onFailure(@NonNull Exception e) {
                         Log.w(FlagsList.DEBUG_REGISTER_FLAG, "Error writing user to Firestore: " + (retries-1) + " retries left, details: ", e);
                         if (retries > 0) {
-                            writeNewUserToFirestore(user, retries-1);
+                            writeNewUserToFirestore(user, retries-1, callback);
                         } else {
                             Log.w(FlagsList.DEBUG_REGISTER_FLAG, "Cannot write user to Firestore, deleting user");
+                            callback.onSignUpFailure(FlagsList.ERROR_REGISTER);
                             deleteUser();
                         }
                     }
