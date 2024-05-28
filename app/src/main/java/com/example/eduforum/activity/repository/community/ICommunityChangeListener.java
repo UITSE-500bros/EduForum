@@ -12,5 +12,6 @@ public interface ICommunityChangeListener {
     void onCommunityChange(Community community);
 
     void onCreateNewCommunity(List<Community> communities);
+    void onGlobalCommunityFetch(List<Community> communities);
 
 }

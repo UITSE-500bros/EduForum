@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -285,28 +286,75 @@ public class CommunityRepository {
      * @param callback the callback to be called when the operation is done, providing a list of communities
      */
     public void exploreCommunity(String userID, IExploreCallback callback) {
-        db.collection("Community")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            List<Community> communities = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Community community = document.toObject(Community.class);
-                                if (!community.getUserList().contains(userID) && !community.getAdminList().contains(userID)) {
-                                    community.setCommunityId(document.getId());
-                                    communities.add(community);
+        getAllCommunityInMemberApprovalOfUser(userID, new IGetMemberApprovalState() {
+            @Override
+            public void onGetMemberApprovalStateSuccess(List<String> memberApprovalState) {
+                db.collection("Community")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    List<Community> communities = new ArrayList<>();
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        Community community = document.toObject(Community.class);
+                                        if (!community.getUserList().contains(userID) && !community.getAdminList().contains(userID) && !community.getVisibility().equals("all")) {
+                                            community.setCommunityId(document.getId());
+                                            Boolean isMemberApproval = memberApprovalState.contains(community.getCommunityId());
+                                            community.setRequestSent(isMemberApproval);
+                                            communities.add(community);
+                                        }
+                                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
+                                    }
+                                    callback.onGetCommunitySuccess(communities);
+                                } else {
+                                    Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Error getting documents: ", task.getException());
+                                    callback.onGetCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_GET_COMMUNITY);
                                 }
-                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
                             }
-                            callback.onGetCommunitySuccess(communities);
-                        } else {
-                            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Error getting documents: ", task.getException());
-                            callback.onGetCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_GET_COMMUNITY);
+                        });
+            }
+
+            @Override
+            public void onGetMemberApprovalStateFailure(String message) {
+                 callback.onGetCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_GET_COMMUNITY);
+            }
+        });
+
+    }
+
+
+    public void getAllCommunityInMemberApprovalOfUser(String userID, IGetMemberApprovalState callback) {
+        List<String> res = new ArrayList<>();
+        try {
+            db.collectionGroup("MemberApproval")
+                    .whereEqualTo(FieldPath.documentId(), userID)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
+                                String commuID = document.getReference().getParent().getParent().getId();
+                                res.add(commuID);
+                            }
+                            callback.onGetMemberApprovalStateSuccess(res);
                         }
-                    }
-                });
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            callback.onGetMemberApprovalStateFailure("Failed to fetch MemberApproval State!");
+                            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Failed to fetch MemberApproval State documents: ", e);
+                        }
+                    });
+        } catch (Exception e) {
+            callback.onGetMemberApprovalStateFailure("Failed to fetch MemberApproval State!");
+            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Failed to fetch MemberApproval State documents: ", e);
+        }
+
+
+
     }
 
     /**
@@ -547,7 +595,8 @@ public class CommunityRepository {
                         .where(
                                 Filter.or(
                                         Filter.arrayContains("userList", userID),
-                                        Filter.arrayContains("adminList", userID)
+                                        Filter.arrayContains("adminList", userID),
+                                        Filter.equalTo("visibility", "all")
                                 )
                         ).addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
                             @Override
@@ -560,19 +609,23 @@ public class CommunityRepository {
 
                                 List<Community> isMemberOf = new ArrayList<>();
                                 List<Community> isAdminOf = new ArrayList<>();
+                                List<Community> isGlobal = new ArrayList<>();
                                 for (QueryDocumentSnapshot doc : snapshots) {
                                     Community community = doc.toObject(Community.class);
                                     // TODO: make sure this is correct
-                                    community.setTotalNewPost(newPosts.get(community.getCommunityId()));
                                     community.setCommunityId(doc.getId());
+                                    community.setTotalNewPost(newPosts.get(community.getCommunityId()));
                                     if (community.getAdminList().contains(userID)) {
                                         isAdminOf.add(community);
                                     } else if (community.getUserList().contains(userID)) {
                                         isMemberOf.add(community);
+                                    } else {
+                                        isGlobal.add(community);
                                     }
                                 }
                                 listener.onCommunityFetch(isMemberOf);
                                 listener.onCreateNewCommunity(isAdminOf);
+                                listener.onGlobalCommunityFetch(isGlobal);
                             }
                         });
             }

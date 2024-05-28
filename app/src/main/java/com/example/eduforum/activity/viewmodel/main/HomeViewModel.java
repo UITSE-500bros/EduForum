@@ -76,6 +76,12 @@ public class HomeViewModel extends ViewModel{
                 isAdminCommunityList.setValue(convertToViewStateList(communities));
             }
 
+            @Override
+            public void onGlobalCommunityFetch(List<Community> communities) {
+
+            }
+
+
         });
     }
     //-------------------------------------------------------------------------------

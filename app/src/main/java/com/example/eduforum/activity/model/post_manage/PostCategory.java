@@ -1,8 +1,9 @@
 package com.example.eduforum.activity.model.post_manage;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class PostCategory {
+public class PostCategory implements Serializable {
     private String categoryID;
     private String title;
 
