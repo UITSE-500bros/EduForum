@@ -253,7 +253,7 @@ public class PostDetailsViewModel extends ViewModel {
         parentComment.setCommunityID(community_id);
         parentComment.setPostID(pt_id);
         parentComment.setCreator(commentParentViewState.getCreator());
-
+        parentComment.setImage(commentParentViewState.getImage());
 
         Comment childComment = new Comment();
         childComment.setPostID(pt_id);
