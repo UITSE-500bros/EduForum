@@ -32,6 +32,7 @@ import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Transaction;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
@@ -718,6 +719,52 @@ public class CommunityRepository {
                         Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "get community member failed with: ", e);
                     }
                 });
+    }
+
+    /** Leave community
+     *
+     * @param userID the user's ID
+     * @param communityID the community's ID
+     * @param callback the callback to be called when the operation is done, if leave community success, call onLeaveCommunitySuccess(), if failure, there are two type of error: "lastAdmin" if the user is the last admin of the community, "networkError" if the operation failed due to network error
+     */
+    public void leaveCommunity(String userID, String communityID, ILeaveCommunityCallback callback) {
+        // run transaction to check if the user is the last admin of the community
+        DocumentReference communityRef = db.collection("Community").document(communityID);
+        db.runTransaction(new Transaction.Function<String>() {
+            @Nullable
+            @Override
+            public String apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
+                DocumentSnapshot snapshot = transaction.get(communityRef);
+                List<String> adminList = (List<String>) snapshot.get("adminList");
+                if (adminList != null && adminList.contains(userID)) {
+                    if (adminList.size() == 1) {
+                        return "lastAdmin";
+                    } else {
+                        transaction.update(communityRef, "adminList", FieldValue.arrayRemove(userID));
+                    }
+                } else {
+                    transaction.update(communityRef, "userList", FieldValue.arrayRemove(userID));
+                }
+                return "success";
+            }
+        }).addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (task.getResult().equals("lastAdmin")) {
+                    callback.onLeaveCommunityFailure("lastAdmin");
+                    Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "leave community failed: last admin");
+                } else {
+                    callback.onLeaveCommunitySuccess();
+                    Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "leave community success");
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onLeaveCommunityFailure("networkError");
+                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "leave community failed with: ", e);
+            }
+        });
     }
 
 }
