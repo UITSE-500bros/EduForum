@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.eduforum.activity.model.user_manage.User;
+import com.example.eduforum.activity.repository.user.dto.UpdateProfileDTO;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,19 +38,15 @@ public class UserRepository {
     public void updateProfile(User user, IUserCallback callback) {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            DocumentReference docRef = db.collection("User").document(currentUser.getUid());
-            docRef.set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Log.d(FlagsList.DEBUG_USER_FLAG, "User profile updated.");
-                        callback.onGetUserSuccess(user);
-                    } else {
-                        Log.d(FlagsList.DEBUG_USER_FLAG, "User profile update failed.");
-                        callback.onGetUserFailure(FlagsList.ERROR_USER);
-                    }
-                }
-            });
+            UpdateProfileDTO updateProfileDTO = new UpdateProfileDTO(user);
+            db.collection("User")
+                    .document(user.getUserId())
+                    .update(updateProfileDTO.toMap())
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(FlagsList.DEBUG_USER_FLAG, "DocumentSnapshot successfully updated!");
+//                        callback.onUpdateUserSuccess();
+                    });
+
         }
     }
 
