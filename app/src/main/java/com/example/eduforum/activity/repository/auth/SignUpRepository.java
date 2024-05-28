@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.eduforum.activity.model.user_manage.User;
+import com.example.eduforum.activity.repository.auth.dto.RegisterDTO;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -103,8 +104,9 @@ public class SignUpRepository {
     }
 
     protected void writeNewUserToFirestore(User user, int retries, ISignUpCallback callback) {
+        RegisterDTO regDTO = new RegisterDTO(user);
         db.collection("User").document(user.getUserId())
-                .set(user)
+                .set(regDTO)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

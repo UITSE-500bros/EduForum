@@ -30,6 +30,28 @@ public class UserRepository {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
     }
+    public void signOut() {
+        mAuth.signOut();
+    }
+
+    public void updateProfile(User user, IUserCallback callback) {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            DocumentReference docRef = db.collection("User").document(currentUser.getUid());
+            docRef.set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Log.d(FlagsList.DEBUG_USER_FLAG, "User profile updated.");
+                        callback.onGetUserSuccess(user);
+                    } else {
+                        Log.d(FlagsList.DEBUG_USER_FLAG, "User profile update failed.");
+                        callback.onGetUserFailure(FlagsList.ERROR_USER);
+                    }
+                }
+            });
+        }
+    }
 
     public void getCurrentUser(IUserCallback callback) {
         FirebaseUser currentUser = mAuth.getCurrentUser();
