@@ -30,6 +30,7 @@ public class Community {
     private Integer totalNewPost;
     private String inviteCode;
     private String visibility;
+    private Boolean requestSent;
 
 
     private List<String> userList = new ArrayList<>();
@@ -64,6 +65,14 @@ public class Community {
 
     public String getVisibility() {
         return visibility;
+    }
+
+    public Boolean getRequestSent() {
+        return requestSent;
+    }
+
+    public void setRequestSent(Boolean requestSent) {
+        this.requestSent = requestSent;
     }
 
     public void setVisibility(String visibility) {
