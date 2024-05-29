@@ -26,6 +26,7 @@ public class ProfileCommunityViewModel extends ViewModel {
     }
 
     public void updateCommunityInfo(){
+        if(!isStateValidated()) return;
         Community community = mapStateToCommunity(communityViewState.getValue());
 
         if(community == null) {
@@ -47,6 +48,17 @@ public class ProfileCommunityViewModel extends ViewModel {
             }
         });
     }
+
+    private boolean isStateValidated() {
+        CreateCommunityViewState state = communityViewState.getValue();
+        if(state == null) return false;
+        if(state.getName().isEmpty() || state.getDescription().isEmpty() || state.getCategory().isEmpty() || state.getIsPublic()==null){
+            errorMessage.setValue("Vui lòng điền đầy đủ thông tin");
+            return false;
+        }
+        return true;
+    }
+
     Community mapStateToCommunity(CreateCommunityViewState UIState){
         if(UIState == null) return null;
         CommunityBuilder builder = new CommunityConcreteBuilder();
