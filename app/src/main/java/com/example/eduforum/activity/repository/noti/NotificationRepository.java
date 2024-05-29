@@ -89,6 +89,59 @@ public class NotificationRepository {
                 });
     }
 
+    /**
+     * Mark notification as read - call when user click on a notification item
+     *
+     * @param userID
+     * @param notificationID
+     */
+    public void markAsRead(String userID, String notificationID) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("isRead", true);
+        db.collection("User")
+                .document(userID)
+                .collection("Notification")
+                .document(notificationID)
+                .update(data)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(FlagsList.DEBUG_NOTIFICATION_FLAG, "DocumentSnapshot successfully updated!");
+                    } else {
+                        Log.d(FlagsList.DEBUG_NOTIFICATION_FLAG, "Error updating document", task.getException());
+                    }
+                });
+    }
+
+    /**
+     * Mark all notifications as read - call when user click on "Mark all as read" button
+     *
+     * @param userID
+     */
+    public void markAllAsRead(String userID) {
+        Map<String, String> data = new HashMap<>();
+        data.put("userID", userID);
+        mFunctions.getHttpsCallable("markAllNotificationAsRead")
+                .call(data)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Map<String, Object> result = (Map<String, Object>) task.getResult().getData();
+                        if (result == null) {
+                            Log.d(FlagsList.DEBUG_NOTIFICATION_FLAG, "Error marking all notifications as read");
+                            return;
+                        }
+                        if (result.containsKey("error")) {
+                            Log.d(FlagsList.DEBUG_NOTIFICATION_FLAG, "Error marking all notifications as read: " + result.get("error"));
+                            return;
+                        }
+                        if (result.containsKey("success")) {
+                            Log.d(FlagsList.DEBUG_NOTIFICATION_FLAG, "All notifications marked as read");
+                        }
+                    } else {
+                        Log.d(FlagsList.DEBUG_NOTIFICATION_FLAG, "Error marking all notifications as read", task.getException());
+                    }
+                });
+    }
+
     public void removeNotificationListener() {
         if (registration != null) {
             registration.remove();
