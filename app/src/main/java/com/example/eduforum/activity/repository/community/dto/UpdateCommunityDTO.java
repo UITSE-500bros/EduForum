@@ -84,6 +84,8 @@ public class UpdateCommunityDTO {
 
     public Map<String, Object> convertToDataObject() {
         Map<String, Object> res = new java.util.HashMap<>();
+        if (communityID != null)
+            res.put("communityID", communityID);
         if (name != null) {
             res.put("name", name);
         }
