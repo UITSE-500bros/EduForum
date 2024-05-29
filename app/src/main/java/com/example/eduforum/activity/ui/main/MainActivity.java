@@ -26,9 +26,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.mainBottomNavigation, navController);
 
 
-        //Set badge number for notification fragment
+        //Set badge number for notification fragment (số thông báo)
         BadgeDrawable badgeDrawable = binding.mainBottomNavigation.getOrCreateBadge(R.id.notiFragment);
-        badgeDrawable.setBackgroundColor(Color.BLUE);
+        badgeDrawable.setBackgroundColor(Color.RED);
         badgeDrawable.setNumber(10);
         badgeDrawable.setBadgeTextColor(Color.WHITE);
         badgeDrawable.setVisible(true);
