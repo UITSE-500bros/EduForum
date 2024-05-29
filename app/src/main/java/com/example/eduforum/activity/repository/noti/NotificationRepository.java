@@ -72,6 +72,7 @@ public class NotificationRepository {
         registration = db.collection("User")
                 .document(userID)
                 .collection("Notification")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
                         Log.w(FlagsList.DEBUG_NOTIFICATION_FLAG, "Listen failed.", error);
