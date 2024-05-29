@@ -4,6 +4,7 @@ public class FlagsList {
     public static final String ERROR_REGISTER_EMAIL_EXISTED = "ERROR_REGISTER_EMAIL_EXISTED";
     public static final String ERROR_REGISTER = "ERROR_REGISTER";
     public static final String DEBUG_POST_FLAG = "DEBUG_POST";
+    public static final String DEBUG_NOTIFICATION_FLAG = "DEBUG_NOTIFICATION";
     public static final String ERROR_COMMUNITY_FAILED_TO_JOIN = "ERROR_COMMUNITY_FAILED_TO_JOIN";
     public static final String ERROR_COMMUNITY_SUCCESS_TO_JOIN = "ERROR_COMMUNITY_SUCCESS_TO_JOIN";
     public static final String DEBUG_USER_FLAG = "DEBUG_USER";
