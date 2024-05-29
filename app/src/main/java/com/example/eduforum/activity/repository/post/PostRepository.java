@@ -13,6 +13,7 @@ import com.example.eduforum.activity.model.post_manage.PostCategory;
 import com.example.eduforum.activity.model.subscription_manage.Subscription;
 import com.example.eduforum.activity.repository.post.IUpload;
 import com.example.eduforum.activity.repository.post.dto.AddPostDTO;
+import com.example.eduforum.activity.util.ConvertUtil;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -96,11 +97,10 @@ public class PostRepository {
                                     post.setTotalDownVote((Integer) result.get("totalDownVote"));
                                     post.setVoteDifference((Integer) result.get("voteDifference"));
                                     post.setTotalComment((Integer) result.get("totalComment"));
-                                    post.setTimeCreated((Timestamp) result.get("timeCreated"));
-                                    post.setLastModified((Timestamp) result.get("lastModified"));
+                                    post.setTimeCreated(ConvertUtil.convertMapToTimestamp(result, "timeCreated"));
+                                    post.setLastModified(ConvertUtil.convertMapToTimestamp(result, "lastModified"));
                                     callback.onAddPostSuccess(post);
                                 }
-
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {

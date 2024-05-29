@@ -220,16 +220,16 @@ public class CommunityRepository {
      * @param communityID the ID of the community
      * @param isOn        true if turn on, false if turn off
      */
-    public void toggleNotification(String communityID, boolean isOn) {
+    public void toggleNotification(String communityID, String userID, boolean isOn) {
 
         DocumentReference ref = db.collection("Community")
                 .document(communityID)
                 .collection("Subscription")
                 .document("subscription");
         if (isOn) {
-            ref.update("userList", FieldValue.arrayUnion(currentUser.getUid()));
+            ref.update("userList", FieldValue.arrayUnion(userID));
         } else {
-            ref.update("userList", FieldValue.arrayRemove(currentUser.getUid()));
+            ref.update("userList", FieldValue.arrayRemove(userID));
         }
     }
 
