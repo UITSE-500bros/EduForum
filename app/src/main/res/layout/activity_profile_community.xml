@@ -4,7 +4,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.eduforum.activity.viewmodel.community.settings.ProfileCommunityViewModel" />
+    </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -62,7 +66,7 @@
                         android:layout_height="62dp"
                         android:backgroundTint="#FFFFFF"
                         android:inputType="textPersonName"
-                        android:text=""
+                        android:text="@={viewModel.communityViewState.name}"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -78,7 +82,7 @@
                     android:layout_marginTop="30dp"
                     >
                     <com.google.android.material.textfield.TextInputEditText
-                        android:text=""
+                        android:text="@={viewModel.communityViewState.description}"
                         android:textSize="14sp"
                         android:inputType="textPersonName"
                         android:layout_width="match_parent"

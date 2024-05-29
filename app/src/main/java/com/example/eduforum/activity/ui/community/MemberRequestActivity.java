@@ -33,14 +33,14 @@ public class MemberRequestActivity extends AppCompatActivity {
         binding.toolBarMemberRequest.setNavigationOnClickListener(v -> {
             finish();
         });
-        CreateCommunityViewState currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
-        if(currentCommunity == null) {
-            Log.e("Intent to MemberRequestActivity", "currentCommunity is null");
-            finish();
-        }
-        String communityId = currentCommunity.getCommunityID();
+
+        String communityId = getIntent().getStringExtra("communityId");
         if(communityId != null) {
             viewModel.setCommunityId(communityId);
+        }
+        else{
+            Log.e("Intent to MemberRequestActivity", "communityId is null");
+            finish();
         }
         RecyclerView recyclerView = binding.recyclerView;
         // set adapter

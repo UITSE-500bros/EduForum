@@ -16,12 +16,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.eduforum.R;
 import com.example.eduforum.activity.ui.community.adapter.MediaAdapter;
 import com.example.eduforum.activity.ui.community.adapter.MediaItem;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
+import com.example.eduforum.activity.viewmodel.community.settings.ProfileCommunityViewModel;
 import com.example.eduforum.databinding.ActivityProfileCommunityBinding;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -30,19 +32,20 @@ import java.util.ArrayList;
 public class ProfileCommunityActivity extends AppCompatActivity {
 
     private ActivityProfileCommunityBinding binding;
-
+    private ProfileCommunityViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityProfileCommunityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        viewModel = new ViewModelProvider(this).get(ProfileCommunityViewModel.class);
+        binding.setLifecycleOwner(this);
         CreateCommunityViewState currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
         if(currentCommunity == null) {
             Log.d("Intent to ProfileCommunityActivity", "currentCommunity is null");
             finish();
         }
-
+        viewModel.setCommunityViewState(currentCommunity);
 
         ActivityResultLauncher<PickVisualMediaRequest> pickImage =
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {

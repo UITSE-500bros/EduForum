@@ -47,12 +47,7 @@ public class AdminMemberListActivity extends AppCompatActivity {
         setContentView(binding.getRoot()); // This should be the only call to setContentView
         viewModel = new ViewModelProvider(this).get(AdminMemberListViewModel.class);
 
-        CreateCommunityViewState currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
-        if(currentCommunity == null) {
-            Log.d("Intent to AdminMemberListActivity", "currentCommunity is null");
-            finish();
-        }
-        String communityId = currentCommunity.getCommunityID();
+        String communityId = getIntent().getStringExtra("communityId");
         // isAdmin is set to true for testing
         Boolean isAdmin = getIntent().getBooleanExtra("isAdmin", true);
         if(communityId != null) {

@@ -41,15 +41,14 @@ public class CustomTagsActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(CustomTagsViewModel.class);
         binding.setLifecycleOwner(this);
 
-        CreateCommunityViewState currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
-        if(currentCommunity == null) {
-            Log.d("Intent to CustomTagsActivity", "currentCommunity is null");
-            finish();
-        }
-        String communityId = currentCommunity.getCommunityID();
+        String communityId = getIntent().getStringExtra("communityId");
         if(communityId != null) {
             viewModel.setCommunityId(communityId);
             viewModel.refreshCategories();
+        }
+        else{
+            Log.e("Intent to CustomTagsActivity", "communityId is null");
+            finish();
         }
         MaterialToolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);

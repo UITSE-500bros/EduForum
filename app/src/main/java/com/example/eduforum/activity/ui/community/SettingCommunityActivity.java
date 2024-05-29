@@ -40,7 +40,7 @@ public class SettingCommunityActivity extends AppCompatActivity {
         binding.settingCommunity.setOnClickListener(v -> {
             if(isAdmin){
                 Intent intent = new Intent(this, ProfileCommunityActivity.class);
-                intent.putExtra("communityId", currentCommunity.getCommunityID());
+                intent.putExtra("currentCommunity", currentCommunity);
                 startActivity(intent);
             }
             else {
@@ -73,7 +73,7 @@ public class SettingCommunityActivity extends AppCompatActivity {
         });
         binding.memberSetting.setOnClickListener(v -> {
             Intent intent = new Intent(this, AdminMemberListActivity.class);
-            intent.putExtra("communityId", currentCommunity);
+            intent.putExtra("communityId", currentCommunity.getCommunityID());
             intent.putExtra("isAdmin", isAdmin);
             startActivity(intent);
         });
