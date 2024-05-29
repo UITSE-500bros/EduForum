@@ -98,7 +98,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     binding.contentNotiTextView.setText(notificationViewState.getTriggerBy().getName() + " đã đăng một bình luận mới vào bài viết của bạn.");
                     break;
                 case 2:
-                    binding.contentNotiTextView.setText(notificationViewState.getTriggerBy().getName() + " đăng một post mới trong cộng đồng.");
+                    binding.contentNotiTextView.setText(notificationViewState.getTriggerBy().getName() + " đăng một bài viết mới trong cộng đồng.");
                     break;
                 case 3:
                     binding.contentNotiTextView.setText(notificationViewState.getTriggerBy().getName() + " đã trả lời bình luận của bạn.");
