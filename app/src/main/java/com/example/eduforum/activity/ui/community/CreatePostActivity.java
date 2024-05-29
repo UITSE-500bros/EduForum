@@ -208,7 +208,7 @@ public class CreatePostActivity extends AppCompatActivity {
                             imageView.setLayoutParams(layoutParams);
                             uriList1.add(uris.get(i));
                         }
-                        MediaAdapter imageAdapter = new MediaAdapter(uriList1);
+                        MediaAdapter imageAdapter = new MediaAdapter(uriList1, false);
                         binding.imageRecyclerView.setAdapter(imageAdapter);
                         postViewState.setImage(uriList1);
                         viewModel.setPostViewState(postViewState);

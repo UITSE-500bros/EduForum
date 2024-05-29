@@ -103,9 +103,11 @@ public class PostDetailActivity extends AppCompatActivity {
             binding.contentPost.setText(postViewState.getContent());
             binding.commentCountTextView.setText(String.valueOf(postViewState.getTotalComment()));
             binding.userNameTextView.setText(postViewState.getCreator().getName());
-            if(postViewState.getImage()!=null){
+
+            if(postViewState.getPictures()!=null){
+
                 RecyclerView recyclerView = binding.recycleImage;
-                mediaAdapter = new MediaAdapter(postViewState.getImage());
+                mediaAdapter = new MediaAdapter(postViewState.getPictures());
                 recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                 recyclerView.setAdapter(mediaAdapter);
             }
