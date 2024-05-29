@@ -37,6 +37,7 @@ public class ProfileCommunityActivity extends AppCompatActivity {
 
     private ActivityProfileCommunityBinding binding;
     private ProfileCommunityViewModel viewModel;
+    private CreateCommunityViewState currentCommunity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,12 +45,15 @@ public class ProfileCommunityActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         viewModel = new ViewModelProvider(this).get(ProfileCommunityViewModel.class);
         binding.setLifecycleOwner(this);
-        CreateCommunityViewState currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
+        currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
         if(currentCommunity == null) {
             Log.d("Intent to ProfileCommunityActivity", "currentCommunity is null");
             finish();
         }
         viewModel.setCommunityViewState(currentCommunity);
+        binding.nameCommunityEditText.getEditText().setText(currentCommunity.getName());
+        binding.descriptionCommnunityEditText.getEditText().setText(currentCommunity.getDescription());
+
 
         if(currentCommunity.getCommunityProfilePicture()!=null){
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(currentCommunity.getCommunityProfilePicture());
@@ -93,6 +97,14 @@ public class ProfileCommunityActivity extends AppCompatActivity {
             state.setCategory(binding.ACTVCategory.getText().toString());
             viewModel.setCommunityViewState(state);
         });
+        for(int i = 0; i < departmentItems.length; i++){
+            if(departmentItems[i].equals(currentCommunity.getCategory())){
+                binding.ACTVCategory.setListSelection(i);
+                break;
+            }
+        }
+
+
 
         String[] accessItems = getResources().getStringArray(R.array.access_community);
         ArrayAdapter<String> accessAdapter = new ArrayAdapter<>(binding.getRoot().getContext(),
@@ -109,8 +121,18 @@ public class ProfileCommunityActivity extends AppCompatActivity {
             }
             viewModel.setCommunityViewState(state);
         });
+        if(currentCommunity.getIsPublic()){
+            binding.ACTVAccess.setListSelection(0);
+        }
+        else{
+            binding.ACTVAccess.setListSelection(1);
+        }
 
         binding.updateBtn.setOnClickListener(v -> {
+            CreateCommunityViewState state = viewModel.getCommunityViewState().getValue();
+            assert state != null;
+            state.setName(binding.nameCommunityEditText.getEditText().getText().toString());
+            state.setDescription(binding.descriptionCommnunityEditText.getEditText().getText().toString());
             viewModel.updateCommunityInfo();
         });
         viewModel.getIsSuccess().observe(this, isSuccess -> {
