@@ -45,16 +45,6 @@
                 android:backgroundTint="@color/secondaryColor"
                 app:iconGravity="textStart"/>
 
-            <Button
-                android:id="@+id/createCommuButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="10dp"
-                style="Widget.MaterialComponents.Button.TextButton.Icon"
-                app:icon="@drawable/icon_add2"
-                android:backgroundTint="@color/secondaryColor"
-                app:iconGravity="textStart"/>
-
         </LinearLayout>
 
 

@@ -2,6 +2,7 @@ package com.example.eduforum.activity.ui.community;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -219,6 +221,17 @@ public class CreatePostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pickImages.launch(new PickVisualMediaRequest.Builder().build());
+            }
+        });
+
+        binding.incognitoModeButton.setOnClickListener(v -> {
+            if(binding.incognitoModeButton.getIconTint() == ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.unLikedButtonColor)){
+                ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
+                binding.incognitoModeButton.setIconTint(colorStateList);
+            }
+            else {
+                ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.unLikedButtonColor);
+                binding.incognitoModeButton.setIconTint(colorStateList);
             }
         });
 

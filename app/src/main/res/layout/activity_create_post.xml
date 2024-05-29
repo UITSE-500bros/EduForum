@@ -209,7 +209,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
-                    android:layout_marginTop="15dp">
+                    android:layout_marginTop="10dp">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
@@ -230,16 +230,20 @@
                         android:scaleType="centerCrop"
                         android:src="@drawable/image_insert_icon" />
 
-                    <ImageButton
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.Material3.Button.Icon"
                         android:id="@+id/incognitoModeButton"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_marginStart="15dp"
-                        android:background="@null"
+                        app:backgroundTint="@color/backgroundColor"
                         android:contentDescription="@null"
                         android:foreground="?attr/selectableItemBackground"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/incognito_mode" />
+                        app:icon="@drawable/incognito_mode"
+                        app:iconGravity="textEnd"
+                        app:iconTint="@color/unLikedButtonColor"
+                        app:iconSize="24dp"/>
                 </LinearLayout>
 
                 <TextView
