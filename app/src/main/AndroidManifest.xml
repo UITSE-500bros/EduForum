@@ -18,11 +18,12 @@
         android:theme="@style/Theme.EduForum"
         tools:targetApi="31">
         <activity
+            android:name=".activity.ui.setting_main.ProfileUserSettingActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ui.setting_main.ContactActivity"
             android:exported="true"
-            android:theme="@style/Theme.Material3.Light.NoActionBar"
-            />
-
+            android:theme="@style/Theme.Material3.Light.NoActionBar" />
         <activity
             android:name=".activity.ui.community.ImageDetailActivity"
             android:exported="false" />

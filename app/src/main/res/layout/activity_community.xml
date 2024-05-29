@@ -179,6 +179,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/titleCreatePost"
+                    android:textColorHint="@color/hintColorText"
                     android:background="@drawable/input_text_box"
                     android:layout_marginTop="15dp"
                     android:layout_marginStart="10dp"
