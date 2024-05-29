@@ -49,6 +49,7 @@ public class CommunityActivity extends AppCompatActivity {
     PostAdapter postAdapter;
     Boolean isAdmin;
     Boolean isExploring;
+    CreateCommunityViewState currentCommunity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,7 @@ public class CommunityActivity extends AppCompatActivity {
         //customTagsViewModel = new ViewModelProvider(this).get(CustomTagsViewModel.class);
         binding.setLifecycleOwner(this);
 
-        CreateCommunityViewState currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
+        currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
         if (currentCommunity != null) {
             viewModel.setCurrentCommunity(currentCommunity);
             viewModel.updateCategories();
@@ -231,9 +232,11 @@ public class CommunityActivity extends AppCompatActivity {
 
         if (id == R.id.setting) {
            Intent intent = new Intent(this, SettingCommunityActivity.class);
-           intent.putExtra("communityId", viewModel.getCurrentCommunity().getValue().getCommunityID());
+            if(currentCommunity==null) return true;
+            intent.putExtra("currentCommunity", currentCommunity);
+            intent.putExtra("communityId", viewModel.getCurrentCommunity().getValue().getCommunityID());
            intent.putExtra("isAdmin", isAdmin);
-              startActivity(intent);
+           startActivity(intent);
                 return true;
         }
 

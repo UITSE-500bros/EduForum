@@ -2,6 +2,7 @@ package com.example.eduforum.activity.ui.community;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.eduforum.R;
 import com.example.eduforum.activity.model.community_manage.CommunityMember;
 import com.example.eduforum.activity.ui.community.adapter.MemberListAdapter;
+import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.util.LoadingDialog;
 import com.example.eduforum.activity.viewmodel.community.settings.AdminMemberListViewModel;
 import com.example.eduforum.databinding.ActivityAdminMemberListBinding;
@@ -45,11 +47,23 @@ public class AdminMemberListActivity extends AppCompatActivity {
         setContentView(binding.getRoot()); // This should be the only call to setContentView
         viewModel = new ViewModelProvider(this).get(AdminMemberListViewModel.class);
 
-        String communityId = getIntent().getStringExtra("communityId");
+        CreateCommunityViewState currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
+        if(currentCommunity == null) {
+            Log.d("Intent to AdminMemberListActivity", "currentCommunity is null");
+            finish();
+        }
+        String communityId = currentCommunity.getCommunityID();
         // isAdmin is set to true for testing
         Boolean isAdmin = getIntent().getBooleanExtra("isAdmin", true);
         if(communityId != null) {
             viewModel.setCommunityId(communityId);
+        }
+        else {
+            Log.d("Intent to AdminMemberListActivity", "communityId is null");
+            finish();
+        }
+        if(isAdmin==null){
+            Log.d("Intent to AdminMemberListActivity", "isAdmin is null");
         }
 
         MaterialToolbar toolbar = binding.toolbar;
@@ -71,25 +85,27 @@ public class AdminMemberListActivity extends AppCompatActivity {
             @Override
             public void onMemberLongClick(CommunityMember member) {
 // Create and show the BottomSheetDialog
-                BottomDialogMemberListBinding bottomDialogBinding = BottomDialogMemberListBinding.inflate(getLayoutInflater());
-                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(AdminMemberListActivity.this);
-                bottomSheetDialog.setContentView(bottomDialogBinding.getRoot());
+                if(isAdmin){
+                    BottomDialogMemberListBinding bottomDialogBinding = BottomDialogMemberListBinding.inflate(getLayoutInflater());
+                    BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(AdminMemberListActivity.this);
+                    bottomSheetDialog.setContentView(bottomDialogBinding.getRoot());
 
-                bottomDialogBinding.setMember(member);
+                    bottomDialogBinding.setMember(member);
 
-                // Set up the buttons in the BottomSheetDialog
+                    // Set up the buttons in the BottomSheetDialog
 
-                bottomDialogBinding.btnpromote.setOnClickListener(v1 -> {
-                    viewModel.manageAdmin(member.getMemberId(), true);
-                    bottomSheetDialog.dismiss();
-                });
+                    bottomDialogBinding.btnpromote.setOnClickListener(v1 -> {
+                        viewModel.manageAdmin(member.getMemberId(), true);
+                        bottomSheetDialog.dismiss();
+                    });
 
-                bottomDialogBinding.btndelete.setOnClickListener(v1 -> {
-                    viewModel.deleteMember(member.getMemberId());
-                    bottomSheetDialog.dismiss();
-                });
+                    bottomDialogBinding.btndelete.setOnClickListener(v1 -> {
+                        viewModel.deleteMember(member.getMemberId());
+                        bottomSheetDialog.dismiss();
+                    });
 
-                bottomSheetDialog.show();
+                    bottomSheetDialog.show();
+                }
 
             }
         });
