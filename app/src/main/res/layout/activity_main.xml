@@ -9,6 +9,7 @@
         tools:context=".activity.ui.main.MainActivity"
         android:background="@color/backgroundColor">
         <com.google.android.material.bottomnavigation.BottomNavigationView
+            style="@style/com.google.android.material.bottomnavigation.BottomNavigationView"
             android:id="@+id/mainBottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
