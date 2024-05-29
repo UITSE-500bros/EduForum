@@ -10,11 +10,11 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/image"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:maxHeight="250dp"
-            android:maxWidth="250dp"
-            android:scaleType="fitCenter"
+            android:layout_width="220dp"
+            android:layout_height="150dp"
+            android:maxHeight="200dp"
+            android:maxWidth="200dp"
+            android:scaleType="center"
             android:src="@drawable/congrats_image"
             android:layout_marginStart="5dp"
             app:layout_constraintEnd_toEndOf="parent"
