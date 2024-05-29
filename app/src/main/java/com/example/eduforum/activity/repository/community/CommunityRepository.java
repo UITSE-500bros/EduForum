@@ -9,7 +9,9 @@ import androidx.annotation.Nullable;
 import com.example.eduforum.activity.model.community_manage.Community;
 import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.activity.repository.community.dto.CreateCommunityDTO;
+import com.example.eduforum.activity.repository.community.dto.IUpdateCommunityCallback;
 import com.example.eduforum.activity.repository.community.dto.JoinRequestDTO;
+import com.example.eduforum.activity.repository.community.dto.UpdateCommunityDTO;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -277,8 +279,56 @@ public class CommunityRepository {
         db.collection("Community").document(community.getCommunityId()).delete();
     }
 
-    public void updateCommunity(Community community) {
-        db.collection("Community").document(community.getCommunityId()).set(community);
+    public void updateCommunity(Community community, IUpdateCommunityCallback callback) {
+        // 1. upload the new image
+        // 2. update the community by calling the cloud function, cloud function will delete the old image
+        // 3. update the community object in the client side
+        uploadCommunityPicture(community, new IUpload() {
+            @Override
+            public void onUploadSuccess(String path) {
+                UpdateCommunityDTO updateCommunityDTO = new UpdateCommunityDTO(community);
+                if (!path.equals("default")) {
+                    String oldPath = community.getProfilePicture();
+                    community.setProfilePicture(path);
+                    updateCommunityDTO.setOldProfilePicture(oldPath);
+                    updateCommunityDTO.setProfilePicture(path);
+                } else {
+                    updateCommunityDTO.setProfilePicture(null);
+                }
+
+
+                Map<String, Object> data = updateCommunityDTO.convertToDataObject();
+                mFunctions.getHttpsCallable("updateCommunity")
+                        .call(data)
+                        .addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+                            @Override
+                            public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                                Map<String, Object> result = (Map<String, Object>) httpsCallableResult.getData();
+                                if (result.containsKey("error")) {
+                                    callback.onUpdateCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE);
+                                    Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Update community failed, DTO validation failed!");
+                                } else if((boolean) result.get("success")) {
+                                    Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Update community success!");
+                                    callback.onUpdateCommunitySuccess(community);
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "update community failed with: ", e);
+                                callback.onUpdateCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE);
+                            }
+                        });
+            }
+
+            @Override
+            public void onUploadFailed(String message) {
+                callback.onUpdateCommunityFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE);
+            }
+        });
+
+
     }
 
     /**

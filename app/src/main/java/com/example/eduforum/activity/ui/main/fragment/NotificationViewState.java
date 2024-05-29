@@ -20,13 +20,13 @@ public class NotificationViewState {
 
     }
 
-    public NotificationViewState(String notificationID, Creator triggerBy, int type, boolean isRead, String date, String content, String communityName, String postID, String commentID) {
+    public NotificationViewState(String notificationID, Creator triggerBy, int type, boolean isRead, String date, String communityName, String postID, String commentID) {
         this.notificationID = notificationID;
         this.triggerBy = triggerBy;
         this.type = type;
         this.isRead = isRead;
         this.date = date;
-        this.content = content;
+
         if (communityName==null) this.communityName = "";
         else this.communityName = communityName;
 

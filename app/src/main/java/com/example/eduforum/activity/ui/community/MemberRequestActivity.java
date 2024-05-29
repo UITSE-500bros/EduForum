@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.eduforum.R;
 import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.activity.ui.community.adapter.MemberRequestsAdapter;
+import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.viewmodel.community.settings.MemberRequestsViewModel;
 import com.example.eduforum.databinding.ActivityMemberRequestBinding;
 
@@ -32,8 +33,12 @@ public class MemberRequestActivity extends AppCompatActivity {
         binding.toolBarMemberRequest.setNavigationOnClickListener(v -> {
             finish();
         });
-
-        String communityId = getIntent().getStringExtra("communityId");
+        CreateCommunityViewState currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
+        if(currentCommunity == null) {
+            Log.e("Intent to MemberRequestActivity", "currentCommunity is null");
+            finish();
+        }
+        String communityId = currentCommunity.getCommunityID();
         if(communityId != null) {
             viewModel.setCommunityId(communityId);
         }
@@ -53,6 +58,13 @@ public class MemberRequestActivity extends AppCompatActivity {
         viewModel.getMemberRequests().observe(this, users -> {
             adapter.setMemberRequests(users);
             binding.numberMemberRequestTextView.setText(String.valueOf(users.size())+" yêu cầu tham gia");
+        });
+
+        binding.actAllButton.setOnClickListener(v -> {
+            viewModel.memberAllApproval(true);
+        });
+        binding.denyAllButton.setOnClickListener(v -> {
+            viewModel.memberAllApproval(false);
         });
     }
 }

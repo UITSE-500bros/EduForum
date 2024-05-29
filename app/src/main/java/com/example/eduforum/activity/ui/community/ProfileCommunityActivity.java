@@ -2,6 +2,7 @@ package com.example.eduforum.activity.ui.community;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,6 +21,7 @@ import com.example.eduforum.R;
 import com.example.eduforum.activity.ui.community.adapter.MediaAdapter;
 import com.example.eduforum.activity.ui.community.adapter.MediaItem;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
+import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.databinding.ActivityProfileCommunityBinding;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -32,8 +34,15 @@ public class ProfileCommunityActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_profile_community);
+        binding = ActivityProfileCommunityBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        CreateCommunityViewState currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
+        if(currentCommunity == null) {
+            Log.d("Intent to ProfileCommunityActivity", "currentCommunity is null");
+            finish();
+        }
+
 
         ActivityResultLauncher<PickVisualMediaRequest> pickImage =
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
@@ -55,7 +64,6 @@ public class ProfileCommunityActivity extends AppCompatActivity {
             pickImage.launch(new PickVisualMediaRequest());
         });
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_profile_community);
 
         String[] departmentItems = getResources().getStringArray(R.array.category_community);
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(binding.getRoot().getContext(),

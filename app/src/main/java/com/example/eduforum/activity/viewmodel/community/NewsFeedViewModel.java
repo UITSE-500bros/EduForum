@@ -210,11 +210,10 @@ public class NewsFeedViewModel extends ViewModel {
             @Override
             public void onGetPostSuccess(List<Post> posts){
                 postList.setValue(convertPostListToPostViewStateList(posts));
-                errorMessage.setValue("Success");
             }
             @Override
             public void onGetPostFailure(String errorMsg){
-                errorMessage.setValue("Không thể lấy bài viết");
+                errorMessage.setValue("Không thể tải bài viết");
             }
             @Override
             public void onAddPostFailure(String errorMsg){

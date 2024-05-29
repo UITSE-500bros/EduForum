@@ -2,6 +2,7 @@ package com.example.eduforum.activity.ui.main.adapter;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eduforum.R;
+import com.example.eduforum.activity.model.noti_manage.Notification;
 import com.example.eduforum.activity.ui.main.fragment.NotificationViewState;
 import com.example.eduforum.databinding.ItemNotiBinding;
 import com.google.firebase.storage.FirebaseStorage;
@@ -24,8 +26,8 @@ import java.util.List;
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
     Context context;
     private List<NotificationViewState> notificationList;
-    public NotificationAdapter(Context context, List<NotificationViewState> notificationList) {
-        this.context = context;
+    public NotificationAdapter(List<NotificationViewState> notificationList) {
+
         if (notificationList == null) {
             this.notificationList = new ArrayList<>();
         }
@@ -48,6 +50,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
+        NotificationViewState notification = notificationList.get(position);
+        holder.bind(notification);
+
         holder.binding.moreOptionImageButton.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(context, v);
             popupMenu.getMenuInflater().inflate(R.menu.noti_option_menu, popupMenu.getMenu());
@@ -60,7 +65,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             ColorStateList colorStateList = ContextCompat.getColorStateList(context, R.color.readComment);
             assert colorStateList != null;
             v.setBackgroundColor(colorStateList.getDefaultColor());
+            handleCardViewClick(notificationList.get(position));
         });
+
 
     }
 
@@ -109,6 +116,21 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         public void bind(NotificationViewState notificationViewState) {
             bindingComponents(notificationViewState);
 
+        }
+    }
+    //TODO: Handle card view click
+    public void handleCardViewClick(NotificationViewState notificationViewState) {
+        switch (notificationViewState.getType()) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4: // new announcement
+                break;
+            case 5:
+                break;
         }
     }
 }
