@@ -119,39 +119,6 @@ public class PostDetailActivity extends AppCompatActivity {
             //finish();
         }
 
-        commentChildAdapter = new CommentChildAdapter(this, viewModel.getComments().getValue(),viewModel.getCommentsChild().getValue(),
-                comment -> {
-                    binding.commentEditText.setText("@" + comment.getCreator().getName() + " ");
-                    binding.commentEditText.setVisibility(View.VISIBLE);
-                    binding.sendButton.setVisibility(View.VISIBLE);
-                    binding.sendButton.setOnClickListener(v -> {
-                        String commentText = binding.commentEditText.getText().toString();
-                        if (!commentText.isEmpty()) {
-
-                            CommentViewState commentViewState = new CommentViewState(
-                                    null,
-                                    commentText,
-                                    null,
-                                    creator,
-                                    0,
-                                    0,
-                                    0,
-                                    null,
-                                    null,
-                                    comment.getCommentID(),
-                                    0
-                            );
-
-                            viewModel.addChildComment(comment, commentViewState);
-                            binding.commentEditText.setText("");
-                        }
-                    });
-                },
-                comment -> viewModel.downVote(comment),
-                comment -> viewModel.upVote(comment),
-                comment -> {
-                    viewModel.loadChildComments(comment);
-                });
 
         commentAdapter = new CommentAdapter(this,
                 viewModel.getComments().getValue(),
@@ -163,7 +130,6 @@ public class PostDetailActivity extends AppCompatActivity {
                         binding.commentEditText.setVisibility(View.VISIBLE);
                         binding.sendButton.setVisibility(View.VISIBLE);
 
-                        System.out.println("Comment ID: " + comment.getCommentID());
                         binding.sendButton.setOnClickListener(v -> {
                             String commentText = binding.commentEditText.getText().toString();
                             if (!commentText.isEmpty()) {
@@ -206,13 +172,10 @@ public class PostDetailActivity extends AppCompatActivity {
                     public void onShowUpReplies(CommentViewState comment) {
                         viewModel.loadChildComments(comment);
                     }
-                },
-                commentChildAdapter
+                }
         );
 
 
-
-        
         binding.recyclecomment.setAdapter(commentAdapter);
         binding.recyclecomment.setLayoutManager(new LinearLayoutManager(this));
 
@@ -222,8 +185,6 @@ public class PostDetailActivity extends AppCompatActivity {
 
         viewModel.getComments().observe(this, commentViewStates -> {
             List<CommentViewState> commentChildList = new ArrayList<>();
-            List<CommentViewState> commentGrandChildList = new ArrayList<>();
-
             List<CommentViewState> itemsToRemove = new ArrayList<>();
 
             for (CommentViewState commentViewState : commentViewStates) {

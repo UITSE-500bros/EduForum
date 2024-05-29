@@ -268,24 +268,23 @@ public class PostDetailsViewModel extends ViewModel {
         commentRepository.createComment(parentComment, childComment, new CommentCallback() {
             @Override
             public void onCreateSuccess(Comment comments) {
-                CommentViewState commentViewState = new CommentViewState(
+                List<CommentViewState> commentViewStates = cmts.getValue();
+                assert commentViewStates != null;
+                commentViewStates.add(new CommentViewState(
                         comments.getCommentID(),
                         comments.getContent(),
-                        null,
+                        "just now",
                         comments.getCreator(),
                         comments.getTotalUpVote(),
                         comments.getTotalDownVote(),
-                        comments.getVoteDifference(),
-                        null,
+                        0,
+                        "just now",
                         comments.getImage(),
-                        comments.getReplyCommentID(),
-                        comments.getTotalReply()
-                );
-
-                List<CommentViewState> commentViewStates = cmts.getValue();
-                assert commentViewStates != null;
-                commentViewStates.add(commentViewState);
+                        null,
+                        0
+                ));
                 cmts.setValue(commentViewStates);
+
             }
 
             @Override

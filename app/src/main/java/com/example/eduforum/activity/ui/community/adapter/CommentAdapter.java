@@ -68,8 +68,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                           OnReplyClickListener onReplyClickListener,
                           OnDownVoteClickListener onDownVoteClickListener,
                           OnUpVoteClickListener onUpVoteClickListener,
-                          OnShowUpReplies onShowUpReplies,
-                          CommentChildAdapter commentChildAdapter) {
+                          OnShowUpReplies onShowUpReplies
+                          ) {
         this.context = context;
         if (commentList != null) {
             this.commentList = commentList;
@@ -85,7 +85,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         this.onUpVoteClickListener = onUpVoteClickListener;
         this.onDownVoteClickListener = onDownVoteClickListener;
         this.onShowUpReplies = onShowUpReplies;
-        this.commentChildAdapter = commentChildAdapter;
+
     }
     public void setCommentList(List<CommentViewState> commentList) {
         if (commentList != null) {
@@ -174,7 +174,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             this.binding = binding;
         }
 
-        private void bindingComponents(CommentViewState comment) {
+        public void bindingComponents(CommentViewState comment) {
             binding.contentNotiParentTextView.setText(comment.getContent());
             binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference()));
             binding.timeParentCommentTextView.setText(comment.getTimeCreated());
@@ -198,7 +198,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
             /*Set up RecyclerView*/
             binding.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-            binding.nestedRecyclerView.setAdapter(new ChildCommentAdapter(temp));
+            binding.nestedRecyclerView.setAdapter(new CommentChildAdapter(this.binding.getRoot().getContext(),temp, onReplyClickListener, onDownVoteClickListener, onUpVoteClickListener, onShowUpReplies));
 
 
             /*Set up click listener*/
