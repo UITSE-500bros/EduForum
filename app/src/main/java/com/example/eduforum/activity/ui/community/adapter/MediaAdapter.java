@@ -107,7 +107,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ImageViewHol
     }
 
     public void removeItem(int position) {
-        mediaItems.remove(position);
+        mediaItemsUri.remove(position);
     }
 
     @Override
