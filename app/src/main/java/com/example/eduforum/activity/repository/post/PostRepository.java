@@ -162,7 +162,7 @@ public class PostRepository {
             String uniqueFileName = String.format(Locale.US, "%04d-%d", sequenceNumber++, System.currentTimeMillis());
 
             StorageReference fileRef = postRef.child(uniqueFileName);
-            imagePaths.add(fileRef.getPath()+"/"+uniqueFileName);
+            imagePaths.add(fileRef.getPath());
 
             UploadTask uploadTask = fileRef.putFile(fileUri, metadata);
             uploadTasks.add(uploadTask);
