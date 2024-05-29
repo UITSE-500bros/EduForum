@@ -105,6 +105,11 @@ public class CreatePostActivity extends AppCompatActivity {
 
     }
     private void initComponents(){
+
+        binding.toolBarCreatePost.setNavigationOnClickListener(v -> {
+            finish();
+        });
+
         //Stlye rich editor through binding
         binding.contentRichEditor.setBackgroundColor(Color.WHITE);
         binding.contentRichEditor.setEditorHeight(250);

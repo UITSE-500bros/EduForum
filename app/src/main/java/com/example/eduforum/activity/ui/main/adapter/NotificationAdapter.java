@@ -1,12 +1,14 @@
 package com.example.eduforum.activity.ui.main.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -55,7 +57,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             popupMenu.show();
         });
         holder.binding.notiCardView.setOnClickListener(v -> {
-            v.setBackgroundColor(context.getResources().getColor(R.color.readComment));
+            ColorStateList colorStateList = ContextCompat.getColorStateList(context, R.color.readComment);
+            assert colorStateList != null;
+            v.setBackgroundColor(colorStateList.getDefaultColor());
         });
 
     }
