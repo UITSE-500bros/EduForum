@@ -10,6 +10,9 @@ import com.example.eduforum.activity.repository.user.dto.UpdateProfileDTO;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -33,6 +36,48 @@ public class UserRepository {
     }
     public void signOut() {
         mAuth.signOut();
+    }
+//    public void changePassword() {
+//        FirebaseUser user = mAuth.getCurrentUser();
+//        if (user != null) {
+//            mAuth.sendPasswordResetEmail(user.getEmail());
+//        }
+//    }
+
+    public void changePassword(String oldPassword, String newPassword, IPassword callback) {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null) {
+            callback.onPasswordChangeFailed("Network error. Please try again.");
+            return;
+        }
+        String email = user.getEmail();
+        assert email != null;
+        AuthCredential credential = EmailAuthProvider.getCredential(email, oldPassword);
+        user.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(FlagsList.DEBUG_USER_FLAG, "User re-authenticated.");
+                            // Proceed with password change
+                            user.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d(FlagsList.DEBUG_USER_FLAG, "Password updated successfully.");
+                                        callback.onPasswordChanged();
+                                    } else {
+                                        Log.e(FlagsList.DEBUG_USER_FLAG, "Failed to update password.");
+                                        callback.onPasswordChangeFailed("Network error. Please try again.");
+                                    }
+                                }
+                            });
+                        } else {
+                            Log.e(FlagsList.DEBUG_USER_FLAG, "Re-authentication failed.");
+                            callback.onPasswordChangeFailed("Incorrect old password.");
+                        }
+                    }
+                });
     }
 
     public void updateProfile(User user, IUserCallback callback) {
