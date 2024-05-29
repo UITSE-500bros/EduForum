@@ -6,25 +6,33 @@ import com.google.firebase.Timestamp;
 
 public class Notification {
     private String notificationID;
-    private Creator triggerBy;
+    private Creator triggeredBy;
     private int type;
     private Community community;
 
+    private PostNotification post;
     private boolean isRead;
-    private Timestamp timeStamp;
+    private Timestamp timestamp;
     private String commentID;
 
     public Notification() {
 
     }
 
+    public PostNotification getPost() {
+        return post;
+    }
+
+    public void setPost(PostNotification post) {
+        this.post = post;
+    }
 
     public void setNotificationID(String notificationID) {
         this.notificationID = notificationID;
     }
 
-    public void setTriggerBy(Creator triggerBy) {
-        this.triggerBy = triggerBy;
+    public void setTriggeredBy(Creator triggeredBy) {
+        this.triggeredBy = triggeredBy;
     }
 
     public void setType(int type) {
@@ -39,8 +47,8 @@ public class Notification {
         isRead = read;
     }
 
-    public void setTimeStamp(Timestamp timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     public void setCommentID(String commentID) {
@@ -51,8 +59,8 @@ public class Notification {
         return notificationID;
     }
 
-    public Creator getTriggerBy() {
-        return triggerBy;
+    public Creator getTriggeredBy() {
+        return triggeredBy;
     }
 
     public int getType() {
@@ -67,8 +75,8 @@ public class Notification {
         return isRead;
     }
 
-    public Timestamp getTimeStamp() {
-        return timeStamp;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
     public String getCommentID() {
