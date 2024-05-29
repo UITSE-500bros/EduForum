@@ -100,6 +100,7 @@ public class ProfileCommunityActivity extends AppCompatActivity {
         for(int i = 0; i < departmentItems.length; i++){
             if(departmentItems[i].equals(currentCommunity.getCategory())){
                 binding.ACTVCategory.setListSelection(i);
+                binding.ACTVCategory.setText(departmentItems[i], false);
                 break;
             }
         }
@@ -123,9 +124,11 @@ public class ProfileCommunityActivity extends AppCompatActivity {
         });
         if(currentCommunity.getIsPublic()){
             binding.ACTVAccess.setListSelection(0);
+            binding.ACTVAccess.setText(accessItems[0], false);
         }
         else{
             binding.ACTVAccess.setListSelection(1);
+            binding.ACTVAccess.setText(accessItems[1], false);
         }
 
         binding.updateBtn.setOnClickListener(v -> {
