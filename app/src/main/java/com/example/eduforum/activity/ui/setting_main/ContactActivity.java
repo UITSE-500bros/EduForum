@@ -1,4 +1,4 @@
-package com.example.eduforum.activity.ui.Setting;
+package com.example.eduforum.activity.ui.setting_main;
 
 import android.os.Bundle;
 
@@ -9,8 +9,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.eduforum.R;
+import com.example.eduforum.databinding.ActivityContactBinding;
+import com.google.android.material.appbar.MaterialToolbar;
+
 
 public class ContactActivity extends AppCompatActivity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,5 +27,14 @@ public class ContactActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
     }
+
+
+
+
+
 }
