@@ -200,15 +200,15 @@ public class PostDetailsViewModel extends ViewModel {
                 commentViewStates.add(new CommentViewState(
                         comments.getCommentID(),
                         comments.getContent(),
-                        null,
+                        "just now",
                         comments.getCreator(),
                         comments.getTotalUpVote(),
                         comments.getTotalDownVote(),
-                        comments.getVoteDifference(),
-                        null,
+                        0,
+                        "just now",
                         comments.getImage(),
                         null,
-                        comments.getTotalReply()
+                        0
                 ));
                 cmts.setValue(commentViewStates);
             }

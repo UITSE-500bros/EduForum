@@ -249,7 +249,7 @@ public class PostDetailActivity extends AppCompatActivity {
                         0,
                         0,
                         0,
-                        null,
+                        "just now",
                         null,
                         null,
                         0
@@ -257,34 +257,6 @@ public class PostDetailActivity extends AppCompatActivity {
                 viewModel.addParentComment(commentViewState, postViewState.getPostId(), postViewState.getCommunity().getCommunityID());
                 binding.commentEditText.setText("");
             }
-            
-//            ActivityResultLauncher<PickVisualMediaRequest> pickImages =
-//                    registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(), uris -> {
-//                        if (uris != null) {
-//                            List<Uri> uriList1 = new ArrayList<>();
-//                            // Get the current list of images
-//                            CommentViewState commentViewState = viewModel.getComments().getValue();
-//                            if (postViewState != null && postViewState.getImage() != null) {
-//                                uriList1.addAll(postViewState.getImage());
-//                            }
-//                            for(int i = 0; i < uris.size(); i++) {
-//                                ImageView imageView = new ImageView(this);
-//                                imageView.setImageURI(uris.get(i));
-//                                int sizeInDp = 40;
-//                                float scale = getResources().getDisplayMetrics().density;
-//                                int sizeInPx = (int) (sizeInDp * scale + 0.5f);
-//                                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(sizeInPx, sizeInPx);
-//                                imageView.setLayoutParams(layoutParams);
-//                                uriList1.add(uris.get(i));
-//                            }
-//                            MediaAdapter imageAdapter = new MediaAdapter(uriList1);
-//                            binding.recycleImage.setAdapter(imageAdapter);
-//                            postViewState.setImage(uriList1);
-//
-//                        } else {
-//                            // TODO: Show errors
-//                        }
-//                    });
         });
 
         binding.downVoteButton.setOnClickListener(v -> {

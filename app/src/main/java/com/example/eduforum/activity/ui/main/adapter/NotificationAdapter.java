@@ -50,6 +50,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
+        NotificationViewState notification = notificationList.get(position);
+        holder.bind(notification);
+
         holder.binding.moreOptionImageButton.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(context, v);
             popupMenu.getMenuInflater().inflate(R.menu.noti_option_menu, popupMenu.getMenu());
@@ -65,14 +68,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             handleCardViewClick(notificationList.get(position));
         });
 
-        NotificationViewState notification = notificationList.get(position);
-        holder.bind(notification);
-
-        if (notification.isRead()) {
-
-        } else {
-
-        }
 
     }
 
