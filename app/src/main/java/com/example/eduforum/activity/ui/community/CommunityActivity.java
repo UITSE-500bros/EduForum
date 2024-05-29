@@ -124,6 +124,10 @@ public class CommunityActivity extends AppCompatActivity {
         MaterialToolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
 
+        toolbar.setNavigationOnClickListener(v -> {
+            finish();
+        });
+
 
 
     }

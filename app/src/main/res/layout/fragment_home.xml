@@ -58,7 +58,7 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
         </LinearLayout>
 
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/commusScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -138,7 +138,7 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                     tools:listitem="@layout/item_forum"/>
 
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
