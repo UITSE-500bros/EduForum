@@ -119,4 +119,6 @@ Nh\u00e1\u00ba\u00adp m\u00c3\u00b4n l\u00e1\u00ba\u00adp tr\u00c3\u00acnh\n500 
     <string name="delete_member">Xóa %s khỏi cộng đồng?</string>
     <string name="add_admin">Thêm %s làm quản trị viên?</string>
 
+    <string name="titleCreatePost">Bạn có điều gì muốn chia sẻ không?</string>
+
 </resources>

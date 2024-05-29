@@ -20,14 +20,13 @@
             android:layout_width="122dp"
             android:layout_height="24dp"
             android:layout_gravity="left"
-            android:layout_marginTop="10dp"
+            android:layout_marginVertical="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/eduforumlogo" />
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
             android:layout_marginBottom="20dp">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -38,7 +37,7 @@
                     android:id="@+id/ng_nh_p"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginStart="26dp"
                     android:fontFamily="@font/source_sans_pro_semibold"
                     android:gravity="top"

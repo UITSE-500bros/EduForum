@@ -57,10 +57,10 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="200dp"
                     android:maxHeight="200dp"
                     android:src="@drawable/community_background"
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitCenter"
                     android:id="@+id/postImageView"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -178,7 +178,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Bạn đang nghĩ gì?"
+                    android:hint="@string/titleCreatePost"
                     android:background="@drawable/input_text_box"
                     android:layout_marginTop="15dp"
                     android:layout_marginStart="15dp"

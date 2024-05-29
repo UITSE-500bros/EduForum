@@ -21,10 +21,10 @@
             android:layout_height="wrap_content"
             android:background="@color/secondaryColor"
             >
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/memberAvatar"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_margin="8dp"
                 android:src="@{member.profileImage}"
                 app:layout_constraintStart_toStartOf="parent"
