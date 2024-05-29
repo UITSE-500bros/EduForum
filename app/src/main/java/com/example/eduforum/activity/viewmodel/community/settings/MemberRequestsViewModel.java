@@ -57,6 +57,17 @@ public class MemberRequestsViewModel extends ViewModel {
 
     public void memberApproval(String userId, Boolean isApproved) {
         communityRepository.approveUser(communityId.getValue(), userId, isApproved);
-        refreshMemberRequests();
+        List<User> users = memberRequests.getValue();
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUserId().equals(userId)) {
+                users.remove(i);
+                break;
+            }
+        }
+        memberRequests.setValue(users);
+    }
+    public void memberAllApproval(Boolean isApproved) {
+        communityRepository.ApproveAll(communityId.getValue(), isApproved);
+        memberRequests.setValue(new ArrayList<>());
     }
 }

@@ -64,7 +64,7 @@
                         android:id="@+id/communityNewPostNotiTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Admin đã thêm một bài viết"
+                        android:text=""
                         android:maxWidth="250dp"
                         android:maxLines="1"
                         android:ellipsize="end"

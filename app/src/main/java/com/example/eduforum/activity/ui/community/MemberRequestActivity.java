@@ -54,5 +54,12 @@ public class MemberRequestActivity extends AppCompatActivity {
             adapter.setMemberRequests(users);
             binding.numberMemberRequestTextView.setText(String.valueOf(users.size())+" yêu cầu tham gia");
         });
+
+        binding.actAllButton.setOnClickListener(v -> {
+            viewModel.memberAllApproval(true);
+        });
+        binding.denyAllButton.setOnClickListener(v -> {
+            viewModel.memberAllApproval(false);
+        });
     }
 }
