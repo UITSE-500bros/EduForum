@@ -469,6 +469,37 @@ public class CommunityRepository {
         });
     }
 
+    public void ApproveAll(String communityID, boolean isApprove) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("isApprove", isApprove);
+        data.put("communityID", communityID);
+
+        mFunctions.getHttpsCallable("approveAllUserRequestToJoinCommunity")
+                .call(data)
+                .addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+                    @Override
+                    public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Approve all user request to join community success!");
+                        Map<String, Object> result = (Map<String, Object>) httpsCallableResult.getData();
+                        if (result.containsKey("error")) {
+                            Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Approve all user request to join community failed: " + (String) result.get("error"));
+                        } else {
+                            if ((boolean) result.get("success")) {
+                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Approve all user request to join community success!");
+                            } else {
+                                Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Approve all user request to join community failed: " + (String) result.get("error"));
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, "Approve all user request to join community failed with: ", e);
+                    }
+                });
+    }
+
     /**
      * Make a user an admin of a community
      *
