@@ -18,6 +18,7 @@ public class CreateCommunityViewState implements Serializable {
     Integer unReadposts;
     Integer totalPosts;
     Integer totalMembers;
+    Boolean isPublic;
 
     public CreateCommunityViewState(String name, String description, String category, Uri commuAvt, String communityID) {
         this.name = name;
@@ -50,6 +51,15 @@ public class CreateCommunityViewState implements Serializable {
         if(community.getTotalPost()!=null) this.totalPosts = community.getTotalPost();
         else this.totalPosts = 0;
         this.totalMembers = community.getUserList().size();
+    }
+    public void setIsPublic(Boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+    public Boolean getIsPublic() {
+        if(isPublic==null){
+            isPublic = true;
+        }
+        return isPublic;
     }
     public void setUnReadposts(Integer unReadposts) {
         this.unReadposts = unReadposts;

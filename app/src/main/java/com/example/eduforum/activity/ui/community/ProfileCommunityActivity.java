@@ -1,5 +1,6 @@
 package com.example.eduforum.activity.ui.community;
 
+import android.app.AlertDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.example.eduforum.R;
 import com.example.eduforum.activity.ui.community.adapter.MediaAdapter;
 import com.example.eduforum.activity.ui.community.adapter.MediaItem;
@@ -26,6 +28,8 @@ import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.viewmodel.community.settings.ProfileCommunityViewModel;
 import com.example.eduforum.databinding.ActivityProfileCommunityBinding;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -47,13 +51,24 @@ public class ProfileCommunityActivity extends AppCompatActivity {
         }
         viewModel.setCommunityViewState(currentCommunity);
 
+        if(currentCommunity.getCommunityProfilePicture()!=null){
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(currentCommunity.getCommunityProfilePicture());
+            Glide.with(binding.getRoot().getContext())
+                    .load(storageReference)
+                    .into(binding.avaCommunityImageView);
+        }
+
         ActivityResultLauncher<PickVisualMediaRequest> pickImage =
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                     if (uri != null) {
                         binding.avaCommunityImageView.setImageURI(uri);
+                        CreateCommunityViewState state = viewModel.getCommunityViewState().getValue();
+                        assert state != null;
+                        state.setCommuAvt(uri);
+                        viewModel.setCommunityViewState(state);
                     }
                     else {
-
+                        Snackbar.make(binding.getRoot(), "Không thể tải ảnh", Snackbar.LENGTH_SHORT).show();
                     }
                 });
 
@@ -71,13 +86,44 @@ public class ProfileCommunityActivity extends AppCompatActivity {
         String[] departmentItems = getResources().getStringArray(R.array.category_community);
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(binding.getRoot().getContext(),
                 android.R.layout.simple_dropdown_item_1line, departmentItems);
-
         binding.ACTVCategory.setAdapter(categoryAdapter);
+        binding.ACTVCategory.setOnItemClickListener((parent, view, position, id) -> {
+            CreateCommunityViewState state = viewModel.getCommunityViewState().getValue();
+            assert state != null;
+            state.setCategory(binding.ACTVCategory.getText().toString());
+            viewModel.setCommunityViewState(state);
+        });
 
         String[] accessItems = getResources().getStringArray(R.array.access_community);
         ArrayAdapter<String> accessAdapter = new ArrayAdapter<>(binding.getRoot().getContext(),
                 android.R.layout.simple_dropdown_item_1line, accessItems);
-
         binding.ACTVAccess.setAdapter(accessAdapter);
+        binding.ACTVAccess.setOnItemClickListener((parent, view, position, id) -> {
+            CreateCommunityViewState state = viewModel.getCommunityViewState().getValue();
+            assert state != null;
+            if(parent.getItemAtPosition(position).toString().equals("Riêng tư")){
+                state.setIsPublic(false);
+            }
+            else{
+                state.setIsPublic(true);
+            }
+            viewModel.setCommunityViewState(state);
+        });
+
+        binding.updateBtn.setOnClickListener(v -> {
+            viewModel.updateCommunityInfo();
+        });
+        viewModel.getIsSuccess().observe(this, isSuccess -> {
+            if(isSuccess){
+                new AlertDialog.Builder(this)
+                        .setTitle("Thông báo")
+                        .setMessage("Cập nhật thông tin cộng đồng thành công")
+                        .setPositiveButton("OK", (dialog, which) -> {
+                            finish();
+                        })
+                        .show();
+
+            }
+        });
     }
 }
