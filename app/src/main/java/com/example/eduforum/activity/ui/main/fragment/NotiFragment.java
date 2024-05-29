@@ -74,9 +74,15 @@ public class NotiFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
         adapter = new NotificationAdapter(viewModel.getNotificationList().getValue());
-        viewModel.setupListener(userViewModel);
-        viewModel.getNotificationList().observe(getViewLifecycleOwner(), notifications -> {
 
+        userViewModel.getCurrentUserLiveData().observe(getViewLifecycleOwner(), user -> {
+            if(user != null) {
+                viewModel.setCurrentUser(user);
+                viewModel.setupListener(userViewModel);
+            }
+        });
+
+        viewModel.getNotificationList().observe(getViewLifecycleOwner(), notifications -> {
             adapter.setNotificationList(notifications);
         });
         viewModel.getNotificationList();
