@@ -10,6 +10,7 @@ import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.model.post_manage.PostingObject;
 import com.example.eduforum.activity.repository.comment.dto.AddCommentDTO;
 import com.example.eduforum.activity.repository.post.IPostCallback;
+import com.example.eduforum.activity.util.ConvertUtil;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.Transaction;
+import com.google.firebase.firestore.core.FirestoreClient;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
 import com.google.firebase.storage.FirebaseStorage;
@@ -98,15 +100,15 @@ public class CommentRepository {
                                 Map<String, Object> result = (Map<String, Object>) httpsCallableResult.getData();
                                 if (result.containsKey("error")) {
                                     callback.onFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE);
-                                    Log.d(FlagsList.DEBUG_POST_FLAG, "Create comment failed, DTO validation failed!");
+                                    Log.d(FlagsList.DEBUG_COMMENT_FLAG, "Create comment failed, DTO validation failed!");
                                 } else {
                                     // map the result to community object
                                     newComment.setTotalUpVote((Integer) result.get("totalUpVote"));
                                     newComment.setTotalDownVote((Integer) result.get("totalDownVote"));
                                     newComment.setVoteDifference((Integer) result.get("voteDifference"));
                                     newComment.setTotalReply((Integer) result.get("totalReply"));
-                                    newComment.setTimeCreated((Timestamp) result.get("timeCreated"));
-                                    newComment.setLastModified((Timestamp) result.get("lastModified"));
+                                    newComment.setTimeCreated(ConvertUtil.convertMapToTimestamp(result, "timeCreated"));
+                                    newComment.setLastModified(ConvertUtil.convertMapToTimestamp(result, "lastModified"));
                                     callback.onCreateSuccess(newComment);
                                 }
 
@@ -116,7 +118,7 @@ public class CommentRepository {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 // The function execution failed
-                                Log.d(FlagsList.DEBUG_POST_FLAG, "create comment failed with: ", e);
+                                Log.d(FlagsList.DEBUG_COMMENT_FLAG, "create comment failed with: ", e);
                                 callback.onFailure(e.toString());
                             }
                         });
