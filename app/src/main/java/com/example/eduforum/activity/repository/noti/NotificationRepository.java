@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -30,6 +31,8 @@ public class NotificationRepository {
     private final FirebaseStorage storage;
     private final FirebaseFunctions mFunctions;
     private final FirebaseAuth currentUser;
+    private ListenerRegistration registration;
+
 
     public NotificationRepository() {
         db = FirebaseFirestore.getInstance();
@@ -45,34 +48,51 @@ public class NotificationRepository {
         return instance;
     }
 
-    private void getTotalNotification(String userId, INotificationCallback callback) {
-        Query newQuery = db.collection("Notification")
-                .whereEqualTo("userId", currentUser.getUid())
-                .whereEqualTo("isReaf", false);
-        List<String> data = new ArrayList<>();
+//    private void getTotalNotification(String userId, INotificationCallback callback) {
+//        Query newQuery = db.collection("Notification")
+//                .whereEqualTo("userId", currentUser.getUid())
+//                .whereEqualTo("isReaf", false);
+//        List<String> data = new ArrayList<>();
+//
+//        newQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+//                    Notification newNotification = document.toObject(Notification.class);
+//
+//                    data.add(newNotification.getNotificationID());
+//                    Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
+//                }
+//                callback.onCallback(data);
+//            }
+//        });
+//    }
 
-        newQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                    Notification newNotification = document.toObject(Notification.class);
-
-                    data.add(newNotification.getNotificationID());
-                    Log.d(FlagsList.DEBUG_COMMUNITY_FLAG, document.getId() + " => " + document.getData());
-                }
-                callback.onCallback(data);
-            }
-        });
+    public void observeNotification(String userID, INotificationCallback callback) {
+        registration = db.collection("User")
+                .document(userID)
+                .collection("Notification")
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        Log.w(FlagsList.DEBUG_NOTIFICATION_FLAG, "Listen failed.", error);
+                        callback.onGetRealtimeFailure(error.getMessage());
+                        return;
+                    }
+                    List<Notification> data = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : value) {
+                        Notification newNotification = document.toObject(Notification.class);
+                        newNotification.setNotificationID(document.getId());
+                        data.add(newNotification);
+                        Log.d(FlagsList.DEBUG_NOTIFICATION_FLAG, document.getId() + " => " + document.getData());
+                    }
+                    callback.onGetRealtimeSuccess(data);
+                });
     }
 
-    public void observeNotification(INotificationCallback callback) {
-        getTotalNotification(currentUser.getUid(), new INotificationCallback() {
-            @Override
-            public void onCallback(List<String> data) {
-
-            }
-
-        });
+    public void removeNotificationListener() {
+        if (registration != null) {
+            registration.remove();
+        }
     }
 
 

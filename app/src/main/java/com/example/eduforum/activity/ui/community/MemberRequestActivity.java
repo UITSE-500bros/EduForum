@@ -52,7 +52,7 @@ public class MemberRequestActivity extends AppCompatActivity {
 
         viewModel.getMemberRequests().observe(this, users -> {
             adapter.setMemberRequests(users);
-
+            binding.numberMemberRequestTextView.setText(String.valueOf(users.size())+" yêu cầu tham gia");
         });
     }
 }
