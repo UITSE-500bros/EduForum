@@ -6,9 +6,11 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import com.example.eduforum.R;
 import com.example.eduforum.databinding.ActivityMainBinding;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.color.utilities.DynamicColor;
 
@@ -23,5 +25,12 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(binding.mainBottomNavigation, navController);
 
+
+        //Set badge number for notification fragment
+        BadgeDrawable badgeDrawable = binding.mainBottomNavigation.getOrCreateBadge(R.id.notiFragment);
+        badgeDrawable.setBackgroundColor(Color.BLUE);
+        badgeDrawable.setNumber(10);
+        badgeDrawable.setBadgeTextColor(Color.WHITE);
+        badgeDrawable.setVisible(true);
     }
 }

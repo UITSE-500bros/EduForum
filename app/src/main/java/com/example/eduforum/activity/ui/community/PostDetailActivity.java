@@ -309,8 +309,6 @@ public class PostDetailActivity extends AppCompatActivity {
 
 
 
-
-
         binding.moreButton.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(this, v);
             popupMenu.getMenuInflater().inflate(R.menu.post_option_menu, popupMenu.getMenu());

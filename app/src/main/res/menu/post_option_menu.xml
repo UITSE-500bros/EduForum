@@ -9,10 +9,6 @@
         android:icon="@drawable/remove_icon"
         android:title="Xóa"/>
 
-    <item android:id="@+id/savePost"
-        android:icon="@drawable/archive_icon"
-        android:title="Lưu trữ" />
-
     <item android:id="@+id/remindPost"
         android:icon="@drawable/inspect_icon"
         android:title="Quan tâm" />
