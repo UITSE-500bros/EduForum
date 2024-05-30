@@ -8,8 +8,7 @@ public class Notification {
     private String notificationID;
     private Creator triggeredBy;
     private int type;
-    private Community community;
-
+    private CommunityNotification community;
     private PostNotification post;
     private boolean isRead;
     private Timestamp timestamp;
@@ -39,7 +38,7 @@ public class Notification {
         this.type = type;
     }
 
-    public void setCommunity(Community community) {
+    public void setCommunity(CommunityNotification community) {
         this.community = community;
     }
 
@@ -67,7 +66,7 @@ public class Notification {
         return type;
     }
 
-    public Community getCommunity() {
+    public CommunityNotification getCommunity() {
         return community;
     }
 
