@@ -106,6 +106,7 @@ public class HomeFragment extends Fragment {
         myCommunitiesAdapter = new CommunityAdapter(getContext(), viewModel.getIsAdminCommunityList().getValue(), FirebaseAuth.getInstance());
         myCommunitiesAdapter.setIsAdminList(true);
         globalCommunitiesAdapter = new CommunityAdapter(getContext(), viewModel.getGlobalCommunityList().getValue(), FirebaseAuth.getInstance());
+        globalCommunitiesAdapter.setIsGlobalList(true);
         binding.joinedCommunitiesRecyclerView.setAdapter(joinedCommunitiesAdapter);
         binding.myCommunitiesRecyclerView.setAdapter(myCommunitiesAdapter);
         binding.joinedCommunitiesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));

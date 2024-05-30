@@ -49,6 +49,7 @@ public class CommunityActivity extends AppCompatActivity {
     PostAdapter postAdapter;
     Boolean isAdmin;
     Boolean isExploring;
+    Boolean isUITcommunity;
     CreateCommunityViewState currentCommunity;
 
     @Override
@@ -82,9 +83,10 @@ public class CommunityActivity extends AppCompatActivity {
         }
         isAdmin = getIntent().getBooleanExtra("isAdmin", false);
         isExploring = getIntent().getBooleanExtra("isExploring", false);
-
+        isUITcommunity = getIntent().getBooleanExtra("isUITcommunity", false);
         // setup postRecyclerView
         postAdapter = new PostAdapter(this, viewModel.getPostList().getValue());
+        postAdapter.setIsUITcommunity(isUITcommunity);
         binding.postRecyclerView.setAdapter(postAdapter);
         binding.postRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -101,6 +103,9 @@ public class CommunityActivity extends AppCompatActivity {
         if(isExploring){
             binding.createPostEditTextButton.setEnabled(false);
             binding.joinedTextview.setText("Chưa tham gia");
+        }
+        if(isUITcommunity){
+            binding.createPostEditTextButton.setEnabled(false);
         }
         binding.createPostEditTextButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, CreatePostActivity.class);
