@@ -1,5 +1,6 @@
 package com.example.eduforum.activity.ui.community;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.net.Uri;
@@ -7,6 +8,7 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -164,7 +166,15 @@ public class PostDetailActivity extends AppCompatActivity {
                 new CommentAdapter.OnReplyClickListener() {
                     @Override
                     public void onReplyClick(CommentViewState comment) {
+                        // Yêu cầu focus trên EditText
+                        binding.commentEditText.requestFocus();
+
+                        // Hiển thị bàn phím
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(binding.commentEditText, InputMethodManager.SHOW_IMPLICIT);
+
                         binding.commentEditText.setText("@" + comment.getCreator().getName() + " ");
+
                         binding.commentEditText.setVisibility(View.VISIBLE);
                         binding.sendButton.setVisibility(View.VISIBLE);
 
@@ -281,6 +291,22 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
+        binding.commentButton.setOnClickListener(v -> {
+            // Yêu cầu focus trên EditText
+            binding.commentEditText.requestFocus();
+
+            // Hiển thị bàn phím
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(binding.commentEditText, InputMethodManager.SHOW_IMPLICIT);
+
+            // Hiển thị nút sendButton
+            binding.sendButton.setVisibility(View.VISIBLE);
+
+            binding.commentEditText.setText("");
+
+            // Đánh dấu là bình luận gốc
+            this.isParentComment = true;
+        });
 
 
         binding.moreButton.setOnClickListener(v -> {
