@@ -129,6 +129,11 @@ public class NewsFeedViewModel extends ViewModel {
 
             }
 
+            @Override
+            public void onGetOnePostSuccess(Post post) {
+
+            }
+
         });
     }
     public void filterBySearch(String keyword) {
@@ -198,6 +203,11 @@ public class NewsFeedViewModel extends ViewModel {
             public void onGetVoteStatusSuccess(int voteType) {
 
             }
+
+            @Override
+            public void onGetOnePostSuccess(Post post) {
+
+            }
         });
     }
 
@@ -264,6 +274,11 @@ public class NewsFeedViewModel extends ViewModel {
 
             @Override
             public void onGetVoteStatusSuccess(int voteType) {
+
+            }
+
+            @Override
+            public void onGetOnePostSuccess(Post post) {
 
             }
         });

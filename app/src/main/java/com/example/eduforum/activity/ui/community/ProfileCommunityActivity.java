@@ -1,6 +1,7 @@
 package com.example.eduforum.activity.ui.community;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,7 @@ import com.example.eduforum.R;
 import com.example.eduforum.activity.ui.community.adapter.MediaAdapter;
 import com.example.eduforum.activity.ui.community.adapter.MediaItem;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
+import com.example.eduforum.activity.ui.main.MainActivity;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.viewmodel.community.settings.ProfileCommunityViewModel;
 import com.example.eduforum.databinding.ActivityProfileCommunityBinding;
@@ -37,6 +39,7 @@ public class ProfileCommunityActivity extends AppCompatActivity {
 
     private ActivityProfileCommunityBinding binding;
     private ProfileCommunityViewModel viewModel;
+    private CreateCommunityViewState currentCommunity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,12 +47,15 @@ public class ProfileCommunityActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         viewModel = new ViewModelProvider(this).get(ProfileCommunityViewModel.class);
         binding.setLifecycleOwner(this);
-        CreateCommunityViewState currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
+        currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
         if(currentCommunity == null) {
             Log.d("Intent to ProfileCommunityActivity", "currentCommunity is null");
             finish();
         }
         viewModel.setCommunityViewState(currentCommunity);
+        binding.nameCommunityEditText.getEditText().setText(currentCommunity.getName());
+        binding.descriptionCommnunityEditText.getEditText().setText(currentCommunity.getDescription());
+
 
         if(currentCommunity.getCommunityProfilePicture()!=null){
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(currentCommunity.getCommunityProfilePicture());
@@ -57,7 +63,6 @@ public class ProfileCommunityActivity extends AppCompatActivity {
                     .load(storageReference)
                     .into(binding.avaCommunityImageView);
         }
-
         ActivityResultLauncher<PickVisualMediaRequest> pickImage =
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                     if (uri != null) {
@@ -66,6 +71,7 @@ public class ProfileCommunityActivity extends AppCompatActivity {
                         assert state != null;
                         state.setCommuAvt(uri);
                         viewModel.setCommunityViewState(state);
+                        viewModel.setIsChanged(true);
                     }
                     else {
                         Snackbar.make(binding.getRoot(), "Không thể tải ảnh", Snackbar.LENGTH_SHORT).show();
@@ -88,11 +94,26 @@ public class ProfileCommunityActivity extends AppCompatActivity {
                 android.R.layout.simple_dropdown_item_1line, departmentItems);
         binding.ACTVCategory.setAdapter(categoryAdapter);
         binding.ACTVCategory.setOnItemClickListener((parent, view, position, id) -> {
-            CreateCommunityViewState state = viewModel.getCommunityViewState().getValue();
-            assert state != null;
-            state.setCategory(binding.ACTVCategory.getText().toString());
-            viewModel.setCommunityViewState(state);
+            if(parent.getItemAtPosition(position).toString().equals(viewModel.getCommunityViewState().getValue().getCategory())){
+                return;
+            }
+            else{
+                CreateCommunityViewState state = viewModel.getCommunityViewState().getValue();
+                assert state != null;
+                state.setCategory(parent.getItemAtPosition(position).toString());
+                viewModel.setCommunityViewState(state);
+                viewModel.setIsChanged(true);
+            }
         });
+        for(int i = 0; i < departmentItems.length; i++){
+            if(departmentItems[i].equals(currentCommunity.getCategory())){
+                binding.ACTVCategory.setListSelection(i);
+                binding.ACTVCategory.setText(departmentItems[i], false);
+                break;
+            }
+        }
+
+
 
         String[] accessItems = getResources().getStringArray(R.array.access_community);
         ArrayAdapter<String> accessAdapter = new ArrayAdapter<>(binding.getRoot().getContext(),
@@ -107,11 +128,27 @@ public class ProfileCommunityActivity extends AppCompatActivity {
             else{
                 state.setIsPublic(true);
             }
+            if(currentCommunity.getIsPublic()== state.getIsPublic()){
+                return;
+            }
             viewModel.setCommunityViewState(state);
+            viewModel.setIsChanged(true);
         });
+        if(currentCommunity.getIsPublic()){
+            binding.ACTVAccess.setListSelection(0);
+            binding.ACTVAccess.setText(accessItems[0], false);
+        }
+        else{
+            binding.ACTVAccess.setListSelection(1);
+            binding.ACTVAccess.setText(accessItems[1], false);
+        }
 
         binding.updateBtn.setOnClickListener(v -> {
-            viewModel.updateCommunityInfo();
+            CreateCommunityViewState state = viewModel.getCommunityViewState().getValue();
+            assert state != null;
+            state.setName(binding.nameCommunityEditText.getEditText().getText().toString());
+            state.setDescription(binding.descriptionCommnunityEditText.getEditText().getText().toString());
+            viewModel.updateCommunityInfo(state);
         });
         viewModel.getIsSuccess().observe(this, isSuccess -> {
             if(isSuccess){
@@ -119,10 +156,19 @@ public class ProfileCommunityActivity extends AppCompatActivity {
                         .setTitle("Thông báo")
                         .setMessage("Cập nhật thông tin cộng đồng thành công")
                         .setPositiveButton("OK", (dialog, which) -> {
+                            Intent intent = new Intent(ProfileCommunityActivity.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
                             finish();
                         })
                         .show();
 
+            }
+        });
+
+        viewModel.getErrorMessage().observe(this, errorMessage -> {
+            if (errorMessage != null) {
+                Snackbar.make(binding.getRoot(), errorMessage, Snackbar.LENGTH_SHORT).show();
             }
         });
     }

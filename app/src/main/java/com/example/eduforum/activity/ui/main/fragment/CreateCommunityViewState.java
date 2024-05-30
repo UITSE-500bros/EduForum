@@ -50,7 +50,11 @@ public class CreateCommunityViewState implements Serializable {
         else this.unReadposts = 0;
         if(community.getTotalPost()!=null) this.totalPosts = community.getTotalPost();
         else this.totalPosts = 0;
+        if(community.getUserList()!=null)
         this.totalMembers = community.getUserList().size();
+        else this.totalMembers = 0;
+
+        if(community.getAdminList()!=null) this.totalMembers+= community.getAdminList().size();
     }
     public void setIsPublic(Boolean isPublic) {
         this.isPublic = isPublic;

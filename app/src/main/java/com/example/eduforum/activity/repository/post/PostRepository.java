@@ -620,4 +620,27 @@ public class PostRepository {
         });
     }
 
+    public void getOnePost(String communityID, String postID, IPostCallback callback) {
+        db.collection("Community")
+                .document(communityID)
+                .collection("Post")
+                .document(postID)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        Post post = documentSnapshot.toObject(Post.class);
+                        post.setPostID(documentSnapshot.getId());
+                        callback.onGetOnePostSuccess(post);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                        Log.w(FlagsList.DEBUG_POST_FLAG, "Error fetching post,", e);
+                    }
+                });
+    };
+
 }

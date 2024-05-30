@@ -15,7 +15,7 @@ public class ProfileCommunityViewModel extends ViewModel {
     private MutableLiveData<CreateCommunityViewState> communityViewState;
     private MutableLiveData<String> errorMessage;
     private MutableLiveData<Boolean> isSuccess;
-
+    private MutableLiveData<Boolean> isChanged;
     CommunityRepository communityRepository;
     public ProfileCommunityViewModel(){
         communityViewState = new MutableLiveData<>();
@@ -23,9 +23,20 @@ public class ProfileCommunityViewModel extends ViewModel {
         communityRepository = CommunityRepository.getInstance();
         isSuccess = new MutableLiveData<>();
         isSuccess.setValue(false);
+        isChanged = new MutableLiveData<>();
+        isChanged.setValue(false);
     }
 
-    public void updateCommunityInfo(){
+    public void updateCommunityInfo(CreateCommunityViewState state){
+        if(state == null) return;
+        // check if the state changed is impossible, many bugs
+//        if(isChanged.getValue()==false && state.getName().equals(communityViewState.getValue().getName()) && state.getDescription().equals(communityViewState.getValue().getDescription())){
+//            errorMessage.setValue("Không có thông tin nào thay đổi");
+//            return;
+//        }
+
+        communityViewState.setValue(state);
+        if(!isStateValidated()) return;
         Community community = mapStateToCommunity(communityViewState.getValue());
 
         if(community == null) {
@@ -47,6 +58,17 @@ public class ProfileCommunityViewModel extends ViewModel {
             }
         });
     }
+
+    private boolean isStateValidated() {
+        CreateCommunityViewState state = communityViewState.getValue();
+        if(state == null) return false;
+        if(state.getName().isEmpty() || state.getDescription().isEmpty() || state.getCategory().isEmpty() || state.getIsPublic()==null){
+            errorMessage.setValue("Vui lòng điền đầy đủ thông tin");
+            return false;
+        }
+        return true;
+    }
+
     Community mapStateToCommunity(CreateCommunityViewState UIState){
         if(UIState == null) return null;
         CommunityBuilder builder = new CommunityConcreteBuilder();
@@ -56,6 +78,9 @@ public class ProfileCommunityViewModel extends ViewModel {
                 .setDescription(UIState.getDescription())
                 .setProfileImage(UIState.getCommuAvt())
                 .build();
+    }
+    public void setIsChanged(Boolean isChanged) {
+        this.isChanged.setValue(isChanged);
     }
     public LiveData<Boolean> getIsSuccess() {
         return isSuccess;

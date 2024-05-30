@@ -66,7 +66,6 @@
                         android:layout_height="62dp"
                         android:backgroundTint="#FFFFFF"
                         android:inputType="textPersonName"
-                        android:text="@={viewModel.communityViewState.name}"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -82,7 +81,6 @@
                     android:layout_marginTop="30dp"
                     >
                     <com.google.android.material.textfield.TextInputEditText
-                        android:text="@={viewModel.communityViewState.description}"
                         android:textSize="14sp"
                         android:inputType="textPersonName"
                         android:layout_width="match_parent"

@@ -25,11 +25,11 @@
             android:layout_height="match_parent"
             >
             <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:id="@+id/avatar"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="13dp"
                 android:src="@drawable/user_ava_default"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

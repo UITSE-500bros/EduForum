@@ -45,6 +45,8 @@
         <activity
             android:name=".activity.ui.community.ProfileCommunityActivity"
             android:exported="true" />
+        <activity android:name=".activity.ui.auth.NewPassActivity"
+            android:exported="true" />
         <activity
             android:name=".activity.ui.community.CustomTagsActivity"
             android:exported="true"

@@ -24,15 +24,20 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
     Context context;
     List<CreateCommunityViewState> communityList;
     Boolean isAdminList;
+    Boolean isGlobalList;
     FirebaseAuth currentUser;
     public CommunityAdapter(Context context, List<CreateCommunityViewState> communityList, FirebaseAuth currentUser) {
         this.context = context;
         this.communityList = communityList;
         this.currentUser = currentUser;
         isAdminList = false;
+        isGlobalList = false;
     }
     public void setIsAdminList(Boolean isAdminList) {
         this.isAdminList = isAdminList;
+    }
+    public void setIsGlobalList(Boolean isGlobalList) {
+        this.isGlobalList = isGlobalList;
     }
     public void setCommunityList(List<CreateCommunityViewState> communityList) {
         this.communityList = communityList;
@@ -53,6 +58,9 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Comm
             intent.putExtra("currentCommunity", communityList.get(position));
             if(isAdminList) {
                 intent.putExtra("isAdmin", true);
+            }
+            if(isGlobalList) {
+                intent.putExtra("isUITcommunity", true);
             }
             context.startActivity(intent);
         });
