@@ -78,6 +78,7 @@ public class NotificationViewModel extends ViewModel {
 
     public void markAllAsRead(){
         notificationRepository.markAllAsRead(currentUser.getValue().getUserId());
+
     }
 
     public void clearListener(){
