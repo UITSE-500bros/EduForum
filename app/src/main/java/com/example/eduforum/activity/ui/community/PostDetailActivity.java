@@ -1,6 +1,7 @@
 package com.example.eduforum.activity.ui.community;
 
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -119,6 +121,17 @@ public class PostDetailActivity extends AppCompatActivity {
             //finish();
         }
 
+        binding.incognitomodeButton.setOnClickListener(v -> {
+            if(binding.incognitomodeButton.getIconTint() != ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor)){
+                ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
+                binding.incognitomodeButton.setIconTint(colorStateList);
+            }
+            else {
+                ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.unLikedButtonColor);
+                binding.incognitomodeButton.setIconTint(colorStateList);
+            }
+        });
+
 
         commentAdapter = new CommentAdapter(this,
                 viewModel.getComments().getValue(),
@@ -178,6 +191,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
         binding.recyclecomment.setAdapter(commentAdapter);
         binding.recyclecomment.setLayoutManager(new LinearLayoutManager(this));
+
 
 
         assert postViewState != null;
@@ -262,19 +276,6 @@ public class PostDetailActivity extends AppCompatActivity {
             });
             popupMenu.show();
         });
-
-
-
-        binding.incognitoModeButton.setOnClickListener(v -> {
-//            if (binding.incognitoModeButton.isChecked()) {
-//                binding.userNameTextView.setText("Ẩn danh");
-//                binding.avatarImageView.setImageResource(R.drawable.ic_baseline_account_circle_24);
-//            } else {
-//                binding.userNameTextView.setText(postViewState.getCreator().getName());
-//                binding.avatarImageView.setImageResource(R.drawable.ic_baseline_account_circle_24);
-//            }
-        });
-
 
     }
 
