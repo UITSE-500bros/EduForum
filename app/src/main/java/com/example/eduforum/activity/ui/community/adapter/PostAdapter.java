@@ -28,6 +28,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     private Context context;
     private List<PostViewState> postList;
     private Boolean isUITcommunity;
+    private Boolean isExploring;
 
     public PostAdapter(Context context, List<PostViewState> postList) {
         this.context = context;
@@ -36,11 +37,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         }
         else this.postList = postList;
         this.isUITcommunity = false;
+        this.isExploring = false;
 
     }
     public void setPostList(List<PostViewState> postList) {
         this.postList = postList;
         notifyDataSetChanged();
+    }
+    public void setIsExploring(Boolean isExploring) {
+        this.isExploring = isExploring;
     }
     public void setIsUITcommunity(Boolean isUITcommunity) {
         this.isUITcommunity = isUITcommunity;
@@ -64,6 +69,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             Intent intent = new Intent(context, PostDetailActivity.class);
             intent.putExtra("currentPost", postList.get(position));
             intent.putExtra("isUITcommunity", isUITcommunity);
+            intent.putExtra("isExploring", isExploring);
             context.startActivity(intent);
         });
         holder.binding.setting.setOnClickListener(v -> {
