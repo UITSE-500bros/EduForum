@@ -159,8 +159,11 @@ public class PostDetailsViewModel extends ViewModel {
         newComment.setTotalDownVote(0);
         newComment.setVoteDifference(0);
 
+        Post newPost = new Post();
+        newPost.setPostID(pt_id);
+        newPost.setCommunityID(community_id);
 
-        commentRepository.createComment(postInstance, newComment, new CommentCallback() {
+        commentRepository.createComment(newPost, newComment, new CommentCallback() {
             @Override
             public void onCreateSuccess(Comment comments) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
@@ -681,6 +684,8 @@ public class PostDetailsViewModel extends ViewModel {
                         post.getTotalComment()
                 );
                 fetPost.setPictures(post.getDownloadImage());
+                pt_id = post.getPostID();
+                community_id = post.getCommunityID();
                 currentPost.setValue(fetPost);
             }
         });

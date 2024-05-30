@@ -55,9 +55,6 @@ public class PostDetailActivity extends AppCompatActivity {
     private PostDetailsViewModel viewModel;
 
     private CommentAdapter commentAdapter;
-
-
-
     private boolean isUpVoted = false;
     private boolean isDownVoted = false;
     private boolean isParentComment = true;
@@ -65,8 +62,6 @@ public class PostDetailActivity extends AppCompatActivity {
 
     private UserViewModel userViewModel;
     private Creator creator;
-
-
     public static final String KEY_CURRENT_POST = "currentPost";
     public static final String KEY_NOTI_POST = "noti";
     public static final String KEY_COMMUNITY_ID = "notiCommunityID";
@@ -166,6 +161,127 @@ public class PostDetailActivity extends AppCompatActivity {
                         }
                     });
 
+                    commentAdapter = new CommentAdapter(this,
+                            viewModel.getComments().getValue(),
+                            viewModel.getCommentsChild().getValue(),
+                            new CommentAdapter.OnReplyClickListener() {
+                                @Override
+                                public void onReplyClick(CommentViewState comment) {
+                                    // Yêu cầu focus trên EditText
+                                    binding.commentEditText.requestFocus();
+                                    // Hiển thị bàn phím
+                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.showSoftInput(binding.commentEditText, InputMethodManager.SHOW_IMPLICIT);
+
+                                    binding.commentEditText.setText("@" + comment.getCreator().getName() + " ");
+
+                                    binding.commentEditText.setVisibility(View.VISIBLE);
+                                    binding.sendButton.setVisibility(View.VISIBLE);
+
+                                    binding.sendButton.setOnClickListener(v -> {
+                                        String commentText = binding.commentEditText.getText().toString();
+                                        if (!commentText.isEmpty()) {
+
+                                            CommentViewState commentViewState = new CommentViewState(
+                                                    null,
+                                                    commentText,
+                                                    null,
+                                                    creator,
+                                                    0,
+                                                    0,
+                                                    0,
+                                                    null,
+                                                    null,
+                                                    comment.getCommentID(),
+                                                    0
+                                            );
+
+                                            viewModel.addChildComment(comment, commentViewState);
+                                            binding.commentEditText.setText("");
+                                        }
+                                    });
+                                }
+
+                            },
+                            new CommentAdapter.OnDownVoteClickListener() {
+                                @Override
+                                public void onDownClick(CommentViewState comment) {
+                                    viewModel.downVote(comment);
+                                }
+                            },
+                            new CommentAdapter.OnUpVoteClickListener() {
+                                @Override
+                                public void onUpVote(CommentViewState comment) {
+                                    viewModel.upVote(comment);
+                                }
+                            },
+                            new CommentAdapter.OnShowUpReplies() {
+                                @Override
+                                public void onShowUpReplies(CommentViewState comment) {
+                                    viewModel.loadChildComments(comment);
+                                }
+                            }
+                    );
+
+
+                    binding.recyclecomment.setAdapter(commentAdapter);
+                    binding.recyclecomment.setLayoutManager(new LinearLayoutManager(this));
+
+                    viewModel.getComments().observe(this, commentViewStates -> {
+                        List<CommentViewState> commentChildList = new ArrayList<>();
+                        List<CommentViewState> itemsToRemove = new ArrayList<>();
+
+                        for (CommentViewState commentViewState : commentViewStates) {
+                            if (commentViewState.getReplyCommentID() != null) {
+                                commentChildList.add(commentViewState);
+                                itemsToRemove.add(commentViewState);
+                            }
+
+                        }
+                        commentViewStates.removeAll(itemsToRemove);
+                        commentAdapter.setCommentList(commentViewStates);
+                        commentAdapter.setChildCommentList(commentChildList);
+                    });
+
+
+                    binding.setLifecycleOwner(this);
+                    binding.sendButton.setOnClickListener(v -> {
+                        String commentText = binding.commentEditText.getText().toString();
+                        if (!commentText.isEmpty() && this.isParentComment) {
+                            CommentViewState commentViewState = new CommentViewState(
+                                    null,
+                                    commentText,
+                                    null,
+                                    creator,
+                                    0,
+                                    0,
+                                    0,
+                                    null,
+                                    null,
+                                    null,
+                                    0
+                            );
+                            viewModel.addParentComment(commentViewState);
+                            binding.commentEditText.setText("");
+                        }
+                    });
+
+                    binding.commentButton.setOnClickListener(v -> {
+                        // Yêu cầu focus trên EditText
+                        binding.commentEditText.requestFocus();
+
+                        // Hiển thị bàn phím
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(binding.commentEditText, InputMethodManager.SHOW_IMPLICIT);
+
+                        // Hiển thị nút sendButton
+                        binding.sendButton.setVisibility(View.VISIBLE);
+
+                        binding.commentEditText.setText("");
+
+                        // Đánh dấu là bình luận gốc
+                        this.isParentComment = true;
+                    });
                     break;
                 case KEY_NOTI_POST:
                     communityName = (String) getIntent().getSerializableExtra("notiCommunityName");
@@ -233,6 +349,112 @@ public class PostDetailActivity extends AppCompatActivity {
                 });
 
 
+
+                commentAdapter = new CommentAdapter(this,
+                        viewModel.getComments().getValue(),
+                        viewModel.getCommentsChild().getValue(),
+                        new CommentAdapter.OnReplyClickListener() {
+                            @Override
+                            public void onReplyClick(CommentViewState comment) {
+                                // Yêu cầu focus trên EditText
+                                binding.commentEditText.requestFocus();
+                                // Hiển thị bàn phím
+                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.showSoftInput(binding.commentEditText, InputMethodManager.SHOW_IMPLICIT);
+
+                                binding.commentEditText.setText("@" + comment.getCreator().getName() + " ");
+
+                                binding.commentEditText.setVisibility(View.VISIBLE);
+                                binding.sendButton.setVisibility(View.VISIBLE);
+
+                                binding.sendButton.setOnClickListener(v -> {
+                                    String commentText = binding.commentEditText.getText().toString();
+                                    if (!commentText.isEmpty()) {
+
+                                        CommentViewState commentViewState = new CommentViewState(
+                                                null,
+                                                commentText,
+                                                null,
+                                                creator,
+                                                0,
+                                                0,
+                                                0,
+                                                null,
+                                                null,
+                                                comment.getCommentID(),
+                                                0
+                                        );
+
+                                        viewModel.addChildComment(comment, commentViewState);
+                                        binding.commentEditText.setText("");
+                                    }
+                                });
+                            }
+
+                        },
+                        new CommentAdapter.OnDownVoteClickListener() {
+                            @Override
+                            public void onDownClick(CommentViewState comment) {
+                                viewModel.downVote(comment);
+                            }
+                        },
+                        new CommentAdapter.OnUpVoteClickListener() {
+                            @Override
+                            public void onUpVote(CommentViewState comment) {
+                                viewModel.upVote(comment);
+                            }
+                        },
+                        new CommentAdapter.OnShowUpReplies() {
+                            @Override
+                            public void onShowUpReplies(CommentViewState comment) {
+                                viewModel.loadChildComments(comment);
+                            }
+                        }
+                );
+
+
+                binding.recyclecomment.setAdapter(commentAdapter);
+                binding.recyclecomment.setLayoutManager(new LinearLayoutManager(this));
+
+                viewModel.getComments().observe(this, commentViewStates -> {
+                    List<CommentViewState> commentChildList = new ArrayList<>();
+                    List<CommentViewState> itemsToRemove = new ArrayList<>();
+
+                    for (CommentViewState commentViewState : commentViewStates) {
+                        if (commentViewState.getReplyCommentID() != null) {
+                            commentChildList.add(commentViewState);
+                            itemsToRemove.add(commentViewState);
+                        }
+
+                    }
+                    commentViewStates.removeAll(itemsToRemove);
+                    commentAdapter.setCommentList(commentViewStates);
+                    commentAdapter.setChildCommentList(commentChildList);
+                });
+
+
+                binding.setLifecycleOwner(this);
+                binding.sendButton.setOnClickListener(v -> {
+                    String commentText = binding.commentEditText.getText().toString();
+                    if (!commentText.isEmpty() && this.isParentComment) {
+                        CommentViewState commentViewState = new CommentViewState(
+                                null,
+                                commentText,
+                                null,
+                                creator,
+                                0,
+                                0,
+                                0,
+                                null,
+                                null,
+                                null,
+                                0
+                        );
+                        viewModel.addParentComment(commentViewState);
+                        binding.commentEditText.setText("");
+                    }
+                });
+
             } else {
                 Log.d("PostDetailActivity", "postViewState is null");
             }
@@ -248,111 +470,6 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
-
-        commentAdapter = new CommentAdapter(this,
-                viewModel.getComments().getValue(),
-                viewModel.getCommentsChild().getValue(),
-                new CommentAdapter.OnReplyClickListener() {
-                    @Override
-                    public void onReplyClick(CommentViewState comment) {
-                        // Yêu cầu focus trên EditText
-                        binding.commentEditText.requestFocus();
-                        // Hiển thị bàn phím
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.showSoftInput(binding.commentEditText, InputMethodManager.SHOW_IMPLICIT);
-
-                        binding.commentEditText.setText("@" + comment.getCreator().getName() + " ");
-
-                        binding.commentEditText.setVisibility(View.VISIBLE);
-                        binding.sendButton.setVisibility(View.VISIBLE);
-
-                        binding.sendButton.setOnClickListener(v -> {
-                            String commentText = binding.commentEditText.getText().toString();
-                            if (!commentText.isEmpty()) {
-
-                                CommentViewState commentViewState = new CommentViewState(
-                                        null,
-                                        commentText,
-                                        null,
-                                        creator,
-                                        0,
-                                        0,
-                                        0,
-                                        null,
-                                        null,
-                                        comment.getCommentID(),
-                                        0
-                                );
-
-                                viewModel.addChildComment(comment, commentViewState);
-                                binding.commentEditText.setText("");
-                            }
-                        });
-                    }
-
-                },
-                new CommentAdapter.OnDownVoteClickListener() {
-                    @Override
-                    public void onDownClick(CommentViewState comment) {
-                        viewModel.downVote(comment);
-                    }
-                },
-                new CommentAdapter.OnUpVoteClickListener() {
-                    @Override
-                    public void onUpVote(CommentViewState comment) {
-                        viewModel.upVote(comment);
-                    }
-                },
-                new CommentAdapter.OnShowUpReplies() {
-                    @Override
-                    public void onShowUpReplies(CommentViewState comment) {
-                        viewModel.loadChildComments(comment);
-                    }
-                }
-        );
-
-
-        binding.recyclecomment.setAdapter(commentAdapter);
-        binding.recyclecomment.setLayoutManager(new LinearLayoutManager(this));
-
-        viewModel.getComments().observe(this, commentViewStates -> {
-            List<CommentViewState> commentChildList = new ArrayList<>();
-            List<CommentViewState> itemsToRemove = new ArrayList<>();
-
-            for (CommentViewState commentViewState : commentViewStates) {
-                if (commentViewState.getReplyCommentID() != null) {
-                    commentChildList.add(commentViewState);
-                    itemsToRemove.add(commentViewState);
-                }
-
-            }
-            commentViewStates.removeAll(itemsToRemove);
-            commentAdapter.setCommentList(commentViewStates);
-            commentAdapter.setChildCommentList(commentChildList);
-        });
-
-
-        binding.setLifecycleOwner(this);
-        binding.sendButton.setOnClickListener(v -> {
-            String commentText = binding.commentEditText.getText().toString();
-            if (!commentText.isEmpty() && this.isParentComment) {
-                CommentViewState commentViewState = new CommentViewState(
-                        null,
-                        commentText,
-                        null,
-                        creator,
-                        0,
-                        0,
-                        0,
-                        null,
-                        null,
-                        null,
-                        0
-                );
-                viewModel.addParentComment(commentViewState);
-                binding.commentEditText.setText("");
-            }
-        });
 
         binding.commentButton.setOnClickListener(v -> {
             // Yêu cầu focus trên EditText
