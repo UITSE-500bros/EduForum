@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.eduforum.activity.model.community_manage.Community;
 import com.example.eduforum.activity.repository.community.CommunityRepository;
 import com.example.eduforum.activity.repository.community.ILeaveCommunityCallback;
+import com.example.eduforum.activity.repository.community.INotificationStatus;
 
 public class SettingsCommunityViewModel extends ViewModel {
     CommunityRepository communityRepository;
@@ -14,6 +15,7 @@ public class SettingsCommunityViewModel extends ViewModel {
     MutableLiveData<Boolean> isLeaveSuccess;
     MutableLiveData<String> communityId;
     MutableLiveData<String> userId;
+    MutableLiveData<Boolean> isNotified;
     public SettingsCommunityViewModel(){
         communityRepository = CommunityRepository.getInstance();
         errorMessage = new MutableLiveData<>();
@@ -21,9 +23,23 @@ public class SettingsCommunityViewModel extends ViewModel {
         isLeaveSuccess.setValue(false);
         communityId = new MutableLiveData<>();
         userId = new MutableLiveData<>();
+        isNotified = new MutableLiveData<>();
+        isNotified.setValue(true);
     }
     public void setCommunityId(String communityId) {
         this.communityId.setValue(communityId);
+
+        communityRepository.getNotificationStatus(communityId, new INotificationStatus() {
+            @Override
+            public void onNotificationStatusSuccess(Boolean status) {
+                isNotified.setValue(status);
+            }
+
+            @Override
+            public void onNotificationStatusFailure(String errorMsg) {
+                isNotified.setValue(true);
+            }
+        });
     }
     public void setUserId(String userId) {
         this.userId.setValue(userId);
@@ -33,6 +49,9 @@ public class SettingsCommunityViewModel extends ViewModel {
     }
     public LiveData<Boolean> getIsLeaveSuccess() {
         return isLeaveSuccess;
+    }
+    public LiveData<Boolean> getIsNotified() {
+        return isNotified;
     }
     public void leaveCommunity() {
         communityRepository.leaveCommunity(userId.getValue(), communityId.getValue(), new ILeaveCommunityCallback() {
@@ -53,6 +72,10 @@ public class SettingsCommunityViewModel extends ViewModel {
                 isLeaveSuccess.setValue(false);
             }
         });
+    }
+    public void toggleNotificationStatus(Boolean isNotified) {
+        communityRepository.toggleNotification(communityId.getValue(), userId.getValue(), isNotified);
+        this.isNotified.setValue(isNotified);
     }
     public void deleteCommunity() {
         Community community = new Community();

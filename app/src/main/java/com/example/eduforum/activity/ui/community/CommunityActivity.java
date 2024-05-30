@@ -81,6 +81,14 @@ public class CommunityActivity extends AppCompatActivity {
         } else {
             //finish();
         }
+        viewModel.getIsNotified().observe(this, isNotified -> {
+            if (isNotified) {
+                binding.joinTextview.setText("Đã tham gia");
+            }
+            else{
+                binding.joinTextview.setText("Chưa tham gia");
+            }
+        });
         isAdmin = getIntent().getBooleanExtra("isAdmin", false);
         isExploring = getIntent().getBooleanExtra("isExploring", false);
         isUITcommunity = getIntent().getBooleanExtra("isUITcommunity", false);

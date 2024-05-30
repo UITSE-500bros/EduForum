@@ -96,7 +96,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         }
         void bind(PostViewState post) {
             if(post.getCreator()!=null){
-                if(!post.getAnonymous())
+                if(post.getAnonymous() != null && !post.getAnonymous())
                 {
                     binding.username.setText(post.getCreator().getName());
                     binding.falcuty.setText(post.getCreator().getDepartment());

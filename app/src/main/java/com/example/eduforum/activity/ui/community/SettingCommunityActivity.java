@@ -105,6 +105,12 @@ public class SettingCommunityActivity extends AppCompatActivity {
                         .show();
 
         });
+        binding.notiButtonSetting.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            viewModel.toggleNotificationStatus(isChecked);
+        });
+        viewModel.getIsNotified().observe(this, isNotified -> {
+            binding.notiButtonSetting.setChecked(isNotified);
+        });
         viewModel.getIsLeaveSuccess().observe(this, isLeaveSuccess -> {
             if(isLeaveSuccess) {
                 Intent intent = new Intent(SettingCommunityActivity.this, MainActivity.class);

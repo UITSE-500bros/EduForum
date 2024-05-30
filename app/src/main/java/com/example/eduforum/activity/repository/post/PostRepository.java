@@ -621,6 +621,8 @@ public class PostRepository {
     }
 
     public void getOnePost(String communityID, String postID, IPostCallback callback) {
+
+
         db.collection("Community")
                 .document(communityID)
                 .collection("Post")
@@ -630,6 +632,7 @@ public class PostRepository {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         Post post = documentSnapshot.toObject(Post.class);
+                        assert post != null;
                         post.setPostID(documentSnapshot.getId());
                         callback.onGetOnePostSuccess(post);
                     }
@@ -641,6 +644,6 @@ public class PostRepository {
                         Log.w(FlagsList.DEBUG_POST_FLAG, "Error fetching post,", e);
                     }
                 });
-    };
+    }
 
 }

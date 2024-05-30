@@ -29,8 +29,8 @@ import java.util.List;
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
     Context context;
     private List<NotificationViewState> notificationList;
-    public NotificationAdapter(List<NotificationViewState> notificationList) {
-
+    public NotificationAdapter(Context context, List<NotificationViewState> notificationList) {
+        this.context = context;
         if (notificationList == null) {
             this.notificationList = new ArrayList<>();
         }
@@ -79,6 +79,16 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         return notificationList.size();
     }
 
+    public int getUnreadCount() {
+        int count = 0;
+        for (NotificationViewState notification : notificationList) {
+            if (!notification.isRead()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     public static class NotificationViewHolder extends RecyclerView.ViewHolder {
         ItemNotiBinding binding;
         public NotificationViewHolder(ItemNotiBinding binding) {
@@ -93,9 +103,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                         .load(storageReference)
                         .into(binding.avatarCardView);
             }
-            //String communityName = notificationViewState.getCommunity().getCommunityName();
-            //binding.commuNotiTextView.setText(communityName);
-            //binding.timeNotiTextView.setText(notificationViewState.getTimeStamp().toDate().toString());
+            String communityName = notificationViewState.getCommunityName();
+            binding.commuNotiTextView.setText(communityName);
+            binding.timeNotiTextView.setText(notificationViewState.getDate());
+
+            if(notificationViewState.isRead()) binding.notiCardView.setBackgroundColor(Color.parseColor("#001D3D"));
+
             switch (notificationViewState.getType()) {
                 case 1:
                     binding.contentNotiTextView.setText(notificationViewState.getTriggerBy().getName() + " đã đăng một bình luận mới vào bài viết của bạn.");
@@ -124,7 +137,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     //TODO: Handle card view click
     public void handleCardViewClick(NotificationViewState notificationViewState) {
         Intent intent = new Intent(context, PostDetailActivity.class);
-        intent.putExtra("key", "notiPost");
+        intent.putExtra("key", "noti");
         intent.putExtra("notiCommunityID", notificationViewState.getCommunityID());
         intent.putExtra("notiPost", notificationViewState.getPostID());
         context.startActivity(intent);
