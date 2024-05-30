@@ -165,8 +165,11 @@ public class UserRepository {
             uploadProfilePicture(user, new IUpload() {
                 @Override
                 public void onUploadSuccess(String url) {
-                    user.setProfilePicture(url);
                     UpdateProfileDTO updateProfileDTO = new UpdateProfileDTO(user);
+                    if (!url.equals("default")) {
+                        user.setProfilePicture(url);
+                        updateProfileDTO.setProfilePicture(url);
+                    }
                     db.collection("User")
                             .document(user.getUserId())
                             .update(updateProfileDTO.toMap())

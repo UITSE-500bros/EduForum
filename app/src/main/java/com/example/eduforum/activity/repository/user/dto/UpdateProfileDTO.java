@@ -11,6 +11,7 @@ public class UpdateProfileDTO {
     private String department;
     private String gender;
     private String schoolYear;
+    private String profilePicture;
 
     public UpdateProfileDTO(User user) {
         this.name = user.getName();
@@ -67,6 +68,12 @@ public class UpdateProfileDTO {
         res.put("department", department);
         res.put("gender", gender);
         res.put("schoolYear", schoolYear);
+        if (profilePicture != null)
+            res.put("profilePicture", profilePicture);
         return res;
+    }
+
+    public void setProfilePicture(String url) {
+        this.profilePicture = url;
     }
 }
