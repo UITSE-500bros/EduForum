@@ -64,8 +64,11 @@ public class PostDetailActivity extends AppCompatActivity {
     private UserViewModel userViewModel;
     private Creator creator;
 
+    private PostViewState postViewState;
 
-
+    public static final String KEY_CURRENT_POST = "currentPost";
+    public static final String KEY_NOTI_POST = "notiPost";
+    public static final String KEY_COMMUNITY_ID = "communityID";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

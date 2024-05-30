@@ -150,6 +150,11 @@ public class CreatePostViewModel extends ViewModel {
             public void onGetVoteStatusSuccess(int voteType) {
 
             }
+
+            @Override
+            public void onGetOnePostSuccess(Post post) {
+
+            }
         });
     }
     private Boolean isPostValid(PostViewState post){

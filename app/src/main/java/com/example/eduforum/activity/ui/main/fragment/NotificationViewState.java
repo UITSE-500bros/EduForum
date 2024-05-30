@@ -9,18 +9,19 @@ public class NotificationViewState {
     private int type;
     private boolean isRead;
     private String date;
-
+    private String communityID;
     private String content;
     private String communityName;
 
     private String postID;
     private String commentID;
 
+
     public NotificationViewState() {
 
     }
 
-    public NotificationViewState(String notificationID, Creator triggerBy, int type, boolean isRead, String date, String communityName, String postID, String commentID) {
+    public NotificationViewState(String notificationID, Creator triggerBy, int type, boolean isRead, String date, String communityName, String postID, String commentID, String communityID) {
         this.notificationID = notificationID;
         this.triggerBy = triggerBy;
         this.type = type;
@@ -41,7 +42,9 @@ public class NotificationViewState {
 
         if (communityName==null) this.communityName = "";
         else this.communityName = communityName;
+        this.communityID = communityID;
     }
+
 
     public String getNotificationID() {
         return notificationID;
@@ -113,5 +116,9 @@ public class NotificationViewState {
 
     public void setCommentID(String commentID) {
         this.commentID = commentID;
+    }
+
+    public String getCommunityID() {
+        return communityID;
     }
 }
