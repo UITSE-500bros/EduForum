@@ -522,6 +522,11 @@ public class PostDetailsViewModel extends ViewModel {
             public void onGetVoteStatusSuccess(int voteType) {
 
             }
+
+            @Override
+            public void onGetOnePostSuccess(Post post) {
+
+            }
         });
     }
 
@@ -604,6 +609,114 @@ public class PostDetailsViewModel extends ViewModel {
             public void onGetVoteStatusSuccess(int voteType) {
 
             }
+
+            @Override
+            public void onGetOnePostSuccess(Post post) {
+
+            }
         });
+    }
+
+    PostViewState fetPost = new PostViewState();
+    public PostViewState loadPost(String postID, String communityID){
+
+        postRepository.getOnePost(postID, communityID, new IPostCallback() {
+
+            @Override
+            public void onGetPostSuccess(List<Post> posts) {
+
+            }
+
+            @Override
+            public void onGetPostFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onAddPostFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onAddPostSuccess(Post newPost) {
+
+            }
+
+            @Override
+            public void onEditPostSuccess() {
+
+            }
+
+            @Override
+            public void onEditPostFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onQueryPostError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onQueryPostSuccess(List<Post> queryPostResults) {
+
+            }
+
+            @Override
+            public void onDeletePostSuccess() {
+
+            }
+
+            @Override
+            public void onDeletePostError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onSubscriptionSuccess() {
+
+            }
+
+            @Override
+            public void onSubscriptionError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onBookmarkError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onBookmarkSuccess() {
+
+            }
+
+            @Override
+            public void onGetVoteStatusSuccess(int voteType) {
+
+            }
+
+            @Override
+            public void onGetOnePostSuccess(Post post) {
+                fetPost = new PostViewState(
+                        post.getPostID(),
+                        post.getCreator(),
+                        post.getCommunityID(),
+                        post.getTitle(),
+                        post.getContent(),
+                        post.getAnonymous(),
+                        post.getTimeCreated().toDate().toString(),
+                        post.getImage(), post.getTaggedUsers(),
+                        post.getCategory(),
+                        post.getVoteDifference(),
+                        post.getTotalComment()
+                );
+                fetPost.setPictures(post.getDownloadImage());
+
+
+            }
+        });
+        return fetPost;
     }
 }

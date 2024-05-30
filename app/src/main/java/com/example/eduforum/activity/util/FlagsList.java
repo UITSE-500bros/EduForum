@@ -13,6 +13,7 @@ public class FlagsList {
     public static final String ERROR_COMMENT = "ERROR_COMMENT";
     public static final String ERROR_CATEGORY = "ERROR_CATEGORY";
     public static final String ERROR_COMMUNITY_FAILED_TO_GET_COMMUNITY = "ERROR_COMMUNITY_FAILED_TO_GET_COMMUNITY";
+    public static final String DEBUG_FCM = "DEBUG_FCM";
     public static String DEBUG_REGISTER_FLAG = "DEBUG_REGISTER";
     public static String DEBUG_LOGIN_FLAG = "DEBUG_LOGIN";
     public static String ERROR_LOGIN_EMAIL_NOT_VERIFIED = "ERROR_LOGIN_EMAIL_NOT_VERIFIED";
@@ -23,7 +24,7 @@ public class FlagsList {
     public static String ERROR_USER_NOT_FOUND = "ERROR_USER_NOT_FOUND";
     public static String ERROR_USER = "ERROR_USER";
     public static int CONNECTION_RETRIES = 3;
-    public static String APPLICATION_ENVIRONMENT = "development";
+    public static String APPLICATION_ENVIRONMENT = "production";
 
     public static String DEBUG_COMMUNITY_FLAG = "DEBUG_COMMUNITY";
 }

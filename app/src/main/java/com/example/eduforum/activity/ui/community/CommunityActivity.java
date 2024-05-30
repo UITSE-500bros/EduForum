@@ -88,6 +88,7 @@ public class CommunityActivity extends AppCompatActivity {
         postAdapter = new PostAdapter(this, viewModel.getPostList().getValue());
         postAdapter.setIsUITcommunity(isUITcommunity);
         binding.postRecyclerView.setAdapter(postAdapter);
+        binding.postRecyclerView.setNestedScrollingEnabled(false);
         binding.postRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         ActivityResultLauncher<Intent> createPostActivityResult = registerForActivityResult(

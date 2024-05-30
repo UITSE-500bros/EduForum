@@ -67,6 +67,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.bind(post);
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, PostDetailActivity.class);
+            intent.putExtra("key", "currentPost");
             intent.putExtra("currentPost", postList.get(position));
             intent.putExtra("isUITcommunity", isUITcommunity);
             intent.putExtra("isExploring", isExploring);

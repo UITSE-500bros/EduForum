@@ -1,6 +1,7 @@
 package com.example.eduforum.activity.ui.main.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -15,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.eduforum.R;
 import com.example.eduforum.activity.model.noti_manage.Notification;
+import com.example.eduforum.activity.ui.community.PostDetailActivity;
+import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.activity.ui.main.fragment.NotificationViewState;
 import com.example.eduforum.databinding.ItemNotiBinding;
 import com.google.firebase.storage.FirebaseStorage;
@@ -62,7 +65,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             popupMenu.show();
         });
         holder.binding.notiCardView.setOnClickListener(v -> {
-            v.setBackgroundColor(Color.parseColor("#001D3D"));
+            ColorStateList colorStateList = ColorStateList.valueOf(Color.parseColor("#001D3D"));
+            v.setBackgroundTintList(colorStateList);
+
             handleCardViewClick(notificationList.get(position));
         });
 
@@ -96,7 +101,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     binding.contentNotiTextView.setText(notificationViewState.getTriggerBy().getName() + " đã đăng một bình luận mới vào bài viết của bạn.");
                     break;
                 case 2:
-                    binding.contentNotiTextView.setText(notificationViewState.getTriggerBy().getName() + " đăng một bài viết mới trong cộng đồng.");
+                    binding.contentNotiTextView.setText(notificationViewState.getTriggerBy().getName() + " đăng một post mới trong cộng đồng.");
                     break;
                 case 3:
                     binding.contentNotiTextView.setText(notificationViewState.getTriggerBy().getName() + " đã trả lời bình luận của bạn.");
@@ -118,17 +123,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
     //TODO: Handle card view click
     public void handleCardViewClick(NotificationViewState notificationViewState) {
-        switch (notificationViewState.getType()) {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4: // new announcement
-                break;
-            case 5:
-                break;
-        }
+        Intent intent = new Intent(context, PostDetailActivity.class);
+        intent.putExtra("key", "notiPost");
+        intent.putExtra("notiCommunityID", notificationViewState.getCommunityID());
+        intent.putExtra("notiPost", notificationViewState.getPostID());
+        context.startActivity(intent);
     }
 }

@@ -12,6 +12,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.AggregateQuerySnapshot;
+import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
@@ -68,6 +70,28 @@ public class NotificationRepository {
 //        });
 //    }
 
+    public void getNumberOfUnreadNotification(String userId, IGetNumberOfUnread callback) {
+        db.collection("User")
+                .document(userId)
+                .collection("Notification")
+                .whereEqualTo("isRead", false)
+                .count()
+                .get(AggregateSource.SERVER)
+                .addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AggregateQuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            // Count fetched successfully
+                            AggregateQuerySnapshot snapshot = task.getResult();
+                            Log.d(FlagsList.DEBUG_NOTIFICATION_FLAG, "Count: " + snapshot.getCount());
+                            callback.onGetNumberOfUnreadSuccess((int) snapshot.getCount());
+                        } else {
+                            callback.onGetNumberOfUnreadFailure();
+                            Log.d(FlagsList.DEBUG_NOTIFICATION_FLAG, "Count failed: ", task.getException());
+                        }
+                    }
+                });
+    }
     public void observeNotification(String userID, INotificationCallback callback) {
         registration = db.collection("User")
                 .document(userID)

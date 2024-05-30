@@ -1,5 +1,6 @@
 package com.example.eduforum.activity.ui.community;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.net.Uri;
@@ -7,6 +8,7 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -64,8 +66,11 @@ public class PostDetailActivity extends AppCompatActivity {
     private UserViewModel userViewModel;
     private Creator creator;
 
+    private PostViewState postViewState;
 
-
+    public static final String KEY_CURRENT_POST = "currentPost";
+    public static final String KEY_NOTI_POST = "notiPost";
+    public static final String KEY_COMMUNITY_ID = "communityID";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +101,28 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
-        PostViewState postViewState = (PostViewState) getIntent().getSerializableExtra("currentPost");
+        String key = (String) getIntent().getSerializableExtra("key");
+        if (key != null) {
+            switch (key) {
+                case KEY_CURRENT_POST:
+                    PostViewState currentPost = (PostViewState) getIntent().getSerializableExtra(KEY_CURRENT_POST);
+                    if (currentPost != null) {
+                        postViewState = currentPost;
+                    }
+                    break;
+                case KEY_NOTI_POST:
+                    String postID = (String) getIntent().getSerializableExtra(KEY_NOTI_POST);
+                    String communityID = (String) getIntent().getSerializableExtra(KEY_COMMUNITY_ID);
+                    if (postID != null && communityID != null) {
+                        postViewState = viewModel.loadPost(postID, communityID);
+                    }
+                    break;
+                default:
+                    // Handle unexpected key value
+                    break;
+            }
+        }
+
         if (postViewState != null) {
             viewModel.setCurrentPost(postViewState);
             binding.toolBarCreatePost.setTitle(postViewState.getCommunity().getName());
@@ -121,6 +147,7 @@ public class PostDetailActivity extends AppCompatActivity {
             //finish();
         }
 
+
         binding.incognitomodeButton.setOnClickListener(v -> {
             if(binding.incognitomodeButton.getIconTint() != ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor)){
                 ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
@@ -139,7 +166,15 @@ public class PostDetailActivity extends AppCompatActivity {
                 new CommentAdapter.OnReplyClickListener() {
                     @Override
                     public void onReplyClick(CommentViewState comment) {
+                        // Yêu cầu focus trên EditText
+                        binding.commentEditText.requestFocus();
+
+                        // Hiển thị bàn phím
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(binding.commentEditText, InputMethodManager.SHOW_IMPLICIT);
+
                         binding.commentEditText.setText("@" + comment.getCreator().getName() + " ");
+
                         binding.commentEditText.setVisibility(View.VISIBLE);
                         binding.sendButton.setVisibility(View.VISIBLE);
 
@@ -256,6 +291,22 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
+        binding.commentButton.setOnClickListener(v -> {
+            // Yêu cầu focus trên EditText
+            binding.commentEditText.requestFocus();
+
+            // Hiển thị bàn phím
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(binding.commentEditText, InputMethodManager.SHOW_IMPLICIT);
+
+            // Hiển thị nút sendButton
+            binding.sendButton.setVisibility(View.VISIBLE);
+
+            binding.commentEditText.setText("");
+
+            // Đánh dấu là bình luận gốc
+            this.isParentComment = true;
+        });
 
 
         binding.moreButton.setOnClickListener(v -> {
