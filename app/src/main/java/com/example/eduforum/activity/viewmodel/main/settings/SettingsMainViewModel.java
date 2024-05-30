@@ -10,6 +10,6 @@ public class SettingsMainViewModel extends ViewModel {
         userRepository = UserRepository.getInstance();
     }
     public void signOut() {
-        userRepository.signOut();
+//        userRepository.signOut();
     }
 }

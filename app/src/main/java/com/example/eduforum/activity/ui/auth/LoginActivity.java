@@ -197,8 +197,24 @@ public class LoginActivity extends AppCompatActivity {
         if (user != null && user.isEmailVerified()) {
 //            Log.d("TEST", user.getEmail());
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(i);
-            finish();
+            userViewModel.getCurrentUser(new IUserCallback() {
+                @Override
+                public void onGetUserSuccess(User user) {
+                    FirebaseMessaging.getInstance().subscribeToTopic("user_" + user.getUserId())
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    startActivity(i);
+                                    finish();
+                                } else {
+                                    Snackbar.make(binding.getRoot(), "Đã có lỗi xảy ra, vui lòng chờ giây lát!", Snackbar.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+                @Override
+                public void onGetUserFailure(String errorMsg) {
+                    Snackbar.make(binding.getRoot(), "Đã có lỗi xảy ra, vui lòng chờ giây lát!", Snackbar.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }
