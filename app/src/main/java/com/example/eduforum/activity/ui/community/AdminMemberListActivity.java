@@ -65,6 +65,10 @@ public class AdminMemberListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        binding.toolbar.setNavigationOnClickListener(v -> {
+            finish();
+        });
+
         // setup recyclerView
         //admin recycler view
         RecyclerView memberMemberListRecyclerView = binding.MemberrecyclerView;

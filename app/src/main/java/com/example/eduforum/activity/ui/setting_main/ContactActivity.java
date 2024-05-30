@@ -1,6 +1,7 @@
 package com.example.eduforum.activity.ui.setting_main;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +29,10 @@ public class ContactActivity extends AppCompatActivity {
             return insets;
         });
 
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        MaterialToolbar toolbar = findViewById(R.id.toolbarContact);
+        toolbar.setNavigationOnClickListener(v -> {
+            finish();
+        });
         setSupportActionBar(toolbar);
 
     }
