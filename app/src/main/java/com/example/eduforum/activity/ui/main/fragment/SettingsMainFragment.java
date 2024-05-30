@@ -1,7 +1,11 @@
 package com.example.eduforum.activity.ui.main.fragment;
 
+import static com.example.eduforum.activity.util.FlagsList.PREF_FILE_NAME;
+
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -105,5 +109,22 @@ public class SettingsMainFragment extends Fragment {
                 Snackbar.make(binding.getRoot(), errorMessage, Snackbar.LENGTH_SHORT).show();
             }
         });
+
+        binding.notiButtonSetting.setChecked(getNotificationPreference(binding.getRoot().getContext()));
+        binding.notiButtonSetting.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            setNotificationPreference(isChecked, buttonView.getContext());
+        });
     }
+
+    private boolean getNotificationPreference(Context c) {
+        SharedPreferences prefs = c.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
+        return prefs.getBoolean("notifications", true); // Default is true
     }
+
+    private void setNotificationPreference(boolean isEnabled, Context c) {
+        SharedPreferences prefs = c.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean("notifications", isEnabled);
+        editor.apply();
+    }
+}

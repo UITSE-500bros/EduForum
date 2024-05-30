@@ -6,7 +6,7 @@
     <string name="forgotPassText">Đừng lo! Nó thường xuyên xảy ra. Hãy nhập địa chỉ email liên kết với tài khoản của bạn.</string>
     <string name="createNewPassHeadingText">Tạo mật khẩu mới</string>
     <string name="createNewPassText">Mật khẩu mới của bạn phải khác với những mật khẩu đã dùng trước đó.</string>
-
+    <string name="default_notification_channel_id">edu_forum_notifications</string>
     <!-- thiết lập string cho welcome -->
     <string name="screen0">Chào mừng tới</string>
     <string name="screen1">Kết nối</string>
