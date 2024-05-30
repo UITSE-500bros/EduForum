@@ -106,6 +106,9 @@ public class NotificationRepository {
                     List<Notification> data = new ArrayList<>();
                     for (QueryDocumentSnapshot document : value) {
                         Notification newNotification = document.toObject(Notification.class);
+//                        Log.d(FlagsList.DEBUG_NOTIFICATION_FLAG, "Notification data: " + document.getData().get("isRead"));
+//                        Log.d(FlagsList.DEBUG_NOTIFICATION_FLAG, "Notification object: " + newNotification.isRead());
+                        newNotification.setIsRead((boolean) document.getData().get("isRead"));
                         newNotification.setNotificationID(document.getId());
                         data.add(newNotification);
                         Log.d(FlagsList.DEBUG_NOTIFICATION_FLAG, document.getId() + " => " + document.getData());

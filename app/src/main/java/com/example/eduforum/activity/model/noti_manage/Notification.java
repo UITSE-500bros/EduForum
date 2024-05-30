@@ -42,8 +42,8 @@ public class Notification {
         this.community = community;
     }
 
-    public void setRead(boolean read) {
-        isRead = read;
+    public void setIsRead(boolean read) {
+        this.isRead = read;
     }
 
     public void setTimestamp(Timestamp timestamp) {
