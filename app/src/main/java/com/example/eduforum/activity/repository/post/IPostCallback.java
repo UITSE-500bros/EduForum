@@ -31,4 +31,6 @@ public interface IPostCallback {
     void onBookmarkSuccess();
 
     void onGetVoteStatusSuccess(int voteType);  // 0: no vote, 1: upvote, -1: downvote
+
+    void onGetOnePostSuccess(Post post);
 }

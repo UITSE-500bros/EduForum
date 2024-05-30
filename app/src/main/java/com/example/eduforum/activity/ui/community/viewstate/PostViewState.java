@@ -29,6 +29,25 @@ public class PostViewState implements Serializable {
     private int totalComment;
     private int voteDiff;
 
+    private String communityID;
+    public PostViewState(String postId, Creator creator, String communityID, String title, String content, Boolean isAnonymous, String date, List<Uri> image, List<String> taggedUsers,  List<PostCategory> tags, int voteDiff, int totalComment) {
+        this.postId = postId;
+        this.creator = creator;
+        this.communityID = communityID;
+        this.title = title;
+        if(content==null) this.content = "";
+        else this.content = content;
+        this.isAnonymous = isAnonymous;
+        this.date = date;
+        if(tags==null) this.tags = new ArrayList<>();
+        else this.tags = tags;
+        if(image==null) this.image = new ArrayList<>();
+        else  this.image = image;
+        if(taggedUsers==null) this.taggedUsers = new ArrayList<>();
+        else this.taggedUsers = taggedUsers;
+        this.voteDiff = voteDiff;
+        this.totalComment = totalComment;
+    }
     public PostViewState(String postId, Creator creator, CreateCommunityViewState community, String title, String content, Boolean isAnonymous, String date, List<Uri> image, List<String> taggedUsers,  List<PostCategory> tags, int voteDiff, int totalComment) {
         this.postId = postId;
         this.creator = creator;
@@ -138,4 +157,27 @@ public class PostViewState implements Serializable {
         this.voteDiff = i;
     }
 
+    public Boolean getAnonymous() {
+        return isAnonymous;
+    }
+
+    public void setTotalComment(int totalComment) {
+        this.totalComment = totalComment;
+    }
+
+    public int getVoteDiff() {
+        return voteDiff;
+    }
+
+    public void setVoteDiff(int voteDiff) {
+        this.voteDiff = voteDiff;
+    }
+
+    public String getCommunityID() {
+        return communityID;
+    }
+
+    public void setCommunityID(String communityID) {
+        this.communityID = communityID;
+    }
 }

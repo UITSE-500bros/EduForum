@@ -57,7 +57,8 @@ public class NotificationViewModel extends ViewModel {
                                     convertTimestamp(notification.getTimestamp()),
                                     notification.getCommunity().getName(),
                                     notification.getPost().getPostID(),
-                                    notification.getCommentID()
+                                    notification.getCommentID(),
+                                    notification.getCommunity().getCommunityId()
                             );
                             notificationViewStates.add(notificationViewState);
                         }
