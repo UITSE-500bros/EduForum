@@ -72,7 +72,7 @@ public class CommunityActivity extends AppCompatActivity {
             binding.descriptionContentTextview.setText(currentCommunity.getDescription());
             binding.memberCountTextview.setText(currentCommunity.getTotalMembers().toString());
             binding.postCountTextview.setText(currentCommunity.getTotalPosts().toString());
-            if(currentCommunity.getCommunityProfilePicture()!=null){
+            if(currentCommunity.getCommunityProfilePicture()!=null && !currentCommunity.getCommunityProfilePicture().equals("default")){
                 StorageReference storageReference = FirebaseStorage.getInstance().getReference(currentCommunity.getCommunityProfilePicture());
                 Glide.with(binding.getRoot().getContext())
                         .load(storageReference)
