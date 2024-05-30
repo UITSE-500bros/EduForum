@@ -6,7 +6,7 @@ import com.google.firebase.Timestamp;
 
 public class Notification {
     private String notificationID;
-    private Creator triggeredBy;
+    private Sender triggeredBy;
     private int type;
     private CommunityNotification community;
     private PostNotification post;
@@ -30,7 +30,7 @@ public class Notification {
         this.notificationID = notificationID;
     }
 
-    public void setTriggeredBy(Creator triggeredBy) {
+    public void setTriggeredBy(Sender triggeredBy) {
         this.triggeredBy = triggeredBy;
     }
 
@@ -58,7 +58,7 @@ public class Notification {
         return notificationID;
     }
 
-    public Creator getTriggeredBy() {
+    public Sender getTriggeredBy() {
         return triggeredBy;
     }
 
