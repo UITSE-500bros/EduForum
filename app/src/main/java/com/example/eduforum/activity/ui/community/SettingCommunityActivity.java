@@ -1,5 +1,6 @@
 package com.example.eduforum.activity.ui.community;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,9 +10,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.EduForum;
+import com.example.eduforum.activity.ui.main.MainActivity;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
+import com.example.eduforum.activity.viewmodel.community.SettingsCommunityViewModel;
+import com.example.eduforum.activity.viewmodel.shared.UserViewModel;
 import com.example.eduforum.databinding.ActivitySettingCommunityBinding;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -19,12 +25,21 @@ public class SettingCommunityActivity extends AppCompatActivity {
 
     ActivitySettingCommunityBinding binding;
     CreateCommunityViewState currentCommunity;
+    SettingsCommunityViewModel viewModel;
+    UserViewModel userViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySettingCommunityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        viewModel = new ViewModelProvider(this).get(SettingsCommunityViewModel.class);
+        EduForum app  = (EduForum) getApplication();
+        userViewModel = app.getSharedViewModel(UserViewModel.class);
+        userViewModel.getCurrentUserLiveData().observe(this, user -> {
+            if(user != null) {
+                viewModel.setUserId(user.getUserId());
+            }
+        });
         //set up turn back button in ActionBar
         binding.toolBarSettingCommunity.setNavigationOnClickListener(v -> {
             finish();
@@ -36,7 +51,7 @@ public class SettingCommunityActivity extends AppCompatActivity {
             Log.e("Intent to SettingCommunityActivity", "currentCommunity is null");
             finish();
         }
-
+        viewModel.setCommunityId(currentCommunity.getCommunityID());
         binding.settingCommunity.setOnClickListener(v -> {
             if(isAdmin){
                 Intent intent = new Intent(this, ProfileCommunityActivity.class);
@@ -76,6 +91,32 @@ public class SettingCommunityActivity extends AppCompatActivity {
             intent.putExtra("communityId", currentCommunity.getCommunityID());
             intent.putExtra("isAdmin", isAdmin);
             startActivity(intent);
+        });
+
+        binding.leaveCommunity.setOnClickListener(v -> {
+            //if user is admin- need a check from database
+                new AlertDialog.Builder(this)
+                        .setTitle("Rời khỏi cộng đồng")
+                        .setMessage("Bạn có chắc chắn muốn rời khỏi cộng đồng không?")
+                        .setPositiveButton("Có", (dialog, which) -> {
+                            viewModel.leaveCommunity();
+                        })
+                        .setNegativeButton("Không", null)
+                        .show();
+
+        });
+        viewModel.getIsLeaveSuccess().observe(this, isLeaveSuccess -> {
+            if(isLeaveSuccess) {
+                Intent intent = new Intent(SettingCommunityActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
+        viewModel.getErrorMessage().observe(this, errorMessage -> {
+            if(errorMessage != null) {
+                makeSnackBar(errorMessage);
+            }
         });
     }
     void makeSnackBar(String message){

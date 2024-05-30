@@ -39,7 +39,7 @@ public class NewPassActivity extends AppCompatActivity {
                         .setMessage("Đổi mật khẩu thành công")
                         .setPositiveButton("OK", (dialog, which) -> {
                             dialog.dismiss();
-                            //finish();
+                            finish();
                         })
                         .show();
             }

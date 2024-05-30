@@ -24,6 +24,7 @@ import com.example.eduforum.activity.ui.setting_main.ProfileUserSettingActivity;
 import com.example.eduforum.activity.viewmodel.main.settings.SettingsMainViewModel;
 import com.example.eduforum.activity.viewmodel.shared.UserViewModel;
 import com.example.eduforum.databinding.FragmentSettingsMainBinding;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -87,12 +88,22 @@ public class SettingsMainFragment extends Fragment {
                     .setMessage("Bạn có chắc chắn muốn đăng xuất không?")
                     .setPositiveButton("Có", (dialog, which) -> {
                         viewModel.signOut();
-                        Intent intent = new Intent(getActivity(), LoginActivity.class);
-                        startActivity(intent);
-                        getActivity().finishAffinity();
+
                     })
                     .setNegativeButton("No", null)
                     .show();
+        });
+        viewModel.getIsSignOutSuccess().observe(getViewLifecycleOwner(), isSignOutSuccess -> {
+            if(isSignOutSuccess) {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+                getActivity().finishAffinity();
+            }
+        });
+        viewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
+            if(errorMessage != null) {
+                Snackbar.make(binding.getRoot(), errorMessage, Snackbar.LENGTH_SHORT).show();
+            }
         });
     }
     }
