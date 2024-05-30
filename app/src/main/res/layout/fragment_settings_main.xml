@@ -60,7 +60,7 @@
             android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tên người dùng"
+            android:text="Họ tên"
             android:textSize="25sp"
             android:textColor="@color/white"
             android:fontFamily="@font/source_sans_pro_semibold"
