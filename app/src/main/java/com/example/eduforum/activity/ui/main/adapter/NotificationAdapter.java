@@ -118,17 +118,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
     //TODO: Handle card view click
     public void handleCardViewClick(NotificationViewState notificationViewState) {
-        switch (notificationViewState.getType()) {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4: // new announcement
-                break;
-            case 5:
-                break;
-        }
+
+        Intent intent = new Intent(context, PostDetailActivity.class);
+        intent.putExtra("key", "notiPost");
+        intent.putExtra("notiCommunityID", notificationViewState.getCommunityID());
+        intent.putExtra("notiPost", notificationViewState.getPostID());
+        context.startActivity(intent);
     }
 }

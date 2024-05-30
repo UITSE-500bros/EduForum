@@ -96,7 +96,28 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
-        PostViewState postViewState = (PostViewState) getIntent().getSerializableExtra("currentPost");
+        String key = (String) getIntent().getSerializableExtra("key");
+        if (key != null) {
+            switch (key) {
+                case KEY_CURRENT_POST:
+                    PostViewState currentPost = (PostViewState) getIntent().getSerializableExtra(KEY_CURRENT_POST);
+                    if (currentPost != null) {
+                        postViewState = currentPost;
+                    }
+                    break;
+                case KEY_NOTI_POST:
+                    String postID = (String) getIntent().getSerializableExtra(KEY_NOTI_POST);
+                    String communityID = (String) getIntent().getSerializableExtra(KEY_COMMUNITY_ID);
+                    if (postID != null && communityID != null) {
+                        postViewState = viewModel.loadPost(postID, communityID);
+                    }
+                    break;
+                default:
+                    // Handle unexpected key value
+                    break;
+            }
+        }
+
         if (postViewState != null) {
             viewModel.setCurrentPost(postViewState);
             binding.toolBarCreatePost.setTitle(postViewState.getCommunity().getName());
