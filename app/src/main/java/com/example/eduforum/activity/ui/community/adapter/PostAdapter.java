@@ -96,13 +96,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         }
         void bind(PostViewState post) {
             if(post.getCreator()!=null){
-                binding.username.setText(post.getCreator().getName());
-                binding.falcuty.setText(post.getCreator().getDepartment());
-                if(post.getCreator().getProfilePicture()!=null){
-                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(post.getCreator().getProfilePicture());
-                    Glide.with(binding.getRoot().getContext())
-                            .load(storageReference)
-                            .into(binding.avatar);
+                if(!post.getAnonymous())
+                {
+                    binding.username.setText(post.getCreator().getName());
+                    binding.falcuty.setText(post.getCreator().getDepartment());
+                    if(post.getCreator().getProfilePicture()!=null){
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(post.getCreator().getProfilePicture());
+                        Glide.with(binding.getRoot().getContext())
+                                .load(storageReference)
+                                .into(binding.avatar);
+                    }
+                }
+                else{
+                    binding.username.setText("Ẩn danh");
+                    binding.falcuty.setText("");
+
                 }
             }
             binding.title.setText(post.getTitle());
