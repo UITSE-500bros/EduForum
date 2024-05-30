@@ -1,6 +1,7 @@
 package com.example.eduforum.activity.ui.community;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,7 @@ import com.example.eduforum.R;
 import com.example.eduforum.activity.ui.community.adapter.MediaAdapter;
 import com.example.eduforum.activity.ui.community.adapter.MediaItem;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
+import com.example.eduforum.activity.ui.main.MainActivity;
 import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.viewmodel.community.settings.ProfileCommunityViewModel;
 import com.example.eduforum.databinding.ActivityProfileCommunityBinding;
@@ -61,7 +63,6 @@ public class ProfileCommunityActivity extends AppCompatActivity {
                     .load(storageReference)
                     .into(binding.avaCommunityImageView);
         }
-
         ActivityResultLauncher<PickVisualMediaRequest> pickImage =
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                     if (uri != null) {
@@ -70,6 +71,7 @@ public class ProfileCommunityActivity extends AppCompatActivity {
                         assert state != null;
                         state.setCommuAvt(uri);
                         viewModel.setCommunityViewState(state);
+                        viewModel.setIsChanged(true);
                     }
                     else {
                         Snackbar.make(binding.getRoot(), "Không thể tải ảnh", Snackbar.LENGTH_SHORT).show();
@@ -92,10 +94,16 @@ public class ProfileCommunityActivity extends AppCompatActivity {
                 android.R.layout.simple_dropdown_item_1line, departmentItems);
         binding.ACTVCategory.setAdapter(categoryAdapter);
         binding.ACTVCategory.setOnItemClickListener((parent, view, position, id) -> {
-            CreateCommunityViewState state = viewModel.getCommunityViewState().getValue();
-            assert state != null;
-            state.setCategory(binding.ACTVCategory.getText().toString());
-            viewModel.setCommunityViewState(state);
+            if(parent.getItemAtPosition(position).toString().equals(viewModel.getCommunityViewState().getValue().getCategory())){
+                return;
+            }
+            else{
+                CreateCommunityViewState state = viewModel.getCommunityViewState().getValue();
+                assert state != null;
+                state.setCategory(parent.getItemAtPosition(position).toString());
+                viewModel.setCommunityViewState(state);
+                viewModel.setIsChanged(true);
+            }
         });
         for(int i = 0; i < departmentItems.length; i++){
             if(departmentItems[i].equals(currentCommunity.getCategory())){
@@ -120,7 +128,11 @@ public class ProfileCommunityActivity extends AppCompatActivity {
             else{
                 state.setIsPublic(true);
             }
+            if(currentCommunity.getIsPublic()== state.getIsPublic()){
+                return;
+            }
             viewModel.setCommunityViewState(state);
+            viewModel.setIsChanged(true);
         });
         if(currentCommunity.getIsPublic()){
             binding.ACTVAccess.setListSelection(0);
@@ -136,7 +148,7 @@ public class ProfileCommunityActivity extends AppCompatActivity {
             assert state != null;
             state.setName(binding.nameCommunityEditText.getEditText().getText().toString());
             state.setDescription(binding.descriptionCommnunityEditText.getEditText().getText().toString());
-            viewModel.updateCommunityInfo();
+            viewModel.updateCommunityInfo(state);
         });
         viewModel.getIsSuccess().observe(this, isSuccess -> {
             if(isSuccess){
@@ -144,10 +156,19 @@ public class ProfileCommunityActivity extends AppCompatActivity {
                         .setTitle("Thông báo")
                         .setMessage("Cập nhật thông tin cộng đồng thành công")
                         .setPositiveButton("OK", (dialog, which) -> {
+                            Intent intent = new Intent(ProfileCommunityActivity.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
                             finish();
                         })
                         .show();
 
+            }
+        });
+
+        viewModel.getErrorMessage().observe(this, errorMessage -> {
+            if (errorMessage != null) {
+                Snackbar.make(binding.getRoot(), errorMessage, Snackbar.LENGTH_SHORT).show();
             }
         });
     }
