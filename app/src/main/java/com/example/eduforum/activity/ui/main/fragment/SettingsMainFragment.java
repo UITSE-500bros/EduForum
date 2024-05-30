@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +17,11 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.example.eduforum.R;
 import com.example.eduforum.activity.EduForum;
+import com.example.eduforum.activity.ui.auth.LoginActivity;
 import com.example.eduforum.activity.ui.auth.NewPassActivity;
 import com.example.eduforum.activity.ui.setting_main.ContactActivity;
 import com.example.eduforum.activity.ui.setting_main.ProfileUserSettingActivity;
+import com.example.eduforum.activity.viewmodel.main.settings.SettingsMainViewModel;
 import com.example.eduforum.activity.viewmodel.shared.UserViewModel;
 import com.example.eduforum.databinding.FragmentSettingsMainBinding;
 import com.google.firebase.storage.FirebaseStorage;
@@ -27,6 +30,7 @@ import com.google.firebase.storage.StorageReference;
 public class SettingsMainFragment extends Fragment {
     private FragmentSettingsMainBinding binding;
     private UserViewModel userViewModel;
+    private SettingsMainViewModel viewModel;
     public SettingsMainFragment() {
         // Required empty public constructor
     }
@@ -40,6 +44,8 @@ public class SettingsMainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentSettingsMainBinding.inflate(inflater, container, false);
+        binding.setLifecycleOwner(this);
+        viewModel = new ViewModelProvider(this).get(SettingsMainViewModel.class);
         EduForum app  = (EduForum) getActivity().getApplication();
         userViewModel = app.getSharedViewModel(UserViewModel.class);
         userViewModel.getCurrentUserLiveData().observe(getViewLifecycleOwner(), user -> {
@@ -53,6 +59,7 @@ public class SettingsMainFragment extends Fragment {
                 }
             }
         });
+
 
 
         return binding.getRoot();
@@ -79,7 +86,10 @@ public class SettingsMainFragment extends Fragment {
                     .setTitle("Đăng xuất")
                     .setMessage("Bạn có chắc chắn muốn đăng xuất không?")
                     .setPositiveButton("Có", (dialog, which) -> {
-                        // Logout
+                        viewModel.signOut();
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(intent);
+                        getActivity().finishAffinity();
                     })
                     .setNegativeButton("No", null)
                     .show();

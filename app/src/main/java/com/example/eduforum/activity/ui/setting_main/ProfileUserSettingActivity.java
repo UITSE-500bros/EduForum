@@ -13,6 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.example.eduforum.R;
@@ -36,6 +37,7 @@ public class ProfileUserSettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile_user_setting);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_profile_user_setting);
         binding.setLifecycleOwner(this);
+        viewModel = new ViewModelProvider(this).get(ProfileUserSettingViewModel.class);
         EduForum app  = (EduForum) getApplication();
         userViewModel = app.getSharedViewModel(UserViewModel.class);
         userViewModel.getCurrentUserLiveData().observe(this, user -> {
