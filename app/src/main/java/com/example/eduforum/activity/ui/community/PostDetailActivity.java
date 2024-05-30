@@ -145,6 +145,7 @@ public class PostDetailActivity extends AppCompatActivity {
             //finish();
         }
 
+
         binding.incognitomodeButton.setOnClickListener(v -> {
             if(binding.incognitomodeButton.getIconTint() != ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor)){
                 ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
