@@ -1,11 +1,12 @@
 package com.example.eduforum.activity.ui.main.fragment;
 
+import com.example.eduforum.activity.model.noti_manage.Sender;
 import com.example.eduforum.activity.model.post_manage.Creator;
 
 public class NotificationViewState {
 
     private String notificationID;
-    private Creator triggerBy;
+    private Sender triggerBy;
     private int type;
     private boolean isRead;
     private String date;
@@ -21,7 +22,7 @@ public class NotificationViewState {
 
     }
 
-    public NotificationViewState(String notificationID, Creator triggerBy, int type, boolean isRead, String date, String communityName, String postID, String commentID, String communityID) {
+    public NotificationViewState(String notificationID, Sender triggerBy, int type, boolean isRead, String date, String communityName, String postID, String commentID, String communityID) {
         this.notificationID = notificationID;
         this.triggerBy = triggerBy;
         this.type = type;
@@ -54,11 +55,11 @@ public class NotificationViewState {
         this.notificationID = notificationID;
     }
 
-    public Creator getTriggerBy() {
+    public Sender getTriggerBy() {
         return triggerBy;
     }
 
-    public void setTriggerBy(Creator triggerBy) {
+    public void setTriggerBy(Sender triggerBy) {
         this.triggerBy = triggerBy;
     }
 

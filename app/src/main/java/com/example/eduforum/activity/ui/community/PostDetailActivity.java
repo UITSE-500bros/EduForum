@@ -66,7 +66,6 @@ public class PostDetailActivity extends AppCompatActivity {
     private UserViewModel userViewModel;
     private Creator creator;
 
-    private PostViewState postViewState;
 
     public static final String KEY_CURRENT_POST = "currentPost";
     public static final String KEY_NOTI_POST = "noti";
@@ -101,6 +100,7 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
+        String communityName;
         String key = (String) getIntent().getSerializableExtra("key");
         if (key != null) {
             switch (key) {
@@ -121,14 +121,62 @@ public class PostDetailActivity extends AppCompatActivity {
                     if (currentPost != null) {
                         viewModel.setCurrentPost(currentPost);
                     }
+
+                    binding.toolBarCreatePost.setTitle(currentPost.getCommunity().getName());
+                    binding.titlePost.setText(currentPost.getTitle());
+                    binding.contentPost.setText(currentPost.getContent());
+                    binding.commentCountTextView.setText(String.valueOf(currentPost.getTotalComment()));
+                    binding.voteCountTextView.setText(String.valueOf(currentPost.getVoteDifference()));
+                    binding.timeCommentTextView.setText(currentPost.getDate());
+                    binding.khoaTextView.setText(currentPost.getCreator().getDepartment());
+                    if(currentPost.getPictures()!=null){
+                        RecyclerView recyclerView = binding.recycleImage;
+                        mediaAdapter = new MediaAdapter(currentPost.getPictures());
+                        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                        recyclerView.setAdapter(mediaAdapter);
+                    }
+
+                    binding.userNameTextView.setText(currentPost.getCreator().getName());
+                    binding.khoaTextView.setText(currentPost.getCreator().getDepartment());
+
+                    if(currentPost.getCreator().getProfilePicture() != null) {
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(currentPost.getCreator().getProfilePicture());
+                        Glide.with(binding.getRoot().getContext())
+                                .load(storageReference)
+                                .into(binding.avatarImageView);
+                    }
+
+                    binding.downVoteButton.setOnClickListener(v -> {
+                        if(!isDownVoted){
+                            viewModel.downVote(currentPost);
+                            binding.voteCountTextView.setText(String.valueOf(currentPost.getVoteDifference() - 1));
+                            currentPost.setVoteDifference(currentPost.getVoteDifference() - 1);
+                            isDownVoted = true;
+                            isUpVoted = false;
+                        }
+                    });
+
+                    binding.upVoteButton.setOnClickListener(v -> {
+                        if(!isUpVoted){
+                            viewModel.upVote();
+                            binding.voteCountTextView.setText(String.valueOf(currentPost.getVoteDifference()+ 1));
+                            currentPost.setVoteDifference(currentPost.getVoteDifference() + 1);
+                            isUpVoted = true;
+                            isDownVoted = false;
+                        }
+                    });
+
                     break;
                 case KEY_NOTI_POST:
+                    communityName = (String) getIntent().getSerializableExtra("notiCommunityName");
                     String postID = (String) getIntent().getSerializableExtra("notiPost");
                     String communityID = (String) getIntent().getSerializableExtra(KEY_COMMUNITY_ID);
                     if (postID != null && communityID != null) {
                         viewModel.loadPost(postID, communityID);
+                        viewModel.loadComments(postID, communityID);
 
                     }
+                    binding.toolBarCreatePost.setTitle(communityName);
                     break;
             }
         }
@@ -136,21 +184,19 @@ public class PostDetailActivity extends AppCompatActivity {
         viewModel.getPost().observe(this, currentPost -> {
             if (currentPost != null) {
 
-//                binding.toolBarCreatePost.setTitle(currentPost.getCommunity().getName());
                 binding.titlePost.setText(currentPost.getTitle());
-
                 binding.contentPost.setText(currentPost.getContent());
                 binding.commentCountTextView.setText(String.valueOf(currentPost.getTotalComment()));
-//                if(currentPost.getAnonymous()){
-//                    binding.userNameTextView.setText("Ẩn danh");
-//                    binding.khoaTextView.setText("");
-//                }else{
-//                    binding.userNameTextView.setText(currentPost.getCreator().getName());
-//                    binding.khoaTextView.setText(currentPost.getCreator().getDepartment());
-//                }
+                binding.voteCountTextView.setText(String.valueOf(currentPost.getVoteDifference()));
+                if(currentPost.getAnonymous()){
+                    binding.userNameTextView.setText("Ẩn danh");
+                    binding.khoaTextView.setText("");
+                }else{
+                    binding.userNameTextView.setText(currentPost.getCreator().getName());
+                    binding.khoaTextView.setText(currentPost.getCreator().getDepartment());
+                }
 
                 if(currentPost.getPictures()!=null){
-
                     RecyclerView recyclerView = binding.recycleImage;
                     mediaAdapter = new MediaAdapter(currentPost.getPictures());
                     recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -159,6 +205,33 @@ public class PostDetailActivity extends AppCompatActivity {
 
                 binding.timeCommentTextView.setText(currentPost.getDate());
                 binding.khoaTextView.setText(currentPost.getCreator().getDepartment());
+                if(currentPost.getCreator().getProfilePicture() != null) {
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(currentPost.getCreator().getProfilePicture());
+                    Glide.with(binding.getRoot().getContext())
+                            .load(storageReference)
+                            .into(binding.avatarImageView);
+                }
+
+                binding.downVoteButton.setOnClickListener(v -> {
+                    if(!isDownVoted){
+                        viewModel.downVote(currentPost);
+                        binding.voteCountTextView.setText(String.valueOf(currentPost.getVoteDifference() - 1));
+                        currentPost.setVoteDifference(currentPost.getVoteDifference() - 1);
+                        isDownVoted = true;
+                        isUpVoted = false;
+                    }
+                });
+
+                binding.upVoteButton.setOnClickListener(v -> {
+                    if(!isUpVoted){
+                        viewModel.upVote();
+                        binding.voteCountTextView.setText(String.valueOf(currentPost.getVoteDifference()+ 1));
+                        currentPost.setVoteDifference(currentPost.getVoteDifference() + 1);
+                        isUpVoted = true;
+                        isDownVoted = false;
+                    }
+                });
+
 
             } else {
                 Log.d("PostDetailActivity", "postViewState is null");
@@ -184,7 +257,6 @@ public class PostDetailActivity extends AppCompatActivity {
                     public void onReplyClick(CommentViewState comment) {
                         // Yêu cầu focus trên EditText
                         binding.commentEditText.requestFocus();
-
                         // Hiển thị bàn phím
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.showSoftInput(binding.commentEditText, InputMethodManager.SHOW_IMPLICIT);
@@ -277,28 +349,8 @@ public class PostDetailActivity extends AppCompatActivity {
                         null,
                         0
                 );
-                viewModel.addParentComment(commentViewState, postViewState.getPostId(), postViewState.getCommunity().getCommunityID());
+                viewModel.addParentComment(commentViewState);
                 binding.commentEditText.setText("");
-            }
-        });
-
-        binding.downVoteButton.setOnClickListener(v -> {
-            if(!isDownVoted){
-                viewModel.downVote(postViewState);
-                binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference() - 1));
-                postViewState.setVoteDifference(postViewState.getVoteDifference() - 1);
-                isDownVoted = true;
-                isUpVoted = false;
-            }
-        });
-
-        binding.upVoteButton.setOnClickListener(v -> {
-            if(!isUpVoted){
-                viewModel.upVote();
-                binding.voteCountTextView.setText(String.valueOf(postViewState.getVoteDifference() + 1));
-                postViewState.setVoteDifference(postViewState.getVoteDifference() + 1);
-                isUpVoted = true;
-                isDownVoted = false;
             }
         });
 

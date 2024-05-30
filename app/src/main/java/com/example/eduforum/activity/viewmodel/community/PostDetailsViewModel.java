@@ -88,6 +88,9 @@ public class PostDetailsViewModel extends ViewModel {
                 postViewState.getTags());
         postInstance = post;
 
+        pt_id = post.getPostID();
+        community_id = post.getCommunityID();
+
         commentRepository.loadTopLevelComments(post, new CommentCallback() {
 
             @Override
@@ -131,16 +134,20 @@ public class PostDetailsViewModel extends ViewModel {
 
 
     public void upVote() {
-        postRepository.updateVoteCount(postInstance, FirebaseAuth.getInstance().getCurrentUser().getUid(), 1);
+        Post newPost = new Post();
+        newPost.setPostID(pt_id);
+        newPost.setCommunityID(community_id);
+        postRepository.updateVoteCount(newPost, FirebaseAuth.getInstance().getCurrentUser().getUid(), 1);
     }
 
     public void downVote(PostViewState postViewState) {
-        Post post = new Post(postViewState.getPostId(), postViewState.getCommunity().getCommunityID(), postViewState.getTitle(), postViewState.getContent(), postViewState.getIsAnonymous(), null, null, postViewState.getCreator(), 0, 0, 0,0, null, null, postViewState.getTags());
-
-        postRepository.updateVoteCount(post, FirebaseAuth.getInstance().getCurrentUser().getUid(), -1);
+        Post newPost = new Post();
+        newPost.setPostID(pt_id);
+        newPost.setCommunityID(community_id);
+        postRepository.updateVoteCount(newPost, FirebaseAuth.getInstance().getCurrentUser().getUid(), -1);
     }
 
-    public void addParentComment(CommentViewState comment,String postID, String communityID) {
+    public void addParentComment(CommentViewState comment) {
         Comment newComment = new Comment();
         newComment.setContent(comment.getContent());
         newComment.setCommunityID(community_id);
@@ -156,17 +163,18 @@ public class PostDetailsViewModel extends ViewModel {
         commentRepository.createComment(postInstance, newComment, new CommentCallback() {
             @Override
             public void onCreateSuccess(Comment comments) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
                 List<CommentViewState> commentViewStates = cmts.getValue();
                 assert commentViewStates != null;
                 commentViewStates.add(new CommentViewState(
                         comments.getCommentID(),
                         comments.getContent(),
-                        "just now",
+                        dateFormat.format(comments.getTimeCreated().toDate()),
                         comments.getCreator(),
                         comments.getTotalUpVote(),
                         comments.getTotalDownVote(),
                         0,
-                        "just now",
+                        dateFormat.format(comments.getTimeCreated().toDate()),
                         comments.getImage(),
                         null,
                         0
@@ -677,5 +685,47 @@ public class PostDetailsViewModel extends ViewModel {
             }
         });
 
+    }
+
+    public void loadComments(String postID,String communityID) {
+        Post postLoad = new Post();
+        postLoad.setPostID(postID);
+        postLoad.setCommunityID(communityID);
+        commentRepository.loadTopLevelComments(postLoad, new CommentCallback() {
+            @Override
+            public void onCreateSuccess(Comment comments) {
+
+            }
+
+            @Override
+            public void onFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onInitialLoadSuccess(List<Comment> comments) {
+                cmts.postValue(convertCommentListToCommentViewStateList(comments));
+            }
+
+            @Override
+            public void onLoadRepliesSuccess(List<Comment> comments) {
+
+            }
+
+            @Override
+            public void onDeleteSuccess() {
+
+            }
+
+            @Override
+            public void onUpdateSuccess(Comment comment) {
+
+            }
+
+            @Override
+            public void onGetVoteStatusSuccess(int voteType) {
+
+            }
+        });
     }
 }

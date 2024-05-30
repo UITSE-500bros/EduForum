@@ -139,6 +139,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         Intent intent = new Intent(context, PostDetailActivity.class);
         intent.putExtra("key", "noti");
         intent.putExtra("notiCommunityID", notificationViewState.getCommunityID());
+        intent.putExtra("notiCommunityName", notificationViewState.getCommunityName());
         intent.putExtra("notiPost", notificationViewState.getPostID());
         context.startActivity(intent);
     }

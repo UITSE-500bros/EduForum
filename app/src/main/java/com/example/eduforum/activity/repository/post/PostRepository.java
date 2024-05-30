@@ -269,6 +269,7 @@ public class PostRepository {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Post post = documentSnapshot.toObject(Post.class);
                             post.setPostID(documentSnapshot.getId());
+                            post.setAnonymous(documentSnapshot.getBoolean("isAnonymous"));
                             posts.add(post);
                             Log.d(FlagsList.DEBUG_POST_FLAG, documentSnapshot.getId() + " => " + documentSnapshot.getData());
                         }
@@ -339,6 +340,7 @@ public class PostRepository {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Post post = documentSnapshot.toObject(Post.class);
                             post.setPostID(documentSnapshot.getId());
+                            post.setAnonymous(documentSnapshot.getBoolean("isAnonymous"));
                             posts.add(post);
                             Log.d(FlagsList.DEBUG_POST_FLAG, "Searched post: " + documentSnapshot.getId() + " => " + documentSnapshot.getData());
                         }
@@ -406,7 +408,10 @@ public class PostRepository {
                 for (Object result : results) {
                     QuerySnapshot snapshot = (QuerySnapshot) result;
                     for (QueryDocumentSnapshot document : snapshot) {
-                        queryPostResults.add(document.toObject(Post.class));
+                        Post newQueryPost = document.toObject(Post.class);
+                        newQueryPost.setPostID(document.getId());
+                        newQueryPost.setAnonymous(document.getBoolean("isAnonymous"));
+                        queryPostResults.add(newQueryPost);
                         Log.d(FlagsList.DEBUG_POST_FLAG, document.getId() + " => " + document.getData());
                     }
                 }
@@ -634,6 +639,7 @@ public class PostRepository {
                         Post post = documentSnapshot.toObject(Post.class);
                         assert post != null;
                         post.setPostID(documentSnapshot.getId());
+                        post.setAnonymous(documentSnapshot.getBoolean("isAnonymous"));
                         callback.onGetOnePostSuccess(post);
                     }
                 })
