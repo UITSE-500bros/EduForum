@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
@@ -44,8 +45,23 @@ public class UserRepository {
         mAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
     }
-    public void signOut() {
-        mAuth.signOut();
+    public void signOut(ISignOut callback) {
+        if (mAuth.getCurrentUser() != null) {
+            FirebaseMessaging.getInstance().unsubscribeFromTopic("user_" + mAuth.getCurrentUser().getUid())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (!task.isSuccessful()) {
+                                Log.e(FlagsList.DEBUG_USER_FLAG, "Failed to unsubscribe from user topic.");
+                                callback.onFailure();
+                                return;
+                            }
+                            mAuth.signOut();
+                            Log.d(FlagsList.DEBUG_USER_FLAG, "Unsubscribed from user topic.");
+                            callback.onSuccess();
+                        }
+                    });
+        }
     }
 //    public void changePassword() {
 //        FirebaseUser user = mAuth.getCurrentUser();
