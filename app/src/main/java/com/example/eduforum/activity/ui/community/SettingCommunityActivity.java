@@ -118,6 +118,23 @@ public class SettingCommunityActivity extends AppCompatActivity {
                 makeSnackBar(errorMessage);
             }
         });
+
+        if(isAdmin){
+            binding.removeCommunity.setOnClickListener(v -> {
+                new AlertDialog.Builder(this)
+                        .setTitle("Xóa cộng đồng")
+                        .setMessage("Bạn có chắc chắn muốn xóa cộng đồng không?")
+                        .setPositiveButton("Có", (dialog, which) -> {
+                            viewModel.deleteCommunity();
+                            Intent intent = new Intent(SettingCommunityActivity.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
+                        })
+                        .setNegativeButton("Không", null)
+                        .show();
+            });
+        }
     }
     void makeSnackBar(String message){
         Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_SHORT).show();

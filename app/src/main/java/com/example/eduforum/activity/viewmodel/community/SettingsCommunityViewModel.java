@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.eduforum.activity.model.community_manage.Community;
 import com.example.eduforum.activity.repository.community.CommunityRepository;
 import com.example.eduforum.activity.repository.community.ILeaveCommunityCallback;
 
@@ -52,5 +53,10 @@ public class SettingsCommunityViewModel extends ViewModel {
                 isLeaveSuccess.setValue(false);
             }
         });
+    }
+    public void deleteCommunity() {
+        Community community = new Community();
+        community.setCommunityId(communityId.getValue());
+        communityRepository.deleteCommunity(community);
     }
 }
