@@ -1,6 +1,8 @@
 package com.example.eduforum.activity.util;
 
 public class FlagsList {
+    public static final String PREF_FILE_NAME = "EduForumPreferences";
+
     public static final String ERROR_REGISTER_EMAIL_EXISTED = "ERROR_REGISTER_EMAIL_EXISTED";
     public static final String ERROR_REGISTER = "ERROR_REGISTER";
     public static final String DEBUG_POST_FLAG = "DEBUG_POST";

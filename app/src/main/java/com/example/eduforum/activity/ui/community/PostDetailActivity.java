@@ -56,7 +56,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
     private CommentAdapter commentAdapter;
 
-    private CommentChildAdapter commentChildAdapter;
+
 
     private boolean isUpVoted = false;
     private boolean isDownVoted = false;
@@ -69,8 +69,8 @@ public class PostDetailActivity extends AppCompatActivity {
     private PostViewState postViewState;
 
     public static final String KEY_CURRENT_POST = "currentPost";
-    public static final String KEY_NOTI_POST = "notiPost";
-    public static final String KEY_COMMUNITY_ID = "communityID";
+    public static final String KEY_NOTI_POST = "noti";
+    public static final String KEY_COMMUNITY_ID = "notiCommunityID";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,49 +105,65 @@ public class PostDetailActivity extends AppCompatActivity {
         if (key != null) {
             switch (key) {
                 case KEY_CURRENT_POST:
+                    Boolean isUITcommunity = (Boolean) getIntent().getBooleanExtra("isUITcommunity", false);
+                    if (isUITcommunity) {
+                        binding.userNameTextView.setText("Quản trị viên");
+                        binding.khoaTextView.setText("");
+                    }
+
+                    Boolean isExploring = (Boolean) getIntent().getBooleanExtra("isExploring", false);
+                    if (isExploring) {
+                        binding.commentEditText.setVisibility(View.GONE);
+                        binding.sendButton.setVisibility(View.GONE);
+                    }
+
                     PostViewState currentPost = (PostViewState) getIntent().getSerializableExtra(KEY_CURRENT_POST);
                     if (currentPost != null) {
-                        postViewState = currentPost;
+                        viewModel.setCurrentPost(currentPost);
                     }
                     break;
                 case KEY_NOTI_POST:
-                    String postID = (String) getIntent().getSerializableExtra(KEY_NOTI_POST);
+                    String postID = (String) getIntent().getSerializableExtra("notiPost");
                     String communityID = (String) getIntent().getSerializableExtra(KEY_COMMUNITY_ID);
                     if (postID != null && communityID != null) {
-                        postViewState = viewModel.loadPost(postID, communityID);
+                        viewModel.loadPost(postID, communityID);
+
                     }
                     break;
-                default:
-                    // Handle unexpected key value
-                    break;
             }
         }
 
-        if (postViewState != null) {
-            viewModel.setCurrentPost(postViewState);
-            binding.toolBarCreatePost.setTitle(postViewState.getCommunity().getName());
-            binding.titlePost.setText(postViewState.getTitle());
-            binding.khoaTextView.setText(postViewState.getCreator().getDepartment());
-            binding.contentPost.setText(postViewState.getContent());
-            binding.commentCountTextView.setText(String.valueOf(postViewState.getTotalComment()));
-            binding.userNameTextView.setText(postViewState.getCreator().getName());
+        viewModel.getPost().observe(this, currentPost -> {
+            if (currentPost != null) {
 
-            if(postViewState.getPictures()!=null){
+//                binding.toolBarCreatePost.setTitle(currentPost.getCommunity().getName());
+                binding.titlePost.setText(currentPost.getTitle());
 
-                RecyclerView recyclerView = binding.recycleImage;
-                mediaAdapter = new MediaAdapter(postViewState.getPictures());
-                recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-                recyclerView.setAdapter(mediaAdapter);
+                binding.contentPost.setText(currentPost.getContent());
+                binding.commentCountTextView.setText(String.valueOf(currentPost.getTotalComment()));
+//                if(currentPost.getAnonymous()){
+//                    binding.userNameTextView.setText("Ẩn danh");
+//                    binding.khoaTextView.setText("");
+//                }else{
+//                    binding.userNameTextView.setText(currentPost.getCreator().getName());
+//                    binding.khoaTextView.setText(currentPost.getCreator().getDepartment());
+//                }
+
+                if(currentPost.getPictures()!=null){
+
+                    RecyclerView recyclerView = binding.recycleImage;
+                    mediaAdapter = new MediaAdapter(currentPost.getPictures());
+                    recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                    recyclerView.setAdapter(mediaAdapter);
+                }
+
+                binding.timeCommentTextView.setText(currentPost.getDate());
+                binding.khoaTextView.setText(currentPost.getCreator().getDepartment());
+
+            } else {
+                Log.d("PostDetailActivity", "postViewState is null");
             }
-
-            binding.timeCommentTextView.setText(postViewState.getDate());
-            binding.khoaTextView.setText(postViewState.getCreator().getDepartment());
-
-        } else {
-            //finish();
-        }
-
-
+        });
         binding.incognitomodeButton.setOnClickListener(v -> {
             if(binding.incognitomodeButton.getIconTint() != ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor)){
                 ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
@@ -227,11 +243,6 @@ public class PostDetailActivity extends AppCompatActivity {
         binding.recyclecomment.setAdapter(commentAdapter);
         binding.recyclecomment.setLayoutManager(new LinearLayoutManager(this));
 
-
-
-        assert postViewState != null;
-        viewModel.loadComments(postViewState);
-
         viewModel.getComments().observe(this, commentViewStates -> {
             List<CommentViewState> commentChildList = new ArrayList<>();
             List<CommentViewState> itemsToRemove = new ArrayList<>();
@@ -261,7 +272,7 @@ public class PostDetailActivity extends AppCompatActivity {
                         0,
                         0,
                         0,
-                        "just now",
+                        null,
                         null,
                         null,
                         0

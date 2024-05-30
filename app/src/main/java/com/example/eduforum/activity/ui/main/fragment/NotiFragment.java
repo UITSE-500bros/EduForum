@@ -1,5 +1,7 @@
 package com.example.eduforum.activity.ui.main.fragment;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -73,19 +75,20 @@ public class NotiFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
-        adapter = new NotificationAdapter(viewModel.getNotificationList().getValue());
+        adapter = new NotificationAdapter(this.getContext(), viewModel.getNotificationList().getValue());
 
         userViewModel.getCurrentUserLiveData().observe(getViewLifecycleOwner(), user -> {
             if(user != null) {
                 viewModel.setCurrentUser(user);
                 viewModel.setupListener(userViewModel);
+
             }
         });
 
         viewModel.getNotificationList().observe(getViewLifecycleOwner(), notifications -> {
             adapter.setNotificationList(notifications);
+
         });
-        viewModel.getNotificationList();
 
         binding.notiRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.notiRecyclerView.setAdapter(adapter);
@@ -94,5 +97,7 @@ public class NotiFragment extends Fragment {
             viewModel.markAllAsRead();
         });
     }
+
+
 
 }

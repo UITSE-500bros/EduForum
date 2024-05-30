@@ -1,6 +1,8 @@
 package com.example.eduforum.activity.ui.auth;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -77,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
 //        else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-//              display an educational UI explaining to the user the features that will be enabled
+////              display an educational UI explaining to the user the features that will be enabled
 //            //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
 //            //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
 //            //       If the user selects "No thanks," allow the user to continue without notifications.
@@ -88,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        createNotificationChannel();
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         viewModel.getSignedInUser().observe(this, this::updateUI);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
@@ -151,19 +154,19 @@ public class LoginActivity extends AppCompatActivity {
         TextInputLayout passwordInput = binding.TILPassword;
 
         viewModel.getEmailError().observe(this, emailError -> {
-            if(emailError != null){
+            if (emailError != null) {
                 emailInput.setError(emailError);
             }
         });
 
         viewModel.getPasswordError().observe(this, passwordError -> {
-            if(passwordError != null){
+            if (passwordError != null) {
                 passwordInput.setError(passwordError);
             }
         });
 
         viewModel.getIsEmailVerified().observe(this, isEmailVerified -> {
-            if(isEmailVerified){
+            if (isEmailVerified) {
                 Intent intent = new Intent(this, MainActivity.class);
                 userViewModel.getCurrentUser(new IUserCallback() {
                     @Override
@@ -178,6 +181,7 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 });
                     }
+
                     @Override
                     public void onGetUserFailure(String errorMsg) {
                         Snackbar.make(binding.getRoot(), "Đã có lỗi xảy ra, vui lòng chờ giây lát!", Snackbar.LENGTH_SHORT).show();
@@ -200,6 +204,8 @@ public class LoginActivity extends AppCompatActivity {
             userViewModel.getCurrentUser(new IUserCallback() {
                 @Override
                 public void onGetUserSuccess(User user) {
+//                    startActivity(i);
+//                    finish();
                     FirebaseMessaging.getInstance().subscribeToTopic("user_" + user.getUserId())
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
@@ -215,6 +221,25 @@ public class LoginActivity extends AppCompatActivity {
                     Snackbar.make(binding.getRoot(), "Đã có lỗi xảy ra, vui lòng chờ giây lát!", Snackbar.LENGTH_SHORT).show();
                 }
             });
+        }
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Notification Channel Name";
+            String description = "Notification Channel Description";
+            String channelId = getString(R.string.default_notification_channel_id);
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+
+            NotificationChannel channel = new NotificationChannel(channelId, name, importance);
+            channel.setDescription(description);
+
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
     }
 }
