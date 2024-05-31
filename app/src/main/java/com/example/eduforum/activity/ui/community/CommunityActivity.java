@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 
@@ -113,6 +114,7 @@ public class CommunityActivity extends AppCompatActivity {
         if(isExploring){
             binding.createPostEditTextButton.setEnabled(false);
             binding.joinedTextview.setText("Chưa tham gia");
+            binding.joinTextview.setVisibility(View.GONE);
         }
         if(isUITcommunity){
             binding.createPostEditTextButton.setEnabled(false);
@@ -251,6 +253,7 @@ public class CommunityActivity extends AppCompatActivity {
             intent.putExtra("currentCommunity", currentCommunity);
             intent.putExtra("communityId", viewModel.getCurrentCommunity().getValue().getCommunityID());
            intent.putExtra("isAdmin", isAdmin);
+           intent.putExtra("isExploring", isExploring);
            startActivity(intent);
                 return true;
         }

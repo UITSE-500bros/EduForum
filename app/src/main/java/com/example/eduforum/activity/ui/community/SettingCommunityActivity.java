@@ -47,13 +47,17 @@ public class SettingCommunityActivity extends AppCompatActivity {
         });
 
         Boolean isAdmin = getIntent().getBooleanExtra("isAdmin", false);
-
+        Boolean isExploring = getIntent().getBooleanExtra("isExploring", false);
         if(!isAdmin){
             binding.removeCommunity.setVisibility(View.GONE);
             binding.settingCommunity.setVisibility(View.GONE);
             binding.categorySetting.setVisibility(View.GONE);
             binding.memberRequest.setVisibility(View.GONE);
 
+        }
+        if(isExploring){
+            binding.leaveCommunity.setVisibility(View.GONE);
+            binding.notificationSetting.setVisibility(View.GONE);
         }
         currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
         if(currentCommunity == null) {
