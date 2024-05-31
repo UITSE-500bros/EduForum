@@ -34,6 +34,11 @@ public class ContactActivity extends AppCompatActivity {
             finish();
         });
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(v -> {
+            finish();
+        });
+
 
     }
 
