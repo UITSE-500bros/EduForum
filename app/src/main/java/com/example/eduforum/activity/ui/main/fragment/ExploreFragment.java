@@ -76,6 +76,7 @@ public class ExploreFragment extends Fragment {
         });
         RecyclerView recyclerView = binding.exploreCommusRecyclerView;
         recyclerView.setAdapter(adapter);
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 }
