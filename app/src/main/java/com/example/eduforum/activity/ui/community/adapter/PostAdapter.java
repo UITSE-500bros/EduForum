@@ -64,7 +64,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         PostViewState post = postList.get(position);
-        holder.bind(post);
+        holder.bind(post, isUITcommunity);
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, PostDetailActivity.class);
             intent.putExtra("key", "currentPost");
@@ -94,8 +94,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             super(binding.getRoot());
             this.binding = binding;
         }
-        void bind(PostViewState post) {
-            if(post.getCreator()!=null){
+        void bind(PostViewState post, Boolean isUIT) {
+            if(isUIT){
+                binding.username.setText("Quản trị viên");
+                binding.falcuty.setText("");
+            }
+            else if(post.getCreator()!=null){
                 if(post.getAnonymous() != null && !post.getAnonymous())
                 {
                     binding.username.setText(post.getCreator().getName());
@@ -106,6 +110,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                                 .load(storageReference)
                                 .into(binding.avatar);
                     }
+
                 }
                 else{
                     binding.username.setText("Ẩn danh");

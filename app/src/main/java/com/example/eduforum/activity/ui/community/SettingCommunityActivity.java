@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +47,14 @@ public class SettingCommunityActivity extends AppCompatActivity {
         });
 
         Boolean isAdmin = getIntent().getBooleanExtra("isAdmin", false);
+
+        if(!isAdmin){
+            binding.removeCommunity.setVisibility(View.GONE);
+            binding.settingCommunity.setVisibility(View.GONE);
+            binding.categorySetting.setVisibility(View.GONE);
+            binding.memberRequest.setVisibility(View.GONE);
+
+        }
         currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
         if(currentCommunity == null) {
             Log.e("Intent to SettingCommunityActivity", "currentCommunity is null");

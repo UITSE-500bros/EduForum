@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Username"
+                android:text="Ẩn danh"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@id/avatar"
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
-                android:text="Công nghệ phần mềm"
+                android:text=""
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@id/avatar"
@@ -70,19 +70,19 @@
                 app:layout_constraintStart_toEndOf="@id/avatar"
                 app:layout_constraintTop_toBottomOf="@id/falcuty"
                 />
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:id="@+id/setting"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/more_horizontal"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintHeight_percent="0.15"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:id="@+id/setting"-->
+<!--                android:layout_marginEnd="10dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:background="@drawable/more_horizontal"-->
+<!--                app:layout_constraintDimensionRatio="1:1"-->
+<!--                app:layout_constraintHeight_percent="0.15"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
 
-                />
+<!--                />-->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
