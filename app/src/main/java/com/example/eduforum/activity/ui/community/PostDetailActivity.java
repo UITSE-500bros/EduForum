@@ -100,11 +100,7 @@ public class PostDetailActivity extends AppCompatActivity {
         if (key != null) {
             switch (key) {
                 case KEY_CURRENT_POST:
-                    Boolean isUITcommunity = (Boolean) getIntent().getBooleanExtra("isUITcommunity", false);
-                    if (isUITcommunity) {
-                        binding.userNameTextView.setText("Quản trị viên");
-                        binding.khoaTextView.setText("");
-                    }
+
 
                     Boolean isExploring = (Boolean) getIntent().getBooleanExtra("isExploring", false);
                     if (isExploring) {
@@ -115,6 +111,14 @@ public class PostDetailActivity extends AppCompatActivity {
                     PostViewState currentPost = (PostViewState) getIntent().getSerializableExtra(KEY_CURRENT_POST);
                     if (currentPost != null) {
                         viewModel.setCurrentPost(currentPost);
+                    }
+                    Boolean isUITcommunity = (Boolean) getIntent().getBooleanExtra("isUITcommunity", false);
+                    if (isUITcommunity) {
+                        binding.userNameTextView.setText("Quản trị viên");
+                        binding.khoaTextView.setText("");
+                    }else {
+                        binding.userNameTextView.setText(currentPost.getCreator().getName());
+                        binding.khoaTextView.setText(currentPost.getCreator().getDepartment());
                     }
 
                     binding.toolBarCreatePost.setTitle(currentPost.getCommunity().getName());
@@ -231,10 +235,6 @@ public class PostDetailActivity extends AppCompatActivity {
                             }
                     );
 
-
-                    binding.recyclecomment.setAdapter(commentAdapter);
-                    binding.recyclecomment.setLayoutManager(new LinearLayoutManager(this));
-
                     viewModel.getComments().observe(this, commentViewStates -> {
                         List<CommentViewState> commentChildList = new ArrayList<>();
                         List<CommentViewState> itemsToRemove = new ArrayList<>();
@@ -250,6 +250,11 @@ public class PostDetailActivity extends AppCompatActivity {
                         commentAdapter.setCommentList(commentViewStates);
                         commentAdapter.setChildCommentList(commentChildList);
                     });
+
+                    binding.recyclecomment.setAdapter(commentAdapter);
+                    binding.recyclecomment.setLayoutManager(new LinearLayoutManager(this));
+
+
 
 
                     binding.setLifecycleOwner(this);
@@ -297,7 +302,7 @@ public class PostDetailActivity extends AppCompatActivity {
                         popupMenu.setOnMenuItemClickListener(item -> {
 
                             if(item.getItemId() == R.id.deletePost){
-                                builder.show();
+                                //builder.show();
                                 viewModel.deletePost(currentPost);
                                 finish();
                             }
@@ -337,21 +342,18 @@ public class PostDetailActivity extends AppCompatActivity {
                     binding.khoaTextView.setText(currentPost.getCreator().getDepartment());
                 }
 
-                if(currentPost.getPictures()!=null){
-                    RecyclerView recyclerView = binding.recycleImage;
-                    mediaAdapter = new MediaAdapter(currentPost.getPictures());
-                    recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-                    recyclerView.setAdapter(mediaAdapter);
+                if(currentPost.getCreator()!= null ) {
+                    if (currentPost.getCreator().getProfilePicture() != null) {
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(currentPost.getCreator().getProfilePicture());
+                        Glide.with(binding.getRoot().getContext())
+                                .load(storageReference)
+                                .into(binding.avatarImageView);
+                    }
                 }
 
                 binding.timeCommentTextView.setText(currentPost.getDate());
                 binding.khoaTextView.setText(currentPost.getCreator().getDepartment());
-                if(currentPost.getCreator().getProfilePicture() != null) {
-                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(currentPost.getCreator().getProfilePicture());
-                    Glide.with(binding.getRoot().getContext())
-                            .load(storageReference)
-                            .into(binding.avatarImageView);
-                }
+
 
                 binding.downVoteButton.setOnClickListener(v -> {
                     if(!isDownVoted){
@@ -383,71 +385,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
 
 
-                commentAdapter = new CommentAdapter(this,
-                        viewModel.getComments().getValue(),
-                        viewModel.getCommentsChild().getValue(),
-                        new CommentAdapter.OnReplyClickListener() {
-                            @Override
-                            public void onReplyClick(CommentViewState comment) {
-                                // Yêu cầu focus trên EditText
-                                binding.commentEditText.requestFocus();
-                                // Hiển thị bàn phím
-                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.showSoftInput(binding.commentEditText, InputMethodManager.SHOW_IMPLICIT);
 
-                                binding.commentEditText.setText("@" + comment.getCreator().getName() + " ");
-
-                                binding.commentEditText.setVisibility(View.VISIBLE);
-                                binding.sendButton.setVisibility(View.VISIBLE);
-
-                                binding.sendButton.setOnClickListener(v -> {
-                                    String commentText = binding.commentEditText.getText().toString();
-                                    if (!commentText.isEmpty()) {
-
-                                        CommentViewState commentViewState = new CommentViewState(
-                                                null,
-                                                commentText,
-                                                null,
-                                                creator,
-                                                0,
-                                                0,
-                                                0,
-                                                null,
-                                                null,
-                                                comment.getCommentID(),
-                                                0
-                                        );
-
-                                        viewModel.addChildComment(comment, commentViewState);
-                                        binding.commentEditText.setText("");
-                                    }
-                                });
-                            }
-
-                        },
-                        new CommentAdapter.OnDownVoteClickListener() {
-                            @Override
-                            public void onDownClick(CommentViewState comment) {
-                                viewModel.downVote(comment);
-                            }
-                        },
-                        new CommentAdapter.OnUpVoteClickListener() {
-                            @Override
-                            public void onUpVote(CommentViewState comment) {
-                                viewModel.upVote(comment);
-                            }
-                        },
-                        new CommentAdapter.OnShowUpReplies() {
-                            @Override
-                            public void onShowUpReplies(CommentViewState comment) {
-                                viewModel.loadChildComments(comment);
-                            }
-                        }
-                );
-
-
-                binding.recyclecomment.setAdapter(commentAdapter);
-                binding.recyclecomment.setLayoutManager(new LinearLayoutManager(this));
 
                 viewModel.getComments().observe(this, commentViewStates -> {
                     List<CommentViewState> commentChildList = new ArrayList<>();
@@ -461,8 +399,12 @@ public class PostDetailActivity extends AppCompatActivity {
 
                     }
                     commentViewStates.removeAll(itemsToRemove);
-                    commentAdapter.setCommentList(commentViewStates);
-                    commentAdapter.setChildCommentList(commentChildList);
+
+
+                    if (commentAdapter != null) {
+                        commentAdapter.setCommentList(commentViewStates);
+                    }
+
                 });
 
 
@@ -527,6 +469,7 @@ public class PostDetailActivity extends AppCompatActivity {
             // Đánh dấu là bình luận gốc
             this.isParentComment = true;
         });
+
 
 
 

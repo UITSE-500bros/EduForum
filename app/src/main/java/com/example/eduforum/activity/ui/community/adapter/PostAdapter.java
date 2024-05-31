@@ -73,7 +73,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             intent.putExtra("isExploring", isExploring);
             context.startActivity(intent);
         });
-        
+
     }
 
     @Override
