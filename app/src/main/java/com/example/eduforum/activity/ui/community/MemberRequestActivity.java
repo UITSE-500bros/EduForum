@@ -1,6 +1,7 @@
 package com.example.eduforum.activity.ui.community;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.eduforum.R;
 import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.activity.ui.community.adapter.MemberRequestsAdapter;
+import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.viewmodel.community.settings.MemberRequestsViewModel;
 import com.example.eduforum.databinding.ActivityMemberRequestBinding;
 
@@ -36,6 +38,10 @@ public class MemberRequestActivity extends AppCompatActivity {
         if(communityId != null) {
             viewModel.setCommunityId(communityId);
         }
+        else{
+            Log.e("Intent to MemberRequestActivity", "communityId is null");
+            finish();
+        }
         RecyclerView recyclerView = binding.recyclerView;
         // set adapter
         MemberRequestsAdapter adapter = new MemberRequestsAdapter(viewModel.getMemberRequests().getValue());
@@ -51,6 +57,14 @@ public class MemberRequestActivity extends AppCompatActivity {
 
         viewModel.getMemberRequests().observe(this, users -> {
             adapter.setMemberRequests(users);
+            binding.numberMemberRequestTextView.setText(String.valueOf(users.size())+" yêu cầu tham gia");
+        });
+
+        binding.actAllButton.setOnClickListener(v -> {
+            viewModel.memberAllApproval(true);
+        });
+        binding.denyAllButton.setOnClickListener(v -> {
+            viewModel.memberAllApproval(false);
         });
     }
 }

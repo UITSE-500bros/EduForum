@@ -10,10 +10,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.eduforum.R;
 import com.example.eduforum.activity.model.community_manage.CommunityMember;
 import com.example.eduforum.databinding.ItemMemberListBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -48,6 +51,12 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
     public void onBindViewHolder(@NonNull MemberListAdapter.MemberViewHolder holder, int position) {
         CommunityMember member = memberList.get(position);
         holder.binding.setMember(member);
+        if(member.getProfileImage()!=null){
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference(member.getProfileImage());
+            Glide.with(holder.binding.getRoot().getContext())
+                    .load(storageReference)
+                    .into(holder.binding.memberAvatar);
+        }
         holder.binding.executePendingBindings();
         holder.itemView.setOnClickListener(v -> {
             if (onMemberClickListener != null) {

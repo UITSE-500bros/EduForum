@@ -18,13 +18,19 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.eduforum.R;
+import com.example.eduforum.activity.model.post_manage.Comment;
+import com.example.eduforum.activity.repository.comment.CommentCallback;
+import com.example.eduforum.activity.repository.comment.CommentRepository;
 import com.example.eduforum.activity.ui.community.PostDetailActivity;
 import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
 import com.example.eduforum.activity.ui.main.adapter.ChildCommentAdapter;
 import com.example.eduforum.databinding.ItemChildCommentBinding;
 import com.example.eduforum.databinding.ItemListCommentBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +43,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     private static List<CommentViewState> childCommentList;
     private MaterialAlertDialogBuilder builder;
+    private CommentRepository commentRepository;
 
 
     public interface OnReplyClickListener {
@@ -57,6 +64,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private static OnUpVoteClickListener onUpVoteClickListener;
     private static OnDownVoteClickListener onDownVoteClickListener;
     private static OnShowUpReplies onShowUpReplies;
+    private CommentChildAdapter commentChildAdapter;
 
     public CommentAdapter(Context context,
                           List<CommentViewState> commentList,
@@ -64,7 +72,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                           OnReplyClickListener onReplyClickListener,
                           OnDownVoteClickListener onDownVoteClickListener,
                           OnUpVoteClickListener onUpVoteClickListener,
-                          OnShowUpReplies onShowUpReplies) {
+                          OnShowUpReplies onShowUpReplies
+                          ) {
+        commentRepository = new CommentRepository();
         this.context = context;
         if (commentList != null) {
             this.commentList = commentList;
@@ -111,25 +121,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
 
-        createDeleteDialog();
 
         CommentViewState comment = commentList.get(position);
 
-
-        holder.binding.moreChildCommentButton.setOnClickListener(v -> {
-            PopupMenu popupMenu = new PopupMenu(context, holder.binding.moreChildCommentButton);
-            popupMenu.inflate(R.menu.comment_menu);
-            popupMenu.setOnMenuItemClickListener(item -> {
-                if (item.getItemId() == R.id.deleteComment) {
-                    builder.show();
-                }
-                else {
-                    //TODO: Edit Comment
-                }
-                return true;
-            });
-            popupMenu.show();
-        });
 
 
         List<CommentViewState> temp = new ArrayList<>();
@@ -137,22 +131,65 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         for (CommentViewState commentViewState : childCommentList) {
             if (Objects.equals(commentViewState.getReplyCommentID(), comment.getCommentID())) {
                 temp.add(commentViewState);
-
             }
         }
 
-        holder.bind(comment, onReplyClickListener,temp,onDownVoteClickListener,onUpVoteClickListener, onShowUpReplies);
-
+        holder.bind(comment, onReplyClickListener, temp, onDownVoteClickListener, onUpVoteClickListener, onShowUpReplies);
+    }
+    public void removeItem(int position) {
+        commentList.remove(position);
+        notifyItemRemoved(position);
     }
 
-    public void createDeleteDialog() {
+    public void createDeleteDialog(int position) {
         builder = new MaterialAlertDialogBuilder(context);
         builder.setTitle("Thông báo");
         builder.setMessage("Bạn có chắc muốn xóa bình luận này chứ?");
         builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //TODO: Delete Comment
+                removeItem(position);
+                Comment comment  = new Comment();
+                comment.setCommentID(commentList.get(position).getCommentID());
+
+
+                commentRepository.deleteComment(comment, new CommentCallback() {
+                    @Override
+                    public void onCreateSuccess(Comment comments) {
+
+                    }
+
+                    @Override
+                    public void onFailure(String errorMsg) {
+
+                    }
+
+                    @Override
+                    public void onInitialLoadSuccess(List<Comment> comments) {
+
+                    }
+
+                    @Override
+                    public void onLoadRepliesSuccess(List<Comment> comments) {
+
+                    }
+
+                    @Override
+                    public void onDeleteSuccess() {
+
+                    }
+
+                    @Override
+                    public void onUpdateSuccess(Comment comment) {
+
+                    }
+
+                    @Override
+                    public void onGetVoteStatusSuccess(int voteType) {
+
+                    }
+                });
+                dialog.dismiss();
             }
         });
         builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
@@ -174,12 +211,37 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             super(binding.getRoot());
             this.binding = binding;
         }
-        public void bind(CommentViewState comment, OnReplyClickListener onReplyClickListener,List<CommentViewState> temp,OnDownVoteClickListener onDownVoteClickListener,OnUpVoteClickListener onUpVoteClickListener,OnShowUpReplies onShowUpReplies) {
+
+        public void bindingComponents(CommentViewState comment) {
             binding.contentNotiParentTextView.setText(comment.getContent());
-
             binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference()));
+            binding.timeParentCommentTextView.setText(comment.getTimeCreated());
+            binding.userNameParentTextView.setText(comment.getCreator().getName());
+            binding.khoaParentTextView.setText(comment.getCreator().getDepartment());
 
 
+            if(comment.getCreator().getProfilePicture()!=null){
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(comment.getCreator().getProfilePicture());
+                Glide.with(binding.getRoot().getContext())
+                        .load(storageReference)
+                        .into(binding.avatarParentComment);
+            }
+
+
+            binding.replyParentTextView.setVisibility(View.GONE);
+            binding.showReplyParentTextView.setVisibility(View.GONE);
+        }
+
+        public void bind(CommentViewState comment, OnReplyClickListener onReplyClickListener,List<CommentViewState> temp,OnDownVoteClickListener onDownVoteClickListener,OnUpVoteClickListener onUpVoteClickListener,OnShowUpReplies onShowUpReplies) {
+
+            bindingComponents(comment);
+
+            /*Set up RecyclerView*/
+            binding.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+            binding.nestedRecyclerView.setAdapter(new CommentChildAdapter(this.binding.getRoot().getContext(),temp, onReplyClickListener, onDownVoteClickListener, onUpVoteClickListener, onShowUpReplies));
+
+
+            /*Set up click listener*/
             binding.replyParentTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -187,8 +249,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     onReplyClickListener.onReplyClick(comment);
                 }
             });
-            binding.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-            binding.nestedRecyclerView.setAdapter(new ChildCommentAdapter(temp));
 
 
             binding.upVoteParentButton.setOnClickListener(new View.OnClickListener() {
@@ -217,6 +277,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     onShowUpReplies.onShowUpReplies(comment);
                 }
             });
+
+
 
         }
     }

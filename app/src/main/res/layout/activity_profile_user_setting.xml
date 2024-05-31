@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:background="@color/backgroundColor">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolBarProfileUser"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/secondaryColor"
+                app:navigationIcon="@drawable/back_icon"
+                app:title="Tùy chỉnh hồ sơ"
+                app:titleTextColor="@color/white" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_marginBottom="20dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ava_user_ImageView"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:maxHeight="150dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:layout_marginTop="20dp"
+                    android:src="@drawable/community_background" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:id="@+id/name_user_EditText"
+                    android:hint="Họ và tên"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="26dp"
+                    android:background="@drawable/rectangle"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="20dp"
+                    android:textColorHint="@color/black"
+                    >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="62dp"
+                        android:backgroundTint="#FFFFFF"
+                        android:inputType="textPersonName"
+                        android:text=""
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/department_user_EditText"
+                    style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="62dp"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="20dp"
+                    android:hint="Khoa"
+                    android:background="@drawable/rectangle"
+                    android:textColorHint="@color/black"
+                    app:cursorColor="@color/primaryColor"
+                    android:textSize="12sp"
+                    >
+                    <AutoCompleteTextView
+                        android:id="@+id/ACTV_Category"
+                        android:layout_width="match_parent"
+                        android:layout_height="62dp"
+                        android:inputType="none"
+                        android:textSize="14sp"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:id="@+id/phone_Number_EditText"
+                    android:hint="@string/SDT"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="26dp"
+                    android:background="@drawable/rectangle"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="20dp"
+                    android:textColorHint="@color/black"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:inputType="phone"
+                        android:layout_width="match_parent"
+                        android:textSize="14sp"
+                        android:backgroundTint="#FFFFFF"
+                        android:layout_height="62dp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/update_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cập nhật"
+                    android:textSize="20sp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginEnd="20dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:background="@drawable/login_btn" />
+
+            </LinearLayout>
+        </ScrollView>
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

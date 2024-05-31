@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
     tools:context=".activity.ui.main.fragment.NotiFragment"
     android:background="@color/backgroundColor">
 
@@ -42,8 +43,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="10dp"
+            android:clickable="false"
             style="Widget.MaterialComponents.Button.TextButton.Icon"
-            app:icon="@drawable/search_icon2"
             android:backgroundTint="@color/secondaryColor"
             app:iconGravity="textStart"/>
 
@@ -79,7 +80,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="5dp"
-            tools:listitem="@layout/item_noti" />
+            tools:listitem="@layout/item_noti"
+            android:layout_marginBottom="70dp"
+            />
 
     </ScrollView>
 

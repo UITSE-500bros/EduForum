@@ -125,14 +125,14 @@
                 android:orientation="vertical"
                 android:layout_gravity="top|center">
 
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/moreChildComment_Button"
-                    android:src="@drawable/more_horizontal"
-                    android:background="@null"
-                    android:paddingStart="2dp"
-                    android:layout_marginBottom="1dp"/>
+<!--                <ImageButton-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:id="@+id/moreChildComment_Button"-->
+<!--                    android:src="@drawable/more_horizontal"-->
+<!--                    android:background="@null"-->
+<!--                    android:paddingStart="2dp"-->
+<!--                    android:layout_marginBottom="1dp"/>-->
 
                 <com.google.android.material.button.MaterialButton
                     style="@style/Widget.Material3.Button.IconButton"

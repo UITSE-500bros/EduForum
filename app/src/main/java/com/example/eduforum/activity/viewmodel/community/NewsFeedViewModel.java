@@ -12,6 +12,7 @@ import com.example.eduforum.activity.repository.category.CategoryCallback;
 import com.example.eduforum.activity.repository.category.CategoryRepository;
 import com.example.eduforum.activity.repository.community.CommunityRepository;
 import com.example.eduforum.activity.repository.community.ICommunityCallBack_C;
+import com.example.eduforum.activity.repository.community.INotificationStatus;
 import com.example.eduforum.activity.repository.post.IPostCallback;
 import com.example.eduforum.activity.repository.post.PostRepository;
 import com.example.eduforum.activity.ui.community.viewstate.FilterViewState;
@@ -33,6 +34,7 @@ public class NewsFeedViewModel extends ViewModel {
     MutableLiveData<FilterViewState> currentFilter;
     MutableLiveData<List<PostCategory>> allCategories;
     MutableLiveData<String> errorMessage;
+    MutableLiveData<Boolean> isNotified;
     CommunityRepository communityRepository;
     PostRepository postRepository;
     CategoryRepository categoryRepository;
@@ -45,7 +47,8 @@ public class NewsFeedViewModel extends ViewModel {
         currentCommunity.setValue(new CreateCommunityViewState());
         postList = new MutableLiveData<>();
         allCategories = new MutableLiveData<>();
-
+        isNotified = new MutableLiveData<>();
+        isNotified.setValue(true);
         currentFilter = new MutableLiveData<>();
         currentFilter.setValue(new FilterViewState());
         errorMessage = new MutableLiveData<>();
@@ -129,6 +132,11 @@ public class NewsFeedViewModel extends ViewModel {
 
             }
 
+            @Override
+            public void onGetOnePostSuccess(Post post) {
+
+            }
+
         });
     }
     public void filterBySearch(String keyword) {
@@ -198,11 +206,29 @@ public class NewsFeedViewModel extends ViewModel {
             public void onGetVoteStatusSuccess(int voteType) {
 
             }
+
+            @Override
+            public void onGetOnePostSuccess(Post post) {
+
+            }
         });
     }
 
     public void setCurrentCommunity(CreateCommunityViewState community) {
         currentCommunity.setValue(community);
+
+        communityRepository.getNotificationStatus(community.getCommunityID(),  new INotificationStatus(){
+
+            @Override
+            public void onNotificationStatusSuccess(Boolean status) {
+                isNotified.setValue(status);
+            }
+
+            @Override
+            public void onNotificationStatusFailure(String errorMsg) {
+                isNotified.setValue(true);
+            }
+        });
         refreshPostList();
     }
     public void refreshPostList(){
@@ -210,11 +236,10 @@ public class NewsFeedViewModel extends ViewModel {
             @Override
             public void onGetPostSuccess(List<Post> posts){
                 postList.setValue(convertPostListToPostViewStateList(posts));
-                errorMessage.setValue("Success");
             }
             @Override
             public void onGetPostFailure(String errorMsg){
-                errorMessage.setValue("Không thể lấy bài viết");
+                errorMessage.setValue("Không thể tải bài viết");
             }
             @Override
             public void onAddPostFailure(String errorMsg){
@@ -267,6 +292,11 @@ public class NewsFeedViewModel extends ViewModel {
             public void onGetVoteStatusSuccess(int voteType) {
 
             }
+
+            @Override
+            public void onGetOnePostSuccess(Post post) {
+
+            }
         });
     }
     public LiveData<CreateCommunityViewState> getCurrentCommunity() {
@@ -290,10 +320,15 @@ public class NewsFeedViewModel extends ViewModel {
     public LiveData<String> getErrorMessage() {
         return errorMessage;
     }
+    public LiveData<Boolean> getIsNotified() {
+        return isNotified;
+    }
     private List<PostViewState> convertPostListToPostViewStateList(List<Post> posts) {
         List<PostViewState> postViewStateList = new ArrayList<>();
         for(Post post : posts) {
-            postViewStateList.add(new PostViewState(post.getPostID(), post.getCreator(), currentCommunity.getValue(), post.getTitle(), post.getContent(),post.getAnonymous(), convertTimestampToReadable(post.getTimeCreated()), null, post.getTaggedUsers(), post.getCategory(), post.getVoteDifference(),post.getTotalComment()));
+            PostViewState state = new PostViewState(post.getPostID(), post.getCreator(), currentCommunity.getValue(), post.getTitle(), post.getContent(),post.getAnonymous(), convertTimestampToReadable(post.getTimeCreated()), post.getImage(), post.getTaggedUsers(), post.getCategory(), post.getVoteDifference(),post.getTotalComment());
+            state.setPictures(post.getDownloadImage());
+            postViewStateList.add(state);
         }
         return postViewStateList;
     }

@@ -15,17 +15,17 @@ import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 // TODO: Nam lam cai nay ne Nam
 public class PostDetailsViewModel extends ViewModel {
     PostRepository postRepository;
     CommentRepository commentRepository;
-
     MutableLiveData<List<CommentViewState>> cmts;
     MutableLiveData<List<CommentViewState>> cmts_child;
-
     MutableLiveData<PostViewState> currentPost;
 
 
@@ -36,7 +36,9 @@ public class PostDetailsViewModel extends ViewModel {
         cmts_child = new MutableLiveData<>();
         currentPost = new MutableLiveData<>();
         cmts.setValue(new ArrayList<CommentViewState>());
+
     }
+
 
     public LiveData<PostViewState> getPost(){
         return currentPost;
@@ -51,16 +53,18 @@ public class PostDetailsViewModel extends ViewModel {
     // TODO: anh nam lam cai nay ne
     private List<CommentViewState> convertCommentListToCommentViewStateList(List<Comment> comments){
         List<CommentViewState> commentViewStates = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
+
         for(Comment comment: comments){
             commentViewStates.add(new CommentViewState(
                     comment.getCommentID(),
                     comment.getContent(),
-                    String.valueOf(comment.getTimeCreated()),
+                    dateFormat.format(comment.getTimeCreated().toDate()), // Convert timestamp to string
                     comment.getCreator(),
                     comment.getTotalUpVote(),
                     comment.getTotalDownVote(),
                     comment.getVoteDifference(),
-                    String.valueOf(comment.getLastModified()),
+                    dateFormat.format(comment.getLastModified().toDate()), // Convert timestamp to string
                     comment.getImage(),
                     comment.getReplyCommentID(),
                     comment.getTotalReply()
@@ -73,58 +77,19 @@ public class PostDetailsViewModel extends ViewModel {
     private Post postInstance;
     // TODO: anh em lam cai nay ne
     public void setCurrentPost(PostViewState postViewState) {
-        currentPost.setValue(postViewState);
 
-        Post post = new Post(postViewState.getPostId(), postViewState.getCommunity().getCommunityID(), postViewState.getTitle(), postViewState.getContent(), postViewState.getIsAnonymous(), null, null, postViewState.getCreator(), 0, 0, 0,0, null, null, postViewState.getTags());
+        Post post = new Post(postViewState.getPostId(),
+                postViewState.getCommunity().getCommunityID(),
+                postViewState.getTitle(),
+                postViewState.getContent(),
+                postViewState.getIsAnonymous(), null, null,
+                postViewState.getCreator(), 0, 0, 0,0,
+                null, null,
+                postViewState.getTags());
         postInstance = post;
-        commentRepository.loadTopLevelComments(post, new CommentCallback() {
 
-            @Override
-            public void onCreateSuccess(Comment comments) {
-
-            }
-
-            @Override
-            public void onFailure(String errorMsg) {
-
-            }
-
-            @Override
-            public void onInitialLoadSuccess(List<Comment> comments) {
-
-            }
-
-            @Override
-            public void onLoadRepliesSuccess(List<Comment> comments) {
-
-            }
-
-            @Override
-            public void onDeleteSuccess() {
-
-            }
-
-            @Override
-            public void onUpdateSuccess(Comment comment) {
-
-            }
-
-            @Override
-            public void onGetVoteStatusSuccess(int voteType) {
-
-            }
-        });
-    }
-    private String pt_id;
-    private String community_id;
-    public void loadComments(PostViewState postViewState){
-        Post post = new Post();
-        post.setPostID(postViewState.getPostId());
-        post.setCommunityID(postViewState.getCommunity().getCommunityID());
-
-
-        pt_id = postViewState.getPostId();
-        community_id = postViewState.getCommunity().getCommunityID();
+        pt_id = post.getPostID();
+        community_id = post.getCommunityID();
 
         commentRepository.loadTopLevelComments(post, new CommentCallback() {
 
@@ -164,18 +129,25 @@ public class PostDetailsViewModel extends ViewModel {
             }
         });
     }
+    private String pt_id;
+    private String community_id;
+
 
     public void upVote() {
-        postRepository.updateVoteCount(postInstance, FirebaseAuth.getInstance().getCurrentUser().getUid(), 1);
+        Post newPost = new Post();
+        newPost.setPostID(pt_id);
+        newPost.setCommunityID(community_id);
+        postRepository.updateVoteCount(newPost, FirebaseAuth.getInstance().getCurrentUser().getUid(), 1);
     }
 
     public void downVote(PostViewState postViewState) {
-        Post post = new Post(postViewState.getPostId(), postViewState.getCommunity().getCommunityID(), postViewState.getTitle(), postViewState.getContent(), postViewState.getIsAnonymous(), null, null, postViewState.getCreator(), 0, 0, 0,0, null, null, postViewState.getTags());
-
-        postRepository.updateVoteCount(post, FirebaseAuth.getInstance().getCurrentUser().getUid(), -1);
+        Post newPost = new Post();
+        newPost.setPostID(pt_id);
+        newPost.setCommunityID(community_id);
+        postRepository.updateVoteCount(newPost, FirebaseAuth.getInstance().getCurrentUser().getUid(), -1);
     }
 
-    public void addParentComment(CommentViewState comment,String postID, String communityID) {
+    public void addParentComment(CommentViewState comment) {
         Comment newComment = new Comment();
         newComment.setContent(comment.getContent());
         newComment.setCommunityID(community_id);
@@ -187,24 +159,28 @@ public class PostDetailsViewModel extends ViewModel {
         newComment.setTotalDownVote(0);
         newComment.setVoteDifference(0);
 
+        Post newPost = new Post();
+        newPost.setPostID(pt_id);
+        newPost.setCommunityID(community_id);
 
-        commentRepository.createComment(postInstance, newComment, new CommentCallback() {
+        commentRepository.createComment(newPost, newComment, new CommentCallback() {
             @Override
             public void onCreateSuccess(Comment comments) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
                 List<CommentViewState> commentViewStates = cmts.getValue();
                 assert commentViewStates != null;
                 commentViewStates.add(new CommentViewState(
                         comments.getCommentID(),
                         comments.getContent(),
-                        null,
+                        dateFormat.format(comments.getTimeCreated().toDate()),
                         comments.getCreator(),
                         comments.getTotalUpVote(),
                         comments.getTotalDownVote(),
-                        comments.getVoteDifference(),
-                        null,
+                        0,
+                        dateFormat.format(comments.getTimeCreated().toDate()),
                         comments.getImage(),
                         null,
-                        comments.getTotalReply()
+                        0
                 ));
                 cmts.setValue(commentViewStates);
             }
@@ -249,7 +225,7 @@ public class PostDetailsViewModel extends ViewModel {
         parentComment.setCommunityID(community_id);
         parentComment.setPostID(pt_id);
         parentComment.setCreator(commentParentViewState.getCreator());
-
+        parentComment.setImage(commentParentViewState.getImage());
 
         Comment childComment = new Comment();
         childComment.setPostID(pt_id);
@@ -264,24 +240,23 @@ public class PostDetailsViewModel extends ViewModel {
         commentRepository.createComment(parentComment, childComment, new CommentCallback() {
             @Override
             public void onCreateSuccess(Comment comments) {
-                CommentViewState commentViewState = new CommentViewState(
+                List<CommentViewState> commentViewStates = cmts.getValue();
+                assert commentViewStates != null;
+                commentViewStates.add(new CommentViewState(
                         comments.getCommentID(),
                         comments.getContent(),
-                        null,
+                        "just now",
                         comments.getCreator(),
                         comments.getTotalUpVote(),
                         comments.getTotalDownVote(),
-                        comments.getVoteDifference(),
-                        null,
+                        0,
+                        "just now",
                         comments.getImage(),
-                        comments.getReplyCommentID(),
-                        comments.getTotalReply()
-                );
-
-                List<CommentViewState> commentViewStates = cmts.getValue();
-                assert commentViewStates != null;
-                commentViewStates.add(commentViewState);
+                        null,
+                        0
+                ));
                 cmts.setValue(commentViewStates);
+
             }
 
             @Override
@@ -519,6 +494,11 @@ public class PostDetailsViewModel extends ViewModel {
             public void onGetVoteStatusSuccess(int voteType) {
 
             }
+
+            @Override
+            public void onGetOnePostSuccess(Post post) {
+
+            }
         });
     }
 
@@ -594,6 +574,156 @@ public class PostDetailsViewModel extends ViewModel {
 
             @Override
             public void onBookmarkSuccess() {
+
+            }
+
+            @Override
+            public void onGetVoteStatusSuccess(int voteType) {
+
+            }
+
+            @Override
+            public void onGetOnePostSuccess(Post post) {
+
+            }
+        });
+    }
+
+
+    public void loadPost(String postID, String communityID){
+        postRepository.getOnePost(communityID,postID, new IPostCallback() {
+
+            @Override
+            public void onGetPostSuccess(List<Post> posts) {
+
+            }
+
+            @Override
+            public void onGetPostFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onAddPostFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onAddPostSuccess(Post newPost) {
+
+            }
+
+            @Override
+            public void onEditPostSuccess() {
+
+            }
+
+            @Override
+            public void onEditPostFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onQueryPostError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onQueryPostSuccess(List<Post> queryPostResults) {
+
+            }
+
+            @Override
+            public void onDeletePostSuccess() {
+
+            }
+
+            @Override
+            public void onDeletePostError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onSubscriptionSuccess() {
+
+            }
+
+            @Override
+            public void onSubscriptionError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onBookmarkError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onBookmarkSuccess() {
+
+            }
+
+            @Override
+            public void onGetVoteStatusSuccess(int voteType) {
+
+            }
+
+            @Override
+            public void onGetOnePostSuccess(Post post) {
+                PostViewState fetPost = new PostViewState(
+                        post.getPostID(),
+                        post.getCreator(),
+                        post.getCommunityID(),
+                        post.getTitle(),
+                        post.getContent(),
+                        post.getAnonymous(),
+                        post.getTimeCreated().toDate().toString(),
+                        post.getImage(), post.getTaggedUsers(),
+                        post.getCategory(),
+                        post.getVoteDifference(),
+                        post.getTotalComment()
+                );
+                fetPost.setPictures(post.getDownloadImage());
+                pt_id = post.getPostID();
+                community_id = post.getCommunityID();
+                currentPost.setValue(fetPost);
+            }
+        });
+
+    }
+
+    public void loadComments(String postID,String communityID) {
+        Post postLoad = new Post();
+        postLoad.setPostID(postID);
+        postLoad.setCommunityID(communityID);
+        commentRepository.loadTopLevelComments(postLoad, new CommentCallback() {
+            @Override
+            public void onCreateSuccess(Comment comments) {
+
+            }
+
+            @Override
+            public void onFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onInitialLoadSuccess(List<Comment> comments) {
+                cmts.postValue(convertCommentListToCommentViewStateList(comments));
+            }
+
+            @Override
+            public void onLoadRepliesSuccess(List<Comment> comments) {
+
+            }
+
+            @Override
+            public void onDeleteSuccess() {
+
+            }
+
+            @Override
+            public void onUpdateSuccess(Comment comment) {
 
             }
 

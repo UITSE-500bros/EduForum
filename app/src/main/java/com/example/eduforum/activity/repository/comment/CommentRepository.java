@@ -10,11 +10,13 @@ import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.model.post_manage.PostingObject;
 import com.example.eduforum.activity.repository.comment.dto.AddCommentDTO;
 import com.example.eduforum.activity.repository.post.IPostCallback;
+import com.example.eduforum.activity.util.ConvertUtil;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -23,6 +25,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.Transaction;
+import com.google.firebase.firestore.core.FirestoreClient;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
@@ -38,10 +43,12 @@ public class CommentRepository {
     private static CommentRepository instance;
     private final FirebaseFirestore db;
     private final FirebaseStorage storage;
+    private final FirebaseFunctions mFunctions;
 
     public CommentRepository() {
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
+        mFunctions = FirebaseFunctions.getInstance();
     }
 
     public static synchronized CommentRepository getInstance() {
@@ -61,48 +68,77 @@ public class CommentRepository {
      *                   <br></br><p>- The parent totalComment/totalReplies will be recalculated immediately after a new comment is created.</p>
      *                   <br></br><p>- For a reply, the <strong>replyCommentID</strong> will be set in the <strong>newComment</strong> object passed in the callback.</p>
      *                   <br></br><p>- Comment's <strong>lastModified, timeCreated</strong> is handled automatically by Cloud Function.</p>
-     *                   <br></br><strong>*Notes:</strong>
-     *                   <br></br>- <strong>lastModified and timeCreated</strong> may need to be generated from client side (ViewModel, Activity) to display onto the UI (Ex: Now). After re-fetching comments data, lastModified and timeCreated will be provided from this repository.
-     *                   <br></br>- <strong>totalReply, totalComment</strong> from parent post or comment will only be updated if re-fetching data from Firestore. UI logic should handle the increment of totalComment/Replies programmatically.
      */
-    //TODO: Uploading images - THY
     public void createComment(PostingObject parent, Comment newComment, CommentCallback callback) {
-        CollectionReference commentRef = db.collection("Community")
+        DocumentReference commentRef = db.collection("Community")
                 .document(parent.getCommunityID())
                 .collection("Post")
                 .document(parent.getPostID())
-                .collection("Comment");
+                .collection("Comment")
+                .document();
         if (parent instanceof Comment) { // is a reply
             Comment parentComment = (Comment) parent;
             newComment.setReplyCommentID(parentComment.getCommentID());
+        } else {
+            newComment.setReplyCommentID(null);
         }
         newComment.setCommunityID(parent.getCommunityID());
         newComment.setPostID(parent.getPostID());
+        newComment.setCommentID(commentRef.getId());
+
         AddCommentDTO addCommentDTO = new AddCommentDTO(newComment);
-        commentRef.add(addCommentDTO).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        newComment.setCommentID(documentReference.getId());
-                        uploadCommentImages(newComment, callback);
-                        Log.d(FlagsList.DEBUG_COMMENT_FLAG, "Comment written with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        callback.onFailure(e.getMessage());
-                        Log.w(FlagsList.DEBUG_COMMENT_FLAG, "Error adding comment", e);
-                    }
-                });
+        uploadCommentImages(newComment, new IUpload() {
+            @Override
+            public void onSuccess(List<String> url) {
+                addCommentDTO.setDownloadImage(url);
+                mFunctions.getHttpsCallable("createComment")
+                        .call(addCommentDTO.convertToDataObject())
+                        .addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+                            @Override
+                            public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                                // The function executed successfully, parse the result
+                                Map<String, Object> result = (Map<String, Object>) httpsCallableResult.getData();
+                                if (result.containsKey("error")) {
+                                    callback.onFailure(FlagsList.ERROR_COMMUNITY_FAILED_TO_CREATE);
+                                    Log.d(FlagsList.DEBUG_COMMENT_FLAG, "Create comment failed, DTO validation failed!");
+                                } else {
+                                    // map the result to community object
+                                    newComment.setTotalUpVote((Integer) result.get("totalUpVote"));
+                                    newComment.setTotalDownVote((Integer) result.get("totalDownVote"));
+                                    newComment.setVoteDifference((Integer) result.get("voteDifference"));
+                                    newComment.setTotalReply((Integer) result.get("totalReply"));
+                                    newComment.setTimeCreated(ConvertUtil.convertMapToTimestamp(result, "timeCreated"));
+                                    newComment.setLastModified(ConvertUtil.convertMapToTimestamp(result, "lastModified"));
+                                    callback.onCreateSuccess(newComment);
+                                }
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // The function execution failed
+                                Log.d(FlagsList.DEBUG_COMMENT_FLAG, "create comment failed with: ", e);
+                                callback.onFailure(e.toString());
+                            }
+                        });
+            }
+
+            @Override
+            public void onFailed(String message) {
+                callback.onFailure(message);
+            }
+        });
+
 
     }
 
-    private void uploadCommentImages(Comment comment, CommentCallback callback) {
+    private void uploadCommentImages(Comment comment, IUpload callback) {
         StorageReference commentRef = storage.getReference("Community/"+ comment.getCommunityID() + "/Post/" + comment.getPostID() + "/Comment/" + comment.getCommentID() + "/images");
 
         List<Uri> filesUri = comment.getImage();
         if (filesUri == null || filesUri.isEmpty()) {
-            callback.onCreateSuccess(comment);
+            callback.onSuccess(null);
             return;
         }
         int sequenceNumber = 0;
@@ -117,7 +153,7 @@ public class CommentRepository {
             String uniqueFileName = String.format(Locale.US, "%04d-%d", sequenceNumber++, System.currentTimeMillis());
 
             StorageReference fileRef = commentRef.child(uniqueFileName);
-            imagePaths.add(fileRef.getPath()+"/"+uniqueFileName);
+            imagePaths.add(fileRef.getPath());
 
             UploadTask uploadTask = fileRef.putFile(fileUri, metadata);
             uploadTasks.add(uploadTask);
@@ -126,15 +162,14 @@ public class CommentRepository {
         Tasks.whenAllSuccess(uploadTasks).addOnSuccessListener(new OnSuccessListener<List<Object>>() {
             @Override
             public void onSuccess(List<Object> objects) {
-                comment.setDownloadImage(imagePaths);
-                updateDownloadImage(comment, callback);
+                callback.onSuccess(imagePaths);
                 Log.d(FlagsList.DEBUG_COMMENT_FLAG, "All images uploaded successfully!");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.w(FlagsList.DEBUG_COMMENT_FLAG, "Error uploading images", e);
-                callback.onFailure(e.toString());
+                callback.onFailed(e.toString());
             }
         });
     }

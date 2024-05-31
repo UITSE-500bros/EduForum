@@ -79,8 +79,8 @@ public class CreatePostViewModel extends ViewModel {
         this.communityId.setValue(communityId);
     }
     // ----------------------------------------------------------------------------
-    public void createPost(){
-        PostViewState newPost = postViewState.getValue();
+    public void createPost(PostViewState state){
+        PostViewState newPost = state;
         if(newPost == null){
             errorMessage.setValue("Không thể tạo bài viết");
             return;
@@ -89,7 +89,14 @@ public class CreatePostViewModel extends ViewModel {
             return;
         }
         String sth = communityId.getValue();
-        Post post = new Post(newPost.getPostId(), sth, newPost.getTitle(), newPost.getContent(), newPost.getIsAnonymous(), null, null, newPost.getCreator(), 0, 0, 0,0, newPost.getImage(), null, newPost.getTags());
+        Post post = new Post(newPost.getPostId(),
+                sth,
+                newPost.getTitle(),
+                newPost.getContent(),
+                newPost.getIsAnonymous(),
+                null, null, newPost.getCreator(),
+                0, 0, 0,0,
+                newPost.getImage(), null, newPost.getTags());
         // add new post to database
         postRepository.addPost(post, new IPostCallback() {
             @Override
@@ -143,6 +150,11 @@ public class CreatePostViewModel extends ViewModel {
             public void onGetVoteStatusSuccess(int voteType) {
 
             }
+
+            @Override
+            public void onGetOnePostSuccess(Post post) {
+
+            }
         });
     }
     private Boolean isPostValid(PostViewState post){
@@ -150,7 +162,10 @@ public class CreatePostViewModel extends ViewModel {
             errorMessage.setValue("Tiêu đề không được để trống");
             return false;
         }
-        // other validations ...
+        if(post.getContent() == null || post.getContent().isEmpty()){
+            errorMessage.setValue("Nội dung không được để trống");
+            return false;
+        }
         return true;
     }
     private String convertTimestampToReadable(Timestamp timestamp){

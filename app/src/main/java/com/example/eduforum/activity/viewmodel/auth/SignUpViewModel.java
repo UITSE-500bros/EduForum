@@ -198,6 +198,11 @@ public class SignUpViewModel extends ViewModel {
             errorMessage.setValue("Chưa chọn giới tính");
             return false;
         }
+
+        if (state.profilePicture == null) {
+            errorMessage.setValue("Chưa chọn ảnh đại diện");
+            return false;
+        }
         return true;
     }
 }

@@ -2,6 +2,7 @@ package com.example.eduforum.activity.ui.community;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,17 +10,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.VideoView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,21 +29,15 @@ import com.example.eduforum.activity.model.post_manage.Creator;
 import com.example.eduforum.activity.model.post_manage.PostCategory;
 import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.activity.ui.community.adapter.MediaAdapter;
-import com.example.eduforum.activity.ui.community.adapter.MediaItem;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
-import com.example.eduforum.activity.util.LoadingDialog;
 import com.example.eduforum.activity.viewmodel.community.CreatePostViewModel;
 import com.example.eduforum.activity.viewmodel.shared.UserViewModel;
 import com.example.eduforum.databinding.ActivityCreatePostBinding;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.checkerframework.checker.units.qual.C;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import jp.wasabeef.richeditor.RichEditor;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class CreatePostActivity extends AppCompatActivity {
 
@@ -105,6 +96,11 @@ public class CreatePostActivity extends AppCompatActivity {
 
     }
     private void initComponents(){
+
+        binding.toolBarCreatePost.setNavigationOnClickListener(v -> {
+            finish();
+        });
+
         //Stlye rich editor through binding
         binding.contentRichEditor.setBackgroundColor(Color.WHITE);
         binding.contentRichEditor.setEditorHeight(250);
@@ -201,7 +197,7 @@ public class CreatePostActivity extends AppCompatActivity {
                             imageView.setLayoutParams(layoutParams);
                             uriList1.add(uris.get(i));
                         }
-                        MediaAdapter imageAdapter = new MediaAdapter(uriList1);
+                        MediaAdapter imageAdapter = new MediaAdapter(uriList1, false);
                         binding.imageRecyclerView.setAdapter(imageAdapter);
                         postViewState.setImage(uriList1);
                         viewModel.setPostViewState(postViewState);
@@ -214,6 +210,20 @@ public class CreatePostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pickImages.launch(new PickVisualMediaRequest.Builder().build());
+            }
+        });
+
+        AtomicReference<Boolean> isAnonymous = new AtomicReference<>(false);
+        binding.incognitoModeButton.setOnClickListener(v -> {
+            if(binding.incognitoModeButton.getIconTint() == ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.unLikedButtonColor)){
+                ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
+                binding.incognitoModeButton.setIconTint(colorStateList);
+                isAnonymous.set(true);
+            }
+            else {
+                ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.unLikedButtonColor);
+                binding.incognitoModeButton.setIconTint(colorStateList);
+                isAnonymous.set(false);
             }
         });
 
@@ -275,10 +285,11 @@ public class CreatePostActivity extends AppCompatActivity {
         binding.createPostButton.setOnClickListener(v -> {
             PostViewState newPost = viewModel.getPostViewState().getValue();
             newPost.setContent(binding.contentRichEditor.getHtml());
+            newPost.setAnonymous(isAnonymous.get());
             //newPost.setDate(LocalDate.now().toString());
             // newPost.setCategory(...);
             viewModel.setPostViewState(newPost);
-            viewModel.createPost();
+            viewModel.createPost(viewModel.getPostViewState().getValue());
         });
     }
     private Creator mapToCreator(User user) {

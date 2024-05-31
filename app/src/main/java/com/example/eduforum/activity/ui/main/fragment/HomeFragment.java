@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -11,15 +12,20 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.example.eduforum.R;
+import com.example.eduforum.activity.EduForum;
+import com.example.eduforum.activity.model.post_manage.Creator;
+import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.example.eduforum.activity.ui.main.adapter.CommunityAdapter;
 
 import com.example.eduforum.activity.viewmodel.main.HomeViewModel;
+import com.example.eduforum.activity.viewmodel.shared.UserViewModel;
 import com.example.eduforum.databinding.DialogCreateCommunityBinding;
 import com.example.eduforum.databinding.DialogJoinCommunityBinding;
 import com.example.eduforum.databinding.FragmentHomeBinding;
@@ -30,8 +36,10 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private HomeViewModel viewModel;
+    private UserViewModel userViewModel;
     private CommunityAdapter joinedCommunitiesAdapter;
     private CommunityAdapter myCommunitiesAdapter;
+    private CommunityAdapter globalCommunitiesAdapter;
     private ActivityResultLauncher<String> mGetContent;
 
     private DialogCreateCommunityBinding dialogBinding;
@@ -52,34 +60,59 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        EduForum app  = (EduForum) getActivity().getApplication();
+        userViewModel = app.getSharedViewModel(UserViewModel.class);
+        userViewModel.getCurrentUserLiveData().observe(getViewLifecycleOwner(), user -> {
+            if(user != null) {
+                viewModel.setCurrentUser(user);
+                Log.d("HomeFragment", "User: "+user.getName());
+            }
+        });
         return binding.getRoot();
     }
-
+    public void onStart(){
+        super.onStart();
+        // onStart is called after onCreate, so we can safely set up the listener here
+    }
+    public void onResume(){
+        super.onResume();
+        Log.d("HomeFragment", "onResume");
+        viewModel.setUpListener();
+    }
+    public void onStop(){
+        super.onStop();
+        // onStop is back to onStart (never directly back to onResume), not onResume, so we can remove listener here and set up listener again in onStart
+        viewModel.removeListener();
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        pickMedia =
-//                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-//                    if (uri != null) {
-//                        Log.d("Gallery is opened", uri.toString());
-//                        //TO DO: Handle the image uri data here
-//                        dialogBinding.communityImage.setImageURI(uri);
-//                        CreateCommunityViewState state = viewModel.getCommuLiveData().getValue();
-//                        assert state != null;
-//                        state.setCommuAvt(uri);
-//                        viewModel.setCommuLiveData(state);
-//
-//                    } else {
-//                        Snackbar.make(binding.getRoot(), "Không thể mở tài nguyên", Snackbar.LENGTH_SHORT).show();
-//                    }
-//                });
+        pickMedia =
+                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                    if (uri != null) {
+                        Log.d("Photo Picker", "Selected uri: "+uri.toString());
+                        //TO DO: Handle the image uri data here
+                        dialogBinding.communityImage.setImageURI(uri);
+                        CreateCommunityViewState state = viewModel.getNewCommunityLiveData().getValue();
+                        assert state != null;
+                        state.setCommuAvt(uri);
+                        viewModel.setNewCommunityLiveData(state);
+
+                    } else {
+                        Snackbar.make(binding.getRoot(), "Không thể mở tài nguyên", Snackbar.LENGTH_SHORT).show();
+                    }
+                });
         joinedCommunitiesAdapter = new CommunityAdapter(getContext(), viewModel.getJoinedCommunityList().getValue(),  FirebaseAuth.getInstance());
         myCommunitiesAdapter = new CommunityAdapter(getContext(), viewModel.getIsAdminCommunityList().getValue(), FirebaseAuth.getInstance());
+        myCommunitiesAdapter.setIsAdminList(true);
+        globalCommunitiesAdapter = new CommunityAdapter(getContext(), viewModel.getGlobalCommunityList().getValue(), FirebaseAuth.getInstance());
+        globalCommunitiesAdapter.setIsGlobalList(true);
         binding.joinedCommunitiesRecyclerView.setAdapter(joinedCommunitiesAdapter);
         binding.myCommunitiesRecyclerView.setAdapter(myCommunitiesAdapter);
         binding.joinedCommunitiesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         binding.myCommunitiesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-
+        binding.UITCommunitiesRecyclerView.setAdapter(globalCommunitiesAdapter);
+        binding.UITCommunitiesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         binding.createCommuButton.setOnClickListener(v -> {
             showCreateCommunityDialog();
         });
@@ -92,6 +125,9 @@ public class HomeFragment extends Fragment {
             myCommunitiesAdapter.setCommunityList(myCommunities);
         });
 
+        viewModel.getGlobalCommunityList().observe(getViewLifecycleOwner(), globalCommunities -> {
+            globalCommunitiesAdapter.setCommunityList(globalCommunities);
+        });
     }
     private void showCreateCommunityDialog() {
         viewModel.setNewCommunityLiveData(new CreateCommunityViewState());
@@ -114,16 +150,15 @@ public class HomeFragment extends Fragment {
 
 
 
-//        dialogBinding.uploadImageButton.setOnClickListener(v -> {
-//            // Launch the photo picker and let the user choose image
-////            pickMedia.launch(new PickVisualMediaRequest.Builder()
-////                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-////                    .build());
-//        });
-
-        viewModel.getIsAdminCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
-            myCommunitiesAdapter.setCommunityList(joinedCommunities);
+        dialogBinding.uploadImageButton.setOnClickListener(v -> {
+            pickMedia.launch(new PickVisualMediaRequest.Builder()
+                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                    .build());
         });
+//
+//        viewModel.getIsAdminCommunityList().observe(getViewLifecycleOwner(), joinedCommunities -> {
+//            myCommunitiesAdapter.setCommunityList(joinedCommunities);
+//        });
         viewModel.getNewCommunityLiveData().observe(getViewLifecycleOwner(), newCommunity -> {
             if(newCommunity.getErrorMessage() != null){
                 Snackbar.make(dialogBinding.getRoot(), newCommunity.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
