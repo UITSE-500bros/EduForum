@@ -67,8 +67,8 @@ public class ExploreCommunityAdapter extends RecyclerView.Adapter<ExploreCommuni
             if(!community.getRequestSent()) {
                 binding.joinButton.setOnClickListener(v -> {
                     listener.onJoinCommunityClick(v, community.getCommunityId());
-                    binding.joinButton.setText("Đang chờ phê duyệt");
-                    binding.joinButton.setEnabled(false);
+                    binding.joinButton.setText("Đã gửi yêu cầu");
+                    community.setRequestSent(true);
                 });
             }
             else{
