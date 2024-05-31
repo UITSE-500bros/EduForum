@@ -28,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Set badge number for notification fragment (số thông báo)
         BadgeDrawable badgeDrawable = binding.mainBottomNavigation.getOrCreateBadge(R.id.notiFragment);
-        badgeDrawable.setBackgroundColor(Color.RED);
-        badgeDrawable.setNumber(10);
+//        badgeDrawable.setBackgroundColor(Color.RED);
+//        badgeDrawable.setNumber(10);
         badgeDrawable.setBadgeTextColor(Color.WHITE);
         badgeDrawable.setVisible(true);
     }

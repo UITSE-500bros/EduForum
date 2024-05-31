@@ -271,19 +271,19 @@
                     android:layout_marginHorizontal="5dp"
                     android:orientation="horizontal">
 
-                    <com.google.android.material.button.MaterialButton
-                        style="@style/Widget.Material3.Button.Icon"
-                        android:id="@+id/incognitomodeButton"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        app:backgroundTint="@color/backgroundColor"
-                        android:contentDescription="@null"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:scaleType="centerCrop"
-                        app:icon="@drawable/incognito_mode"
-                        app:iconGravity="textEnd"
-                        app:iconTint="@color/unLikedButtonColor"
-                        app:iconSize="30sp"/>
+<!--                    <com.google.android.material.button.MaterialButton-->
+<!--                        style="@style/Widget.Material3.Button.Icon"-->
+<!--                        android:id="@+id/incognitomodeButton"-->
+<!--                        android:layout_width="30dp"-->
+<!--                        android:layout_height="30dp"-->
+<!--                        app:backgroundTint="@color/backgroundColor"-->
+<!--                        android:contentDescription="@null"-->
+<!--                        android:foreground="?attr/selectableItemBackground"-->
+<!--                        android:scaleType="centerCrop"-->
+<!--                        app:icon="@drawable/incognito_mode"-->
+<!--                        app:iconGravity="textEnd"-->
+<!--                        app:iconTint="@color/unLikedButtonColor"-->
+<!--                        app:iconSize="30sp"/>-->
                 </LinearLayout>
 
 

@@ -73,14 +73,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             intent.putExtra("isExploring", isExploring);
             context.startActivity(intent);
         });
-        holder.binding.setting.setOnClickListener(v -> {
-            PopupMenu popupMenu = new PopupMenu(context, holder.binding.setting);
-            popupMenu.inflate(R.menu.post_option_menu);
-            //popupMenu.setOnMenuItemClickListener(item -> {
-                //TODO: Handle menu item click
-            //});
-            popupMenu.show();
-        });
+        
     }
 
     @Override

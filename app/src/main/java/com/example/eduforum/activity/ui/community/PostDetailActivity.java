@@ -123,41 +123,49 @@ public class PostDetailActivity extends AppCompatActivity {
                     binding.commentCountTextView.setText(String.valueOf(currentPost.getTotalComment()));
                     binding.voteCountTextView.setText(String.valueOf(currentPost.getVoteDifference()));
                     binding.timeCommentTextView.setText(currentPost.getDate());
-                    binding.khoaTextView.setText(currentPost.getCreator().getDepartment());
-                    if(currentPost.getPictures()!=null){
+
+                    if(currentPost.getPictures()!=null ){
                         RecyclerView recyclerView = binding.recycleImage;
                         mediaAdapter = new MediaAdapter(currentPost.getPictures());
                         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                         recyclerView.setAdapter(mediaAdapter);
                     }
 
-                    binding.userNameTextView.setText(currentPost.getCreator().getName());
-                    binding.khoaTextView.setText(currentPost.getCreator().getDepartment());
 
-                    if(currentPost.getCreator().getProfilePicture() != null) {
-                        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(currentPost.getCreator().getProfilePicture());
-                        Glide.with(binding.getRoot().getContext())
-                                .load(storageReference)
-                                .into(binding.avatarImageView);
+                    if(currentPost.getCreator()!= null ) {
+                        if (currentPost.getCreator().getProfilePicture() != null) {
+                            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(currentPost.getCreator().getProfilePicture());
+                            Glide.with(binding.getRoot().getContext())
+                                    .load(storageReference)
+                                    .into(binding.avatarImageView);
+                        }
                     }
 
                     binding.downVoteButton.setOnClickListener(v -> {
                         if(!isDownVoted){
                             viewModel.downVote(currentPost);
+                            ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
+                            binding.downVoteButton.setIconTint(colorStateList);
                             binding.voteCountTextView.setText(String.valueOf(currentPost.getVoteDifference() - 1));
                             currentPost.setVoteDifference(currentPost.getVoteDifference() - 1);
                             isDownVoted = true;
                             isUpVoted = false;
+                        }else {
+                            binding.downVoteButton.setIconTint(null);
                         }
                     });
 
                     binding.upVoteButton.setOnClickListener(v -> {
                         if(!isUpVoted){
                             viewModel.upVote();
+                            ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
+                            binding.upVoteButton.setIconTint(colorStateList);
                             binding.voteCountTextView.setText(String.valueOf(currentPost.getVoteDifference()+ 1));
                             currentPost.setVoteDifference(currentPost.getVoteDifference() + 1);
                             isUpVoted = true;
                             isDownVoted = false;
+                        }else{
+                            binding.upVoteButton.setIconTint(null);
                         }
                     });
 
@@ -282,6 +290,23 @@ public class PostDetailActivity extends AppCompatActivity {
                         // Đánh dấu là bình luận gốc
                         this.isParentComment = true;
                     });
+
+                    binding.moreButton.setOnClickListener(v -> {
+                        PopupMenu popupMenu = new PopupMenu(this, v);
+                        popupMenu.getMenuInflater().inflate(R.menu.post_option_menu, popupMenu.getMenu());
+                        popupMenu.setOnMenuItemClickListener(item -> {
+
+                            if(item.getItemId() == R.id.deletePost){
+                                builder.show();
+                                viewModel.deletePost(currentPost);
+                                finish();
+                            }
+
+//                }
+                            return true;
+                        });
+                        popupMenu.show();
+                    });
                     break;
                 case KEY_NOTI_POST:
                     communityName = (String) getIntent().getSerializableExtra("notiCommunityName");
@@ -331,20 +356,28 @@ public class PostDetailActivity extends AppCompatActivity {
                 binding.downVoteButton.setOnClickListener(v -> {
                     if(!isDownVoted){
                         viewModel.downVote(currentPost);
+                        ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
+                        binding.downVoteButton.setIconTint(colorStateList);
                         binding.voteCountTextView.setText(String.valueOf(currentPost.getVoteDifference() - 1));
                         currentPost.setVoteDifference(currentPost.getVoteDifference() - 1);
                         isDownVoted = true;
                         isUpVoted = false;
+                    }else{
+                        binding.downVoteButton.setIconTint(null);
                     }
                 });
 
                 binding.upVoteButton.setOnClickListener(v -> {
                     if(!isUpVoted){
                         viewModel.upVote();
+                        ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
+                        binding.upVoteButton.setIconTint(colorStateList);
                         binding.voteCountTextView.setText(String.valueOf(currentPost.getVoteDifference()+ 1));
                         currentPost.setVoteDifference(currentPost.getVoteDifference() + 1);
                         isUpVoted = true;
                         isDownVoted = false;
+                    }else{
+                        binding.upVoteButton.setIconTint(null);
                     }
                 });
 
@@ -454,21 +487,28 @@ public class PostDetailActivity extends AppCompatActivity {
                         binding.commentEditText.setText("");
                     }
                 });
+                binding.moreButton.setOnClickListener(v -> {
+                    PopupMenu popupMenu = new PopupMenu(this, v);
+                    popupMenu.getMenuInflater().inflate(R.menu.post_option_menu, popupMenu.getMenu());
+                    popupMenu.setOnMenuItemClickListener(item -> {
+
+                        if(item.getItemId() == R.id.deletePost){
+                            builder.show();
+                            viewModel.deletePost(currentPost);
+                            finish();
+                        }
+
+//                }
+                        return true;
+                    });
+                    popupMenu.show();
+                });
 
             } else {
                 Log.d("PostDetailActivity", "postViewState is null");
             }
         });
-        binding.incognitomodeButton.setOnClickListener(v -> {
-            if(binding.incognitomodeButton.getIconTint() != ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor)){
-                ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
-                binding.incognitomodeButton.setIconTint(colorStateList);
-            }
-            else {
-                ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.unLikedButtonColor);
-                binding.incognitomodeButton.setIconTint(colorStateList);
-            }
-        });
+
 
 
         binding.commentButton.setOnClickListener(v -> {
@@ -489,24 +529,7 @@ public class PostDetailActivity extends AppCompatActivity {
         });
 
 
-        binding.moreButton.setOnClickListener(v -> {
-            PopupMenu popupMenu = new PopupMenu(this, v);
-            popupMenu.getMenuInflater().inflate(R.menu.post_option_menu, popupMenu.getMenu());
-            popupMenu.setOnMenuItemClickListener(item -> {
-//                switch (item.getItemId()) {
-//                    case R.id.editPost:
-//                        viewModel.editPost(postViewState);
-//                        break;
-                    if(item.getItemId() == R.id.deletePost){
-                        builder.show();
-                    }
-//                        viewModel.deletePost(postViewState);
-//                        break;
-//                }
-                return true;
-            });
-            popupMenu.show();
-        });
+
 
     }
 
