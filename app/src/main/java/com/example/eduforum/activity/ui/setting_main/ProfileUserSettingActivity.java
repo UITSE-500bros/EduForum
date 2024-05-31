@@ -1,6 +1,7 @@
 package com.example.eduforum.activity.ui.setting_main;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.example.eduforum.R;
 import com.example.eduforum.activity.EduForum;
 import com.example.eduforum.activity.model.user_manage.User;
+import com.example.eduforum.activity.ui.main.MainActivity;
 import com.example.eduforum.activity.viewmodel.main.settings.ProfileUserSettingViewModel;
 import com.example.eduforum.activity.viewmodel.shared.UserViewModel;
 import com.example.eduforum.databinding.ActivityProfileUserSettingBinding;
@@ -46,11 +48,15 @@ public class ProfileUserSettingActivity extends AppCompatActivity {
 
             }
         });
+        binding.ACTVCategory.setAdapter(new ArrayAdapter<>(
+                binding.getRoot().getContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                getResources().getStringArray(R.array.ds_khoa)));
         viewModel.getUserLiveData().observe(this, user -> {
             if(user != null) {
                 binding.nameUserEditText.getEditText().setText(user.getName());
                 binding.phoneNumberEditText.getEditText().setText(user.getPhoneNumber());
-                binding.ACTVCategory.setText(user.getDepartment());
+                binding.ACTVCategory.setText(user.getDepartment(), false);
                 if(user.getProfilePicture()!=null && !user.getProfilePicture().isEmpty()){
                     StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(user.getProfilePicture());
                     Glide.with(binding.getRoot().getContext())
@@ -63,10 +69,7 @@ public class ProfileUserSettingActivity extends AppCompatActivity {
             finish();
         });
 
-        binding.ACTVCategory.setAdapter(new ArrayAdapter<>(
-                binding.getRoot().getContext(),
-                android.R.layout.simple_dropdown_item_1line,
-                getResources().getStringArray(R.array.ds_khoa)));
+
 
         ActivityResultLauncher<PickVisualMediaRequest> pickImage =
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
@@ -95,18 +98,20 @@ public class ProfileUserSettingActivity extends AppCompatActivity {
                 user.setDepartment(binding.ACTVCategory.getText().toString());
                 viewModel.setUserLiveData(user);
                 viewModel.updateUserProfile();
-            }
-        });
-        viewModel.getIsUpdateSuccess().observe(this, isUpdateSuccess -> {
-            if(isUpdateSuccess) {
                 new AlertDialog.Builder(this)
                         .setTitle("Cập nhật thông tin của bạn")
                         .setMessage("Cập nhật thông tin thành công")
                         .setPositiveButton("OK", (dialog, which) -> {
                             dialog.dismiss();
-                            finish();
-                        })
+                            Intent intent = new Intent(ProfileUserSettingActivity.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);                        })
                         .show();
+            }
+        });
+        viewModel.getIsUpdateSuccess().observe(this, isUpdateSuccess -> {
+            if(isUpdateSuccess) {
+
             }
         });
     }
