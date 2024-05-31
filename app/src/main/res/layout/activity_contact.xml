@@ -1,123 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-tools:context=".activity.ui.setting_main.ContactActivity"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/backgroundColor"
-    android:id="@+id/main"
     >
-<com.google.android.material.appbar.AppBarLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/secondaryColor"
-    app:layout_constraintTop_toTopOf="parent"
-    android:id="@+id/appBarLayout"
-    >
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbarContact"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        tools:context=".activity.ui.setting_main.ContactActivity"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/secondaryColor"
-        app:layout_scrollFlags="scroll|enterAlways"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:title="Liên hệ &amp; hỗ trợ"
-        app:titleTextColor="@color/white"
-        app:navigationIcon="@drawable/back_icon"
-        />
+        android:layout_height="match_parent"
+        android:background="@color/backgroundColor"
+        android:fitsSystemWindows="true"
+        >
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/secondaryColor"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/appBarLayout"
+            >
+            <com.google.android.material.appbar.MaterialToolbar
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:id="@+id/toolbarContact"
+                android:background="@color/secondaryColor"
+                app:title="Liên hệ &amp; Hỗ trợ"
+                app:titleTextColor="@color/white"
+                app:navigationIcon="@drawable/back_icon" />
 
-</com.google.android.material.appbar.AppBarLayout>
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Thông tin liên hệ"
-        android:textSize="20sp"
-        android:textColor="@color/white"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/phoneicon"
-        android:src="@drawable/contact_phone"
-        app:layout_constraintTop_toBottomOf="@id/title"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
-    <TextView
-        android:id="@+id/phone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text= "0826699174"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/phoneicon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/emailicon"
-        android:src="@drawable/contact_email"
-        app:layout_constraintTop_toBottomOf="@id/phone"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
-    <TextView
-        android:id="@+id/email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=" eduforumse@gmail.com"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/emailicon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/addressicon"
-        android:src="@drawable/contact_location"
-        app:layout_constraintTop_toBottomOf="@id/email"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
-    <TextView
-        android:id="@+id/address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=" Đường Hàn Thuyên,\n khu phố 6 P, Thủ Đức, TP.HCM"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/addressicon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        android:gravity="center_horizontal"
-        />
+        </com.google.android.material.appbar.AppBarLayout>
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thông tin liên hệ"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/phoneicon"
+            android:src="@drawable/contact_phone"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+        <TextView
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text= "0826699174"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/phoneicon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/emailicon"
+            android:src="@drawable/contact_email"
+            app:layout_constraintTop_toBottomOf="@id/phone"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" eduforumse@gmail.com"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/emailicon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/addressicon"
+            android:src="@drawable/contact_location"
+            app:layout_constraintTop_toBottomOf="@id/email"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Đường Hàn Thuyên,\n khu phố 6 P, Thủ Đức, TP.HCM"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/addressicon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:gravity="center_horizontal"
+            />
 
 
 
@@ -125,4 +123,8 @@ tools:context=".activity.ui.setting_main.ContactActivity"
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</layout>

@@ -67,7 +67,7 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                     android:layout_height="wrap_content"
                     android:text="@string/homeFragmentTitle"
                     android:layout_gravity="center"
-                    android:textSize="30sp"
+                    android:textSize="25sp"
                     android:fontFamily="@font/source_sans_pro_semibold"
                     android:textColor="@color/textColor"
                     android:layout_marginTop="15dp"
@@ -81,7 +81,7 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                     android:layout_marginTop="16dp"
                     android:text="Cộng đồng UIT"
                     android:textColor="@color/textColor"
-                    android:textSize="24sp" />
+                    android:textSize="20sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/UITCommunitiesRecyclerView"
@@ -100,7 +100,7 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                     android:layout_marginTop="16dp"
                     android:text="Cộng đồng của tôi"
                     android:textColor="@color/textColor"
-                    android:textSize="24sp" />
+                    android:textSize="20sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/myCommunitiesRecyclerView"
@@ -116,7 +116,7 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cộng đồng đã tham gia"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
                     android:textColor="@color/textColor" />

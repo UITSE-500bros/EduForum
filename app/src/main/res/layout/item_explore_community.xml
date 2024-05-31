@@ -77,18 +77,18 @@
             <com.google.android.material.button.MaterialButton
                 android:text="Tham gia"
                 android:id="@+id/joinButton"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:gravity="center"
                 android:textSize="12sp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@id/commuNoti_LinearLayout"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/loginbuttonshape">
-            </com.google.android.material.button.MaterialButton>
-
+                android:background="@drawable/loginbuttonshape" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

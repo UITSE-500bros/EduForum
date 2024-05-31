@@ -60,9 +60,11 @@
             android:layout_marginEnd="24dp"
             android:hint="Mật khẩu hiện tại"
             app:layout_constraintEnd_toEndOf="parent"
+            app:passwordToggleEnabled="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/createNewPassImageView" >
             <com.google.android.material.textfield.TextInputEditText
+                style="@style/ThemeOverlay.Material3.AutoCompleteTextView.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/loginedittextshape"
@@ -79,10 +81,12 @@
             android:layout_marginEnd="24dp"
             android:hint="Mật khẩu mới"
             app:layout_constraintEnd_toEndOf="parent"
+            app:passwordToggleEnabled="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/currentPassEditText" >
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
+                style="@style/ThemeOverlay.Material3.AutoCompleteTextView.FilledBox"
                 android:layout_height="match_parent"
                 android:background="@drawable/loginedittextshape"
                 android:inputType="textPassword" />
@@ -99,10 +103,12 @@
             app:layout_constraintTop_toBottomOf="@id/newPassEditText"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="24dp"
+            app:passwordToggleEnabled="true"
             android:layout_marginRight="24dp">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                style="@style/ThemeOverlay.Material3.AutoCompleteTextView.FilledBox"
                 android:background="@drawable/loginedittextshape"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>

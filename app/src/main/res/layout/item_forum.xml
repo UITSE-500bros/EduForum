@@ -84,6 +84,7 @@
                     app:cardCornerRadius="90dp"
                     app:strokeWidth="0dp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginEnd="20dp"
                     app:cardBackgroundColor="@color/tagBackgroundColor">
 

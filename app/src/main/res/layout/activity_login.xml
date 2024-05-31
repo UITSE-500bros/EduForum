@@ -117,16 +117,19 @@
             android:id="@+id/btnForgotPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="224dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginStart="240dp"
             android:layout_marginTop="355dp"
+            android:layout_marginEnd="30dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:background="@drawable/transparent_btn"
             android:fontFamily="@font/source_sans_pro_semibold"
-            android:gravity="top"
+            android:textAlignment="textEnd"
             android:text="@string/forgot_pass"
             android:textColor="#B0B0B0"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
         <Button
             android:onClick="@{() -> viewModel.onLoginClicked()}"
