@@ -127,7 +127,8 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                     android:id="@+id/joinedCommunitiesRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:listitem="@layout/item_forum"/>
+                    tools:listitem="@layout/item_forum"
+                    android:layout_marginBottom="70dp" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
