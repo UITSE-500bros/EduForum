@@ -94,7 +94,7 @@ public class SettingsMainFragment extends Fragment {
                         viewModel.signOut();
 
                     })
-                    .setNegativeButton("No", null)
+                    .setNegativeButton("Không", null)
                     .show();
         });
         viewModel.getIsSignOutSuccess().observe(getViewLifecycleOwner(), isSignOutSuccess -> {

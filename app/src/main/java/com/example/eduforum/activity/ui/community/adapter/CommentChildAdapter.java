@@ -95,22 +95,22 @@ public class CommentChildAdapter extends RecyclerView.Adapter<CommentChildAdapte
         CommentViewState comment = commentList2.get(position);
 
 
-        createDeleteDialog();
 
-        holder.binding.moreChildCommentButton.setOnClickListener(v -> {
-            PopupMenu popupMenu = new PopupMenu(context, holder.binding.moreChildCommentButton);
-            popupMenu.inflate(R.menu.comment_menu);
-            popupMenu.setOnMenuItemClickListener(item -> {
-                if (item.getItemId() == R.id.deleteComment) {
-                    builder.show();
-                }
-                else{
 
-                }
-                return true;
-            });
-            popupMenu.show();
-        });
+//        holder.binding.moreChildCommentButton.setOnClickListener(v -> {
+//            PopupMenu popupMenu = new PopupMenu(context, holder.binding.moreChildCommentButton);
+//            popupMenu.inflate(R.menu.comment_menu);
+//            popupMenu.setOnMenuItemClickListener(item -> {
+//                if (item.getItemId() == R.id.deleteComment) {
+//                    builder.show();
+//                }
+//                else{
+//
+//                }
+//                return true;
+//            });
+//            popupMenu.show();
+//        });
 
 
 
@@ -123,23 +123,7 @@ public class CommentChildAdapter extends RecyclerView.Adapter<CommentChildAdapte
         return commentList2.size();
     }
 
-    public void createDeleteDialog() {
-        builder = new MaterialAlertDialogBuilder(context);
-        builder.setTitle("Thông báo");
-        builder.setMessage("Bạn có chắc muốn xóa bình luận này chứ?");
-        builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //TODO: Delete Comment
-            }
-        });
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-    }
+
     public static class CommentViewHolder extends RecyclerView.ViewHolder {
         ItemListCommentBinding binding;
         public CommentViewHolder(ItemListCommentBinding binding) {

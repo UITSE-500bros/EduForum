@@ -20,6 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eduforum.R;
+import com.example.eduforum.activity.model.post_manage.Comment;
+import com.example.eduforum.activity.repository.comment.CommentCallback;
+import com.example.eduforum.activity.repository.comment.CommentRepository;
 import com.example.eduforum.activity.ui.community.PostDetailActivity;
 import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
 import com.example.eduforum.activity.ui.main.adapter.ChildCommentAdapter;
@@ -40,6 +43,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     private static List<CommentViewState> childCommentList;
     private MaterialAlertDialogBuilder builder;
+    private CommentRepository commentRepository;
 
 
     public interface OnReplyClickListener {
@@ -70,6 +74,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                           OnUpVoteClickListener onUpVoteClickListener,
                           OnShowUpReplies onShowUpReplies
                           ) {
+        commentRepository = new CommentRepository();
         this.context = context;
         if (commentList != null) {
             this.commentList = commentList;
@@ -115,23 +120,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-        createDeleteDialog();
+
 
         CommentViewState comment = commentList.get(position);
 
-        holder.binding.moreChildCommentButton.setOnClickListener(v -> {
-            PopupMenu popupMenu = new PopupMenu(context, holder.binding.moreChildCommentButton);
-            popupMenu.inflate(R.menu.comment_menu);
-            popupMenu.setOnMenuItemClickListener(item -> {
-                if (item.getItemId() == R.id.deleteComment) {
-                    builder.show();
-                } else {
-                    //TODO: Edit Comment
-                }
-                return true;
-            });
-            popupMenu.show();
-        });
+
 
         List<CommentViewState> temp = new ArrayList<>();
 
@@ -143,15 +136,60 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
         holder.bind(comment, onReplyClickListener, temp, onDownVoteClickListener, onUpVoteClickListener, onShowUpReplies);
     }
+    public void removeItem(int position) {
+        commentList.remove(position);
+        notifyItemRemoved(position);
+    }
 
-    public void createDeleteDialog() {
+    public void createDeleteDialog(int position) {
         builder = new MaterialAlertDialogBuilder(context);
         builder.setTitle("Thông báo");
         builder.setMessage("Bạn có chắc muốn xóa bình luận này chứ?");
         builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //TODO: Delete Comment
+                removeItem(position);
+                Comment comment  = new Comment();
+                comment.setCommentID(commentList.get(position).getCommentID());
+
+
+                commentRepository.deleteComment(comment, new CommentCallback() {
+                    @Override
+                    public void onCreateSuccess(Comment comments) {
+
+                    }
+
+                    @Override
+                    public void onFailure(String errorMsg) {
+
+                    }
+
+                    @Override
+                    public void onInitialLoadSuccess(List<Comment> comments) {
+
+                    }
+
+                    @Override
+                    public void onLoadRepliesSuccess(List<Comment> comments) {
+
+                    }
+
+                    @Override
+                    public void onDeleteSuccess() {
+
+                    }
+
+                    @Override
+                    public void onUpdateSuccess(Comment comment) {
+
+                    }
+
+                    @Override
+                    public void onGetVoteStatusSuccess(int voteType) {
+
+                    }
+                });
+                dialog.dismiss();
             }
         });
         builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
@@ -190,6 +228,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             }
 
 
+            binding.replyParentTextView.setVisibility(View.GONE);
+            binding.showReplyParentTextView.setVisibility(View.GONE);
         }
 
         public void bind(CommentViewState comment, OnReplyClickListener onReplyClickListener,List<CommentViewState> temp,OnDownVoteClickListener onDownVoteClickListener,OnUpVoteClickListener onUpVoteClickListener,OnShowUpReplies onShowUpReplies) {

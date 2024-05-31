@@ -34,6 +34,7 @@ public class ProfileUserSettingViewModel extends ViewModel {
         return errorMessage;
     }
     public void updateUserProfile(){
+        isUpdateSuccess.setValue(false);
         if(!isValidated()) return;
 
         userRepository.updateProfile(userLiveData.getValue(), new IUpdate() {
