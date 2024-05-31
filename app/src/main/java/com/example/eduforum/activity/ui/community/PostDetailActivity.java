@@ -95,6 +95,8 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
+        createDeleteDialog();
+
         String communityName;
         String key = (String) getIntent().getSerializableExtra("key");
         if (key != null) {
