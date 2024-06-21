@@ -6,6 +6,7 @@ import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -50,16 +51,12 @@ import java.util.List;
 public class PostDetailActivity extends AppCompatActivity {
     private ActivityPostDetailBinding binding;
     private MediaAdapter mediaAdapter;
-
-
     private PostDetailsViewModel viewModel;
-
     private CommentAdapter commentAdapter;
     private boolean isUpVoted = false;
     private boolean isDownVoted = false;
     private boolean isParentComment = true;
     private MaterialAlertDialogBuilder builder;
-
     private UserViewModel userViewModel;
     private Creator creator;
     public static final String KEY_CURRENT_POST = "currentPost";
@@ -77,9 +74,6 @@ public class PostDetailActivity extends AppCompatActivity {
         });
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail);
-
-
-
         viewModel = new ViewModelProvider(this).get(PostDetailsViewModel.class);
 
         //set up turn back button in ActionBar
@@ -125,7 +119,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
                     binding.toolBarCreatePost.setTitle(currentPost.getCommunity().getName());
                     binding.titlePost.setText(currentPost.getTitle());
-                    binding.contentPost.setText(currentPost.getContent());
+                    binding.contentPost.setText(Html.fromHtml(currentPost.getContent(), Html.FROM_HTML_MODE_COMPACT));
                     binding.commentCountTextView.setText(String.valueOf(currentPost.getTotalComment()));
                     binding.voteCountTextView.setText(String.valueOf(currentPost.getVoteDifference()));
                     binding.timeCommentTextView.setText(currentPost.getDate());
@@ -333,7 +327,7 @@ public class PostDetailActivity extends AppCompatActivity {
             if (currentPost != null) {
 
                 binding.titlePost.setText(currentPost.getTitle());
-                binding.contentPost.setText(currentPost.getContent());
+                binding.contentPost.setText(Html.fromHtml(currentPost.getContent(), Html.FROM_HTML_MODE_COMPACT));
                 binding.commentCountTextView.setText(String.valueOf(currentPost.getTotalComment()));
                 binding.voteCountTextView.setText(String.valueOf(currentPost.getVoteDifference()));
                 if(currentPost.getAnonymous()){
