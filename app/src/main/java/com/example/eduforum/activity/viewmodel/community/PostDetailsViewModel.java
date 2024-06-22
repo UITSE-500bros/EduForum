@@ -27,7 +27,7 @@ public class PostDetailsViewModel extends ViewModel {
     MutableLiveData<List<CommentViewState>> cmts;
     MutableLiveData<List<CommentViewState>> cmts_child;
     MutableLiveData<PostViewState> currentPost;
-
+    MutableLiveData<Integer> voteType;
 
     public PostDetailsViewModel() {
         postRepository = PostRepository.getInstance();
@@ -36,6 +36,8 @@ public class PostDetailsViewModel extends ViewModel {
         cmts_child = new MutableLiveData<>();
         currentPost = new MutableLiveData<>();
         cmts.setValue(new ArrayList<CommentViewState>());
+        voteType = new MutableLiveData<>();
+
 
     }
 
@@ -49,6 +51,8 @@ public class PostDetailsViewModel extends ViewModel {
     public LiveData<List<CommentViewState>> getCommentsChild(){
         return cmts_child;
     }
+
+
 
     // TODO: anh nam lam cai nay ne
     private List<CommentViewState> convertCommentListToCommentViewStateList(List<Comment> comments){
@@ -87,7 +91,6 @@ public class PostDetailsViewModel extends ViewModel {
                 null, null,
                 postViewState.getTags());
         postInstance = post;
-
         pt_id = post.getPostID();
         community_id = post.getCommunityID();
 
@@ -361,59 +364,6 @@ public class PostDetailsViewModel extends ViewModel {
         commentRepository.updateVoteCount(comment, FirebaseAuth.getInstance().getCurrentUser().getUid(), 1);
     }
 
-    public void getVoteStatus(CommentViewState commentViewState){
-        Comment comment = new Comment(
-                commentViewState.getCommentID(),
-                commentViewState.getContent(),
-                postInstance.getCommunityID(),
-                commentViewState.getReplyCommentID(),
-                commentViewState.getContent(),
-                null,
-                null,
-                commentViewState.getCreator(),
-                commentViewState.getTotalUpVote(),
-                commentViewState.getTotalDownVote(),
-                commentViewState.getVoteDifference(),
-                commentViewState.getImage()
-        );
-
-            commentRepository.getVoteStatus(comment, FirebaseAuth.getInstance().getCurrentUser().getUid(), new CommentCallback() {
-                @Override
-                public void onCreateSuccess(Comment comments) {
-
-                }
-
-                @Override
-                public void onFailure(String errorMsg) {
-
-                }
-
-                @Override
-                public void onInitialLoadSuccess(List<Comment> comments) {
-
-                }
-
-                @Override
-                public void onLoadRepliesSuccess(List<Comment> comments) {
-
-                }
-
-                @Override
-                public void onDeleteSuccess() {
-
-                }
-
-                @Override
-                public void onUpdateSuccess(Comment comment) {
-
-                }
-
-                @Override
-                public void onGetVoteStatusSuccess(int voteType) {
-
-                }
-            });
-    }
 
     public void deletePost(PostViewState postViewState) {
         Post post = new Post(postViewState.getPostId(), postViewState.getCommunity().getCommunityID(), postViewState.getTitle(), postViewState.getContent(), postViewState.getIsAnonymous(), null, null, postViewState.getCreator(), 0, 0, 0,0, null, null, postViewState.getTags());
@@ -591,6 +541,8 @@ public class PostDetailsViewModel extends ViewModel {
 
 
     public void loadPost(String postID, String communityID){
+        pt_id = postID;
+        community_id = communityID;
         postRepository.getOnePost(communityID,postID, new IPostCallback() {
 
             @Override
@@ -732,5 +684,139 @@ public class PostDetailsViewModel extends ViewModel {
 
             }
         });
+    }
+
+    public LiveData<Integer> isVoted(PostViewState postViewState, String userID) {
+        Post post = new Post();
+        post.setPostID(postViewState.getPostId());
+        post.setCommunityID(community_id);
+
+        postRepository.getVoteStatus(post, userID, new IPostCallback() {
+            @Override
+            public void onGetPostSuccess(List<Post> posts) {
+
+            }
+
+            @Override
+            public void onGetPostFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onAddPostFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onAddPostSuccess(Post newPost) {
+
+            }
+
+            @Override
+            public void onEditPostSuccess() {
+
+            }
+
+            @Override
+            public void onEditPostFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onQueryPostError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onQueryPostSuccess(List<Post> queryPostResults) {
+
+            }
+
+            @Override
+            public void onDeletePostSuccess() {
+
+            }
+
+            @Override
+            public void onDeletePostError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onSubscriptionSuccess() {
+
+            }
+
+            @Override
+            public void onSubscriptionError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onBookmarkError(String errorMsg) {
+
+            }
+
+            @Override
+            public void onBookmarkSuccess() {
+
+            }
+
+            @Override
+            public void onGetVoteStatusSuccess(int voteTypeValue) {
+                voteType.postValue(voteTypeValue);
+            }
+
+            @Override
+            public void onGetOnePostSuccess(Post post) {
+
+            }
+        });
+        return voteType;
+    }
+
+    public LiveData<Integer> isVotedComment(CommentViewState commentViewState, String userID, String postID, String communityID) {
+        Comment comment = new Comment();
+        comment.setCommentID(commentViewState.getCommentID());
+        comment.setCommunityID(communityID);
+        comment.setPostID(postID);
+
+        commentRepository.getVoteStatus(comment, userID, new CommentCallback() {
+            @Override
+            public void onCreateSuccess(Comment comments) {
+
+            }
+
+            @Override
+            public void onFailure(String errorMsg) {
+
+            }
+
+            @Override
+            public void onInitialLoadSuccess(List<Comment> comments) {
+
+            }
+
+            @Override
+            public void onLoadRepliesSuccess(List<Comment> comments) {
+
+            }
+
+            @Override
+            public void onDeleteSuccess() {
+
+            }
+
+            @Override
+            public void onUpdateSuccess(Comment comment) {
+
+            }
+
+            @Override
+            public void onGetVoteStatusSuccess(int voteTypeValue) {
+                voteType.postValue(voteTypeValue);
+            }
+        });
+        return voteType;
     }
 }
