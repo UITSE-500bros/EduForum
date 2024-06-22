@@ -295,7 +295,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                         binding.upVoteParentButton.setIconTint(colorStateList);
                         binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference() + 2));
                         comment.setVoteDifference(comment.getVoteDifference() + 2);
-                    }else if(binding.downVoteParentButton.getIconTint() == null && binding.upVoteParentButton.getIconTint() == null) {
+                    }else  {
                         binding.upVoteParentButton.setIconTint(colorStateList);
                         binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference() + 1));
                         comment.setVoteDifference(comment.getVoteDifference() + 1);
@@ -312,7 +312,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                         binding.upVoteParentButton.setIconTint(null);
                         binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference() - 2));
                         comment.setVoteDifference(comment.getVoteDifference() - 2);
-                    }else if(binding.downVoteParentButton.getIconTint() == null && binding.upVoteParentButton.getIconTint() == null) {
+                    }else{
                         binding.downVoteParentButton.setIconTint(colorStateList);
                         binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference() - 1));
                         comment.setVoteDifference(comment.getVoteDifference() - 1);
