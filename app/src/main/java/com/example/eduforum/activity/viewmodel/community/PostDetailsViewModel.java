@@ -2,9 +2,7 @@ package com.example.eduforum.activity.viewmodel.community;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
-
 import com.example.eduforum.activity.model.post_manage.Comment;
 import com.example.eduforum.activity.model.post_manage.Post;
 import com.example.eduforum.activity.repository.comment.CommentCallback;
@@ -14,7 +12,6 @@ import com.example.eduforum.activity.repository.post.PostRepository;
 import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.google.firebase.auth.FirebaseAuth;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +32,7 @@ public class PostDetailsViewModel extends ViewModel {
         cmts = new MutableLiveData<>();
         cmts_child = new MutableLiveData<>();
         currentPost = new MutableLiveData<>();
-        cmts.setValue(new ArrayList<CommentViewState>());
+
         voteType = new MutableLiveData<>();
 
 
@@ -78,7 +75,6 @@ public class PostDetailsViewModel extends ViewModel {
 
     }
 
-    private Post postInstance;
     // TODO: anh em lam cai nay ne
     public void setCurrentPost(PostViewState postViewState) {
 
@@ -90,9 +86,11 @@ public class PostDetailsViewModel extends ViewModel {
                 postViewState.getCreator(), 0, 0, 0,0,
                 null, null,
                 postViewState.getTags());
-        postInstance = post;
+
         pt_id = post.getPostID();
         community_id = post.getCommunityID();
+
+        currentPost.setValue(postViewState);
 
         commentRepository.loadTopLevelComments(post, new CommentCallback() {
 
@@ -143,7 +141,7 @@ public class PostDetailsViewModel extends ViewModel {
         postRepository.updateVoteCount(newPost, FirebaseAuth.getInstance().getCurrentUser().getUid(), 1);
     }
 
-    public void downVote(PostViewState postViewState) {
+    public void downVote() {
         Post newPost = new Post();
         newPost.setPostID(pt_id);
         newPost.setCommunityID(community_id);
