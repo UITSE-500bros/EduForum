@@ -129,22 +129,52 @@ public class CreatePostActivity extends AppCompatActivity {
                 binding.contentRichEditor.setItalic();
         });
         binding.actionAlignLeft.addOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(!binding.actionAlignCenter.isChecked() && !binding.actionAlignRight.isChecked()){
                 binding.contentRichEditor.setAlignLeft();
+            }
+            else{
+                binding.actionAlignLeft.setChecked(false);
+            }
         });
         binding.actionAlignRight.addOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(!binding.actionAlignCenter.isChecked() && !binding.actionAlignLeft.isChecked()){
                 binding.contentRichEditor.setAlignRight();
+            }
+            else{
+                binding.actionAlignRight.setChecked(false);
+            }
         });
         binding.actionAlignCenter.addOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(!binding.actionAlignLeft.isChecked() && !binding.actionAlignRight.isChecked()){
                 binding.contentRichEditor.setAlignCenter();
+            }
+            else{
+                binding.actionAlignCenter.setChecked(false);
+            }
         });
         binding.actionHeading1.addOnCheckedChangeListener((buttonView, isChecked) -> {
-                binding.contentRichEditor.setHeading(1);
+                if(!binding.actionHeading2.isChecked() && !binding.actionHeading3.isChecked()){
+                    binding.contentRichEditor.setHeading(1);
+                }
+                else{
+                    binding.actionHeading1.setChecked(false);
+                }
         });
         binding.actionHeading2.addOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(!binding.actionHeading1.isChecked() && !binding.actionHeading3.isChecked()){
                 binding.contentRichEditor.setHeading(2);
+            }
+            else{
+                binding.actionHeading2.setChecked(false);
+            }
         });
         binding.actionHeading3.addOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(!binding.actionHeading2.isChecked() && !binding.actionHeading1.isChecked()){
                 binding.contentRichEditor.setHeading(3);
+            }
+            else{
+                binding.actionHeading3.setChecked(false);
+            }
         });
         binding.actionInsertBullets.addOnCheckedChangeListener((buttonView, isChecked) -> {
                 binding.contentRichEditor.setBullets();
