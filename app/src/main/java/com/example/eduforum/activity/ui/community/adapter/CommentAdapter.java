@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +27,7 @@ import com.example.eduforum.activity.repository.comment.CommentRepository;
 import com.example.eduforum.activity.ui.community.PostDetailActivity;
 import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
 import com.example.eduforum.activity.ui.main.adapter.ChildCommentAdapter;
+import com.example.eduforum.activity.viewmodel.community.PostDetailsViewModel;
 import com.example.eduforum.databinding.ItemChildCommentBinding;
 import com.example.eduforum.databinding.ItemListCommentBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -44,6 +46,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private static List<CommentViewState> childCommentList;
     private MaterialAlertDialogBuilder builder;
     private CommentRepository commentRepository;
+
+    private String userID;
+    private LifecycleOwner lifecycleOwner;
+    private String postId;
+    private String communityId;
 
 
     public interface OnReplyClickListener {
@@ -66,7 +73,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private static OnShowUpReplies onShowUpReplies;
     private CommentChildAdapter commentChildAdapter;
 
-    public CommentAdapter(Context context,
+    public CommentAdapter(Context context, LifecycleOwner lifecycleOwner, String userId,String postId,String communityId,
+
                           List<CommentViewState> commentList,
                           List<CommentViewState> childCommentList,
                           OnReplyClickListener onReplyClickListener,
@@ -90,6 +98,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         this.onUpVoteClickListener = onUpVoteClickListener;
         this.onDownVoteClickListener = onDownVoteClickListener;
         this.onShowUpReplies = onShowUpReplies;
+
+        this.userID = userId;
+        this.lifecycleOwner = lifecycleOwner;
+        this.postId = postId;
+        this.communityId = communityId;
 
     }
     public void setCommentList(List<CommentViewState> commentList) {
@@ -115,18 +128,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     public CommentAdapter.CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         ItemListCommentBinding itemListCommentBinding = ItemListCommentBinding.inflate(layoutInflater, parent, false);
-        return new CommentViewHolder(itemListCommentBinding);
+        return new CommentViewHolder(itemListCommentBinding, lifecycleOwner,userID,postId,communityId);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-
-
         CommentViewState comment = commentList.get(position);
-
-
-
         List<CommentViewState> temp = new ArrayList<>();
+
 
         for (CommentViewState commentViewState : childCommentList) {
             if (Objects.equals(commentViewState.getReplyCommentID(), comment.getCommentID())) {
@@ -207,9 +216,21 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder {
         ItemListCommentBinding binding;
-        public CommentViewHolder(ItemListCommentBinding binding) {
+        private PostDetailsViewModel viewModel;
+        private LifecycleOwner lifecycleOwner;
+        private String userID;
+        private String postId;
+        private String communityId;
+
+        public CommentViewHolder(ItemListCommentBinding binding, LifecycleOwner lifecycleOwner,String userId,String postId,String communityId){
             super(binding.getRoot());
             this.binding = binding;
+            this.lifecycleOwner = lifecycleOwner;
+            this.userID = userId;
+            String s = userID;
+            viewModel = new PostDetailsViewModel();
+            this.postId = postId;
+            this.communityId = communityId;
         }
 
         public void bindingComponents(CommentViewState comment) {
@@ -230,6 +251,21 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
             binding.replyParentTextView.setVisibility(View.GONE);
             binding.showReplyParentTextView.setVisibility(View.GONE);
+
+
+            viewModel.isVotedComment(comment, userID,postId,communityId).observe(lifecycleOwner, voteType -> {
+                if (voteType != null) {
+                    if (voteType == 1) {
+                        ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
+                        binding.upVoteParentButton.setIconTint(colorStateList);
+
+                    } else if (voteType == -1) {
+                        ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
+                        binding.downVoteParentButton.setIconTint(colorStateList);
+
+                    }
+                }
+            });
         }
 
         public void bind(CommentViewState comment, OnReplyClickListener onReplyClickListener,List<CommentViewState> temp,OnDownVoteClickListener onDownVoteClickListener,OnUpVoteClickListener onUpVoteClickListener,OnShowUpReplies onShowUpReplies) {
@@ -250,24 +286,38 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 }
             });
 
-
+            ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
             binding.upVoteParentButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference() + 1));
+                    if(binding.downVoteParentButton.getIconTint().equals(colorStateList)){
+                        binding.downVoteParentButton.setIconTint(null);
+                        binding.upVoteParentButton.setIconTint(colorStateList);
+                        binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference() + 2));
+                        comment.setVoteDifference(comment.getVoteDifference() + 2);
+                    }else if(binding.downVoteParentButton.getIconTint() == null && binding.upVoteParentButton.getIconTint() == null) {
+                        binding.upVoteParentButton.setIconTint(colorStateList);
+                        binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference() + 1));
+                        comment.setVoteDifference(comment.getVoteDifference() + 1);
+                    }
                     onUpVoteClickListener.onUpVote(comment);
-                    ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
-                    binding.upVoteParentButton.setIconTint(colorStateList);
                 }
             });
 
             binding.downVoteParentButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference() - 1));
+                    if(binding.upVoteParentButton.getIconTint().equals(colorStateList)){
+                        binding.downVoteParentButton.setIconTint(colorStateList);
+                        binding.upVoteParentButton.setIconTint(null);
+                        binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference() - 2));
+                        comment.setVoteDifference(comment.getVoteDifference() - 2);
+                    }else if(binding.downVoteParentButton.getIconTint() == null && binding.upVoteParentButton.getIconTint() == null) {
+                        binding.downVoteParentButton.setIconTint(colorStateList);
+                        binding.voteCountParentTextView.setText(String.valueOf(comment.getVoteDifference() - 1));
+                        comment.setVoteDifference(comment.getVoteDifference() - 1);
+                    }
                     onDownVoteClickListener.onDownClick(comment);
-                    ColorStateList colorStateList = ContextCompat.getColorStateList(binding.getRoot().getContext(), R.color.likedButtonColor);
-                    binding.downVoteParentButton.setIconTint(colorStateList);
                 }
             });
 

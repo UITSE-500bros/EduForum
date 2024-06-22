@@ -162,7 +162,12 @@ public class CreatePostViewModel extends ViewModel {
             errorMessage.setValue("Tiêu đề không được để trống");
             return false;
         }
-        if(post.getContent() == null || post.getContent().isEmpty()){
+        if(post.getContent() == null){
+            errorMessage.setValue("Nội dung không được để trống");
+            return false;
+        }
+        String strippedContent = post.getContent().replaceAll("\\<.*?\\>", "").replaceAll("&nbsp;", "").replaceAll("\n", "").replaceAll("\r", "");
+        if(strippedContent.trim().isEmpty()){
             errorMessage.setValue("Nội dung không được để trống");
             return false;
         }

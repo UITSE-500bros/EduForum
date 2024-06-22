@@ -71,6 +71,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             intent.putExtra("currentPost", postList.get(position));
             intent.putExtra("isUITcommunity", isUITcommunity);
             intent.putExtra("isExploring", isExploring);
+            intent.putExtra("communityId", post.getCommunity().getCommunityID());
             context.startActivity(intent);
         });
 

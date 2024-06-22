@@ -121,10 +121,11 @@ public class HomeViewModel extends ViewModel{
         if(!IsCommunityUIStateValid(commuState)) return;
         // create community object (map UI state to domain object)
         Community commu = mapUIStateToCommunity(commuState);
+        closeCreateCommunityDialog();
+
         communityRepository.createCommunity(commu, new ICommunityCallBack() {
             @Override
             public void onCreateCommunitySuccess(String communityId) {
-                closeCreateCommunityDialog();
             }
             @Override
             public void onCreateCommunityFailure(String errorMsg) {
