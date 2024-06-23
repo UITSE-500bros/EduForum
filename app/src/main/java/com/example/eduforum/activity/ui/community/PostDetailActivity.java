@@ -96,9 +96,9 @@ public class PostDetailActivity extends AppCompatActivity {
                     if (currentPost != null) {
                         viewModel.setCurrentPost(currentPost);
                     }
+                    assert currentPost != null;
                     currentPost.setCommunityID((String) getIntent().getSerializableExtra("communityId"));
                     binding.toolBarCreatePost.setTitle(currentPost.getCommunity().getName());
-
                     break;
                 case KEY_NOTI_POST:
                     communityName = (String) getIntent().getSerializableExtra("notiCommunityName");
@@ -110,7 +110,6 @@ public class PostDetailActivity extends AppCompatActivity {
 
                     }
                     binding.toolBarCreatePost.setTitle(communityName);
-
                     break;
             }
         }
@@ -224,13 +223,10 @@ public class PostDetailActivity extends AppCompatActivity {
                                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                 imm.showSoftInput(binding.commentEditText, InputMethodManager.SHOW_IMPLICIT);
                                 binding.commentEditText.setText("@" + comment.getCreator().getName() + " ");
-                                binding.commentEditText.setVisibility(View.VISIBLE);
-                                binding.sendButton.setVisibility(View.VISIBLE);
 
                                 binding.sendButton.setOnClickListener(v -> {
                                     String commentText = binding.commentEditText.getText().toString();
                                     if (!commentText.isEmpty()) {
-
                                         CommentViewState commentViewState = new CommentViewState(
                                                 null,
                                                 commentText,
@@ -247,10 +243,10 @@ public class PostDetailActivity extends AppCompatActivity {
 
                                         viewModel.addChildComment(comment, commentViewState);
                                         binding.commentEditText.setText("");
+                                        binding.commentCountTextView.setText(String.valueOf(currentPost.getTotalComment() + 1));
                                     }
                                 });
                             }
-
                         },
                         new CommentAdapter.OnDownVoteClickListener() {
                             @Override
@@ -270,6 +266,7 @@ public class PostDetailActivity extends AppCompatActivity {
                                 viewModel.loadChildComments(comment);
                             }
                         }
+
                 );
 
                 viewModel.getComments().observe(this, commentViewStates -> {
@@ -290,7 +287,6 @@ public class PostDetailActivity extends AppCompatActivity {
 
                 binding.recyclecomment.setAdapter(commentAdapter);
                 binding.recyclecomment.setLayoutManager(new LinearLayoutManager(this));
-
 
                 binding.setLifecycleOwner(this);
                 binding.sendButton.setOnClickListener(v -> {
