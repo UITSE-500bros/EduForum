@@ -3,21 +3,13 @@ package com.example.eduforum.activity.ui.community;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
-import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
-
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.PickVisualMediaRequest;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
@@ -27,14 +19,12 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.example.eduforum.R;
 import com.example.eduforum.activity.EduForum;
 import com.example.eduforum.activity.model.post_manage.Creator;
 import com.example.eduforum.activity.model.user_manage.User;
 import com.example.eduforum.activity.ui.community.adapter.CommentAdapter;
-import com.example.eduforum.activity.ui.community.adapter.CommentChildAdapter;
 import com.example.eduforum.activity.ui.community.adapter.MediaAdapter;
 import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
@@ -44,7 +34,6 @@ import com.example.eduforum.databinding.ActivityPostDetailBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +51,6 @@ public class PostDetailActivity extends AppCompatActivity {
     public static final String KEY_CURRENT_POST = "currentPost";
     public static final String KEY_NOTI_POST = "noti";
     public static final String KEY_COMMUNITY_ID = "notiCommunityID";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,15 +96,6 @@ public class PostDetailActivity extends AppCompatActivity {
                     if (currentPost != null) {
                         viewModel.setCurrentPost(currentPost);
                     }
-                    Boolean isUITcommunity = (Boolean) getIntent().getBooleanExtra("isUITcommunity", false);
-                    if (isUITcommunity) {
-                        binding.userNameTextView.setText("Quản trị viên");
-                        binding.khoaTextView.setText("");
-                    }
-                    else {
-                        binding.userNameTextView.setText(currentPost.getCreator().getName());
-                        binding.khoaTextView.setText(currentPost.getCreator().getDepartment());
-                    }
                     currentPost.setCommunityID((String) getIntent().getSerializableExtra("communityId"));
                     binding.toolBarCreatePost.setTitle(currentPost.getCommunity().getName());
 
@@ -131,6 +110,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
                     }
                     binding.toolBarCreatePost.setTitle(communityName);
+
                     break;
             }
         }
@@ -155,6 +135,17 @@ public class PostDetailActivity extends AppCompatActivity {
                                 .load(storageReference)
                                 .into(binding.avatarImageView);
                     }
+
+                }
+
+                Boolean isUITcommunity = (Boolean) getIntent().getBooleanExtra("isUITcommunity", false);
+                if (isUITcommunity) {
+                    binding.userNameTextView.setText("Quản trị viên");
+                    binding.khoaTextView.setText("");
+                }
+                else {
+                    binding.userNameTextView.setText(currentPost.getCreator().getName());
+                    binding.khoaTextView.setText(currentPost.getCreator().getDepartment());
                 }
 
                 viewModel.isVoted(currentPost, userViewModel.getCurrentUserLiveData().getValue().getUserId()).observe(this, voteType -> {
@@ -320,6 +311,7 @@ public class PostDetailActivity extends AppCompatActivity {
                         );
                         viewModel.addParentComment(commentViewState);
                         binding.commentEditText.setText("");
+                        binding.commentCountTextView.setText(String.valueOf(currentPost.getTotalComment() + 1));
                     }
                 });
 
