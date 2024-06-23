@@ -87,7 +87,6 @@ public class NotiFragment extends Fragment {
 
         viewModel.getNotificationList().observe(getViewLifecycleOwner(), notifications -> {
             adapter.setNotificationList(notifications);
-
         });
 
         binding.notiRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -96,6 +95,8 @@ public class NotiFragment extends Fragment {
         binding.readAllButton.setOnClickListener(v -> {
             viewModel.markAllAsRead();
         });
+
+
     }
 
 

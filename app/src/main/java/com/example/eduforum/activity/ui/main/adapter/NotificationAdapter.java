@@ -68,8 +68,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             ColorStateList colorStateList = ColorStateList.valueOf(Color.parseColor("#001D3D"));
             holder.binding.notiCardView.setCardBackgroundColor(colorStateList);
             holder.binding.notiCardView.setRadius(10);
-
             handleCardViewClick(notificationList.get(position));
+            notification.setRead(true);
         });
 
 
