@@ -236,7 +236,7 @@ public class PostDetailsViewModel extends ViewModel {
         childComment.setReplyCommentID(commentParentViewState.getCommentID());
         childComment.setCommentID(null);
         childComment.setImage(commentChildViewState.getImage());
-
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
 
         commentRepository.createComment(parentComment, childComment, new CommentCallback() {
             @Override
@@ -246,14 +246,14 @@ public class PostDetailsViewModel extends ViewModel {
                 commentViewStates.add(new CommentViewState(
                         comments.getCommentID(),
                         comments.getContent(),
-                        "just now",
+                        dateFormat.format(comments.getTimeCreated().toDate()),
                         comments.getCreator(),
                         comments.getTotalUpVote(),
                         comments.getTotalDownVote(),
                         0,
-                        "just now",
+                        dateFormat.format(comments.getTimeCreated().toDate()),
                         comments.getImage(),
-                        null,
+                        comments.getReplyCommentID(),
                         0
                 ));
                 cmts.setValue(commentViewStates);

@@ -1,39 +1,27 @@
 package com.example.eduforum.activity.ui.community.adapter;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.PopupMenu;
-import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.example.eduforum.R;
 import com.example.eduforum.activity.model.post_manage.Comment;
 import com.example.eduforum.activity.repository.comment.CommentCallback;
 import com.example.eduforum.activity.repository.comment.CommentRepository;
-import com.example.eduforum.activity.ui.community.PostDetailActivity;
 import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
-import com.example.eduforum.activity.ui.main.adapter.ChildCommentAdapter;
 import com.example.eduforum.activity.viewmodel.community.PostDetailsViewModel;
-import com.example.eduforum.databinding.ItemChildCommentBinding;
 import com.example.eduforum.databinding.ItemListCommentBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -42,11 +30,9 @@ import java.util.Objects;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder>{
     private Context context;
     private static List<CommentViewState> commentList;
-
     private static List<CommentViewState> childCommentList;
     private MaterialAlertDialogBuilder builder;
     private CommentRepository commentRepository;
-
     private String userID;
     private LifecycleOwner lifecycleOwner;
     private String postId;
@@ -71,7 +57,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private static OnUpVoteClickListener onUpVoteClickListener;
     private static OnDownVoteClickListener onDownVoteClickListener;
     private static OnShowUpReplies onShowUpReplies;
-    private CommentChildAdapter commentChildAdapter;
 
     public CommentAdapter(Context context, LifecycleOwner lifecycleOwner, String userId,String postId,String communityId,
 
@@ -98,12 +83,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         this.onUpVoteClickListener = onUpVoteClickListener;
         this.onDownVoteClickListener = onDownVoteClickListener;
         this.onShowUpReplies = onShowUpReplies;
-
         this.userID = userId;
         this.lifecycleOwner = lifecycleOwner;
         this.postId = postId;
         this.communityId = communityId;
-
     }
     public void setCommentList(List<CommentViewState> commentList) {
         if (commentList != null) {
@@ -134,8 +117,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
         CommentViewState comment = commentList.get(position);
-        List<CommentViewState> temp = new ArrayList<>();
 
+        List<CommentViewState> temp = new ArrayList<>();
 
         for (CommentViewState commentViewState : childCommentList) {
             if (Objects.equals(commentViewState.getReplyCommentID(), comment.getCommentID())) {
@@ -227,7 +210,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             this.binding = binding;
             this.lifecycleOwner = lifecycleOwner;
             this.userID = userId;
-            String s = userID;
             viewModel = new PostDetailsViewModel();
             this.postId = postId;
             this.communityId = communityId;
@@ -247,11 +229,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                         .load(storageReference)
                         .into(binding.avatarParentComment);
             }
-
-
-            binding.replyParentTextView.setVisibility(View.GONE);
-            binding.showReplyParentTextView.setVisibility(View.GONE);
-
 
             viewModel.isVotedComment(comment, userID,postId,communityId).observe(lifecycleOwner, voteType -> {
                 if (voteType != null) {
@@ -274,7 +251,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
             /*Set up RecyclerView*/
             binding.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-            binding.nestedRecyclerView.setAdapter(new CommentChildAdapter(this.binding.getRoot().getContext(),temp, onReplyClickListener, onDownVoteClickListener, onUpVoteClickListener, onShowUpReplies));
+            binding.nestedRecyclerView.setAdapter(new CommentChildAdapter(this.binding.getRoot().getContext(), lifecycleOwner, userID, postId, communityId,
+                    temp,
+                    onReplyClickListener,
+                    onDownVoteClickListener,
+                    onUpVoteClickListener
+                    ));
 
 
             /*Set up click listener*/
@@ -283,6 +265,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 public void onClick(View v) {
                     CommentViewState comment = commentList.get(getAdapterPosition());
                     onReplyClickListener.onReplyClick(comment);
+
                 }
             });
 
@@ -327,9 +310,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     onShowUpReplies.onShowUpReplies(comment);
                 }
             });
-
-
-
         }
     }
 }
