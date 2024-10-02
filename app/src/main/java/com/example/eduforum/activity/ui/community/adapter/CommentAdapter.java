@@ -32,12 +32,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private static List<CommentViewState> commentList;
     private static List<CommentViewState> childCommentList;
     private MaterialAlertDialogBuilder builder;
-    private CommentRepository commentRepository;
-    private String userID;
-    private LifecycleOwner lifecycleOwner;
-    private String postId;
-    private String communityId;
-
 
     public interface OnReplyClickListener {
         void onReplyClick(CommentViewState comment);
@@ -53,7 +47,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         void onShowUpReplies(CommentViewState comment);
     }
 
-    private OnReplyClickListener onReplyClickListener;
+    private static OnReplyClickListener onReplyClickListener;
     private static OnUpVoteClickListener onUpVoteClickListener;
     private static OnDownVoteClickListener onDownVoteClickListener;
     private static OnShowUpReplies onShowUpReplies;
@@ -67,7 +61,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                           OnUpVoteClickListener onUpVoteClickListener,
                           OnShowUpReplies onShowUpReplies
                           ) {
-        commentRepository = new CommentRepository();
         this.context = context;
         if (commentList != null) {
             this.commentList = commentList;
@@ -214,6 +207,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             this.postId = postId;
             this.communityId = communityId;
         }
+
 
         public void bindingComponents(CommentViewState comment) {
             binding.contentNotiParentTextView.setText(comment.getContent());
