@@ -89,7 +89,14 @@ public class CreatePostViewModel extends ViewModel {
             return;
         }
         String sth = communityId.getValue();
-        Post post = new Post(newPost.getPostId(), sth, newPost.getTitle(), newPost.getContent(), newPost.getIsAnonymous(), null, null, newPost.getCreator(), 0, 0, 0,0, newPost.getImage(), null, newPost.getTags());
+        Post post = new Post(newPost.getPostId(),
+                sth,
+                newPost.getTitle(),
+                newPost.getContent(),
+                newPost.getIsAnonymous(),
+                null, null, newPost.getCreator(),
+                0, 0, 0,0,
+                newPost.getImage(), null, newPost.getTags());
         // add new post to database
         postRepository.addPost(post, new IPostCallback() {
             @Override
@@ -143,6 +150,11 @@ public class CreatePostViewModel extends ViewModel {
             public void onGetVoteStatusSuccess(int voteType) {
 
             }
+
+            @Override
+            public void onGetOnePostSuccess(Post post) {
+
+            }
         });
     }
     private Boolean isPostValid(PostViewState post){
@@ -150,7 +162,12 @@ public class CreatePostViewModel extends ViewModel {
             errorMessage.setValue("Tiêu đề không được để trống");
             return false;
         }
-        if(post.getContent() == null || post.getContent().isEmpty()){
+        if(post.getContent() == null){
+            errorMessage.setValue("Nội dung không được để trống");
+            return false;
+        }
+        String strippedContent = post.getContent().replaceAll("\\<.*?\\>", "").replaceAll("&nbsp;", "").replaceAll("\n", "").replaceAll("\r", "");
+        if(strippedContent.trim().isEmpty()){
             errorMessage.setValue("Nội dung không được để trống");
             return false;
         }

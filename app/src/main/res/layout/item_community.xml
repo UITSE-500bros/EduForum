@@ -10,10 +10,8 @@
         android:id="@+id/postcardview"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,11 +25,11 @@
             android:layout_height="match_parent"
             >
             <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:id="@+id/avatar"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="13dp"
                 android:src="@drawable/user_ava_default"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -42,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Username"
+                android:text="Ẩn danh"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@id/avatar"
@@ -54,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
-                android:text="Công nghệ phần mềm"
+                android:text=""
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@id/avatar"
@@ -72,26 +70,25 @@
                 app:layout_constraintStart_toEndOf="@id/avatar"
                 app:layout_constraintTop_toBottomOf="@id/falcuty"
                 />
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:id="@+id/setting"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/more_horizontal"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintHeight_percent="0.15"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:id="@+id/setting"-->
+<!--                android:layout_marginEnd="10dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:background="@drawable/more_horizontal"-->
+<!--                app:layout_constraintDimensionRatio="1:1"-->
+<!--                app:layout_constraintHeight_percent="0.15"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
 
-                />
+<!--                />-->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/title"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="13dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginEnd="10dp"
                 android:text="Đề thi nhập môn lập trình từ năm 2018 đến 2024 đến từ một sinh viên năm 3."
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
@@ -103,9 +100,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tagslayout"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginHorizontal="7dp"
+                android:layout_marginTop="5dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/title"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -118,9 +114,9 @@
                 android:id="@+id/like"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
                 android:text="100 lượt thích"
                 android:textColor="#FFFFFF"
                 android:textSize="10sp"
@@ -133,8 +129,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
                 android:text="100 bình luận"
                 android:textColor="#FFFFFF"
                 android:textSize="10sp"

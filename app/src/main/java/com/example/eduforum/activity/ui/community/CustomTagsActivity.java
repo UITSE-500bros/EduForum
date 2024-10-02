@@ -1,6 +1,7 @@
 package com.example.eduforum.activity.ui.community;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.eduforum.R;
 import com.example.eduforum.activity.model.post_manage.PostCategory;
 import com.example.eduforum.activity.ui.community.adapter.TagsAdapter;
+import com.example.eduforum.activity.ui.main.fragment.CreateCommunityViewState;
 import com.example.eduforum.activity.viewmodel.community.settings.CustomTagsViewModel;
 import com.example.eduforum.databinding.ActivityCustomTagsBinding;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -43,6 +45,10 @@ public class CustomTagsActivity extends AppCompatActivity {
         if(communityId != null) {
             viewModel.setCommunityId(communityId);
             viewModel.refreshCategories();
+        }
+        else{
+            Log.e("Intent to CustomTagsActivity", "communityId is null");
+            finish();
         }
         MaterialToolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);

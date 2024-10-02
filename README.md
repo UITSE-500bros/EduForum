@@ -5,15 +5,18 @@
 
 ![Trường Đại học Công nghệ Thông tin | University of Information Technology](https://i.imgur.com/WmMnSRt.png)
 
+**Giáo viên hướng dẫn**:
+ThS. Huỳnh Hồ Thị Mộng Trinh.
+
 ## Thành viên nhóm
 
 | STT | MSSV     | Họ và Tên                    | Github                                            | Email                    |
 | --- | -------- | ---------------------------- | ------------------------------------------------- | ------------------------ |
-| 1   | 2252xxxx | Nguyễn Trịnh Vĩnh Thịnh |         |  |
-| 2   | 2252xxxx | Dương Thuận Trí              |  |  |
+| 1   | 22521417 | Nguyễn Trịnh Vĩnh Thịnh | [VinhThinh0804](https://github.com/VinhThinh0804)        | <22521417@gm.uit.edu.vn> |
+| 2   | 22521517 | Dương Thuận Trí              | [DTTri](https://github.com/DTTri) | <22521517@gm.uit.edu.vn> |
 | 3   | 22521461 | Trần Quỳnh Thy               | [tqthy](https://github.com/tqthy)                 | <22521461@gm.uit.edu.vn> |
-| 4   | 2252xxxx | Đoàn Phương Nam             |  |  |
-| 5   | 2252xxxx | Huỳnh Hữu Thịnh               |               |  |
+| 4   | 22520908 | Đoàn Phương Nam             | [DPhngNam](https://github.com/DPhngNam) | <22520908@gm.uit.edu.vn> |
+| 5   | 22521406 | Huỳnh Hữu Thịnh               | [ThInhHuYnh04](https://github.com/ThInhHuYnh04) | <22521406@gm.uit.edu.vn> |
 
 ## ❔ **How to name a branch**
 

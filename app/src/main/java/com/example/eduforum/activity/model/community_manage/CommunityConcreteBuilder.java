@@ -49,7 +49,7 @@ public class CommunityConcreteBuilder implements CommunityBuilder{
 
     @Override
     public CommunityBuilder setCommunityId(String id) {
-        this.name = id;
+        this.communityId = id;
         return this;
     }
     public CommunityBuilder setProfileImage(Uri profileImage) {

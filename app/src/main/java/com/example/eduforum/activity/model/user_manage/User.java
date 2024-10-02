@@ -2,6 +2,8 @@ package com.example.eduforum.activity.model.user_manage;
 
 //import com.google.firebase.Timestamp;
 
+import android.net.Uri;
+
 public class User implements UserBuilder {
     private String userId;
     private String userName;
@@ -13,6 +15,7 @@ public class User implements UserBuilder {
     private String schoolYear;
     private String department;
     private String profilePicture;
+    private Uri uploadPicture;
 
     //private Image avatar;
 
@@ -33,6 +36,14 @@ public class User implements UserBuilder {
         this.schoolYear = schoolYear;
         this.department = department;
         this.profilePicture = profilePicture;
+    }
+
+    public Uri getUploadPicture() {
+        return uploadPicture;
+    }
+
+    public void setUploadPicture(Uri uploadPicture) {
+        this.uploadPicture = uploadPicture;
     }
 
     public String getProfilePicture() {

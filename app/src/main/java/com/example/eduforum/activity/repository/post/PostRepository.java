@@ -13,6 +13,7 @@ import com.example.eduforum.activity.model.post_manage.PostCategory;
 import com.example.eduforum.activity.model.subscription_manage.Subscription;
 import com.example.eduforum.activity.repository.post.IUpload;
 import com.example.eduforum.activity.repository.post.dto.AddPostDTO;
+import com.example.eduforum.activity.util.ConvertUtil;
 import com.example.eduforum.activity.util.FlagsList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -96,11 +97,10 @@ public class PostRepository {
                                     post.setTotalDownVote((Integer) result.get("totalDownVote"));
                                     post.setVoteDifference((Integer) result.get("voteDifference"));
                                     post.setTotalComment((Integer) result.get("totalComment"));
-                                    post.setTimeCreated((Timestamp) result.get("timeCreated"));
-                                    post.setLastModified((Timestamp) result.get("lastModified"));
+                                    post.setTimeCreated(ConvertUtil.convertMapToTimestamp(result, "timeCreated"));
+                                    post.setLastModified(ConvertUtil.convertMapToTimestamp(result, "lastModified"));
                                     callback.onAddPostSuccess(post);
                                 }
-
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -162,7 +162,7 @@ public class PostRepository {
             String uniqueFileName = String.format(Locale.US, "%04d-%d", sequenceNumber++, System.currentTimeMillis());
 
             StorageReference fileRef = postRef.child(uniqueFileName);
-            imagePaths.add(fileRef.getPath()+"/"+uniqueFileName);
+            imagePaths.add(fileRef.getPath());
 
             UploadTask uploadTask = fileRef.putFile(fileUri, metadata);
             uploadTasks.add(uploadTask);
@@ -269,6 +269,7 @@ public class PostRepository {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Post post = documentSnapshot.toObject(Post.class);
                             post.setPostID(documentSnapshot.getId());
+                            post.setAnonymous(documentSnapshot.getBoolean("isAnonymous"));
                             posts.add(post);
                             Log.d(FlagsList.DEBUG_POST_FLAG, documentSnapshot.getId() + " => " + documentSnapshot.getData());
                         }
@@ -339,6 +340,7 @@ public class PostRepository {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Post post = documentSnapshot.toObject(Post.class);
                             post.setPostID(documentSnapshot.getId());
+                            post.setAnonymous(documentSnapshot.getBoolean("isAnonymous"));
                             posts.add(post);
                             Log.d(FlagsList.DEBUG_POST_FLAG, "Searched post: " + documentSnapshot.getId() + " => " + documentSnapshot.getData());
                         }
@@ -406,7 +408,10 @@ public class PostRepository {
                 for (Object result : results) {
                     QuerySnapshot snapshot = (QuerySnapshot) result;
                     for (QueryDocumentSnapshot document : snapshot) {
-                        queryPostResults.add(document.toObject(Post.class));
+                        Post newQueryPost = document.toObject(Post.class);
+                        newQueryPost.setPostID(document.getId());
+                        newQueryPost.setAnonymous(document.getBoolean("isAnonymous"));
+                        queryPostResults.add(newQueryPost);
                         Log.d(FlagsList.DEBUG_POST_FLAG, document.getId() + " => " + document.getData());
                     }
                 }
@@ -618,6 +623,33 @@ public class PostRepository {
                 callback.onGetVoteStatusSuccess(0);
             }
         });
+    }
+
+    public void getOnePost(String communityID, String postID, IPostCallback callback) {
+
+
+        db.collection("Community")
+                .document(communityID)
+                .collection("Post")
+                .document(postID)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        Post post = documentSnapshot.toObject(Post.class);
+                        assert post != null;
+                        post.setPostID(documentSnapshot.getId());
+                        post.setAnonymous(documentSnapshot.getBoolean("isAnonymous"));
+                        callback.onGetOnePostSuccess(post);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                        Log.w(FlagsList.DEBUG_POST_FLAG, "Error fetching post,", e);
+                    }
+                });
     }
 
 }

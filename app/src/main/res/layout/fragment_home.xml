@@ -8,6 +8,7 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         android:background="@color/backgroundColor">
 
         <LinearLayout
@@ -36,16 +37,6 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                 android:clickable="false"/>
 
             <Button
-                android:id="@+id/searchButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="10dp"
-                style="Widget.MaterialComponents.Button.TextButton.Icon"
-                app:icon="@drawable/search_icon2"
-                android:backgroundTint="@color/secondaryColor"
-                app:iconGravity="textStart"/>
-
-            <Button
                 android:id="@+id/createCommuButton"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -58,7 +49,7 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
         </LinearLayout>
 
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/commusScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -77,7 +68,7 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                     android:layout_height="wrap_content"
                     android:text="@string/homeFragmentTitle"
                     android:layout_gravity="center"
-                    android:textSize="30sp"
+                    android:textSize="25sp"
                     android:fontFamily="@font/source_sans_pro_semibold"
                     android:textColor="@color/textColor"
                     android:layout_marginTop="15dp"
@@ -91,7 +82,7 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                     android:layout_marginTop="16dp"
                     android:text="Cộng đồng UIT"
                     android:textColor="@color/textColor"
-                    android:textSize="24sp" />
+                    android:textSize="20sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/UITCommunitiesRecyclerView"
@@ -110,7 +101,7 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                     android:layout_marginTop="16dp"
                     android:text="Cộng đồng của tôi"
                     android:textColor="@color/textColor"
-                    android:textSize="24sp" />
+                    android:textSize="20sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/myCommunitiesRecyclerView"
@@ -126,19 +117,20 @@ tools:context=".activity.ui.main.fragment.HomeFragment">
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cộng đồng đã tham gia"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
                     android:textColor="@color/textColor" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/joinedCommunitiesRecyclerView"
+                    android:layout_marginBottom="70dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:listitem="@layout/item_forum"/>
+                    tools:listitem="@layout/item_forum" />
 
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

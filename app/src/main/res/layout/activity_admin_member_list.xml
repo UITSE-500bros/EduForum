@@ -42,7 +42,7 @@
            android:lineHeight="25sp"
               app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
               app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="25dp"
+                android:layout_marginStart="20dp"
             android:layout_marginTop="16dp"
            android:fontFamily="@font/source_sans_pro_semibold"
            />
@@ -80,7 +80,7 @@
                 android:lineHeight="25sp"
                 app:layout_constraintTop_toBottomOf="@+id/adminscrollview"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="25dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/source_sans_pro_semibold"
                 />

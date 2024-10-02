@@ -31,6 +31,7 @@ public class HomeViewModel extends ViewModel{
     private final MutableLiveData<JoinCommunityViewState> joinCommunityLiveData;
     private final MutableLiveData<List<CreateCommunityViewState>> joinedCommunityList;
     private final MutableLiveData<List<CreateCommunityViewState>> isAdminCommunityList;
+    private final MutableLiveData<List<CreateCommunityViewState>> globalCommunityList;
     private final MutableLiveData<User> currentUser;
     CommunityRepository communityRepository;
     LoginRepository loginRepository;
@@ -47,9 +48,10 @@ public class HomeViewModel extends ViewModel{
         joinCommunityLiveData.setValue(new JoinCommunityViewState());
         joinedCommunityList = new MutableLiveData<>();
         isAdminCommunityList = new MutableLiveData<>();
+        globalCommunityList = new MutableLiveData<>();
         joinedCommunityList.setValue(new ArrayList<>());
         isAdminCommunityList.setValue(new ArrayList<>());
-
+        globalCommunityList.setValue(new ArrayList<>());
     }
     public void setCurrentUser(User user){
         currentUser.setValue(user);
@@ -76,6 +78,12 @@ public class HomeViewModel extends ViewModel{
                 isAdminCommunityList.setValue(convertToViewStateList(communities));
             }
 
+            @Override
+            public void onGlobalCommunityFetch(List<Community> communities) {
+                globalCommunityList.setValue(convertToViewStateList(communities));
+            }
+
+
         });
     }
     //-------------------------------------------------------------------------------
@@ -85,6 +93,9 @@ public class HomeViewModel extends ViewModel{
     }
     public LiveData<List<CreateCommunityViewState>> getIsAdminCommunityList() {
         return isAdminCommunityList;
+    }
+    public LiveData<List<CreateCommunityViewState>> getGlobalCommunityList() {
+        return globalCommunityList;
     }
     public LiveData<JoinCommunityViewState> getJoinCommuLiveData() {
         return joinCommunityLiveData;
@@ -110,10 +121,11 @@ public class HomeViewModel extends ViewModel{
         if(!IsCommunityUIStateValid(commuState)) return;
         // create community object (map UI state to domain object)
         Community commu = mapUIStateToCommunity(commuState);
+        closeCreateCommunityDialog();
+
         communityRepository.createCommunity(commu, new ICommunityCallBack() {
             @Override
             public void onCreateCommunitySuccess(String communityId) {
-                closeCreateCommunityDialog();
             }
             @Override
             public void onCreateCommunityFailure(String errorMsg) {
@@ -189,6 +201,10 @@ public class HomeViewModel extends ViewModel{
             if(community.getCommunityId() == null) continue;
             CreateCommunityViewState state = new CreateCommunityViewState(community.getName(), community.getDescription(), community.getDepartment(), community.getProfileImage(), community.getCommunityId());
             state.setCommunityProfilePicture(community.getProfilePicture());
+            state.setTotalMembers(community.getUserList().size()+ community.getAdminList().size());
+            state.setTotalPosts(community.getTotalPost());
+            if(community.getTotalNewPost()==null) Log.d("HomeViewModel", community.getName()+ "getTotalNewPost is null");
+            else state.setUnReadposts(community.getTotalNewPost());
             viewStates.add(state);
         }
         return viewStates;
@@ -208,6 +224,10 @@ public class HomeViewModel extends ViewModel{
         boolean isValid = true;
         if (state.getName() == null || state.getName().isEmpty()) {
             state.setErrorMessage("Tên cộng đồng không thể trống");
+            isValid = false;
+        }
+        else if(state.getDescription() == null || state.getDescription().isEmpty()){
+            state.setErrorMessage("Mô tả không thể trống");
             isValid = false;
         }
         else if (state.getCategory() == null || state.getCategory().isEmpty()) {

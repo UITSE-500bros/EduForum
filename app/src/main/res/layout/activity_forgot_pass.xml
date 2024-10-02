@@ -19,13 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="50dp"
             android:layout_marginRight="20dp"
             android:text="@string/forgotPassHeadingText"
             android:textSize="30dp"
             android:textStyle="bold"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,8 +40,21 @@
             android:text="@string/forgotPassText"
             android:textColor="@color/subTitleTextColor"
             app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/forgotPassHeadingTextview" />
+        
+        <ImageView
+            android:id="@+id/forgotPassImageView"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:src="@drawable/undraw_forgot_password_re_hxwm"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/forgotPassTextview"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginVertical="5dp"/>
+
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
@@ -48,13 +62,12 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:hint="@string/Emailaddress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/forgotPassTextview">
+            app:layout_constraintTop_toBottomOf="@+id/forgotPassImageView">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/forgotPassEmailEditText"
                 android:layout_width="match_parent"

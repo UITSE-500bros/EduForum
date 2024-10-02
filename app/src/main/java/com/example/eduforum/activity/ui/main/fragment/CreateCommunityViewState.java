@@ -15,6 +15,10 @@ public class CreateCommunityViewState implements Serializable {
     String communityID;
     Boolean isDialogClosed;
     String errorMessage;
+    Integer unReadposts;
+    Integer totalPosts;
+    Integer totalMembers;
+    Boolean isPublic;
 
     public CreateCommunityViewState(String name, String description, String category, Uri commuAvt, String communityID) {
         this.name = name;
@@ -24,10 +28,16 @@ public class CreateCommunityViewState implements Serializable {
         this.communityID = communityID;
         this.isDialogClosed = false;
         this.errorMessage = null;
+        this.unReadposts = 0;
+        this.totalMembers = 0;
+        this.totalPosts = 0;
     }
     public CreateCommunityViewState() {
         this.isDialogClosed = false;
         this.errorMessage = null;
+        this.unReadposts = 0;
+        this.totalMembers = 0;
+        this.totalPosts = 0;
     }
 
     public CreateCommunityViewState(Community community) {
@@ -36,8 +46,43 @@ public class CreateCommunityViewState implements Serializable {
         this.category = community.getDepartment();
         this.communityProfilePicture = community.getProfilePicture();
         this.communityID = community.getCommunityId();
-    }
+        if(community.getTotalNewPost()!=null) this.unReadposts = community.getTotalNewPost();
+        else this.unReadposts = 0;
+        if(community.getTotalPost()!=null) this.totalPosts = community.getTotalPost();
+        else this.totalPosts = 0;
+        if(community.getUserList()!=null)
+        this.totalMembers = community.getUserList().size();
+        else this.totalMembers = 0;
 
+        if(community.getAdminList()!=null) this.totalMembers+= community.getAdminList().size();
+    }
+    public void setIsPublic(Boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+    public Boolean getIsPublic() {
+        if(isPublic==null){
+            isPublic = true;
+        }
+        return isPublic;
+    }
+    public void setUnReadposts(Integer unReadposts) {
+        this.unReadposts = unReadposts;
+    }
+    public Integer getUnReadposts() {
+        return unReadposts;
+    }
+    public void setTotalPosts(Integer totalPosts) {
+        this.totalPosts = totalPosts;
+    }
+    public Integer getTotalPosts() {
+        return totalPosts;
+    }
+    public void setTotalMembers(Integer totalMembers) {
+        this.totalMembers = totalMembers;
+    }
+    public Integer getTotalMembers() {
+        return totalMembers;
+    }
     public void setCommunityProfilePicture(String communityProfilePicture) {
         this.communityProfilePicture = communityProfilePicture;
     }
@@ -52,6 +97,7 @@ public class CreateCommunityViewState implements Serializable {
         return name;
     }
     public String getDescription() {
+        if(this.description==null) this.description = "";
         return description;
     }
     public String getCategory() {

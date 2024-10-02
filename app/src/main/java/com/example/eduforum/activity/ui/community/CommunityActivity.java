@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 
@@ -47,7 +48,10 @@ public class CommunityActivity extends AppCompatActivity {
     NewsFeedViewModel viewModel;
     //CustomTagsViewModel customTagsViewModel;
     PostAdapter postAdapter;
-
+    Boolean isAdmin;
+    Boolean isExploring;
+    Boolean isUITcommunity;
+    CreateCommunityViewState currentCommunity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,16 +64,41 @@ public class CommunityActivity extends AppCompatActivity {
         //customTagsViewModel = new ViewModelProvider(this).get(CustomTagsViewModel.class);
         binding.setLifecycleOwner(this);
 
-        CreateCommunityViewState currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
+        currentCommunity = (CreateCommunityViewState) getIntent().getSerializableExtra("currentCommunity");
         if (currentCommunity != null) {
             viewModel.setCurrentCommunity(currentCommunity);
             viewModel.updateCategories();
+            binding.communityName.setText(currentCommunity.getName());
+            binding.descriptionTextview.setText(currentCommunity.getCategory());
+            binding.descriptionContentTextview.setText(currentCommunity.getDescription());
+            binding.memberCountTextview.setText(currentCommunity.getTotalMembers().toString());
+            binding.postCountTextview.setText(currentCommunity.getTotalPosts().toString());
+            if(currentCommunity.getCommunityProfilePicture()!=null && !currentCommunity.getCommunityProfilePicture().equals("default")){
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference(currentCommunity.getCommunityProfilePicture());
+                Glide.with(binding.getRoot().getContext())
+                        .load(storageReference)
+                        .into(binding.postImageView);
+            }
         } else {
             //finish();
         }
+        viewModel.getIsNotified().observe(this, isNotified -> {
+            if (isNotified) {
+                binding.joinTextview.setText("Thông báo đang bật");
+            }
+            else{
+                binding.joinTextview.setText("Thông báo đang tắt");
+            }
+        });
+        isAdmin = getIntent().getBooleanExtra("isAdmin", false);
+        isExploring = getIntent().getBooleanExtra("isExploring", false);
+        isUITcommunity = getIntent().getBooleanExtra("isUITcommunity", false);
         // setup postRecyclerView
         postAdapter = new PostAdapter(this, viewModel.getPostList().getValue());
+        postAdapter.setIsUITcommunity(isUITcommunity);
+        postAdapter.setIsExploring(isExploring);
         binding.postRecyclerView.setAdapter(postAdapter);
+        binding.postRecyclerView.setNestedScrollingEnabled(false);
         binding.postRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         ActivityResultLauncher<Intent> createPostActivityResult = registerForActivityResult(
@@ -77,10 +106,19 @@ public class CommunityActivity extends AppCompatActivity {
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         viewModel.refreshPostList();
+                        currentCommunity.setTotalPosts(currentCommunity.getTotalPosts() + 1);
+                        binding.postCountTextview.setText(currentCommunity.getTotalPosts().toString());
                     }
                 }
         );
-
+        if(isExploring){
+            binding.createPostEditTextButton.setEnabled(false);
+            binding.joinedTextview.setText("Chưa tham gia");
+            binding.joinTextview.setVisibility(View.GONE);
+        }
+        if(isUITcommunity){
+            binding.createPostEditTextButton.setEnabled(false);
+        }
         binding.createPostEditTextButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, CreatePostActivity.class);
             assert currentCommunity != null;
@@ -89,14 +127,7 @@ public class CommunityActivity extends AppCompatActivity {
         });
         viewModel.getCurrentCommunity().observe(this, community -> {
             if (community != null) {
-                binding.communityName.setText(community.getName());
-                binding.descriptionContentTextview.setText(community.getDescription());
-                if(community.getCommunityProfilePicture()!=null){
-                    StorageReference storageReference = FirebaseStorage.getInstance().getReference(community.getCommunityProfilePicture());
-                    Glide.with(binding.getRoot().getContext())
-                            .load(storageReference)
-                            .into(binding.postImageView);
-                }
+
             }
         });
         viewModel.getPostList().observe(this, postList -> {
@@ -110,6 +141,10 @@ public class CommunityActivity extends AppCompatActivity {
         //setup toolbar
         MaterialToolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(v -> {
+            finish();
+        });
 
 
 
@@ -214,8 +249,12 @@ public class CommunityActivity extends AppCompatActivity {
 
         if (id == R.id.setting) {
            Intent intent = new Intent(this, SettingCommunityActivity.class);
-           intent.putExtra("communityId", viewModel.getCurrentCommunity().getValue().getCommunityID());
-              startActivity(intent);
+            if(currentCommunity==null) return true;
+            intent.putExtra("currentCommunity", currentCommunity);
+            intent.putExtra("communityId", viewModel.getCurrentCommunity().getValue().getCommunityID());
+           intent.putExtra("isAdmin", isAdmin);
+           intent.putExtra("isExploring", isExploring);
+           startActivity(intent);
                 return true;
         }
 

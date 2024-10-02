@@ -6,8 +6,7 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -31,8 +30,8 @@
             android:layout_height="match_parent"
             android:background="@color/backgroundColor"
             tools:context=".activity.ui.community.PostDetailActivity"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:fitsSystemWindows="true">
+            android:fitsSystemWindows="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -40,7 +39,6 @@
                 android:layout_above="@id/commentsa"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="0dp"
-                android:fitsSystemWindows="true"
                 android:layout_marginBottom="2dp">
 
                 <LinearLayout
@@ -55,20 +53,19 @@
                         android:text="TÌM ĐỒNG ĐỘI LÀM CHUNG ĐỒ ÁN"
                         android:textSize="26sp"
                         android:textColor="@color/white"
-                        android:layout_marginTop="5dp"
                         android:gravity="center"
                         android:textStyle="bold" />
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="5dp"
+                        android:layout_marginHorizontal="3dp"
                         app:cardBackgroundColor="@color/secondaryColor"
                         app:cardCornerRadius="10dp"
                         app:cardElevation="3dp"
                         app:strokeWidth="0dp"
                         app:cardUseCompatPadding="true"
-                        app:contentPadding="5dp">
+                        app:contentPadding="3dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -115,7 +112,7 @@
                                         android:maxLines="1"
                                         android:text="Râu cha"
                                         android:textColor="@color/white"
-                                        android:textSize="18sp" />
+                                        android:textSize="16sp" />
 
                                     <TextView
                                         android:id="@+id/timeComment_TextView"
@@ -125,7 +122,7 @@
                                         android:maxLines="1"
                                         android:text="10/05/2024 lúc 19:00"
                                         android:textColor="@color/white"
-                                        android:textSize="14sp" />
+                                        android:textSize="12sp" />
 
                                     <TextView
                                         android:id="@+id/khoa_TextView"
@@ -133,7 +130,7 @@
                                         android:layout_height="wrap_content"
                                         android:text="Công nghệ phần mềm"
                                         android:textColor="@color/white"
-                                        android:textSize="14sp" />
+                                        android:textSize="12sp" />
                                 </LinearLayout>
 
                                 <ImageButton
@@ -151,6 +148,7 @@
                                 android:id="@+id/contentPost"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
                                 android:layout_marginStart="10dp"
                                 android:layout_marginEnd="10dp"
                                 android:maxLength="1000"
@@ -168,8 +166,8 @@
                                 android:layout_marginTop="10dp"
                                 android:layout_marginEnd="10dp"
                                 android:layout_marginBottom="10dp"
-                                android:fitsSystemWindows="true"
-                                tools:listitem="@layout/item_image" />
+                                tools:listitem="@layout/item_image"
+                                />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -265,7 +263,7 @@
                 android:layout_alignParentBottom="true"
                 android:fitsSystemWindows="true"
                 android:orientation="vertical"
-                android:layout_marginBottom="30dp">
+                android:layout_marginBottom="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -273,27 +271,21 @@
                     android:layout_marginHorizontal="5dp"
                     android:orientation="horizontal">
 
-                    <ImageButton
-                        android:id="@+id/imageInsertButton"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:background="@null"
-                        android:contentDescription="@null"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/image_insert_icon" />
-
-                    <ImageButton
-                        android:id="@+id/incognitoModeButton"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="15dp"
-                        android:background="@null"
-                        android:contentDescription="@null"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/incognito_mode" />
+<!--                    <com.google.android.material.button.MaterialButton-->
+<!--                        style="@style/Widget.Material3.Button.Icon"-->
+<!--                        android:id="@+id/incognitomodeButton"-->
+<!--                        android:layout_width="30dp"-->
+<!--                        android:layout_height="30dp"-->
+<!--                        app:backgroundTint="@color/backgroundColor"-->
+<!--                        android:contentDescription="@null"-->
+<!--                        android:foreground="?attr/selectableItemBackground"-->
+<!--                        android:scaleType="centerCrop"-->
+<!--                        app:icon="@drawable/incognito_mode"-->
+<!--                        app:iconGravity="textEnd"-->
+<!--                        app:iconTint="@color/unLikedButtonColor"-->
+<!--                        app:iconSize="30sp"/>-->
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"

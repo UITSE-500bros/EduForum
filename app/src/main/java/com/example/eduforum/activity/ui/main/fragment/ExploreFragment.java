@@ -61,6 +61,10 @@ public class ExploreFragment extends Fragment {
 
         return binding.getRoot();
     }
+    public void onResume() {
+        super.onResume();
+        viewModel.fetchCommunityList();
+    }
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
         adapter = new ExploreCommunityAdapter(viewModel.getCommunityList().getValue());
@@ -72,6 +76,7 @@ public class ExploreFragment extends Fragment {
         });
         RecyclerView recyclerView = binding.exploreCommusRecyclerView;
         recyclerView.setAdapter(adapter);
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 }

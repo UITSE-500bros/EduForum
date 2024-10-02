@@ -27,7 +27,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     private Context context;
     private List<PostViewState> postList;
-
+    private Boolean isUITcommunity;
+    private Boolean isExploring;
 
     public PostAdapter(Context context, List<PostViewState> postList) {
         this.context = context;
@@ -35,13 +36,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             this.postList = new ArrayList<>();
         }
         else this.postList = postList;
+        this.isUITcommunity = false;
+        this.isExploring = false;
 
     }
     public void setPostList(List<PostViewState> postList) {
         this.postList = postList;
         notifyDataSetChanged();
     }
-
+    public void setIsExploring(Boolean isExploring) {
+        this.isExploring = isExploring;
+    }
+    public void setIsUITcommunity(Boolean isUITcommunity) {
+        this.isUITcommunity = isUITcommunity;
+    }
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -56,20 +64,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         PostViewState post = postList.get(position);
-        holder.bind(post);
+        holder.bind(post, isUITcommunity);
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, PostDetailActivity.class);
+            intent.putExtra("key", "currentPost");
             intent.putExtra("currentPost", postList.get(position));
+            intent.putExtra("isUITcommunity", isUITcommunity);
+            intent.putExtra("isExploring", isExploring);
+            intent.putExtra("communityId", post.getCommunity().getCommunityID());
             context.startActivity(intent);
         });
-        holder.binding.setting.setOnClickListener(v -> {
-            PopupMenu popupMenu = new PopupMenu(context, holder.binding.setting);
-            popupMenu.inflate(R.menu.post_option_menu);
-            //popupMenu.setOnMenuItemClickListener(item -> {
-                //TODO: Handle menu item click
-            //});
-            popupMenu.show();
-        });
+
     }
 
     @Override
@@ -83,21 +88,34 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             super(binding.getRoot());
             this.binding = binding;
         }
-        void bind(PostViewState post) {
-            if(post.getCreator()!=null){
-                binding.username.setText(post.getCreator().getName());
-                binding.falcuty.setText(post.getCreator().getDepartment());
-                if(post.getCreator().getProfilePicture()!=null){
-                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(post.getCreator().getProfilePicture());
-                    Glide.with(binding.getRoot().getContext())
-                            .load(storageReference)
-                            .into(binding.avatar);
+        void bind(PostViewState post, Boolean isUIT) {
+            if(isUIT){
+                binding.username.setText("Quản trị viên");
+                binding.falcuty.setText("");
+            }
+            else if(post.getCreator()!=null){
+                if(post.getAnonymous() != null && !post.getAnonymous())
+                {
+                    binding.username.setText(post.getCreator().getName());
+                    binding.falcuty.setText(post.getCreator().getDepartment());
+                    if(post.getCreator().getProfilePicture()!=null){
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(post.getCreator().getProfilePicture());
+                        Glide.with(binding.getRoot().getContext())
+                                .load(storageReference)
+                                .into(binding.avatar);
+                    }
+
+                }
+                else{
+                    binding.username.setText("Ẩn danh");
+                    binding.falcuty.setText("");
+
                 }
             }
             binding.title.setText(post.getTitle());
             binding.time.setText(post.getDate());
-            binding.like.setText("0 lượt thích");
-            binding.comment.setText("0 bình luận");
+            binding.like.setText(post.getVoteDifference()+" lượt bình chọn");
+            binding.comment.setText(post.getTotalComment()+" bình luận");
             binding.time.setText(post.getDate());
 
             if(post.getTags()!=null){

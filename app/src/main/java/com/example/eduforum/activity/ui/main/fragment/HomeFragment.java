@@ -39,6 +39,7 @@ public class HomeFragment extends Fragment {
     private UserViewModel userViewModel;
     private CommunityAdapter joinedCommunitiesAdapter;
     private CommunityAdapter myCommunitiesAdapter;
+    private CommunityAdapter globalCommunitiesAdapter;
     private ActivityResultLauncher<String> mGetContent;
 
     private DialogCreateCommunityBinding dialogBinding;
@@ -104,11 +105,14 @@ public class HomeFragment extends Fragment {
         joinedCommunitiesAdapter = new CommunityAdapter(getContext(), viewModel.getJoinedCommunityList().getValue(),  FirebaseAuth.getInstance());
         myCommunitiesAdapter = new CommunityAdapter(getContext(), viewModel.getIsAdminCommunityList().getValue(), FirebaseAuth.getInstance());
         myCommunitiesAdapter.setIsAdminList(true);
+        globalCommunitiesAdapter = new CommunityAdapter(getContext(), viewModel.getGlobalCommunityList().getValue(), FirebaseAuth.getInstance());
+        globalCommunitiesAdapter.setIsGlobalList(true);
         binding.joinedCommunitiesRecyclerView.setAdapter(joinedCommunitiesAdapter);
         binding.myCommunitiesRecyclerView.setAdapter(myCommunitiesAdapter);
         binding.joinedCommunitiesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         binding.myCommunitiesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-
+        binding.UITCommunitiesRecyclerView.setAdapter(globalCommunitiesAdapter);
+        binding.UITCommunitiesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         binding.createCommuButton.setOnClickListener(v -> {
             showCreateCommunityDialog();
         });
@@ -121,6 +125,9 @@ public class HomeFragment extends Fragment {
             myCommunitiesAdapter.setCommunityList(myCommunities);
         });
 
+        viewModel.getGlobalCommunityList().observe(getViewLifecycleOwner(), globalCommunities -> {
+            globalCommunitiesAdapter.setCommunityList(globalCommunities);
+        });
     }
     private void showCreateCommunityDialog() {
         viewModel.setNewCommunityLiveData(new CreateCommunityViewState());

@@ -6,6 +6,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/backgroundColor">
@@ -35,25 +36,6 @@
                 android:layout_weight="1"
                 android:clickable="false"/>
 
-            <Button
-                android:id="@+id/searchButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="10dp"
-                style="Widget.MaterialComponents.Button.TextButton.Icon"
-                app:icon="@drawable/search_icon2"
-                android:backgroundTint="@color/secondaryColor"
-                app:iconGravity="textStart"/>
-
-            <Button
-                android:id="@+id/createCommuButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="10dp"
-                style="Widget.MaterialComponents.Button.TextButton.Icon"
-                app:icon="@drawable/icon_add2"
-                android:backgroundTint="@color/secondaryColor"
-                app:iconGravity="textStart"/>
 
         </LinearLayout>
 
@@ -79,13 +61,14 @@
                     android:layout_marginTop="16dp"
                     android:text="Cộng đồng gợi ý"
                     android:textColor="@color/textColor"
-                    android:textSize="27sp" />
+                    android:textSize="25sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/exploreCommusRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="70dp"
                     tools:listitem="@layout/item_explore_community">
 
                 </androidx.recyclerview.widget.RecyclerView>
