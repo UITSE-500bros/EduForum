@@ -12,6 +12,7 @@ import com.example.eduforum.activity.repository.post.PostRepository;
 import com.example.eduforum.activity.ui.community.viewstate.CommentViewState;
 import com.example.eduforum.activity.ui.community.viewstate.PostViewState;
 import com.google.firebase.auth.FirebaseAuth;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -23,6 +24,7 @@ public class PostDetailsViewModel extends ViewModel {
     MutableLiveData<List<CommentViewState>> cmts;
     MutableLiveData<List<CommentViewState>> cmts_child;
     MutableLiveData<PostViewState> currentPost;
+    MutableLiveData<Integer> voteType;
 
     public PostDetailsViewModel() {
         postRepository = PostRepository.getInstance();
@@ -35,6 +37,7 @@ public class PostDetailsViewModel extends ViewModel {
 
 
     }
+
 
     public LiveData<PostViewState> getPost(){
         return currentPost;
@@ -74,6 +77,7 @@ public class PostDetailsViewModel extends ViewModel {
 
     // TODO: anh em lam cai nay ne
     public void setCurrentPost(PostViewState postViewState) {
+
         Post post = new Post(postViewState.getPostId(),
                 postViewState.getCommunity().getCommunityID(),
                 postViewState.getTitle(),
@@ -87,7 +91,9 @@ public class PostDetailsViewModel extends ViewModel {
         community_id = post.getCommunityID();
 
         currentPost.setValue(postViewState);
-      commentRepository.loadTopLevelComments(post, new CommentCallback() {
+
+        commentRepository.loadTopLevelComments(post, new CommentCallback() {
+
             @Override
             public void onCreateSuccess(Comment comments) {
 
@@ -126,6 +132,21 @@ public class PostDetailsViewModel extends ViewModel {
     }
     private String pt_id;
     private String community_id;
+
+
+    public void upVote() {
+        Post newPost = new Post();
+        newPost.setPostID(pt_id);
+        newPost.setCommunityID(community_id);
+        postRepository.updateVoteCount(newPost, FirebaseAuth.getInstance().getCurrentUser().getUid(), 1);
+    }
+
+    public void downVote() {
+        Post newPost = new Post();
+        newPost.setPostID(pt_id);
+        newPost.setCommunityID(community_id);
+        postRepository.updateVoteCount(newPost, FirebaseAuth.getInstance().getCurrentUser().getUid(), -1);
+    }
 
     public void addParentComment(CommentViewState comment) {
         Comment newComment = new Comment();
@@ -215,6 +236,7 @@ public class PostDetailsViewModel extends ViewModel {
         childComment.setReplyCommentID(commentParentViewState.getCommentID());
         childComment.setCommentID(null);
         childComment.setImage(commentChildViewState.getImage());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
 
         commentRepository.createComment(parentComment, childComment, new CommentCallback() {
             @Override
@@ -319,16 +341,6 @@ public class PostDetailsViewModel extends ViewModel {
             }
         });
     }
-
-    public void upVote() {
-        postRepository.updateVoteCount(postInstance, FirebaseAuth.getInstance().getCurrentUser().getUid(), 1);
-    }
-
-    public void downVote(PostViewState postViewState) {
-        Post post = new Post(postViewState.getPostId(), postViewState.getCommunity().getCommunityID(), postViewState.getTitle(), postViewState.getContent(), postViewState.getIsAnonymous(), null, null, postViewState.getCreator(), 0, 0, 0,0, null, null, postViewState.getTags());
-        postRepository.updateVoteCount(post, FirebaseAuth.getInstance().getCurrentUser().getUid(), -1);
-    }
-
 
     public void downVote(CommentViewState commentViewState){
         Comment comment = new Comment();

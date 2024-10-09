@@ -42,7 +42,6 @@ public class PostDetailActivity extends AppCompatActivity {
     private MediaAdapter mediaAdapter;
     private PostDetailsViewModel viewModel;
     private CommentAdapter commentAdapter;
-
     private boolean isUpVoted = false;
     private boolean isDownVoted = false;
     private boolean isParentComment = true;
@@ -52,6 +51,7 @@ public class PostDetailActivity extends AppCompatActivity {
     public static final String KEY_CURRENT_POST = "currentPost";
     public static final String KEY_NOTI_POST = "noti";
     public static final String KEY_COMMUNITY_ID = "notiCommunityID";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,17 +64,13 @@ public class PostDetailActivity extends AppCompatActivity {
         });
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail);
-
         viewModel = new ViewModelProvider(this).get(PostDetailsViewModel.class);
-
-        binding.setLifecycleOwner(this);
 
         //set up turn back button in ActionBar
         binding.toolBarCreatePost.setNavigationOnClickListener(v -> {
             finish();
         });
 
-        /* Get current user */
         EduForum app = (EduForum) getApplication();
         userViewModel = app.getSharedViewModel(UserViewModel.class);
         userViewModel.getCurrentUserLiveData().observe(this, user -> {

@@ -35,7 +35,6 @@ public class CommentChildAdapter extends RecyclerView.Adapter<CommentChildAdapte
     private Context context;
     private static List<CommentViewState> commentList2;
     private MaterialAlertDialogBuilder builder;
-
     private CommentRepository commentRepository;
     private String userID;
     private LifecycleOwner lifecycleOwner;
@@ -52,6 +51,7 @@ public class CommentChildAdapter extends RecyclerView.Adapter<CommentChildAdapte
                                CommentAdapter.OnUpVoteClickListener onUpVoteClickListener) {
 
         this.context = context;
+        commentList2 = commentList;
         this.onReplyClickListener = onReplyClickListener;
         this.onDownVoteClickListener = onDownVoteClickListener;
         this.onUpVoteClickListener = onUpVoteClickListener;
@@ -74,6 +74,7 @@ public class CommentChildAdapter extends RecyclerView.Adapter<CommentChildAdapte
     public CommentChildAdapter.CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         ItemChildCommentBinding itemChildCommentBinding = ItemChildCommentBinding.inflate(layoutInflater, parent, false);
+        return new CommentViewHolder(itemChildCommentBinding,lifecycleOwner,userID,postId,communityId);
     }
 
     @Override
@@ -95,6 +96,8 @@ public class CommentChildAdapter extends RecyclerView.Adapter<CommentChildAdapte
 //            popupMenu.show();
 //        });
 
+
+        holder.bind(comment, onReplyClickListener, onDownVoteClickListener, onUpVoteClickListener);
 
     }
 
